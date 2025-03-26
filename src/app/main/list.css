@@ -1,0 +1,76 @@
+.list .values ul,
+.list .values .current {
+    background-color: white;
+}
+.list .values .current {
+    text-align: center;
+}
+.list .values .current,
+li {
+    cursor: pointer;
+}
+
+.options .list {
+    margin: 1vw;
+}
+
+.list .values {
+    margin: 1vw 0;
+}
+
+.list .values .values-wrapper {
+    position: relative;
+}
+
+
+.list .values .current {
+    padding: 0.5vw 2vw;
+    color: black;
+    border-radius: 0.5vw;
+    display: inline-block;
+    font-size: max(1vw, 5px);
+    border: 0.1vw solid gray;
+}
+
+.list .values ul {
+    position: absolute;
+    top: 1vw;
+    border-radius: 0.5vw;
+    height: 40vh;
+    width: 20vw;
+    list-style-type: none;
+    overflow-y: scroll;
+    overflow-x: none;
+    box-shadow: 0 0 1vw 0.1vw gray;
+    z-index: 1;
+}
+
+
+
+
+
+ul .search {
+    padding: 0;
+    margin: 0;
+}
+
+ul li input {
+    color: black;
+    background-color: transparent;
+    border: none;
+    padding: 1vw;
+    border-bottom: 0.1vw solid;
+    font-size: max(1vw, 5px);
+    width: 100%;
+}
+
+ul li input:focus {
+    outline: none;
+}
+
+ul li {
+    padding: 1vw;
+    font-size: max(1vw, 5px);
+    color: black;
+
+}

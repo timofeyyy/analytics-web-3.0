@@ -1,0 +1,38 @@
+.workspace main .m-sections .m-table {
+    width: 65%;
+    height: 100%;
+    background: white;
+    border-radius: 0.5vw;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+.m-table .view {
+    width: 100%;
+    height: 70vh;
+    overflow-y: scroll;
+
+}
+.m-table .view .layout {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    padding: 1.5vw;
+    font-size: max(1vw, 15px);
+}
+.m-table .view .cols-def {
+    color: gray;
+}
+.m-table .view .cols-def p {
+    text-align: start;
+}
+.m-table .view .row {
+    border-top: 0.1vw solid lightgray;
+    cursor: pointer;
+}
+.m-table .view .row:hover {
+    background-color: #3D83A9;
+    color: white;
+}
+.m-table .view .cols-def .col-name {
+    width: 100%;
+}
