@@ -1,0 +1,20 @@
+button {
+    padding: 1vw 1.5vw;
+    background-color: #3D83A9;
+    color: white;
+    font-size: max(1vw, 12px);
+    border-radius: 1vw;
+    border: none;
+    margin: 0;
+    align-self: flex-start;
+    cursor: pointer;
+    /* height: 7%;
+    width: 100%; */
+    position: absolute;
+    bottom: 3vw;
+    right: 3vw;
+}
+button:disabled {
+    background-color: #195270;
+    color: rgb(195, 195, 195);
+}

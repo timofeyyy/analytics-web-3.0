@@ -1,0 +1,22 @@
+.components {
+    border-top: 0.1vw solid black;
+    margin-top: 2vw;
+    padding-top: 1vw;
+}
+
+.components .component {
+    margin: 1vw 0;
+}
+
+.components .component input {
+    margin-right: 1vw;
+    width: 1vw;
+    height: 1vw;
+    color: #525151;
+}
+
+.components .component p {
+    color: black;
+    display: inline-block;
+    font-size: max(1vw, 10px);
+}

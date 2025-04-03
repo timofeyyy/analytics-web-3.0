@@ -1,0 +1,69 @@
+.popup-window {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 1;
+}
+
+.popup-window .filters {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    width: 40%;
+    background-color: white;
+    border-radius: 1vw;
+}
+
+.popup-window .filters .head {
+    margin: 1vw;
+    height: 4%;
+}
+
+h1 {
+    font-size: max(1.5vw, 15px);
+    font-weight: lighter;
+
+}
+
+.popup-window .filters .body {
+    height: 90%;
+    border-top: 0.1vw solid lightgray;
+    border-bottom: 0.1vw solid lightgray;
+    padding: 1vw;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.popup-window .filters .footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 6%;
+    margin: 1vw;
+}
+
+.popup-window .filters .footer button {
+    margin: 0 1vw;
+    font-size: max(1vw, 10px);
+    padding: 0.5vw 1.5vw;
+    border-radius: 0.5vw;
+    border: 0.1vw solid lightgray;
+    font-weight: lighter;
+    cursor: pointer;
+
+}
+
+.popup-window .filters .footer .cancel {
+    color: black;
+    background-color: white;
+}
+
+.popup-window .filters .footer button {
+    color: white;
+    background-color: #3D83A9;
+}
+

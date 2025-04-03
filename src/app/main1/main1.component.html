@@ -1,0 +1,88 @@
+<div class="workspace">
+    <app-navigator/>
+    <main>
+        <header class="h-widget">
+            <h1>Общая статистика</h1>
+            <app-country-selection/>
+        </header>
+        <div class="t-wrapper">
+            <section class="fav">
+                <div class="item" *ngFor="let component of componentTypes">
+                    <div>
+                        <input type="checkbox" (click)="selectComponentTypes(component.value)"
+                            [checked]="component.checked" />
+                        <a class="type" [href]="getSafeUrl(component.value)">{{component.value}}</a>
+                    </div>
+                    <div class="info">
+                        <img [src]="getSafeUrl(component.image)" />
+                        <p class="proc">{{component.manufacturer.prodProcent}}%</p>
+                    </div>
+                    <p class="manufacturer">{{component.manufacturer.manufacturerName}}</p>
+                </div>
+            </section>
+            <section class="stat">
+                <iframe [src]="url" frameborder="0"></iframe>
+            </section>
+        </div>
+        <div class="b-wrapper">
+            <!-- <section class="total-stat">
+                <iframe [src]="getSafeUrl(url)" frameborder="0"></iframe>
+
+            </section> -->
+            <section class="prod-stat">
+                <iframe src="chart/componenttypes/stat" frameborder="0"></iframe>
+
+                <!-- .
+                <iframe [src]="getSafeUrl(url)" frameborder="0"></iframe> -->
+            </section>
+            <section class="records">
+                <div class="list-wrapper">
+                    <div class="list">
+                        <div class="values">
+                            <!-- <p class="current" (click)="manufacutrerOptions.open = !manufacutrerOptions.open;" >
+                                currentvalue</p> -->
+                            <li class="search">
+                                <input type="text" placeholder="поиск" (input)="search($event)">
+                            </li>
+                        </div>
+                    </div>
+                </div>
+                <div class="values-wrapper">
+                    <ul [ngStyle]="{display: manufacutrerOptions.open ? 'block' : 'none'}">
+                        <li class="search">
+                            <input type="text" placeholder="поиск">
+                        </li>
+                        <li *ngFor="let manufacturer of manufacutrerOptions.values"
+                            (click)="manufacutrerOptions.currentvalue = manufacturer;manufacutrerOptions.open">
+                            {{manufacturer}}</li>
+                    </ul>
+                </div>
+                <div class="cols-wrapper">
+                    <div class="cols layout">
+                        <div class="col">
+                            <p>Производитель</p>
+                        </div>
+                        <div class="col">
+                            <p>Количество</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="view">
+                    <div class="row layout" *ngFor="let row of rows">
+                        <div class="col">
+                            <p>{{row.manufacturerName}}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{row.prodSummary}}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- <section class="fav-stat">
+
+            </section> -->
+        </div>
+    </main>
+</div>
+<app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />

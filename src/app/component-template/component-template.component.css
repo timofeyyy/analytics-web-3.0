@@ -1,0 +1,35 @@
+.workspace main {
+    box-sizing: border-box;
+    margin: 1.5vw 1.5vw 1.5vw 16.5%;
+    width: 100%;
+}
+
+.workspace main .wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2vw;
+}
+
+.workspace main .wrapper .chart-wrapper,
+.workspace main .wrapper .selection {
+    background-color: white;
+    border-radius: 1vw;
+    height: 35vw;
+    margin: 0;
+}
+
+.workspace main .wrapper .chart-wrapper {
+    /* padding-right: 1vw; */
+    width: 64%;
+    /* overflow-y: scroll;
+    display: grid;
+    grid-template-columns: repeat(2, 47%);
+    justify-content: space-around;
+    gap: 1.5vw; */
+}
+
+.workspace main .wrapper .selection {
+    width: 34%;
+    box-sizing: border-box;
+    padding: 1.5vw;
+}

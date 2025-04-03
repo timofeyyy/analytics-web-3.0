@@ -1,0 +1,51 @@
+<app-filters [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="onSubmit($event)" />
+<div class="workspace">
+    <app-navigator />
+    <main>
+        <header class="h-widget">
+            <h1>Catalog</h1>
+            <app-country-selection />
+        </header>
+        <main class="catalog">
+            <div class="head">
+                <div class="filter" (click)="filter=!filter">
+                    <div class="preview">
+                        <p>filter</p>
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="item" *ngFor="let item of records">
+                    <div class="info">
+                        <div class="h">
+                            <img [src]="getSafeUrl(item.img)" alt="" />
+                            <h1>{{item.ruComponentType}}</h1>
+                        </div>
+                        <h5>{{item.manufacturerName}}, {{item.ruComponentKind}} {{item.componentName}}</h5>
+                        <div [innerHTML]="item.html">
+                            <!-- <p>technology: комплементарная структура металл - оксид - полупроводник (КМОП)</p>
+                            <p>bitDepthValue: 32</p>
+                            <p>minOperatingTemperature: -60</p>
+                            <p>maxOperatingTemperature: 85</p>
+                            <p>radiationResistance: -1.7976931348623157e+308</p> -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <p>Спецификация</p>
+                        <button>Подробнее</button>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="footer">
+                <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
+                <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
+                <p *ngFor="let page of pages" (click)="currentPage = page; selectPage()" [ngClass]="{active: page === currentPage}">{{page}}</p>
+                <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
+                <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
+                <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}</p>
+
+            </div>
+        </main>
+    </main>
+</div>

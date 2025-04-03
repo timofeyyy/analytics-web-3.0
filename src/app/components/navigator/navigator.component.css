@@ -1,0 +1,36 @@
+.menu ul {
+    list-style-type: none;
+}
+
+.menu ul {
+    list-style-type: none;
+}
+
+.menu ul li {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0.5vw;
+    margin-bottom: 0.5vw;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5vw;
+}
+
+.menu ul li:hover {
+    background-color: lightgray;
+}
+
+.menu ul li a {
+    color: black;
+    font-size: max(1vw, 10px);
+    margin: 0;
+}
+
+.menu ul li img {
+    width: max(1vw, 10px);
+    height: max(1vw, 10px);
+    scale: 1.2;
+    margin-right: 0.5vw;
+    margin: 0 0.5vw;
+}

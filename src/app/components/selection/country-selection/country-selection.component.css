@@ -1,0 +1,12 @@
+.options .list-wrapper .list .values .current div:after {
+    content: url('../../../../assets/images/down-arrow.svg');
+    width: max(1vw, 10px);
+    height: max(1vw, 10px);
+    margin-left: 0.5vw;
+    display: block;
+    opacity: 0.5;
+}
+
+.values-wrapper ul {
+    right: 0;
+}
