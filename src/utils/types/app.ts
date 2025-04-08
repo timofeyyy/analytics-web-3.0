@@ -44,9 +44,12 @@ export interface OptionsApi {
 }
 
 export interface Option {
+    propName: string,
     currentvalue: string,
     values: string[],
-    open: boolean
+    open: boolean,
+    sort: (props: any, all: Test[]) => string[] | undefined,
+    componentProps: Map<string, any>
 }
 
 // export interface OptionProp {
@@ -74,17 +77,17 @@ export interface ComponentType {
     image: string
 }
 
-export interface ComponentData {
-    [key: string]: Microchip[] | Capacitor[] | Diod[] | Transistor[]
-}
+// export interface ComponentData {
+//     [key: string]: Microchip[] | Capacitor[] | Diod[] | Transistor[]
+// }
 
-export interface ChartTypes {
-    bar: boolean,
-    line: boolean,
-    mixed: boolean,
-    sorted: boolean,
-    stacked: boolean
-}
+// export interface ChartTypes {
+//     bar: boolean,
+//     line: boolean,
+//     mixed: boolean,
+//     sorted: boolean,
+//     stacked: boolean
+// }
 
 export interface CountryOptions {
     currentValue: Partial<ImageName>,
@@ -93,10 +96,19 @@ export interface CountryOptions {
 }
 
 export interface Test {
-    ruComponentType: string,
-    ruComponentKind: string,
-    componentName: string,
-    manufacturerName: string,
-    html: any,
+    component: Microchip | Transistor | Capacitor | Diod
+    // ruComponentType: string,
+    // ruComponentKind: string,
+    // componentName: string,
+    // manufacturerName: string,
+    filters: string[]
+    html: any
     img: string
 }
+
+
+
+// export interface PropOptions {
+//     propName: string,
+//     currentValue: string 
+// }

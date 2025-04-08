@@ -1,4 +1,4 @@
-<app-filters [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="onSubmit($event)" />
+<app-filters [all]="allCopy" [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="onSubmit($event)" />
 <div class="workspace">
     <app-navigator />
     <main>
@@ -8,10 +8,13 @@
         </header>
         <main class="catalog">
             <div class="head">
-                <div class="filter" (click)="filter=!filter">
-                    <div class="preview">
+                <div class="filter" >
+                    <div class="preview" (click)="filter=!filter">
                         <p>filter</p>
                     </div>
+                    <li class="search">
+                        <input type="text" placeholder="маркеровка" (input)="search($event)">
+                    </li>
                 </div>
             </div>
             <div class="body">
@@ -19,9 +22,9 @@
                     <div class="info">
                         <div class="h">
                             <img [src]="getSafeUrl(item.img)" alt="" />
-                            <h1>{{item.ruComponentType}}</h1>
+                            <h1>{{item.component.ruComponentType}}</h1>
                         </div>
-                        <h5>{{item.manufacturerName}}, {{item.ruComponentKind}} {{item.componentName}}</h5>
+                        <h5>{{item.component.manufacturerName}}, {{item.component.componentName}}</h5>
                         <div [innerHTML]="item.html">
                             <!-- <p>technology: комплементарная структура металл - оксид - полупроводник (КМОП)</p>
                             <p>bitDepthValue: 32</p>
@@ -49,3 +52,4 @@
         </main>
     </main>
 </div>
+<app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}"/> 

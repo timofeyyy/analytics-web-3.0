@@ -1,10 +1,11 @@
 <div class="options">
     <div class="list-wrapper">
         <div class="list">
-            <p class="label">{{options.propName}}</p>
+            <p class="label">Сравнимый тип параметра</p>
             <ul class="values">
-                <li class="current" (click)="openClose()">
-                    <p>{{options.currentvalue}}</p>
+
+                <li class="current"  (click)="options.open =! options.open">
+                    <p>битность</p>
                     <div></div>
                 </li>
             </ul>
@@ -13,17 +14,23 @@
     <div class="values-wrapper">
         <ul [ngStyle]="{display: options.open ? 'block' : 'none'}">
             <li class="search">
-                <input type="text" placeholder="поиск" (input)="search($event)">
+                <input type="text" placeholder="поиск">
             </li>
-            <li *ngFor="let value of valuesCopy" 
-            (click)="openClose(value)"
-            >
-                {{value}}
+            <li>
+                битность
+            </li>
+            <li>
+                битность
+            </li>
+            <li>
+                битность
+            </li>
+            <li>
+                битность
             </li>
         </ul>
     </div>
 </div>
-<!-- (click)="selectValue(value)" -->
 <!-- 
 <div class="list">
     <p class="label">Производитель</p>

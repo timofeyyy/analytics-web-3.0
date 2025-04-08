@@ -29,6 +29,7 @@ li {
 .options .list-wrapper .list .label,
 .options .list-wrapper .list .values {
     margin-bottom: 1vw;
+    word-wrap: break-word;
 }
 
 .values-wrapper {
@@ -45,6 +46,7 @@ li {
 }
 
 .list .values .current {
+    max-width: 15vw;
     padding: 0.5vw 2vw;
     color: black;
     border-radius: 0.5vw;
@@ -85,10 +87,10 @@ li {
     border: none;
     padding: 1vw;
     font-size: max(1vw, 5px);
-    width: 100%;
     border: .1vw solid lightgray;
     border-radius: .5vw;
     padding: .5vw;
+    width: 100%;
 }
 
 

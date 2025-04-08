@@ -48,7 +48,7 @@ export class Main1Component implements OnInit {
   // currentcomponentType!: string
 
   countyOptions!: CountryOptions
-  manufacutrerOptions!: Option
+  manufacutrerOptions!: Partial<Option>
 
   constructor(
     private api: ApiService,
@@ -95,7 +95,7 @@ export class Main1Component implements OnInit {
       // this.componentList = options
       options.forEach((item: OptionsApi) => {
         if (this.getManufacturerIndexByValue(item.manufacturerName) === -1) {
-          this.manufacutrerOptions.values.push(item.manufacturerName)
+          this.manufacutrerOptions.values?.push(item.manufacturerName)
         }
       })
       let componetns: ImageName[] = this.api.getComponentsFromConfig()
@@ -190,7 +190,7 @@ export class Main1Component implements OnInit {
   //   return value;
   // }
   getManufacturerIndexByValue(value: string): number {
-    let index: number = this.manufacutrerOptions.values.findIndex(
+    let index: number = (this.manufacutrerOptions.values as []).findIndex(
       (val: string) => val === value
     )
 

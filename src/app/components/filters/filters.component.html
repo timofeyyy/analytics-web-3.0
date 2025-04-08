@@ -4,7 +4,48 @@
             <h1>Filters</h1>
         </div>
         <div class="body">
+            <div class="base">
+                <app-prop-selection 
+                [all]="all" 
+                [options]="{
+                    propName: 'ruComponentType',
+                    open: currentPropName === 'ruComponentType' 
+                }" 
+                [props]="props"
+                (onChanged)="update($event)" /> 
+                <app-prop-selection 
+                [all]="all" 
+                [options]="{
+                    propName: 'ruComponentKind',
+                    open: currentPropName === 'ruComponentKind'
+                }" 
+                [props]="props"
+                (onChanged)="update($event)" />
+                <app-prop-selection 
+                [all]="all" 
+                [options]="{
+                    propName: 'manufacturerName',
+                    open: currentPropName === 'manufacturerName'
+                }" 
+                [props]="props"
+                (onChanged)="update($event)" /> 
+            </div>
+            <div class="additional">
+                <p *ngIf="!isSelectedComponentType; else templateName">select component type</p>
 
+                <ng-template #templateName>
+                    <app-prop-selection *ngFor="let prop of additional" 
+                    [all]="all" 
+                    [options]="{
+                        propName: prop,
+                        open: currentPropName === prop 
+                    }" 
+                    [props]="componentTypeProp"
+                    (onChanged)="update($event)" /> 
+                </ng-template>
+               
+                
+            </div>
         </div>
         <div class="footer">
             <button class="cancel" (click)="cancel()">cancel</button>

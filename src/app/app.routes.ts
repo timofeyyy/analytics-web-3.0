@@ -15,11 +15,11 @@ export const routes: Routes = [
     { path: 'home', component:  Main1Component },
     { path: 'charts', component:  ChartsComponent },
     { path: 'catalog', component: CatalogComponent },
+    { path: 'not-found', component: NotfoundComponent },
     { path: ':componentType', component:  ComponentTemplateComponent },
     { path: 'chart/manufacturers', component:  ChartComponent },
     { path: 'chart/manufacturers/production', component:  KindStatComponent },
     { path: 'chart/componenttypes/stat', component:  ComponentTypeStatComponent },
-    { path: 'not-found', component: NotfoundComponent },
     { path: 'chart/:componenttype/manufacturers/:chart', component: ManufacturersComponent },
     { path: 'chart/:componenttype/manufacturers/:chart/bitdepthvalue', component: ManufacturerBitDepthValueComponent },
 

@@ -54,6 +54,7 @@
     align-items: center;
     /* border-bottom: 0.1vw solid gray; */
     cursor: pointer;
+    justify-content: space-between;
 }
 .filter .records {
     margin-right: 0;
@@ -97,6 +98,9 @@
     box-shadow: 0 0 1vw 0.1vw gray;
 }
 
+.filter .search input {
+    width: unset;
+}
 
 .item {
     padding: 1vw;

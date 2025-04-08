@@ -8,15 +8,16 @@ import { ApiService } from '../../services/api.services';
 import { ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { catchError, map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { Test } from '../../utils/types/app';
+import { Manufacturer, Test } from '../../utils/types/app';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ImageName } from '../../utils/types/config';
+import { LoaderComponent } from '../components/loader/loader.component';
 
 @Component({
   selector: 'app-catalog',
-  imports: [NavigatorComponent, CountrySelectionComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass],
+  imports: [NavigatorComponent, CountrySelectionComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent],
   templateUrl: './catalog.component.html',
-  styleUrl: './catalog.component.css',
+  styleUrls: ['./catalog.component.css', '../components/selection/selection.css'],
   providers: [ApiService],
   encapsulation: ViewEncapsulation.None
 })
@@ -28,12 +29,14 @@ export class CatalogComponent implements OnInit {
   filter!: boolean
   records!: Test[]
   all!: Test[]
+  allCopy!: Test[]
   storage!: Map<any, any[]>
   pages!: number[]
   from!: number
   to!: number
   currentPage!: number
   last!: number
+  loader!: boolean
   constructor(
     private api: ApiService,
     private router: Router,
@@ -41,9 +44,11 @@ export class CatalogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loader = true
     this.filter = false
     this.records = []
     this.all = []
+    this.allCopy = []
     this.pages = []
     this.to = 1
     this.from = 0
@@ -110,71 +115,73 @@ export class CatalogComponent implements OnInit {
 
     observable.subscribe({
       complete: () => {
-        console.log(this.storage)
-        let componetns: ImageName[] = this.api.getComponentsFromConfig()
-        this.storage.forEach((set: any) => {
-          (set as []).forEach((item: any) => {
-            let markup: string = ''
-            switch (item.ruComponentType) {
-              case ComponentTypeRuEnum.MICROCHIP:
-                markup = `
+        if (this.storage.size === 4) {
+          let componetns: ImageName[] = this.api.getComponentsFromConfig()
+          this.storage.forEach((set: any) => {
+            (set as []).forEach((item: any) => {
+              let markup: string = ''
+              let filters: string[] = []
+              switch (item.ruComponentType) {
+                case ComponentTypeRuEnum.MICROCHIP:
+                  markup = `
                   <p>technology: ${item.ruTechnologyName}</p>
                   <p>bitDepthValue: ${item.bitDepthValue}</p>
                   <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
                   <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
                   <p>radiationResistance: ${item.radiationResistance}</p>
                 `
-                break;
-              case ComponentTypeRuEnum.DIOD:
-                markup = `
+                  // filters = ['ruTechnologyName', 'bitDepthValue']
+                  break;
+                case ComponentTypeRuEnum.DIOD:
+                  markup = `
                   <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
                   <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
                   <p>radiationResistance: ${item.radiationResistance}</p>
                 `
-                break;
-              case ComponentTypeRuEnum.TRANSISTOR:
-                markup = `
+                  break;
+                case ComponentTypeRuEnum.TRANSISTOR:
+                  markup = `
                     <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
                     <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
                     <p>radiationResistance: ${item.radiationResistance}</p>
                   `
-                break;
-              case ComponentTypeRuEnum.RESISTOR:
-                markup = `
+                  break;
+                case ComponentTypeRuEnum.RESISTOR:
+                  markup = `
                       <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
                       <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
                       <p>radiationResistance: ${item.radiationResistance}</p>
                     `
-                break;
-              case ComponentTypeRuEnum.CAPACITOR:
-                markup = `
+                  break;
+                case ComponentTypeRuEnum.CAPACITOR:
+                  markup = `
                     <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
                     <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
                     <p>maxCapacity: ${item.maxCapacity}</p>                   
                     <p>minCapacity: ${item.minCapacity}</p>
                   `
-                break;
-            }
-            let cItemIndex = componetns.findIndex(
-              (cItem: ImageName) => cItem.nameRu === item.ruComponentType
-            )
+                  break;
+              }
+              let cItemIndex = componetns.findIndex(
+                (cItem: ImageName) => cItem.nameRu === item.ruComponentType
+              )
 
-            this.all.push({
-              manufacturerName: item.manufacturerName,
-              ruComponentKind: item.ruComponentKind,
-              ruComponentType: item.ruComponentType,
-              componentName: item.componentName,
-              html: this.sanitizer.bypassSecurityTrustHtml(markup),
-              img: componetns[cItemIndex].image
+              this.all.push({
+                component: item,
+                html: this.sanitizer.bypassSecurityTrustHtml(markup),
+                filters: filters,
+                img: componetns[cItemIndex].image
+              })
             })
           })
-        })
-        this.last = Math.floor(this.all.length / 20) - 1
-        this.to = this.all.length / 20 <= 10 ? Math.floor(this.all.length / 20) : 10
 
-        this.updatePages()
-        this.selectPage()
-
+          this.allCopy = Array.from(this.all);
+          this.last = Math.floor(this.all.length / 20) - 1
+          this.to = this.all.length / 20 <= 10 ? Math.ceil(this.all.length / 20) : 10
+          this.updatePages()
+          this.selectPage()
+          this.loader = false
+        }
       },
     });
   }
@@ -187,8 +194,8 @@ export class CatalogComponent implements OnInit {
   }
   selectPage(): void {
     this.records = []
-    this.all.forEach((item: Test, index: number) => {
-      if(index >= (this.currentPage) * 20 && index < (this.currentPage + 1) * 20) {
+    this.allCopy.forEach((item: Test, index: number) => {
+      if (index >= (this.currentPage) * 20 && index < (this.currentPage + 1) * 20) {
         this.records.push(item)
       }
     })
@@ -199,11 +206,11 @@ export class CatalogComponent implements OnInit {
       this.currentPage--
       if (this.currentPage !== 0 && (this.currentPage + 1) % 10 === 0) {
         this.from -= 10
-        if(this.to % 10 === 0) {
+        if (this.to % 10 === 0) {
           this.to -= 10
         }
         else {
-          this.to = this.to-(this.to%10)
+          this.to = this.to - (this.to % 10)
         }
         this.updatePages()
       }
@@ -223,8 +230,8 @@ export class CatalogComponent implements OnInit {
     }
   }
 
-  getLatest(): void{
-    this.from = this.last - this.last%10
+  getLatest(): void {
+    this.from = this.last - this.last % 10
     this.to = this.last + 1
     this.currentPage = this.last
     this.updatePages()
@@ -232,32 +239,62 @@ export class CatalogComponent implements OnInit {
   }
 
   nextSet(): void {
-    if(this.to <= this.last) {
+    if (this.to <= this.last) {
       this.from += 10
       this.to = this.to + 10 > this.last ? this.last + 1 : this.to + 10
       this.currentPage = this.from
       this.updatePages()
       this.selectPage()
     }
-  } 
+  }
 
   prevSet(): void {
-    if(this.from !=0) {
+    if (this.from != 0) {
       this.from -= 10
-      if(this.to % 10 === 0) {
+      if (this.to % 10 === 0) {
         this.to -= 10
       }
       else {
-        this.to = this.to-(this.to%10)
+        this.to = this.to - (this.to % 10)
       }
       this.currentPage = this.from
       this.updatePages()
       this.selectPage()
     }
-  } 
+  }
 
-  
+
   getSafeUrl(url: string): any {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+  }
+
+  search(event: any): void {
+    let value: string = event.target.value
+    console.log(value)
+    this.records = []
+    this.allCopy = []
+    this.all.forEach((item: Test) => {
+      if (this.include(item, value)) {
+        this.allCopy.push(item)
+      }
+    })
+    this.from = 0
+    this.currentPage = 0
+    this.last = Math.ceil(this.allCopy.length / 20) - 1
+    this.to = this.allCopy.length / 20 <= 10 ? Math.ceil(this.allCopy.length / 20) : 10
+    this.updatePages()
+    this.selectPage()
+  }
+
+  include(item: Test, value: string): boolean {
+    let componentName: string = item.component.componentName
+    let length: number = componentName.length >= value.length ? value.length : componentName.length
+    let extractedPart = componentName.slice(0, length).split('')
+    for (let i = 0; i < extractedPart.length; i++) {
+      if (value[i].toLocaleLowerCase() !== extractedPart[i].toLocaleLowerCase()) {
+        return false;
+      }
+    }
+    return true;
   }
 }
