@@ -1,4 +1,4 @@
-<app-filters [all]="allCopy" [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="onSubmit($event)" />
+<app-filters [all]="all" [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="apply($event)" />
 <div class="workspace">
     <app-navigator />
     <main>
@@ -47,7 +47,6 @@
                 <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
                 <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
                 <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}</p>
-
             </div>
         </main>
     </main>

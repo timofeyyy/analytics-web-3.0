@@ -6,18 +6,6 @@ import { Diod } from "./diod"
 import { Microchip } from "./microchip"
 import { Transistor } from "./transistor"
 
-// export interface DropdownOptions {
-//     manufacturerName: Option
-//     componentKind: Option,
-//     componentName: Option,
-//     propertyName: Partial<OptionProp>,
-//     country: Partial<CountryOptions>
-
-// }
-
-
-
-
 
 export interface Manufacturer {
     manufacturerName: string,
@@ -26,32 +14,38 @@ export interface Manufacturer {
 
 }
 
-export interface ComponentKind {
-    ruComponentKind: string
-}
 
-export interface ComponentName {
-    componentName: string
-}
 
-export interface OptionsApi {
+export interface ComponentLabel {
     manufacturerName: string,
     ruComponentKind: string,
-    EnComponentKind: string,
     ruComponentType: ComponentTypeRuEnum,
-    EnComponentType: ComponentTypeRuEnum,
     componentName: string
 }
 
-export interface Option {
-    propName: string,
-    currentvalue: string,
-    values: string[],
+export interface DropBox {
+    currentValue: Partial<ImageName> | string,
     open: boolean,
-    sort: (props: any, all: Test[]) => string[] | undefined,
-    componentProps: Map<string, any>
+    values: any[]
 }
 
+export interface ComponentTypesCheckBoxes   {
+    checked: boolean,
+    manufacturer: Manufacturer,
+    image: Partial<ImageName>
+    // image: string
+    // value: ComponentTypeRuEnum,
+
+}
+
+export interface FilterDropBox extends DropBox {
+    propName: string,
+    // currentvalue: string,
+    // values: string[],
+    // open: boolean,
+    sort: (props: any, all: ComponentOptions[]) => string[] | undefined,
+    componentProps: Map<string, any>
+}
 // export interface OptionProp {
 //     currentroute: ChartRoute
 //     routes: ChartRoute[],
@@ -60,42 +54,31 @@ export interface Option {
 //     currentValue: string | number
 // }
 
-export interface ChartData {
-    chartOptions: Partial<ChartOptions>,
-    values: string[]
-}
+// export interface ChartData {
+//     chartOptions: Partial<ChartOptions>,
+//     values: string[]
+// }
 
 export interface ChartType {
     checked: boolean,
     value: string
 }
 
-export interface ComponentType {
-    checked: boolean,
-    value: ComponentTypeRuEnum,
-    manufacturer: Manufacturer,
-    image: string
-}
-
-// export interface ComponentData {
-//     [key: string]: Microchip[] | Capacitor[] | Diod[] | Transistor[]
+// export interface ComponentType {
+//     checked: boolean,
+//     value: ComponentTypeRuEnum,
+//     manufacturer: Manufacturer,
+//     image: string
 // }
 
-// export interface ChartTypes {
-//     bar: boolean,
-//     line: boolean,
-//     mixed: boolean,
-//     sorted: boolean,
-//     stacked: boolean
+
+// export interface CountryOptions {
+//     currentValue: Partial<ImageName>,
+//     open: boolean,
+//     values: Partial<ImageName>[]
 // }
 
-export interface CountryOptions {
-    currentValue: Partial<ImageName>,
-    open: boolean,
-    values: Partial<ImageName>[]
-}
-
-export interface Test {
+export interface ComponentOptions {
     component: Microchip | Transistor | Capacitor | Diod
     // ruComponentType: string,
     // ruComponentKind: string,
@@ -105,10 +88,3 @@ export interface Test {
     html: any
     img: string
 }
-
-
-
-// export interface PropOptions {
-//     propName: string,
-//     currentValue: string 
-// }

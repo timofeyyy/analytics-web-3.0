@@ -11,7 +11,7 @@ import { AppEnum } from "../utils/enum/app.enum";
 import { ChartConfig, Config, ImageName } from "../utils/types/config";
 
 @Injectable()
-export class ApiService {
+export class ApiService1 {
 
     private config!: Config
 
@@ -91,16 +91,20 @@ export class ApiService {
         }
         return obs;
     }
-    getBitDepthValue(manufacturerName: string | undefined = undefined, componentKind: string | undefined = undefined, componentName: string | undefined = undefined): Observable<BitDepthValue[]> | null {
+    getBitDepthValue(data: Map<string, any>): Observable<BitDepthValue[]> | null {
         let url: string = "api/microchips/bitdepthvalue?"
+        let manufacturerName: string | null = data.get('manufacturerName')
+        let componentKind: string | null = data.get('componentKind')
+        let componentName: string | null = data.get('componentName')
+
         if(manufacturerName) {
-            url+=`ManufacturerName=${manufacturerName}&`
+            url+=`ManufacturerName=${manufacturerName}&&`
         }
         if(componentKind) {
-            url+=`componentKind=${componentKind}&`
+            url+=`componentKind=${componentKind}&&`
         }
         if(componentName) {
-            url+=`componentName=${componentName}&`
+            url+=`componentName=${componentName}`
         }
         console.log(url)
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -114,16 +118,18 @@ export class ApiService {
         return obs;
     }
 
-    getComponentsApi(componentType: string | void, manufacturerName: string | void): Observable<ComponentLabel[]> | null {
+    getComponentsApi(data: Map<string, any>): Observable<ComponentLabel[]> | null {
 
-        let url: string = "api/components"
-        if(componentType != null) {
-            url+=`?componentType=${componentType}`
+        let url: string = "api/components?"
+        let manufacturerName: string | null = data.get('manufacturerName')
+        let componentType: string | null = data.get('componentType')
+
+        if(componentType) {
+            url+=`componentType=${componentType}&&`
         }
-        if(manufacturerName != null) {
-            url+=`?manufacturerName=${manufacturerName}`
+        if(manufacturerName) {
+            url+=`manufacturerName=${manufacturerName}`
         }
-        console.log(url)
 
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {

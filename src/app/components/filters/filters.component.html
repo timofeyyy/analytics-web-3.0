@@ -11,6 +11,7 @@
                     propName: 'ruComponentType',
                     open: currentPropName === 'ruComponentType' 
                 }" 
+                [currentPropName]="currentPropName"
                 [props]="props"
                 (onChanged)="update($event)" /> 
                 <app-prop-selection 
@@ -19,6 +20,7 @@
                     propName: 'ruComponentKind',
                     open: currentPropName === 'ruComponentKind'
                 }" 
+                [currentPropName]="currentPropName"
                 [props]="props"
                 (onChanged)="update($event)" />
                 <app-prop-selection 
@@ -27,6 +29,7 @@
                     propName: 'manufacturerName',
                     open: currentPropName === 'manufacturerName'
                 }" 
+                [currentPropName]="currentPropName"
                 [props]="props"
                 (onChanged)="update($event)" /> 
             </div>

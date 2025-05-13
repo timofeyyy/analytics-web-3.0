@@ -9,12 +9,12 @@
             <section class="fav">
                 <div class="item" *ngFor="let component of componentTypes">
                     <div>
-                        <input type="checkbox" (click)="selectComponentTypes(component.value)"
+                        <input type="checkbox" (click)="selectComponentTypes(component.image.nameRu)"
                             [checked]="component.checked" />
-                        <a class="type" [href]="getSafeUrl(component.value)">{{component.value}}</a>
+                        <a class="type" [href]="getSafeUrl(component.image.nameRu!)">{{component.image.nameRu}}</a>
                     </div>
                     <div class="info">
-                        <img [src]="getSafeUrl(component.image)" />
+                        <img [src]="getSafeUrl(component.image.image!)" />
                         <p class="proc">{{component.manufacturer.prodProcent}}%</p>
                     </div>
                     <p class="manufacturer">{{component.manufacturer.manufacturerName}}</p>
@@ -30,7 +30,7 @@
 
             </section> -->
             <section class="prod-stat">
-                <iframe src="chart/componenttypes/stat" frameborder="0"></iframe>
+                <iframe src="chart1/parent/components/statistic/donut" frameborder="0"></iframe>
 
                 <!-- .
                 <iframe [src]="getSafeUrl(url)" frameborder="0"></iframe> -->
@@ -47,16 +47,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="values-wrapper">
+                <!-- <div class="values-wrapper">
                     <ul [ngStyle]="{display: manufacutrerOptions.open ? 'block' : 'none'}">
                         <li class="search">
                             <input type="text" placeholder="поиск">
                         </li>
                         <li *ngFor="let manufacturer of manufacutrerOptions.values"
-                            (click)="manufacutrerOptions.currentvalue = manufacturer;manufacutrerOptions.open">
+                            (click)="manufacutrerOptions.currentValue = manufacturer;manufacutrerOptions.open != manufacutrerOptions.open">
                             {{manufacturer}}</li>
                     </ul>
-                </div>
+                </div> -->
                 <div class="cols-wrapper">
                     <div class="cols layout">
                         <div class="col">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="view">
-                    <div class="row layout" *ngFor="let row of rows">
+                    <div class="row layout" *ngFor="let row of rows" (click)="openCatalog(row.manufacturerName)">
                         <div class="col">
                             <p>{{row.manufacturerName}}</p>
                         </div>

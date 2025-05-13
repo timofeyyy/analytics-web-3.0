@@ -1,0 +1,44 @@
+<div class="options">
+    <div class="list-wrapper">
+        <div class="list">
+            <p class="label">{{options.propName}}</p>
+            <ul class="values">
+                <li class="current" (click)="openClose()">
+                    <p>{{options.currentValue}}</p>
+                    <div></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="values-wrapper">
+        <ul [ngStyle]="{display: options.open ? 'block' : 'none'}">
+            <li class="search">
+                <input type="text" placeholder="поиск" (input)="search($event)">
+            </li>
+            <li *ngFor="let value of options.values" 
+            (click)="openClose(value)"
+            >
+                {{value}}
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- (click)="selectValue(value)" -->
+<!-- 
+<div class="list">
+    <p class="label">Производитель</p>
+    <div class="values">
+        <p class="current" (click)="selectValue('manufacturerName')">
+            {{dropdownOptions.manufacturerName.currentvalue}}</p>
+        <div class="values-wrapper">
+            <ul [ngStyle]="{display: dropdownOptions.manufacturerName.open ? 'block' : 'none'}">
+                <li class="search">
+                    <input type="text" placeholder="поиск">
+                </li>
+                <li *ngFor="let manufacturer of dropdownOptions.manufacturerName.values"
+                    (click)="dropdownOptions.manufacturerName.currentvalue = manufacturer;selectValue('manufacturerName');selectManufacrurer();updateTable()">
+                    {{manufacturer}}</li>
+            </ul>
+        </div>
+    </div>
+</div> -->

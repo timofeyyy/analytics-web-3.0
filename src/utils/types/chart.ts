@@ -28,49 +28,6 @@ export type ChartOptions = {
     labels: any;
     theme: ApexTheme;
     title: ApexTitleSubtitle;
+    values: string[];
+    propName: string
 };
-
-
-export interface ILinks {
-    url: string,
-    safeUrl: SafeResourceUrl
-}
-
-export interface IOptions {
-    optionsList: Map<string, []>,
-    currentValues: Map<string, string | number>
-}
-
-// export interface IApiConfig {
-//     apexChartData: IApexChartData,
-//     sortColumns: Map<string, []>
-// }
-
-// export interface IApexChartData {
-//     categories: Array<string | number>,
-//     series: Array<Partial<ISeries>>,
-//     yLabel: string,
-//     xLabel: string,
-//     chart: Partial<{
-//         type: string,
-//         stacked: boolean
-//     }>,
-//     yaxis:
-//     {
-//         opposite: boolean,
-//         title: {
-//             text: string
-//         }
-//     }[],
-//     horizontal: boolean
-// }
-
-export interface ISeries {
-    name: string | number,
-    type: string | undefined
-    data: Array<string | number>
-}
-
-export interface ISeriesData {
-    name: []
-}

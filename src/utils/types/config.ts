@@ -1,3 +1,5 @@
+import { ComponentTypeRuEnum } from "../enum/app.enum"
+
 export interface Config {
     api: {
         url: string
@@ -22,6 +24,6 @@ export interface ChartRoute {
 
 
 export interface ImageName {
-    nameRu: string, 
+    nameRu: string | ComponentTypeRuEnum, 
     image: string
 }

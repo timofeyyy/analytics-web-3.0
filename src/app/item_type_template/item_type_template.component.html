@@ -1,0 +1,18 @@
+<div class="workspace">
+    <app-navigator />
+    <main>
+        <header class="h-widget">
+            <h1>{{componentType === undefined ? "Charts" : componentType}}</h1>
+            <app-country-selection/>
+        </header>
+        <div class="wrapper">
+            <section class="chart-wrapper">
+                <iframe [src]="url!" frameborder="0"></iframe>
+            </section>
+            <section class="selection">
+                <app-prop-name-selection [componentType]="componentType" (onChanged)="onPropChange($event)"/>
+                <app-chart-types-checkboxes (onChnage)="onChartTypeChnage($event)"/>
+            </section>
+        </div>
+    </main>
+</div>
