@@ -4,7 +4,6 @@ import { CountrySelectionComponent } from '../components/selection/country_selec
 import { FiltersComponent } from '../components/filters/filters.component';
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ApiService } from '../../services/api.services';
 import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { catchError, forkJoin, map, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,13 +11,14 @@ import { ComponentOptions } from '../../utils/types/app';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ImageName } from '../../utils/types/config';
 import { LoaderComponent } from '../components/loader/loader.component';
+import { ApiService1 } from '../../services/api.services1';
 
 @Component({
   selector: 'app-catalog',
   imports: [NavigatorComponent, CountrySelectionComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent],
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css', '../components/selection/selection.css'],
-  providers: [ApiService],
+  providers: [ApiService1],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -38,7 +38,7 @@ export class CatalogComponent implements OnInit {
   last!: number
   loader!: boolean
   constructor(
-    private api: ApiService,
+    private api: ApiService1,
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer
@@ -62,7 +62,7 @@ export class CatalogComponent implements OnInit {
 
   apply(payload: Map<string, string>): void {
     if (payload) {
-     this.allCopy = []
+      this.allCopy = []
       this.all.forEach((item: ComponentOptions, index) => {
         let countProp: number = payload.size
         let countMatch: number = 0;
@@ -70,7 +70,7 @@ export class CatalogComponent implements OnInit {
           if ((item.component as any)[key]) {
 
             if (index < 5) {
-              console.log((item.component as any)[key] , value)
+              console.log((item.component as any)[key], value)
             }
             if (((item.component as any)[key] === value || value === AppEnum.ALL)) {
               countMatch++
@@ -95,126 +95,83 @@ export class CatalogComponent implements OnInit {
     this.filter = false
   }
 
-  getApi(payload: Map<string, string> | void): void {
-
-    const observable = new Observable((subscriber) => {
-
-      this.api.getDiods()
-        ?.pipe(map(
-          (api: any) => api
-        ),
-          catchError((err: any) => {
-            console.log(err)
-            this.router.navigate(['not-found'])
-            return []
-          }))
-        ?.subscribe(data => this.storage.set(ComponentTypeRuEnum.DIOD, data))
-
-      this.api.getTransistors()
-        ?.pipe(map(
-          (api: any) => api
-        ),
-          catchError((err: any) => {
-            console.log(err)
-            this.router.navigate(['not-found'])
-            return []
-          }))
-        ?.subscribe(data => this.storage.set(ComponentTypeRuEnum.TRANSISTOR, data))
-
-      this.api.getCapacitors()
-        ?.pipe(map(
-          (api: any) => api
-        ),
-          catchError((err: any) => {
-            console.log(err)
-            this.router.navigate(['not-found'])
-            return []
-          }))
-        ?.subscribe(data => this.storage.set(ComponentTypeRuEnum.CAPACITOR, data))
-
-      this.api.getMicrochips()?.pipe(map(
-        (api: any) => api
-      ),
-        catchError((err: any) => {
-          console.log(err)
-          this.router.navigate(['not-found'])
-          return []
-        }))
-        ?.subscribe(data => {
-          this.storage.set(ComponentTypeRuEnum.MICROCHIP, data)
-          // subscriber.complete()
-        })
-    });
-
+  getApi(payload: Map<string, string>): void {
     forkJoin([
       this.api.getDiods(),
       this.api.getTransistors(),
       this.api.getCapacitors(),
-      this.api.getMicrochips()
+      this.api.getMicrochips(),
+      this.api.getAlias()
     ]).subscribe(res => {
-      console.log(res)
-
       this.storage.set(ComponentTypeRuEnum.DIOD, (res as any[])[0])
       this.storage.set(ComponentTypeRuEnum.TRANSISTOR, (res as any[])[1])
       this.storage.set(ComponentTypeRuEnum.CAPACITOR, (res as any[])[2])
       this.storage.set(ComponentTypeRuEnum.MICROCHIP, (res as any[])[3])
+      const allias = (res as any[])[4]
       if (this.storage.size === 4) {
         let componetns: ImageName[] = this.api.getComponentsFromConfig()
         this.storage.forEach((set: any) => {
           (set as []).forEach((item: any) => {
             let markup: string = ''
             let filters: string[] = []
-            switch (item.ruComponentType) {
-              case ComponentTypeRuEnum.MICROCHIP:
-                markup = `
-                <p>technology: ${item.ruTechnologyName}</p>
-                <p>bitDepthValue: ${item.bitDepthValue}</p>
-                <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
-                <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
-                <p>radiationResistance: ${item.radiationResistance}</p>
-              `
-                // filters = ['ruTechnologyName', 'bitDepthValue']
-                break;
-              case ComponentTypeRuEnum.DIOD:
-                markup = `
-                <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
-                <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
-                <p>radiationResistance: ${item.radiationResistance}</p>
-              `
-                break;
-              case ComponentTypeRuEnum.TRANSISTOR:
-                markup = `
-                  <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
-                  <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
-                  <p>radiationResistance: ${item.radiationResistance}</p>
-                `
-                break;
-              case ComponentTypeRuEnum.RESISTOR:
-                markup = `
-                    <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
-                    <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
-                    <p>radiationResistance: ${item.radiationResistance}</p>
-                  `
-                break;
-              case ComponentTypeRuEnum.CAPACITOR:
-                markup = `
-                  <p>minOperatingTemperature: ${item.minOperatingTemperature}</p>
-                  <p>maxOperatingTemperature: ${item.maxOperatingTemperature}</p>
-                  <p>maxCapacity: ${item.maxCapacity}</p>                   
-                  <p>minCapacity: ${item.minCapacity}</p>
-                `
-                break;
-            }
-            let cItemIndex = componetns.findIndex(
-              (cItem: ImageName) => cItem.nameRu === item.ruComponentType
-            )
-
-            this.all.push({
-              component: item,
-              html: this.sanitizer.bypassSecurityTrustHtml(markup),
-              filters: filters,
-              img: componetns[cItemIndex].image
+            let satisfyCount: number = 0;
+            payload.forEach((value, key) => {
+              if (item[key] && item[key] == value) {
+                satisfyCount++;
+              }
             })
+            if (payload.size == satisfyCount) {
+              switch (item.ruComponentType) {
+                case ComponentTypeRuEnum.MICROCHIP:
+                  markup = `
+                    <p>${allias['ruTechnologyName']}: ${item.ruTechnologyName}</p>
+                    <p>${allias['bitDepthValue']}: ${item.bitDepthValue}</p>
+                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
+                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
+                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
+                  `
+                  break;
+                case ComponentTypeRuEnum.DIOD:
+                  markup = `
+                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
+                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
+                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
+                  `
+                  break;
+                case ComponentTypeRuEnum.TRANSISTOR:
+                  markup = `
+                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
+                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
+                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
+                  `
+                  break;
+                case ComponentTypeRuEnum.RESISTOR:
+                  markup = `
+                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
+                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
+                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
+                  `
+                  break;
+                case ComponentTypeRuEnum.CAPACITOR:
+                  markup = `
+                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
+                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
+                    <p>${allias['maxCapacity']}: ${item.maxCapacity}</p>                   
+                    <p>${allias['minCapacity']}: ${item.minCapacity}</p>
+                  `
+                  break;
+              }
+              let cItemIndex = componetns.findIndex(
+                (cItem: ImageName) => cItem.nameRu === item.ruComponentType
+              )
+
+              this.all.push({
+                component: item,
+                html: this.sanitizer.bypassSecurityTrustHtml(markup),
+                filters: filters,
+                img: componetns[cItemIndex].image
+              })
+            }
           })
         })
 
@@ -224,12 +181,17 @@ export class CatalogComponent implements OnInit {
         this.updatePages()
         this.selectPage()
         this.loader = false
-
-        if(payload) {
+        // this.last = Math.ceil(this.allCopy.length / 20) === 0 ? 0 : Math.ceil(this.allCopy.length / 20) - 1
+        // this.to = this.allCopy.length / 20 <= 10 ? Math.ceil(this.allCopy.length / 20) : 10
+        if (payload) {
           this.apply(payload)
         }
       }
     });
+  }
+
+  openComponentInfo(item: ComponentOptions): void {
+    this.router.navigateByUrl(`component?ruComponentType=${item.component.ruComponentType}&&componentName=${item.component.componentName}`)
   }
 
   updatePages(): void {

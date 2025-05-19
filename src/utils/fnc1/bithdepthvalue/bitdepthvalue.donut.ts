@@ -10,7 +10,10 @@ const getBitDepthValueStatDonut = (data: any): Partial<ChartOptions> => {
             type: "donut",
             zoom: {
                 enabled: true
-              }
+            }
+        },
+        legend: {
+            fontSize: `max(5vw, 15px)`
         },
         labels: [],
     };
@@ -19,20 +22,20 @@ const getBitDepthValueStatDonut = (data: any): Partial<ChartOptions> => {
 
     if (Array.isArray(data)) {
         data.forEach((obj: BitDepthValue) => {
-            let key : string = obj.bitDepthValue === null || obj.bitDepthValue === "" ? "null" : obj.bitDepthValue;
+            let key: string = obj.bitDepthValue === null || obj.bitDepthValue === "" ? "null" : obj.bitDepthValue;
 
             let labelsItemIndex: number = (apexChartData as ChartOptions).labels.findIndex(
                 (category: string) => category === key
             )
-            
-            if(labelsItemIndex === -1) {
+
+            if (labelsItemIndex === -1) {
                 (apexChartData as ChartOptions).labels.push(key)
             }
 
             if (tmp[key] === undefined) {
                 tmp[key] = 0
             }
-        
+
             tmp[key] += 1
 
         });

@@ -1,7 +1,7 @@
 <div class="popup-window">
     <div class="filters">
         <div class="head">
-            <h1>Filters</h1>
+            <h1>Фильтры</h1>
         </div>
         <div class="body">
             <div class="base">
@@ -13,6 +13,7 @@
                 }" 
                 [currentPropName]="currentPropName"
                 [props]="props"
+                [allias]="`${allias.get('ruComponentType')}`"
                 (onChanged)="update($event)" /> 
                 <app-prop-selection 
                 [all]="all" 
@@ -22,6 +23,7 @@
                 }" 
                 [currentPropName]="currentPropName"
                 [props]="props"
+                [allias]="`${allias.get('ruComponentKind')}`"
                 (onChanged)="update($event)" />
                 <app-prop-selection 
                 [all]="all" 
@@ -31,10 +33,11 @@
                 }" 
                 [currentPropName]="currentPropName"
                 [props]="props"
+                [allias]="`${allias.get('manufacturerName')}`"
                 (onChanged)="update($event)" /> 
             </div>
             <div class="additional">
-                <p *ngIf="!isSelectedComponentType; else templateName">select component type</p>
+                <p *ngIf="!isSelectedComponentType; else templateName">Выберите тип компнонента для дополнительных параметров, если они есть</p>
 
                 <ng-template #templateName>
                     <app-prop-selection *ngFor="let prop of additional" 
@@ -44,6 +47,7 @@
                         open: currentPropName === prop 
                     }" 
                     [props]="componentTypeProp"
+                    [allias]="`${allias.get(prop)}`"
                     (onChanged)="update($event)" /> 
                 </ng-template>
                
@@ -51,8 +55,8 @@
             </div>
         </div>
         <div class="footer">
-            <button class="cancel" (click)="cancel()">cancel</button>
-            <button class="apply" (click)="apply()">apply</button>
+            <button class="cancel" (click)="cancel()">Отмена</button>
+            <button class="apply" (click)="apply()">Применить</button>
         </div>
     </div>
 </div>

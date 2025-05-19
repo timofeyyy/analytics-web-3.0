@@ -16,7 +16,7 @@ import { ApiService1 } from '../../../../../services/api.services1';
 })
 export class ParentChartTemplateComponent implements OnInit {
   chartOptions!: Partial<ChartOptions>
-  
+  chartName!: string
   // http://localhost:4200/chart1/components/components/bar
   constructor(
     private api: ApiService1,
@@ -54,7 +54,8 @@ export class ParentChartTemplateComponent implements OnInit {
     if(getObservable) {
       getObservable(this.api, query)?.pipe(
         map((api: any) => {
-          let data = chartOptionsData[chart_name][type_name](api) as ChartOptions;
+          let data = chartOptionsData[chart_name].chartData[type_name](api) as ChartOptions;
+          this.chartName = chartOptionsData[chart_name].chartName(query);
           console.log(query)
 
           this.chartOptions = {
@@ -66,12 +67,12 @@ export class ParentChartTemplateComponent implements OnInit {
                   console.log(data.values[opts.dataPointIndex])
                   let child_req_name = query.get('child_req_name')
                   let child_chart_name = query.get('child_chart_name')
-                  let componentType = query.get('componentType')
-
+                  let componentType = query.get('ruComponentType')
+                  
                   if(child_chart_name && child_req_name) {
                     let url = `chart1/child/${child_req_name}/${child_chart_name}/${type_name}?manufacturerName=${data.values[opts.dataPointIndex]}&&`
                     if(componentType) {
-                      url+=`componentType=${componentType}`
+                      url+=`ruComponentType=${componentType}`
                     }
                     this.router.navigateByUrl(url)
                   }

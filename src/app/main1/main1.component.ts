@@ -6,7 +6,6 @@ import { catchError, map } from 'rxjs';
 import { AppEnum } from '../../utils/enum/app.enum';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ApiService } from '../../services/api.services';
 import { ComponentLabel, ComponentTypesCheckBoxes, FilterDropBox, Manufacturer } from '../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { ImageName } from '../../utils/types/config';
@@ -15,13 +14,14 @@ import getManufacturersProd from '../../utils/fnc1/other/manufacturers_prod.fnc'
 import { CountrySelectionComponent } from '../components/selection/country_selection/country_selection.component';
 import { LoaderComponent } from '../components/loader/loader.component';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
+import { ApiService1 } from '../../services/api.services1';
 
 @Component({
   selector: 'app-main1',
   imports: [NgStyle, NgFor, HttpClientModule, LoaderComponent, NavigatorComponent, CountrySelectionComponent],
   templateUrl: './main1.component.html',
   styleUrls: ['./main1.component.css', '../components/selection/selection.css', '../components/styles/filter.css', '../components/styles/m-table.css'],
-  providers: [ApiService]
+  providers: [ApiService1]
 })
 export class Main1Component implements OnInit {
   // componentList!: OptionsApi[]
@@ -36,10 +36,10 @@ export class Main1Component implements OnInit {
 
 
   constructor(
-    private api: ApiService,
+    private api: ApiService1,
     private router: Router,
     private sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.rows = []
@@ -55,7 +55,6 @@ export class Main1Component implements OnInit {
   }
 
   getApi(): void {
-
     this.api.getComponentsApi()?.pipe(map((options: ComponentLabel[]) => {
 
       let componetns: ImageName[] = this.api.getComponentsFromConfig()
@@ -79,11 +78,8 @@ export class Main1Component implements OnInit {
           }
         }
       })
-
       this.rows = getManufacturersProd(options) as Manufacturer[]
       this.orig = this.rows
-
-
       this.loader = false
     }),
       catchError((err: any) => {
@@ -97,22 +93,22 @@ export class Main1Component implements OnInit {
   search(event: any): void {
     let value: string = event.target.value
     this.rows = []
-    
+
     this.orig.forEach((manufacturer: Manufacturer) => {
-      if(this.include(manufacturer, value)) {
+      if (this.include(manufacturer, value)) {
         this.rows.push(manufacturer)
       }
     })
   }
 
-  include(manufacturer: Manufacturer, value: string):boolean {
+  include(manufacturer: Manufacturer, value: string): boolean {
     let manufacturerName: string = manufacturer.manufacturerName
-    let length: number = manufacturerName.length >= value.length ? value.length : manufacturerName.length   
+    let length: number = manufacturerName.length >= value.length ? value.length : manufacturerName.length
     let extractedPart = manufacturerName.slice(0, length).split('')
     for (let i = 0; i < extractedPart.length; i++) {
-      if(value[i].toLocaleLowerCase() !== extractedPart[i].toLocaleLowerCase()) {
+      if (value[i].toLocaleLowerCase() !== extractedPart[i].toLocaleLowerCase()) {
         return false;
-      } 
+      }
     }
     return true;
   }

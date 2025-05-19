@@ -2,18 +2,6 @@
     "api" : {
         "url" : "http://localhost:5000/"
     },
-    "chart": [
-        {
-            "name" : "microchips",
-            "allias" : "Микросхема",
-            "routes": [
-                {
-                    "allias": "битность - общее количество",
-                    "route": "bitdepthvalue"
-                }
-            ]
-        }
-    ], 
     "countries": [
         {
             "nameRu": "Беларусь",

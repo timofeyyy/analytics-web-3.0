@@ -1,16 +1,17 @@
 <div class="chart-wrapper">
-    <apx-chart
+    <p>{{chartName}}</p>
+  <apx-chart 
     [series]="chartOptions.series!" 
     [chart]="chartOptions.chart!" 
     [dataLabels]="chartOptions.dataLabels!"
     [plotOptions]="chartOptions.plotOptions!" 
     [yaxis]="chartOptions.yaxis!" 
     [xaxis]="chartOptions.xaxis!"
-    [colors]="chartOptions.colors!"
-    [labels]="chartOptions.labels!"
+    [colors]="chartOptions.colors!" 
+    [labels]="chartOptions.labels!" 
     [title]="chartOptions.title!"
-    [responsive]="chartOptions.responsive!"
-    [colors]="chartOptions.colors!"
-  ></apx-chart>
+    [responsive]="chartOptions.responsive!" 
+    [colors]="chartOptions.colors!">
+  </apx-chart>
   <button (click)="getBack()">Назад</button>
 </div>

@@ -1,16 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ComponentOptions, FilterDropBox } from '../../../../utils/types/app';
 import { ImageName } from '../../../../utils/types/config';
-import { ApiService } from '../../../../services/api.services';
 import { NgFor, NgStyle } from '@angular/common';
 import { AppEnum } from '../../../../utils/enum/app.enum';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ApiService1 } from '../../../../services/api.services1';
 
 @Component({
   selector: 'app-prop-selection',
   imports: [NgStyle, NgFor],
   templateUrl: './prop_selection.component.html',
   styleUrls: ['./prop_selection.component.css', '../selection.css'],
-
 })
 export class PropSelectionComponent implements OnChanges {
   @Input()
@@ -22,7 +22,9 @@ export class PropSelectionComponent implements OnChanges {
   @Input()
   props!: any
 
-  
+  @Input()
+  allias!: string
+
   @Input()
   currentValue!: string
 
@@ -37,41 +39,37 @@ export class PropSelectionComponent implements OnChanges {
 
   valuesCopy!: string[]
 
-  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-      let prop = this.props[this.options.propName as string]
-      this.options.currentValue = prop?.currentvalue
-      this.options.currentValue = prop?.currentvalue
-      this.options.values = [AppEnum.ALL]
-      if (this.options.open) {
-        if ((prop as FilterDropBox).sort) {
-          this.options.values = (prop as FilterDropBox).sort(this.props, this.all)
-        } 
-        else {
-          this.all.forEach((item: ComponentOptions) => {
-            let value: string = (item.component as any)[this.options.propName as string]
-            === null || (item.component as any)[this.options.propName as string] === '' ? "null" : (item.component as any)[this.options.propName as string]
-            let index = (this.options.values as string[])?.findIndex((item: string) => item === value)
-            if (index === -1 && value !== undefined)
-              this.options.values?.push(value)
-          })
-        }
-        this.valuesCopy = Array.from(this.options.values as [])
+    let prop = this.props[this.options.propName as string]
+    this.options.currentValue = prop?.currentvalue
+    this.options.currentValue = prop?.currentvalue
+    this.options.values = [AppEnum.ALL]
+    if (this.options.open) {
+      if ((prop as FilterDropBox).sort) {
+        this.options.values = (prop as FilterDropBox).sort(this.props, this.all)
       }
+      else {
+        this.all.forEach((item: ComponentOptions) => {
+          let value: string = (item.component as any)[this.options.propName as string]
+            === null || (item.component as any)[this.options.propName as string] === '' ? "null" : (item.component as any)[this.options.propName as string]
+          let index = (this.options.values as string[])?.findIndex((item: string) => item === value)
+          if (index === -1 && value !== undefined)
+            this.options.values?.push(value)
+        })
+      }
+      this.valuesCopy = Array.from(this.options.values as [])
+    }
   }
 
   openClose(value: string | void): void {
-
     let currentProp = this.options.propName
     if (value) {
       this.options.currentValue = value
     }
-
     if (this.options.open) {
       currentProp = undefined
     }
-    // console.log({ option: this.options, currentProp: currentProp })
     this.onChanged.emit({ option: this.options, currentProp: currentProp })
   }
 

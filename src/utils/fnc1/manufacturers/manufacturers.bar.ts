@@ -38,15 +38,6 @@ const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
                 }
             }
         },
-        // chart: {
-        //         ...value.chart,
-        //         type: value.chart?.type as ChartType,
-        //         events: {
-        //           dataPointSelection: (event, chartContext, opts) => {
-        //             this.router.navigateByUrl(`chart/manufacturers/production?manufacturerName=${value.xaxis?.categories[opts.dataPointIndex] as string}`)
-        //           }
-        //         }
-        //       },
         plotOptions: {
             bar: {
                 horizontal: false
@@ -108,24 +99,6 @@ const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
 
     apexChartData.values = apexChartData.xaxis?.categories;
     return apexChartData;
-    // return {
-    //     chartOptions: apexChartData,
-    //     values: apexChartData.xaxis?.categories
-    // };
-    // let apexChartData: Partial<ChartOptions> = {
-    //     series: [],
-    //     chart: {
-    //         type: "donut",
-    //         zoom: {
-    //             enabled: true
-    //         }
-    //     },
-    //     labels: [],
-    //     legend: {
-    //         fontSize: `max(5vw, 15px)`
-    //     },
-    //     values: []
-    // };
 }
 
 export default getManufacturersChartOptionBar1

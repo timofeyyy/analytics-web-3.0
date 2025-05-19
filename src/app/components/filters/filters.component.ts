@@ -7,12 +7,15 @@ import componentKindFilters from '../../../utils/fnc1/filters/componentKind';
 import componentTypeFilters from '../../../utils/fnc1/filters/componentType';
 import { NgFor, NgIf } from '@angular/common';
 import { ComponentOptions, FilterDropBox } from '../../../utils/types/app';
+import { ApiService1 } from '../../../services/api.services1';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-filters',
-  imports: [PropSelectionComponent, NgIf, NgFor],
+  imports: [PropSelectionComponent, NgIf, NgFor, HttpClientModule],
   templateUrl: './filters.component.html',
-  styleUrl: './filters.component.css'
+  styleUrl: './filters.component.css',
+  providers: [ApiService1]
 })
 export class FiltersComponent implements OnInit {
 
@@ -24,6 +27,11 @@ export class FiltersComponent implements OnInit {
   isSelectedComponentType!: boolean
   additional!: any[]
   componentTypeProp: any
+  allias!: Map<string, string>
+
+  constructor(
+    private api: ApiService1
+  ) { }
 
   @Output()
   public onChange = new EventEmitter<any>()
@@ -40,7 +48,7 @@ export class FiltersComponent implements OnInit {
       else {
         let map: Map<string, string> = this.props[key].componentProps;
         payload.set(key, this.props[key].currentvalue)
-        if(this.props[key].currentvalue !== AppEnum.ALL) {
+        if (this.props[key].currentvalue !== AppEnum.ALL) {
           map.forEach((value, key_) => {
             if (key_ === this.props[key].currentvalue) {
               for (const key__ in value as any) {
@@ -68,7 +76,6 @@ export class FiltersComponent implements OnInit {
         }
       }
     }
-    // console.log(this.props)
     if (mainCategoryProp) {
       this.props[options.option.propName as string].currentvalue = options.option.currentValue
     }
@@ -129,19 +136,11 @@ export class FiltersComponent implements OnInit {
           }
         ),
     }
-    // this.props = new Map()
-    // this.props.set('manufacturerName', {
-    //   currentvalue: AppEnum.ALL,
-    //   sort: manufacturerNameFilters
-    // }),
-    // this.props.set('ruComponentType', {
-    //   currentvalue: AppEnum.ALL,
-    //   sort: componentKindFilters
-    // })
-    // this.props.set('ruComponentKind', {
-    //   currentvalue: AppEnum.ALL,
-    //   sort: componentTypeFilters
-    // })
-    // console.log(this.props)
+    this.api.getAlias()?.pipe().subscribe(
+      (data) => {
+        this.allias = new Map<string, string>(Object.entries(data))
+        console.log(this.allias)
+      }
+    )
   }
 }

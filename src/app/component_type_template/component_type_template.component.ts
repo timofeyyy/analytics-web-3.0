@@ -5,12 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import { ChartTypesCheckboxesComponent } from '../components/chart_types_checkboxes/chart_types_checkboxes.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PropNameSelectionComponent } from '../components/selection/prop_name_selection/prop_name_selection.component';
+import { AppEnum } from '../../utils/enum/app.enum';
 
 @Component({
   selector: 'app-component-template',
   imports: [NavigatorComponent, CountrySelectionComponent, PropNameSelectionComponent, ChartTypesCheckboxesComponent],
-  templateUrl: './item_type_template.component.html',
-  styleUrl: './item_type_template.component.css'
+  templateUrl: './component_type_template.component.html',
+  styleUrl: './component_type_template.component.css'
 })
 export class TypeTemplateComponent implements OnInit {
 
@@ -18,15 +19,15 @@ export class TypeTemplateComponent implements OnInit {
   prop!: string | null
   chart!: string | null
   url: any
-  constructor (
+  constructor(
     private route: ActivatedRoute,
     private santizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.onChartTypeChnage("donut")
-    this.onPropChange("bitdepthvalue")
-  }
+    this.onPropChange(AppEnum.NONE)
+  } 
 
   onChartTypeChnage(value: string): void {
     this.chart = value
@@ -35,10 +36,15 @@ export class TypeTemplateComponent implements OnInit {
 
   buildChart(): void {
     this.route.paramMap.subscribe(params => {
-      this.componentType = params.get('componentType')
-        if(this.prop && this.chart) {
-          this.url = this.santizer.bypassSecurityTrustResourceUrl(`chart1/parent/components/componentTypes/${this.chart}?componentType=${this.componentType}&&child_req_name=${this.prop}&&child_chart_name=${this.prop}`)
+      this.componentType = params.get('ruComponentType')
+      console.log(this.prop)
+      if (this.prop && this.chart) {
+        let url: string = `chart1/parent/components/componentTypes/${this.chart}?ruComponentType=${this.componentType}`
+        if(this.prop != AppEnum.NONE) {
+          url+=`&&child_req_name=${this.prop}&&child_chart_name=${this.prop}`
         }
+        this.url = this.santizer.bypassSecurityTrustResourceUrl(url)
+      }
     })
   }
 

@@ -15,7 +15,6 @@ export class ApiService1 {
 
     private config!: Config
 
-
     constructor(
         private httpClient: HttpClient
     ) {
@@ -39,13 +38,25 @@ export class ApiService1 {
         return this.config.components;
     }
 
-    getChartConfig() : ChartConfig[] {
-        return this.config.chart
+    getAlias(): Observable<any> | null {
+        let obs: Observable<any> | null = this.getReqDomen("api/allias");
+        if (obs != null) {
+            return obs.pipe(map((names: any) => {
+                return names;
+            }))
+        }
+        return obs;
     }
 
-
-    getMicrochips(): Observable<Microchip[]> | null {
-        let obs: Observable<any> | null = this.getReqDomen("api/microchips");
+    getMicrochips(data: Map<string, any> | void): Observable<Microchip[]> | null {
+        let url: string = "api/microchips"
+        if (data) {
+            let componentName: string | null = data.get('componentName')
+            if (componentName) {
+                url += `?componentName=${componentName}`
+            }
+        }
+        let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((names: Microchip[]) => {
                 return names.map(function (name: Microchip): Microchip {
@@ -56,8 +67,15 @@ export class ApiService1 {
         return obs;
     }
 
-    getCapacitors(): Observable<Capacitor[]> | null {
-        let obs: Observable<any> | null = this.getReqDomen("api/capacitors");
+    getCapacitors(data: Map<string, any> | void): Observable<Capacitor[]> | null {
+        let url: string = "api/capacitors"
+        if (data) {
+            let componentName: string | null = data.get('componentName')
+            if (componentName) {
+                url += `?componentName=${componentName}`
+            }
+        }
+        let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((names: Capacitor[]) => {
                 return names.map(function (name: Capacitor): Capacitor {
@@ -68,8 +86,16 @@ export class ApiService1 {
         return obs;
     }
 
-    getDiods(): Observable<Diod[]> | null {
-        let obs: Observable<any> | null = this.getReqDomen("api/diods");
+    getDiods(data: Map<string, any> | void): Observable<Diod[]> | null {
+        let url: string = "api/diods"
+        if (data) {
+            let componentName: string | null = data.get('componentName')
+            if (componentName) {
+                url += `?componentName=${componentName}`
+            }
+        }
+
+        let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((names: Diod[]) => {
                 return names.map(function (name: Diod): Diod {
@@ -79,9 +105,16 @@ export class ApiService1 {
         }
         return obs;
     }
-    
-    getTransistors(): Observable<Transistor[]> | null {
-        let obs: Observable<any> | null = this.getReqDomen("api/transistors");
+
+    getTransistors(data: Map<string, any> | void): Observable<Transistor[]> | null {
+        let url: string = "api/transistors"
+        if (data) {
+            let componentName: string | null = data.get('componentName')
+            if (componentName) {
+                url += `?componentName=${componentName}`
+            }
+        }
+        let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((names: Transistor[]) => {
                 return names.map(function (name: Transistor): Transistor {
@@ -94,17 +127,17 @@ export class ApiService1 {
     getBitDepthValue(data: Map<string, any>): Observable<BitDepthValue[]> | null {
         let url: string = "api/microchips/bitdepthvalue?"
         let manufacturerName: string | null = data.get('manufacturerName')
-        let componentKind: string | null = data.get('componentKind')
+        let componentKind: string | null = data.get('ruComponentKind')
         let componentName: string | null = data.get('componentName')
 
-        if(manufacturerName) {
-            url+=`ManufacturerName=${manufacturerName}&&`
+        if (manufacturerName) {
+            url += `manufacturerName=${manufacturerName}&&`
         }
-        if(componentKind) {
-            url+=`componentKind=${componentKind}&&`
+        if (componentKind) {
+            url += `ruComponentKind=${componentKind}&&`
         }
-        if(componentName) {
-            url+=`componentName=${componentName}`
+        if (componentName) {
+            url += `componentName=${componentName}`
         }
         console.log(url)
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -118,25 +151,25 @@ export class ApiService1 {
         return obs;
     }
 
-    getComponentsApi(data: Map<string, any>): Observable<ComponentLabel[]> | null {
+    getComponentsApi(data: Map<string, any> | void): Observable<ComponentLabel[]> | null {
 
         let url: string = "api/components?"
-        let manufacturerName: string | null = data.get('manufacturerName')
-        let componentType: string | null = data.get('componentType')
-
-        if(componentType) {
-            url+=`componentType=${componentType}&&`
+        if (data) {
+            let manufacturerName: string | null = data.get('manufacturerName')
+            let componentType: string | null = data.get('ruComponentType')
+            if (componentType) {
+                url += `ruComponentType=${componentType}&&`
+            }
+            if (manufacturerName) {
+                url += `manufacturerName=${manufacturerName}`
+            }
         }
-        if(manufacturerName) {
-            url+=`manufacturerName=${manufacturerName}`
-        }
-
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((options: ComponentLabel[]) => {
                 return options.map(function (option: ComponentLabel): ComponentLabel {
                     return option;
-                }); 
+                });
             }))
         }
         return obs;

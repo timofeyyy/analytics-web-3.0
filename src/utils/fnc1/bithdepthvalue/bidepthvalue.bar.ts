@@ -30,11 +30,8 @@ const getBitDepthValueStatBar = (data: any): Partial<ChartOptions> => {
             }
         }
     };
-
     if (Array.isArray(data)) {
-
         let tmp: any = {}
-
         data.forEach((obj: BitDepthValue) => {
             if (obj.bitDepthValue != undefined) {
                 let bitDepthValue: string =  obj.bitDepthValue === "" ? "null" : obj.bitDepthValue

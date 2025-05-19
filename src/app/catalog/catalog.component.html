@@ -3,17 +3,17 @@
     <app-navigator />
     <main>
         <header class="h-widget">
-            <h1>Catalog</h1>
-            <app-country-selection />
+            <h1>Просмотр данных</h1>
+            <app-country-selection style="display: none;"/>
         </header>
         <main class="catalog">
-            <div class="head">
+            <div class="head"> 
                 <div class="filter" >
                     <div class="preview" (click)="filter=!filter">
-                        <p>filter</p>
+                        <p>Фильтры</p>
                     </div>
                     <li class="search">
-                        <input type="text" placeholder="маркеровка" (input)="search($event)">
+                        <input type="text" placeholder="имя компонента" (input)="search($event)">
                     </li>
                 </div>
             </div>
@@ -26,16 +26,11 @@
                         </div>
                         <h5>{{item.component.manufacturerName}}, {{item.component.componentName}}</h5>
                         <div [innerHTML]="item.html">
-                            <!-- <p>technology: комплементарная структура металл - оксид - полупроводник (КМОП)</p>
-                            <p>bitDepthValue: 32</p>
-                            <p>minOperatingTemperature: -60</p>
-                            <p>maxOperatingTemperature: 85</p>
-                            <p>radiationResistance: -1.7976931348623157e+308</p> -->
                         </div>
                     </div>
                     <div class="block">
-                        <p>Спецификация</p>
-                        <button>Подробнее</button>
+                        <a href="https://static.chipdip.ru/lib/906/DOC000906865.pdf" class="spec">Спецификация</a>
+                        <button (click)="openComponentInfo(item)">Подробнее</button>
                     </div>
                 </div>
                

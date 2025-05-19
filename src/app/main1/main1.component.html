@@ -3,7 +3,7 @@
     <main>
         <header class="h-widget">
             <h1>Общая статистика</h1>
-            <app-country-selection/>
+            <app-country-selection style="display: none;"/>
         </header>
         <div class="t-wrapper">
             <section class="fav">
@@ -11,7 +11,7 @@
                     <div>
                         <input type="checkbox" (click)="selectComponentTypes(component.image.nameRu)"
                             [checked]="component.checked" />
-                        <a class="type" [href]="getSafeUrl(component.image.nameRu!)">{{component.image.nameRu}}</a>
+                        <a class="type" [href]="getSafeUrl(`componentType/${component.image.nameRu!}`)">{{component.image.nameRu}}</a>
                     </div>
                     <div class="info">
                         <img [src]="getSafeUrl(component.image.image!)" />
@@ -42,7 +42,7 @@
                             <!-- <p class="current" (click)="manufacutrerOptions.open = !manufacutrerOptions.open;" >
                                 currentvalue</p> -->
                             <li class="search">
-                                <input type="text" placeholder="поиск" (input)="search($event)">
+                                <input type="text" placeholder="Производитель" (input)="search($event)">
                             </li>
                         </div>
                     </div>

@@ -5,7 +5,7 @@ import { BitDepthValue } from "../../types/microchip";
 
 
 
-const getBestManufacturer = (data: any, componentType: string): Manufacturer => {
+const getBestManufacturer = (data: any, ruComponentType: string): Manufacturer => {
  
     var record: Manufacturer = {
         manufacturerName: 'none',
@@ -20,7 +20,7 @@ const getBestManufacturer = (data: any, componentType: string): Manufacturer => 
         
 
         data.forEach((obj: ComponentLabel) => {
-            if (obj.ruComponentType === componentType) {
+            if (obj.ruComponentType === ruComponentType) {
                 summary++
                 if (tmp[obj.manufacturerName] === undefined) {
                     tmp[obj.manufacturerName] = 0 

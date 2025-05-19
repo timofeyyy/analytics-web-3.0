@@ -17,7 +17,7 @@
                 <input type="text" placeholder="поиск">
             </li>
             <li *ngFor="let value of options.values" (click)="selectProp(value)">
-                {{value}}
+                {{value.allias}}
             </li> 
         </ul>
     </div>

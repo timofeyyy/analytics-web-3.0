@@ -46,6 +46,9 @@
     border-radius: 0.5vw;   
 }
 
+.spec {
+    font-size: max(1vw, 10px);
+}
 
 .filter {
     /* padding: 1.5vw; */
