@@ -17,7 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './filters.component.css',
   providers: [ApiService1]
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnInit, OnChanges {
 
   @Input()
   all!: ComponentOptions[]
@@ -27,11 +27,14 @@ export class FiltersComponent implements OnInit {
   isSelectedComponentType!: boolean
   additional!: any[]
   componentTypeProp: any
-  allias!: Map<string, string>
+  allias: Map<string, string> = new Map<string, string>()
 
   constructor(
     private api: ApiService1
   ) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    // console.log("onchanges")
+  }
 
   @Output()
   public onChange = new EventEmitter<any>()
@@ -101,6 +104,7 @@ export class FiltersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // console.log("init")
     this.isSelectedComponentType = false
     this.additional = []
     this.props = {}
@@ -139,7 +143,7 @@ export class FiltersComponent implements OnInit {
     this.api.getAlias()?.pipe().subscribe(
       (data) => {
         this.allias = new Map<string, string>(Object.entries(data))
-        console.log(this.allias)
+        // console.log(this.allias)
       }
     )
   }

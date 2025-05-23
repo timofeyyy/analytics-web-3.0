@@ -43,11 +43,16 @@
     padding: 0.5vw 1vw;
     box-sizing: border-box;
     border: 0.1vw solid lightgray;
-    border-radius: 0.5vw;   
+    border-radius: 0.5vw;
 }
 
 .spec {
     font-size: max(1vw, 10px);
+}
+
+.diabled {
+    color: grey;
+    text-decoration: none;
 }
 
 .filter {
@@ -59,12 +64,15 @@
     cursor: pointer;
     justify-content: space-between;
 }
+
 .filter .records {
     margin-right: 0;
 }
+
 .filter .records p {
     font-size: max(1vw, 10px);
 }
+
 .filter .preview {
     border: 0.1vw solid gray;
     margin: 0;
@@ -73,10 +81,12 @@
     border-radius: 0.5vw;
     position: relative;
 }
+
 .filter .preview p {
     font-size: max(1vw, 15px);
     line-height: 1;
 }
+
 .filter .preview::before {
     content: url('../../assets/images/filter.svg');
     width: max(1vw, 15px);
@@ -85,10 +95,12 @@
     margin-right: 0.5vw;
     line-height: 1;
 }
+
 .filter .options-wrapper {
     position: relative;
     margin: 0;
 }
+
 .filter .options {
     position: absolute;
     top: 1vw;
@@ -135,13 +147,13 @@
 .item h5 {
     margin: 0.5vw 0;
     font-weight: 200;
-    font-size: max(1vw, 10px);  
+    font-size: max(1vw, 10px);
     color: #3D83A9;
     /* text-decoration: underline; */
 }
 
 .item p {
-    font-size: max(1vw, 10px);   
+    font-size: max(1vw, 10px);
     font-weight: 100;
 }
 
@@ -176,4 +188,9 @@
 
 .item .block p {
     text-decoration: underline;
+}
+
+.item .block .disabled {
+    color: lightgray;
+    text-decoration: none;
 }

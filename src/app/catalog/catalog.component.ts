@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
 import { CountrySelectionComponent } from '../components/selection/country_selection/country_selection.component';
 import { FiltersComponent } from '../components/filters/filters.component';
-import { NgClass, NgFor, NgStyle } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { catchError, forkJoin, map, Observable } from 'rxjs';
@@ -15,7 +15,7 @@ import { ApiService1 } from '../../services/api.services1';
 
 @Component({
   selector: 'app-catalog',
-  imports: [NavigatorComponent, CountrySelectionComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent],
+  imports: [NavigatorComponent, CountrySelectionComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent, NgIf],
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css', '../components/selection/selection.css'],
   providers: [ApiService1],
@@ -187,6 +187,7 @@ export class CatalogComponent implements OnInit {
           this.apply(payload)
         }
       }
+      this.loader = false
     });
   }
 
@@ -274,6 +275,10 @@ export class CatalogComponent implements OnInit {
 
   getSafeUrl(url: string): any {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+  }
+
+  getPdfUrl(item: any): string | null  {
+    return item.remark1
   }
 
   search(event: any): void {

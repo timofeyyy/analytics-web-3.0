@@ -4,11 +4,11 @@
     <main>
         <header class="h-widget">
             <h1>Просмотр данных</h1>
-            <app-country-selection style="display: none;"/>
+            <app-country-selection style="display: none;" />
         </header>
         <main class="catalog">
-            <div class="head"> 
-                <div class="filter" >
+            <div class="head">
+                <div class="filter">
                     <div class="preview" (click)="filter=!filter">
                         <p>Фильтры</p>
                     </div>
@@ -29,16 +29,20 @@
                         </div>
                     </div>
                     <div class="block">
-                        <a href="https://static.chipdip.ru/lib/906/DOC000906865.pdf" class="spec">Спецификация</a>
+                        <p *ngIf="!getPdfUrl(item); else templateName"></p>
+                        <ng-template #templateName>
+                            <a [href]="getPdfUrl(item)" class="spec">Спецификация</a>
+                        </ng-template>
                         <button (click)="openComponentInfo(item)">Подробнее</button>
                     </div>
                 </div>
-               
+
             </div>
             <div class="footer">
                 <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
                 <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
-                <p *ngFor="let page of pages" (click)="currentPage = page; selectPage()" [ngClass]="{active: page === currentPage}">{{page}}</p>
+                <p *ngFor="let page of pages" (click)="currentPage = page; selectPage()"
+                    [ngClass]="{active: page === currentPage}">{{page}}</p>
                 <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
                 <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
                 <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}</p>
@@ -46,4 +50,4 @@
         </main>
     </main>
 </div>
-<app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}"/> 
+<app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />
