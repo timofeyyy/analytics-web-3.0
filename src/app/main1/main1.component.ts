@@ -79,6 +79,7 @@ export class Main1Component implements OnInit {
         }
       })
       this.rows = getManufacturersProd(options) as Manufacturer[]
+      console.log(this.rows)
       this.orig = this.rows
       this.loader = false
     }),

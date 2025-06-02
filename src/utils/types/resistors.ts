@@ -13,7 +13,7 @@ export interface Resistor {
     resistanceTolerance: number,
     minOperatingTemperature: number,
     maxOperatingTemperature: number,
-    minRatedResistance: number,
+    minRatedResistance: number, 
     maxRatedResistance: number
     qualicationSG: string,
     qualicationЕС: string,

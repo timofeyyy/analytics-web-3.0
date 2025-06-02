@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { PropNameSelectionComponent } from '../selection/prop_name_selection/prop_name_selection.component';
 import { PropSelectionComponent } from '../selection/prop_selection/prop_selection.component';
 import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import manufacturerNameFilters from '../../../utils/fnc1/filters/manufacturerName';
@@ -9,28 +10,28 @@ import { ComponentOptions, FilterDropBox } from '../../../utils/types/app';
 import { ApiService1 } from '../../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
 
-@Component({
+@Component({ 
   selector: 'app-filters',
   imports: [PropSelectionComponent, NgIf, NgFor, HttpClientModule],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.css',
   providers: [ApiService1]
 })
-export class FiltersComponent implements OnInit {
-
+export class FiltersComponent implements OnInit, OnChanges {
   @Input()
   all!: ComponentOptions[]
-
   props: any
   currentPropName!: string
   isSelectedComponentType!: boolean
   additional!: any[]
   componentTypeProp: any
   allias: Map<string, string> = new Map<string, string>()
-
   constructor(
     private api: ApiService1
   ) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    // console.log("onchanges")
+  }
 
   @Output()
   public onChange = new EventEmitter<any>()
@@ -58,7 +59,6 @@ export class FiltersComponent implements OnInit {
         }
       }
     }
-    // console.log(payload)
     this.onChange.emit(payload)
   }
 
@@ -100,6 +100,8 @@ export class FiltersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // console.log("init")
+    console.log(this.all)
     this.isSelectedComponentType = false
     this.additional = []
     this.props = {}
@@ -141,5 +143,6 @@ export class FiltersComponent implements OnInit {
         // console.log(this.allias)
       }
     )
+    console.log(this.all)
   }
 }

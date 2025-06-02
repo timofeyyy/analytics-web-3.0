@@ -10,7 +10,7 @@ import { Transistor } from "../utils/types/transistor";
 import { AppEnum } from "../utils/enum/app.enum";
 import { ChartConfig, Config, ImageName } from "../utils/types/config";
 import { Resistor } from "../utils/types/resistors";
-
+ 
 @Injectable()
 export class ApiService1 {
 

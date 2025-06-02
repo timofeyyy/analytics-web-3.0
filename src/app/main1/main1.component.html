@@ -1,53 +1,48 @@
-<div class="workspace">
-    <app-navigator/>
-    <main>
-        <header class="h-widget">
-            <h1>Общая статистика</h1>
-            <app-country-selection style="display: none;"/>
-        </header>
-        <div class="t-wrapper">
-            <section class="fav">
-                <div class="item" *ngFor="let component of componentTypes">
-                    <div>
-                        <input type="checkbox" (click)="selectComponentTypes(component.image.nameRu)"
-                            [checked]="component.checked" />
-                        <a class="type" [href]="getSafeUrl(`componentType/${component.image.nameRu!}`)">{{component.image.nameRu}}</a>
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator />
+    </div>
+    <div class="workspace">
+        <main>
+            <header class="h-widget">
+                <h1>Общая статистика</h1>
+                <app-country-selection style="display: none;" />
+            </header>
+            <div class="t-wrapper">
+                <section class="fav">
+                    <div class="item" *ngFor="let component of componentTypes">
+                        <div>
+                            <input type="checkbox" (click)="selectComponentTypes(component.image.nameRu)"
+                                [checked]="component.checked" />
+                            <a class="type"
+                                [href]="getSafeUrl(`componentType/${component.image.nameRu!}`)">{{component.image.nameRu}}</a>
+                        </div>
+                        <div class="info">
+                            <img [src]="getSafeUrl(component.image.image!)" />
+                            <p class="proc">{{component.manufacturer.prodProcent}}%</p>
+                        </div>
+                        <p class="manufacturer">{{component.manufacturer.manufacturerName}}</p>
                     </div>
-                    <div class="info">
-                        <img [src]="getSafeUrl(component.image.image!)" />
-                        <p class="proc">{{component.manufacturer.prodProcent}}%</p>
-                    </div>
-                    <p class="manufacturer">{{component.manufacturer.manufacturerName}}</p>
-                </div>
-            </section>
-            <section class="stat">
-                <iframe [src]="url" frameborder="0"></iframe>
-            </section>
-        </div>
-        <div class="b-wrapper">
-            <!-- <section class="total-stat">
-                <iframe [src]="getSafeUrl(url)" frameborder="0"></iframe>
-
-            </section> -->
-            <section class="prod-stat">
-                <iframe src="chart1/parent/components/statistic/donut" frameborder="0"></iframe>
-
-                <!-- .
-                <iframe [src]="getSafeUrl(url)" frameborder="0"></iframe> -->
-            </section>
-            <section class="records">
-                <div class="list-wrapper">
-                    <div class="list">
-                        <div class="values">
-                            <!-- <p class="current" (click)="manufacutrerOptions.open = !manufacutrerOptions.open;" >
-                                currentvalue</p> -->
-                            <li class="search">
-                                <input type="text" placeholder="Производитель" (input)="search($event)">
-                            </li>
+                </section>
+                <section class="stat">
+                    <iframe [src]="url" frameborder="0"></iframe>
+                </section>
+            </div>
+            <div class="b-wrapper">
+                <section class="prod-stat">
+                    <iframe src="chart1/parent/components/statistic/donut" frameborder="0"></iframe>
+                </section>
+                <section class="records">
+                    <div class="list-wrapper">
+                        <div class="list">
+                            <div class="values">
+                                <li class="search">
+                                    <input type="text" placeholder="Производитель" (input)="search($event)">
+                                </li>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- <div class="values-wrapper">
+                    <!-- <div class="values-wrapper">
                     <ul [ngStyle]="{display: manufacutrerOptions.open ? 'block' : 'none'}">
                         <li class="search">
                             <input type="text" placeholder="поиск">
@@ -57,32 +52,29 @@
                             {{manufacturer}}</li>
                     </ul>
                 </div> -->
-                <div class="cols-wrapper">
-                    <div class="cols layout">
-                        <div class="col">
-                            <p>Производитель</p>
-                        </div>
-                        <div class="col">
-                            <p>Количество</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="view">
-                    <div class="row layout" *ngFor="let row of rows" (click)="openCatalog(row.manufacturerName)">
-                        <div class="col">
-                            <p>{{row.manufacturerName}}</p>
-                        </div>
-                        <div class="col">
-                            <p>{{row.prodSummary}}</p>
+                    <div class="cols-wrapper">
+                        <div class="cols layout">
+                            <div class="col">
+                                <p>Производитель</p>
+                            </div>
+                            <div class="col">
+                                <p>Количество</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- <section class="fav-stat">
-
-            </section> -->
-        </div>
-    </main>
+                    <div class="view">
+                        <div class="row layout" *ngFor="let row of rows" (click)="openCatalog(row.manufacturerName)">
+                            <div class="col">
+                                <p>{{row.manufacturerName}}</p>
+                            </div>
+                            <div class="col">
+                                <p>{{row.prodSummary}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />
 </div>
-<app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />

@@ -150,12 +150,11 @@ li {
     margin: 0;
 
 } */
-
+/* 
 .workspace main {
     box-sizing: border-box;
-    margin: 1.5vw 1.5vw 1.5vw 16.5%;
     width: 100%;
-}
+} */
 
 .workspace main .t-wrapper {
     display: flex;

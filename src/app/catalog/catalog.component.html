@@ -1,53 +1,57 @@
-<app-filters [all]="all" [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="apply($event)" />
-<div class="workspace">
-    <app-navigator />
-    <main>
-        <header class="h-widget">
-            <h1>Просмотр данных</h1>
-            <app-country-selection style="display: none;" />
-        </header>
-        <main class="catalog">
-            <div class="head">
-                <div class="filter">
-                    <div class="preview" (click)="filter=!filter">
-                        <p>Фильтры</p>
-                    </div>
-                    <li class="search">
-                        <input type="text" placeholder="имя компонента" (input)="search($event)">
-                    </li>
-                </div>
-            </div>
-            <div class="body">
-                <div class="item" *ngFor="let item of records">
-                    <div class="info">
-                        <div class="h">
-                            <img [src]="getSafeUrl(item.img)" alt="" />
-                            <h1>{{item.component.ruComponentType}}</h1>
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator />
+    </div>
+    <app-filters [all]="all" [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="apply($event)" />
+    <div class="workspace">
+        <main>
+            <header class="h-widget">
+                <h1>Просмотр данных</h1>
+                <app-country-selection style="display: none;" />
+            </header>
+            <main class="catalog">
+                <div class="head">
+                    <div class="filter">
+                        <div class="preview" (click)="filter=!filter">
+                            <p>Фильтры</p>
                         </div>
-                        <h5>{{item.component.manufacturerName}}, {{item.component.componentName}}</h5>
-                        <div [innerHTML]="item.html">
-                        </div>
-                    </div>
-                    <div class="block">
-                        <p *ngIf="!getPdfUrl(item); else templateName"></p>
-                        <ng-template #templateName>
-                            <a [href]="getPdfUrl(item)" class="spec">Спецификация</a>
-                        </ng-template>
-                        <button (click)="openComponentInfo(item)">Подробнее</button>
+                        <li class="search">
+                            <input type="text" placeholder="имя компонента" (input)="search($event)">
+                        </li>
                     </div>
                 </div>
+                <div class="body">
+                    <div class="item" *ngFor="let item of records">
+                        <div class="info">
+                            <div class="h">
+                                <img [src]="getSafeUrl(item.img)" alt="" />
+                                <h1>{{item.component.ruComponentType}}</h1>
+                            </div>
+                            <h5>{{item.component.manufacturerName}}, {{item.component.componentName}}</h5>
+                            <div [innerHTML]="item.html">
+                            </div>
+                        </div>
+                        <div class="block">
+                            <p *ngIf="!getPdfUrl(item); else templateName"></p>
+                            <ng-template #templateName>
+                                <a [href]="getPdfUrl(item)" class="spec">Спецификация</a>
+                            </ng-template>
+                            <button (click)="openComponentInfo(item)">Подробнее</button>
+                        </div>
+                    </div>
 
-            </div>
-            <div class="footer">
-                <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
-                <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
-                <p *ngFor="let page of pages" (click)="currentPage = page; selectPage()"
-                    [ngClass]="{active: page === currentPage}">{{page}}</p>
-                <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
-                <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
-                <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}</p>
-            </div>
+                </div>
+                <div class="footer">
+                    <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
+                    <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
+                    <p *ngFor="let page of pages" (click)="currentPage = page; selectPage()"
+                        [ngClass]="{active: page === currentPage}">{{page}}</p>
+                    <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
+                    <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
+                    <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}</p>
+                </div>
+            </main>
         </main>
-    </main>
+    </div>
+    <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />
 </div>
-<app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />

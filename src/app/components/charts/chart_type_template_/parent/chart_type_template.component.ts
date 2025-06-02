@@ -56,7 +56,7 @@ export class ParentChartTemplateComponent implements OnInit {
         map((api: any) => {
           let data = chartOptionsData[chart_name].chartData[type_name](api) as ChartOptions;
           this.chartName = chartOptionsData[chart_name].chartName(query);
-          console.log(query)
+          // console.log(query)
 
           this.chartOptions = {
             ...data,
@@ -64,7 +64,7 @@ export class ParentChartTemplateComponent implements OnInit {
               ...data.chart,
               events: {
                 dataPointSelection: (event, chartContext, opts) => {
-                  console.log(data.values)
+                  // console.log(data.values[opts.dataPointIndex])
                   let child_req_name = query.get('child_req_name')
                   let child_chart_name = query.get('child_chart_name')
                   let componentType = query.get('ruComponentType')
@@ -80,9 +80,7 @@ export class ParentChartTemplateComponent implements OnInit {
               }
             }
           }
-
-
-          console.log(this.chartOptions)
+          // console.log(this.chartOptions)
         }),
         catchError((err: any) => {
           console.log(err.message)
