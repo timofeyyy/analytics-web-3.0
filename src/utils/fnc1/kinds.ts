@@ -56,7 +56,7 @@ const getComponentKindStatChartOptions1 = (data: any): Partial<ChartOptions> => 
         let tmp: any = {}
 
         data.forEach((obj: ComponentLabel) => {
-            if (obj.ruComponentType != ComponentTypeRuEnum.RESISTOR) {
+            // if (obj.ruComponentType != ComponentTypeRuEnum.RESISTOR) {
 
                 let categorieItemIndex: number = (apexChartData as ChartOptions).xaxis.categories.findIndex(
                     (category: string) => category === obj.ruComponentKind
@@ -71,7 +71,7 @@ const getComponentKindStatChartOptions1 = (data: any): Partial<ChartOptions> => 
                 }
 
                 tmp[obj.ruComponentKind].count += 1
-            }
+            // }
         });
 
         (apexChartData as ChartOptions).xaxis.categories.forEach((category: string) => {

@@ -96,7 +96,7 @@ const observableApi: ObservableStorage = {
   "bitdepthvalue": (injector: ApiService1, data: Map<string, any>) => injector.getBitDepthValue(data),
   "Микросхема": (injector: ApiService1, data: Map<string, any>) => injector.getMicrochips(data),
   "Транзистор": (injector: ApiService1, data: Map<string, any>) => injector.getTransistors(data),
-  "Резистор": (injector: ApiService1, data: Map<string, any>) => injector.getTransistors(data),
+  "Резистор": (injector: ApiService1, data: Map<string, any>) => injector.getResistors(data),
   "Конденсатор": (injector: ApiService1, data: Map<string, any>) => injector.getCapacitors(data),
   "Диод": (injector: ApiService1, data: Map<string, any>) => injector.getDiods(data),
 }

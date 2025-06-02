@@ -9,6 +9,7 @@ import { Diod } from "../utils/types/diod";
 import { Transistor } from "../utils/types/transistor";
 import { AppEnum } from "../utils/enum/app.enum";
 import { ChartConfig, Config, ImageName } from "../utils/types/config";
+import { Resistor } from "../utils/types/resistors";
 
 @Injectable()
 export class ApiService1 {
@@ -39,7 +40,7 @@ export class ApiService1 {
     }
 
     getAlias(): Observable<any> | null {
-        let obs: Observable<any> | null = this.getReqDomen("api/allias");
+        let obs: Observable<any> | null = this.getReqDomen("allias.json");
         if (obs != null) {
             return obs.pipe(map((names: any) => {
                 return names;
@@ -106,6 +107,26 @@ export class ApiService1 {
         return obs;
     }
 
+    getResistors(data: Map<string, any> | void): Observable<Resistor[]> | null {
+        let url: string = "api/resistors"
+        if (data) {
+            let componentName: string | null = data.get('componentName')
+            if (componentName) {
+                url += `?componentName=${componentName}`
+            }
+        }
+
+        let obs: Observable<any> | null = this.getReqDomen(url);
+        if (obs != null) {
+            return obs.pipe(map((names: Resistor[]) => {
+                return names.map(function (name: Resistor): Resistor {
+                    return name;
+                });
+            }))
+        }
+        return obs;
+    }
+
     getTransistors(data: Map<string, any> | void): Observable<Transistor[]> | null {
         let url: string = "api/transistors"
         if (data) {
@@ -124,6 +145,9 @@ export class ApiService1 {
         }
         return obs;
     }
+    //create view tmp_view as select * from transistors where
+    //insert into resistors (docid, componentName, type_id, kind_id, manufacturername_id, powerrating, minvoltage, maxvoltage, minratedresistance, maxratedresistance, resistancetolerance, minoperatingtemperature, maxoperatingtemperature, currentlimit, package, qualicationSG, QualicationЕС, remark1, remark2 ) select top 100 docid, componentName, type_id, kind_id, manufacturername_id, null, null, null, null, null, null, minoperatingtemperature, maxoperatingtemperature, null, package, qualicationSG, QualicationЕС, remark1, remark2 from transistors;
+    //SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_catalog = 'ComponentDB' AND table_name = 'resistors';    
     getBitDepthValue(data: Map<string, any>): Observable<BitDepthValue[]> | null {
         let url: string = "api/microchips/bitdepthvalue?"
         let manufacturerName: string | null = data.get('manufacturerName')

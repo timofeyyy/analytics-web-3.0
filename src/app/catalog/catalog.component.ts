@@ -63,30 +63,29 @@ export class CatalogComponent implements OnInit {
   apply(payload: Map<string, string>): void {
     if (payload) {
       this.allCopy = []
+      // console.log(this.all.length)
+      // console.log(payload, payload.size)
       this.all.forEach((item: ComponentOptions, index) => {
         let countProp: number = payload.size
         let countMatch: number = 0;
         payload.forEach((value, key) => {
-          if ((item.component as any)[key]) {
-
-            if (index < 5) {
-              console.log((item.component as any)[key], value)
-            }
-            if (((item.component as any)[key] === value || value === AppEnum.ALL)) {
+          let val = (item.component as any)[key]
+          if (val !== undefined) {
+            // console.log(value)
+            if ((val === value || value === AppEnum.ALL) || (val === null && (value === null || value === "null"))) {
               countMatch++
             }
           }
         })
-
         if (countProp == countMatch) {
           this.allCopy.push(item)
         }
       })
-      console.log(this.allCopy.length)
+      // console.log(this.allCopy.length)
       this.from = 0
       this.last = Math.ceil(this.allCopy.length / 20) === 0 ? 0 : Math.ceil(this.allCopy.length / 20) - 1
       this.to = this.allCopy.length / 20 <= 10 ? Math.ceil(this.allCopy.length / 20) : 10
-      console.log(this.last, this.to, this.from)
+      // console.log(this.last, this.to, this.from)
 
       this.updatePages()
       this.selectPage()
@@ -101,14 +100,16 @@ export class CatalogComponent implements OnInit {
       this.api.getTransistors(),
       this.api.getCapacitors(),
       this.api.getMicrochips(),
+      this.api.getResistors(),
       this.api.getAlias()
     ]).subscribe(res => {
       this.storage.set(ComponentTypeRuEnum.DIOD, (res as any[])[0])
       this.storage.set(ComponentTypeRuEnum.TRANSISTOR, (res as any[])[1])
       this.storage.set(ComponentTypeRuEnum.CAPACITOR, (res as any[])[2])
       this.storage.set(ComponentTypeRuEnum.MICROCHIP, (res as any[])[3])
-      const allias = (res as any[])[4]
-      if (this.storage.size === 4) {
+      this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[4])
+      const allias = (res as any[])[5]
+      if (this.storage.size === 5) {
         let componetns: ImageName[] = this.api.getComponentsFromConfig()
         this.storage.forEach((set: any) => {
           (set as []).forEach((item: any) => {
@@ -277,13 +278,13 @@ export class CatalogComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
-  getPdfUrl(item: any): string | null  {
-    return item.remark1
+  getPdfUrl(item: any): string | null {    
+    return !item.component.remark1 ? null : `http://localhost:5000/datasheets/${item.component.remark1}.pdf` 
   }
 
   search(event: any): void {
     let value: string = event.target.value
-    console.log(value)
+    // console.log(value)
     this.records = []
     this.allCopy = []
     this.all.forEach((item: ComponentOptions) => {

@@ -64,7 +64,7 @@ export class ParentChartTemplateComponent implements OnInit {
               ...data.chart,
               events: {
                 dataPointSelection: (event, chartContext, opts) => {
-                  console.log(data.values[opts.dataPointIndex])
+                  console.log(data.values)
                   let child_req_name = query.get('child_req_name')
                   let child_chart_name = query.get('child_chart_name')
                   let componentType = query.get('ruComponentType')

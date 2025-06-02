@@ -1,0 +1,42 @@
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator/>
+    </div>
+    <div class="workspace">
+        <div class="tool-bar" [ngStyle]="{'width' : holderState ? '0' : '41%' }">
+            <div class="tool-bar-wrapper" [ngStyle]="{'left' : holderState ? '-25vw' : '0' }">
+                <div class="tool-bar-body">
+                    <div class="selection-wrappers">
+                        <app-prop-selection
+                            [all]="all" 
+                            [options]="{
+                                propName: 'ruComponentType',
+                                open: currentPropName === 'ruComponentType' 
+                            }" 
+                            [currentPropName]="currentPropName"
+                            [props]="props"
+                            [allias]="`${allias.get('ruComponentType')}`"
+                            (onChanged)="updateRuComponentType($event)" />
+                        <app-prop-name-selection 
+                            [componentType]="ruComponentType" 
+                            (onChanged)="onPropChange($event)" 
+                            [currentProp]="currentPropName"/>
+                    </div>
+                    <button>Построить</button>
+                </div>
+                <p class="tool-bar-state" (click)="holderState=!holderState">
+                    Скрыть
+                </p>
+            </div>
+        </div>
+        <p class="tool-bar-state holder" (click)="holderState=!holderState"
+            [ngStyle]="{'left': holderState ? '0': '-10vw'}">
+            Раскрыть
+        </p>
+        <main>
+            <div class="chart-template" #template [ngStyle]="{'height': holderState ? '90%' : '60%'}">
+                <iframe [src]="url" frameborder="0"></iframe> 
+            </div>
+        </main>
+    </div>
+</div>

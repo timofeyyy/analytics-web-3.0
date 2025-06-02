@@ -17,7 +17,7 @@ export class PropSelectionComponent implements OnChanges {
   options!: Partial<FilterDropBox>
 
   @Input()
-  all!: ComponentOptions[]
+  all!: Partial<ComponentOptions>[]
 
   @Input()
   props!: any
@@ -39,7 +39,6 @@ export class PropSelectionComponent implements OnChanges {
 
   valuesCopy!: string[]
 
-
   ngOnChanges(changes: SimpleChanges): void {
     let prop = this.props[this.options.propName as string]
     this.options.currentValue = prop?.currentvalue
@@ -47,15 +46,17 @@ export class PropSelectionComponent implements OnChanges {
     this.options.values = [AppEnum.ALL]
     if (this.options.open) {
       if ((prop as FilterDropBox).sort) {
-        this.options.values = (prop as FilterDropBox).sort(this.props, this.all)
+        this.options.values = (prop as FilterDropBox).sort(this.props, this.all as ComponentOptions[])
       }
       else {
-        this.all.forEach((item: ComponentOptions) => {
-          let value: string = (item.component as any)[this.options.propName as string]
-            === null || (item.component as any)[this.options.propName as string] === '' ? "null" : (item.component as any)[this.options.propName as string]
-          let index = (this.options.values as string[])?.findIndex((item: string) => item === value)
-          if (index === -1 && value !== undefined)
-            this.options.values?.push(value)
+        this.all.forEach((item: Partial<ComponentOptions>) => {
+          if (item.component) {
+            let value: string = (item.component as any)[this.options.propName as string]
+              === null || (item.component as any)[this.options.propName as string] === '' ? "null" : (item.component as any)[this.options.propName as string]
+            let index = (this.options.values as string[])?.findIndex((item: string) => item === value)
+            if (index === -1 && value !== undefined)
+              this.options.values?.push(value)
+          }
         })
       }
       this.valuesCopy = Array.from(this.options.values as [])

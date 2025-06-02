@@ -33,8 +33,8 @@ const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions
             (apexChartData as ChartOptions).series.push(tmp[label]);
         })
     }
-
-    console.log(tmp)
+    
+    // console.log(tmp)
 
     return apexChartData;
 }
