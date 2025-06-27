@@ -10,8 +10,8 @@
 
 .components .component input {
     margin-right: 1vw;
-    width: 1vw;
-    height: 1vw;
+    width: max(1vw, 12px);
+    height: max(1vw, 12px);
     color: #525151;
 }
 
@@ -19,4 +19,8 @@
     color: black;
     display: inline-block;
     font-size: max(1vw, 10px);
+}
+
+.components>p {
+    font-size: max(1.5vw, 15px);
 }

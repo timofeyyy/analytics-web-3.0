@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartType, NgApexchartsModule } from 'ng-apexcharts';
 import { catchError, map, Observable } from 'rxjs';
-import { chartOptionsData, defaultOptions, observableApiMap } from '../../../../../assets/fetch.config';
+import { chartOptionsData, defaultChartOptions, observableApiMap } from '../../../../../assets/fetch.config';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ChartOptions } from '../../../../../utils/types/chart';
 import { ApiService1 } from '../../../../../services/api.services1';
@@ -26,7 +26,7 @@ export class ParentChartTemplateComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.chartOptions = defaultOptions
+    this.chartOptions = defaultChartOptions
     const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
     let req_name;
     let chart_name;
@@ -80,7 +80,6 @@ export class ParentChartTemplateComponent implements OnInit {
               }
             }
           }
-          // console.log(this.chartOptions)
         }),
         catchError((err: any) => {
           console.log(err.message)

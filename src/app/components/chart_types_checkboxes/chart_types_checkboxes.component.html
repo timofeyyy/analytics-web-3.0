@@ -1,7 +1,7 @@
 <div class="components">
-    <div class="label">Тип граифка</div>
+    <p>Тип граифка</p>
     <div class="component" *ngFor="let item of list">
-        <input type="radio" (click)="onSelected(item.value)" name="btn" [checked]="item.checked">
-        <p>{{item.value}}</p>
+        <input type="checkbox" (click)="onSelected(item.value)" name="btn" [checked]="item.value == currentValue">
+        <p>{{getName(item.value)}}</p>
     </div>
 </div>

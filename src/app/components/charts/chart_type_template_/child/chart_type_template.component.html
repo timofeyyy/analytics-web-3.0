@@ -1,5 +1,5 @@
 <div class="chart-wrapper">
-    <p>{{chartName}}</p>
+    <!-- <p>{{chartName}}</p> -->
   <apx-chart 
     [series]="chartOptions.series!" 
     [chart]="chartOptions.chart!" 
@@ -13,5 +13,5 @@
     [responsive]="chartOptions.responsive!" 
     [colors]="chartOptions.colors!">
   </apx-chart>
-  <button (click)="getBack()">Назад</button>
+  <button (click)="getBack()" class="def">Назад</button>
 </div>

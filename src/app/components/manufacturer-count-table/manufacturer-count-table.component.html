@@ -1,0 +1,31 @@
+<section class="records">
+    <div class="list-wrapper">
+        <div class="list">
+            <div class="values">
+                <div class="search">
+                    <input type="text" placeholder="Производитель" (input)="search($event)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cols-wrapper">
+        <div class="cols layout">
+            <div class="col">
+                <p>Производитель</p>
+            </div>
+            <div class="col">
+                <p>Количество</p>
+            </div>
+        </div>
+    </div>
+    <div class="view">
+        <div class="row layout" *ngFor="let row of rows" (click)="openCatalog(row.manufacturerName)">
+            <div class="col">
+                <p>{{row.manufacturerName}}</p>
+            </div>
+            <div class="col">
+                <p>{{row.prodSummary}}</p>
+            </div>
+        </div>
+    </div>
+</section>

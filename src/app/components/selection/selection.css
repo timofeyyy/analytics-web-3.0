@@ -14,14 +14,14 @@ li {
     cursor: pointer;
 }
 /* 
-.options .list {
+.options .list { 
     margin: 1vw;
 } */
 
 .options .list-wrapper {
     margin: 0;
 }
-
+ 
 .list-wrapper .list .label {
     font-size: max(1vw, 15px);
 }
@@ -86,7 +86,7 @@ li {
     background-color: transparent;
     border: none;
     padding: 1vw;
-    font-size: max(1vw, 5px);
+    font-size: max(1vw, 10px);
     border: .1vw solid lightgray;
     border-radius: .5vw;
     padding: .5vw;

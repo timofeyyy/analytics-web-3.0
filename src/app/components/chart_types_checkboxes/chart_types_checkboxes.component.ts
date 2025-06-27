@@ -1,6 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ChartType } from '../../../utils/types/app';
+import { chartNamesMap } from '../../../assets/fetch.config';
 
 @Component({
   selector: 'app-chart-types-checkboxes',
@@ -13,7 +14,7 @@ export class ChartTypesCheckboxesComponent implements OnInit {
   @Output()
   public onChnage = new EventEmitter<string>();
   list!: ChartType[]
-
+  currentValue!: string
   ngOnInit(): void {
     this.list = [{
         checked: true,
@@ -31,10 +32,15 @@ export class ChartTypesCheckboxesComponent implements OnInit {
         checked: false,
         value: "mixed"
       }]
+      this.onSelected("bar")
   }
 
   onSelected(value: string): void {
+    this.currentValue = value
     this.onChnage.emit(value)
   }
 
+  getName(value: string): string | undefined {
+    return chartNamesMap.get(value)
+  }
 }

@@ -5,15 +5,19 @@
     <div class="workspace">
         <main>
             <header class="h-widget">
-                <h1>{{componentType === undefined ? "Charts" : componentType}}</h1>
-                <app-country-selection style="display: none;" />
+                <h1>{{ruComponentType === undefined ? "Charts" : ruComponentType}}</h1>
+                <!-- <app-country-selection style="display: none;" /> -->
             </header>
             <div class="wrapper">
                 <section class="chart-wrapper">
                     <iframe [src]="url!" frameborder="0"></iframe>
                 </section>
                 <section class="selection">
-                    <app-prop-name-selection [componentType]="componentType" (onChanged)="onPropChange($event)" />
+                    <div class="column" *ngFor="let column of displayedColumns">
+                        <input type="checkbox" (click)="onColumnSelected(column)"
+                            [checked]="currentPropName === column" />
+                        <p>{{allias.get(column)}}</p>
+                    </div>
                     <app-chart-types-checkboxes (onChnage)="onChartTypeChnage($event)" />
                 </section>
             </div>

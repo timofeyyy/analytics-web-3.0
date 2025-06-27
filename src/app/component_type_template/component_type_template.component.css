@@ -2,28 +2,61 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 2vw;
+    height: 35vW;
 }
 
 .workspace main .wrapper .chart-wrapper,
 .workspace main .wrapper .selection {
     background-color: white;
     border-radius: 1vw;
-    height: 35vw;
+    /* height: 35vw; */
     margin: 0;
 }
 
 .workspace main .wrapper .chart-wrapper {
-    /* padding-right: 1vw; */
     width: 64%;
-    /* overflow-y: scroll;
-    display: grid;
-    grid-template-columns: repeat(2, 47%);
-    justify-content: space-around;
-    gap: 1.5vw; */
 }
 
 .workspace main .wrapper .selection {
     width: 34%;
     box-sizing: border-box;
     padding: 1.5vw;
+}
+
+.column {
+    display: flex;
+
+}
+
+.column p,
+.column input {
+    margin: 0;
+}
+
+.column p {
+    font-size: max(1vw, 12px);
+    margin-left: 0.5vw;
+}
+
+.column input {
+    width: max(1vw, 10px);
+}
+
+@media (max-width: 1020px) {
+    .workspace main .wrapper {
+        display: block;
+    }
+
+    .workspace main .wrapper .chart-wrapper {
+        margin-bottom: 1vw;
+        height: 50vw;
+        width: 100%;
+    }
+
+    .workspace main .wrapper .selection {
+        width: 100%;
+        height: unset;
+    }
+
+
 }

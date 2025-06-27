@@ -20,20 +20,15 @@ import { ApiService1 } from '../../services/api.services1';
   selector: 'app-main1',
   imports: [NgStyle, NgFor, HttpClientModule, LoaderComponent, NavigatorComponent, CountrySelectionComponent],
   templateUrl: './main1.component.html',
-  styleUrls: ['./main1.component.css', '../components/selection/selection.css', '../components/styles/filter.css', '../components/styles/m-table.css'],
+  styleUrls: ['./main1.component.css', '../components/selection/selection.css', '../components/styles/filter.css'],
   providers: [ApiService1]
 })
 export class Main1Component implements OnInit {
-  // componentList!: OptionsApi[]
-
-
   componentTypes!: ComponentTypesCheckBoxes[]
-
   loader!: boolean
   rows!: Manufacturer[]
   orig!: Manufacturer[]
   url!: SafeResourceUrl
-
 
   constructor(
     private api: ApiService1,
@@ -44,24 +39,17 @@ export class Main1Component implements OnInit {
   ngOnInit(): void {
     this.rows = []
     this.componentTypes = []
-
     this.loader = true
-    let countries: Partial<ImageName>[] = this.api.getCountriesFromConfig();
-    countries.unshift({ nameRu: AppEnum.ALL })
-
     this.getApi()
-
     this.selectComponentTypes()
   }
 
   getApi(): void {
-    this.api.getComponentsApi()?.pipe(map((options: ComponentLabel[]) => {
-
+    this.api.getComponentsApiPreview()?.pipe(map((options: ComponentLabel[]) => {
+      console.log(options)
       let componetns: ImageName[] = this.api.getComponentsFromConfig()
-
       options.forEach((row: ComponentLabel) => {
         if (this.getComponentTypeIndexByValue(row.ruComponentType) === -1) {
-
           let cItemIndex = componetns.findIndex(
             (cItem: ImageName) => cItem.nameRu === row.ruComponentType
           )
@@ -94,7 +82,6 @@ export class Main1Component implements OnInit {
   search(event: any): void {
     let value: string = event.target.value
     this.rows = []
-
     this.orig.forEach((manufacturer: Manufacturer) => {
       if (this.include(manufacturer, value)) {
         this.rows.push(manufacturer)
@@ -121,7 +108,7 @@ export class Main1Component implements OnInit {
     return index
   }
   selectComponentTypes(value: string | void): void {
-    let url = "chart1/parent/components/componentTypes/bar?child_req_name=components&&child_chart_name=componentKinds&&"
+    let url = "chart1/parent/components/ruComponentType/bar?child_req_name=components&&child_chart_name=componentKinds&&"
     this.componentTypes.forEach((type: ComponentTypesCheckBoxes) => {
       if (value === type.image.nameRu) {
         type.checked = !type.checked

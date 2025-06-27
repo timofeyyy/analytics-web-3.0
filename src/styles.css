@@ -7,6 +7,7 @@
 
 *::-webkit-scrollbar {
     width: 0.5vw;
+    height: 0.5vw;
 }
 
 *::-webkit-scrollbar-track {
@@ -20,7 +21,7 @@
 }
 
 body {
-    background-color: #ececec;
+    background-color: #eaf0f6;
 }
 
 app-item,
@@ -36,9 +37,11 @@ app-table {
 app-chart {
     height: 100vh;
     display: block;
+    background-color: white;
 }
 
-app-navigator {
+/* app-navigator {
+    transition: 0.5s ease all;
     background-color: white;
     width: 15%;
     box-sizing: border-box;
@@ -47,7 +50,8 @@ app-navigator {
     padding: 1.5vw;
     position: fixed;
     z-index: 10;
-}
+    left: 0%;
+} */
 
 app-country-selection {
     margin: 0;
@@ -97,5 +101,16 @@ iframe {
 
 .navigator-wrapper {
     width: 15%;
+    margin: 0;
+}
+
+/* @media (max-width: 820px) {
+    .workspace {
+        width: 100%;
+    }
+} */
+
+
+app-dropbox-provider {
     margin: 0;
 }

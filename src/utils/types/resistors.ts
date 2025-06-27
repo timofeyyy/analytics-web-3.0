@@ -7,6 +7,7 @@ export interface Resistor {
     ruComponentType: string,
     enComponentType: string,
     manufacturerName: string,
+    
     powerRating: number, 
     minVoltage: number,
     maxVoltage: number,
@@ -15,6 +16,7 @@ export interface Resistor {
     maxOperatingTemperature: number,
     minRatedResistance: number, 
     maxRatedResistance: number
+    
     qualicationSG: string,
     qualicationЕС: string,
     package: string,

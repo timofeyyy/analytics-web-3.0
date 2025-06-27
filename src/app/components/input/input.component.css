@@ -1,0 +1,60 @@
+.values-wrapper ul {
+    left: 0;
+}
+
+.options .list-wrapper .list .label {
+    font-size: max(1.2vw, 12px);
+}
+
+.list .values ul,
+.list .values .current {
+    background-color: white;
+}
+
+.list .values .current {
+    text-align: center;
+    display: flex;
+
+}
+
+.list .values .current,
+li {
+    cursor: pointer;
+}
+
+/* 
+.options .list { 
+    margin: 1vw;
+} */
+
+.options .list-wrapper {
+    margin: 0;
+}
+
+.list-wrapper .list .label {
+    font-size: max(1vw, 15px);
+}
+
+.options .list-wrapper .list .label,
+.options .list-wrapper .list .values {
+    margin-bottom: 1vw;
+    word-wrap: break-word;
+}
+
+
+input {
+    color: black;
+    background-color: transparent;
+    border: none;
+    padding: 1vw;
+    font-size: max(1vw, 5px);
+    border: .1vw solid lightgray;
+    border-radius: .5vw;
+    padding: .5vw;
+    width: 7vw;
+    background-color: white;
+}
+
+input:focus {
+    outline: none;
+}

@@ -5,53 +5,21 @@
         </div>
         <div class="body">
             <div class="base">
-                <app-prop-selection 
-                [all]="all" 
-                [options]="{
-                    propName: 'ruComponentType',
-                    open: currentPropName === 'ruComponentType' 
-                }" 
-                [currentPropName]="currentPropName"
-                [props]="props"
-                [allias]="`${allias.get('ruComponentType')}`"
-                (onChanged)="update($event)" /> 
-                <app-prop-selection 
-                [all]="all" 
-                [options]="{
-                    propName: 'ruComponentKind',
-                    open: currentPropName === 'ruComponentKind'
-                }" 
-                [currentPropName]="currentPropName"
-                [props]="props"
-                [allias]="`${allias.get('ruComponentKind')}`"
-                (onChanged)="update($event)" />
-                <app-prop-selection 
-                [all]="all" 
-                [options]="{
-                    propName: 'manufacturerName',
-                    open: currentPropName === 'manufacturerName'
-                }" 
-                [currentPropName]="currentPropName"
-                [props]="props"
-                [allias]="`${allias.get('manufacturerName')}`"
-                (onChanged)="update($event)" /> 
+                <app-dropbox-provider [alliasName]="`${allias.get('ruComponentType')}`"
+                    [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig"
+                    [name]="'ruComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"
+                    (onStateChanged)="onRuComponentTypeChanged($event)" />
+                <app-dropbox-provider [alliasName]="`${allias.get('manufacturerName')}`"
+                    [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig"
+                    [name]="'manufacturerName'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+                <app-dropbox-provider [alliasName]="`${allias.get('ruComponentKind')}`"
+                    [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig"
+                    [name]="'ruComponentKind'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
             </div>
             <div class="additional">
-                <p *ngIf="!isSelectedComponentType; else templateName">Выберите тип компнонента для дополнительных параметров, если они есть</p>
-
-                <ng-template #templateName>
-                    <app-prop-selection *ngFor="let prop of additional" 
-                    [all]="all" 
-                    [options]="{
-                        propName: prop,
-                        open: currentPropName === prop 
-                    }" 
-                    [props]="componentTypeProp"
-                    [allias]="`${allias.get(prop)}`"
-                    (onChanged)="update($event)" /> 
-                </ng-template>
-               
-                
+                <app-dropbox-provider *ngFor="let column of selectedColumns" [alliasName]="`${allias.get(column)}`"
+                    [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig" [name]="column"
+                    (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
             </div>
         </div>
         <div class="footer">

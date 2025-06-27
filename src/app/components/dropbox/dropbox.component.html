@@ -1,0 +1,26 @@
+<div class="options">
+    <div class="list-wrapper">
+        <div class="list">
+            <p class="label">{{allias}}</p>
+            <ul class="values">
+                <li class="current" (click)="openClose()">
+                    <p>{{currentValue}}</p>
+                    <div></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="values-wrapper">
+        <ul [ngStyle]="{display: name === currentName ? 'block' : 'none'}">
+            <li class="search">
+                <input type="text" placeholder="поиск">
+                <!-- (input)="search($event)" -->
+            </li>
+            <li *ngFor="let value of values" 
+            (click)="openClose(value)"
+            >
+                {{value}}
+            </li>
+        </ul>
+    </div>
+</div>

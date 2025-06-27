@@ -22,14 +22,14 @@ export class CountrySelectionComponent implements OnInit {
  
   ngOnInit(): void {
  
-    let countries: Partial<ImageName>[] = this.api.getCountriesFromConfig();
-    countries.unshift({ nameRu: AppEnum.ALL })
+    // let countries: Partial<ImageName>[] = this.api.getCountriesFromConfig();
+    // countries.unshift({ nameRu: AppEnum.ALL })
 
     this.countyOptions = {
       currentValue: {
         nameRu: AppEnum.ALL
       },
-      values: countries,
+      values: [],
       open: false
     };
   }

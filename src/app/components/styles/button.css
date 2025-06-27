@@ -1,20 +1,25 @@
 button {
-    padding: 0.5vw 1vw;
-    background-color: #3D83A9;
-    color: white;
+    padding: 0.5vw 1.5vw;
     font-size: max(1vw, 12px);
-    border-radius: 0.5vw;
+    border-radius: 0.2vw;
     border: none;
     margin: 0;
     align-self: flex-start;
     cursor: pointer;
-    /* height: 7%;
-    width: 100%; */
-    /* position: absolute;
-    bottom: 3vw;
-    right: 3vw; */
 }
-button:disabled {
-    background-color: #195270;
+
+.def {
+    background-color: #7490f8;
+    color: white;
+}
+
+.def:disabled {
+    background-color: lightgrey;
     color: rgb(195, 195, 195);
+}
+
+.rev {
+    background-color: white;
+    color: #7490f8;
+    border: 0.1vw solid #7490f8;
 }

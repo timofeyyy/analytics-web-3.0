@@ -1,0 +1,14 @@
+<p *ngIf="input; else templateName">
+    <app-input [allias]="alliasName" [name]="name" (onChanged)="openClose($event)"/>
+</p>
+<ng-template #templateName>
+    <app-dropbox
+        [ngStyle]="{'display': err? 'none' : 'block'}"
+        [name]="name"
+        [currentName]="currentName"
+        [allias]="alliasName"
+        [values]="values"
+        [currentValue]="currentValue"
+        (onChanged)="openClose($event)"
+    /> 
+</ng-template>

@@ -15,9 +15,7 @@
             <li class="search">
                 <input type="text" placeholder="поиск" (input)="search($event)">
             </li>
-            <li *ngFor="let value of options.values" 
-            (click)="openClose(value)"
-            >
+            <li *ngFor="let value of options.values" (click)="openClose(value)">
                 {{value}}
             </li>
         </ul>

@@ -2,8 +2,8 @@ import { AppEnum } from "../../enum/app.enum"
 import { ComponentOptions } from "../../types/app"
 
 const manufacturerNameFilters = (props: any, all: Partial<ComponentOptions>[]): string[] => {
-    let ruComponentType: string | undefined = props['ruComponentType']?.currentvalue
-    let ruComponentKind: string | undefined = props['ruComponentKind']?.currentvalue
+    let ruComponentType: string | undefined = props.get('ruComponentType')?.currentValue ?? AppEnum.ALL
+    let ruComponentKind: string | undefined = props.get('ruComponentKind')?.currentValue ?? AppEnum.ALL
     let values: string[] = [AppEnum.ALL]
     all.forEach((item: Partial<ComponentOptions>) => {
         if (
@@ -17,7 +17,6 @@ const manufacturerNameFilters = (props: any, all: Partial<ComponentOptions>[]): 
                 values.push(value)
         }
     })
-
     return values
 }
 

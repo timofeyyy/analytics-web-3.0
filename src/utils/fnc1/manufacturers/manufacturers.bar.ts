@@ -1,8 +1,6 @@
 import { ComponentLabel } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
 
-
-
 const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
         series: [],
@@ -48,8 +46,10 @@ const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
 
     let tmp: any = {}
 
-    if (Array.isArray(data)) {
-        data.forEach((obj: ComponentLabel) => {
+    //     if (Array.isArray(data)) {
+    //         data.forEach((obj: ComponentLabel) => {
+    for (const key in data) {
+        for (const obj of data[key]) {
             let categorieItemIndex: number = (apexChartData.xaxis?.categories as Array<string>).findIndex(
                 (category: string) => category === obj.manufacturerName
             )
@@ -78,27 +78,31 @@ const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
             }
 
             tmp[obj.ruComponentType][obj.manufacturerName] += 1
-        });
+            //         });
 
-
-
-        (apexChartData as ChartOptions).series.forEach((seriesItem: any) => {
-            let sum: number = 0;
-            for (const key in tmp[seriesItem.name]) {
-                sum += tmp[seriesItem.name][key]
-            }
-
-            ((apexChartData as ChartOptions).xaxis.categories as Array<string>).forEach((category: string) => {
-                if (seriesItem.name != undefined && seriesItem.data) {
-                    let value: number = tmp[seriesItem.name][category] === undefined ? 0 : tmp[seriesItem.name][category]
-                    seriesItem.data.push((value * 100 / sum).toFixed(1))
-                }
-            })
-        })
+        }
     }
+
+
+    (apexChartData as ChartOptions).series.forEach((seriesItem: any) => {
+        let sum: number = 0;
+        for (const key in tmp[seriesItem.name]) {
+            sum += tmp[seriesItem.name][key]
+        }
+
+        ((apexChartData as ChartOptions).xaxis.categories as Array<string>).forEach((category: string) => {
+            if (seriesItem.name != undefined && seriesItem.data) {
+                let value: number = tmp[seriesItem.name][category] === undefined ? 0 : tmp[seriesItem.name][category]
+                seriesItem.data.push((value * 100 / sum).toFixed(1))
+            }
+        })
+    })
+    //     }
+
 
     apexChartData.values = apexChartData.xaxis?.categories;
     return apexChartData;
 }
+
 
 export default getManufacturersChartOptionBar1

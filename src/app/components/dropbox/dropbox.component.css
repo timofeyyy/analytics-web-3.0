@@ -1,3 +1,11 @@
+.values-wrapper ul {
+    left: 0;
+}
+
+.options .list-wrapper .list .label {
+    font-size: max(1.2vw, 12px);
+}
+
 .list .values ul,
 .list .values .current {
     background-color: white;
@@ -14,16 +22,22 @@ li {
     cursor: pointer;
 }
 /* 
-.options .list {
+.options .list { 
     margin: 1vw;
 } */
 
 .options .list-wrapper {
     margin: 0;
 }
-
-.options .list-wrapper .list .label {
+ 
+.list-wrapper .list .label {
     font-size: max(1vw, 15px);
+}
+
+.options .list-wrapper .list .label,
+.options .list-wrapper .list .values {
+    margin-bottom: 1vw;
+    word-wrap: break-word;
 }
 
 .values-wrapper {
@@ -40,6 +54,7 @@ li {
 }
 
 .list .values .current {
+    max-width: 15vw;
     padding: 0.5vw 2vw;
     color: black;
     border-radius: 0.5vw;
@@ -64,7 +79,6 @@ li {
     box-shadow: 0 0 1vw 0.1vw gray;
     z-index: 1;
     top: 0;
-    right: 0;
 }
 
 
@@ -81,10 +95,10 @@ li {
     border: none;
     padding: 1vw;
     font-size: max(1vw, 5px);
-    width: 100%;
     border: .1vw solid lightgray;
     border-radius: .5vw;
     padding: .5vw;
+    width: 100%;
 }
 
 

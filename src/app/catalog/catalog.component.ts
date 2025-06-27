@@ -12,12 +12,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ImageName } from '../../utils/types/config';
 import { LoaderComponent } from '../components/loader/loader.component';
 import { ApiService1 } from '../../services/api.services1';
+import { props } from '../../assets/fetch.config';
 
 @Component({
   selector: 'app-catalog',
   imports: [NavigatorComponent, CountrySelectionComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent, NgIf],
   templateUrl: './catalog.component.html',
-  styleUrls: ['./catalog.component.css', '../components/selection/selection.css'],
+  styleUrls: ['./catalog.component.css', '../components/selection/selection.css', '../components/styles/button.css'],
   providers: [ApiService1],
   encapsulation: ViewEncapsulation.None
 })
@@ -28,15 +29,21 @@ export class CatalogComponent implements OnInit {
 
   filter!: boolean
   records!: ComponentOptions[]
+  orig!: ComponentOptions[]
+  copy!: ComponentOptions[]
   all!: ComponentOptions[]
-  allCopy!: ComponentOptions[]
   storage!: Map<any, any[]>
+  allias!: Map<string, string>
   pages!: number[]
   from!: number
   to!: number
   currentPage!: number
   last!: number
   loader!: boolean
+  tableColumns!: Map<string, Map<string, string>>
+  dropBoxPropsMapConfig!: Map<string, any>
+  error!: string
+  iconName!: 'invalid_file' | 'not_found'
   constructor(
     private api: ApiService1,
     private router: Router,
@@ -49,66 +56,73 @@ export class CatalogComponent implements OnInit {
     this.loader = true
     this.filter = false
     this.records = []
+    this.orig = []
     this.all = []
-    this.allCopy = []
+    this.copy = []
     this.pages = []
     this.to = 1
     this.from = 0
     this.currentPage = 0
     this.last = 1
     this.storage = new Map()
+    this.allias = new Map()
+    this.tableColumns = new Map()
+    const dropBoxPropsClone: any = {};
+    for (const [key, value] of Object.entries(props)) {
+      dropBoxPropsClone[key] = { ...value };
+    }
+    this.dropBoxPropsMapConfig = new Map(Object.entries(dropBoxPropsClone));
     this.getApi(query)
   }
 
   apply(payload: Map<string, string>): void {
     if (payload) {
-      this.allCopy = []
-      // console.log(this.all.length)
-      // console.log(payload, payload.size)
-      this.all.forEach((item: ComponentOptions, index) => {
+      this.copy = []
+      console.log(payload)
+      this.all.forEach((item: Partial<ComponentOptions>, index) => {
         let countProp: number = payload.size
         let countMatch: number = 0;
         payload.forEach((value, key) => {
           let val = (item.component as any)[key]
           if (val !== undefined) {
-            // console.log(value)
             if ((val === value || value === AppEnum.ALL) || (val === null && (value === null || value === "null"))) {
               countMatch++
             }
           }
         })
         if (countProp == countMatch) {
-          this.allCopy.push(item)
+          this.copy.push(item as ComponentOptions)
         }
       })
-      // console.log(this.allCopy.length)
+      console.log(window.location.href)
+      this.changeCurrentPage(0)
       this.from = 0
-      this.last = Math.ceil(this.allCopy.length / 20) === 0 ? 0 : Math.ceil(this.allCopy.length / 20) - 1
-      this.to = this.allCopy.length / 20 <= 10 ? Math.ceil(this.allCopy.length / 20) : 10
-      // console.log(this.last, this.to, this.from)
-
+      this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
+      this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
       this.updatePages()
       this.selectPage()
-      this.currentPage = 0
     }
     this.filter = false
   }
 
   getApi(payload: Map<string, string>): void {
     forkJoin([
-      this.api.getDiods(),
-      this.api.getTransistors(),
-      this.api.getCapacitors(),
-      this.api.getMicrochips(),
-      this.api.getResistors(),
+      // this.api.getDiods(),
+      // this.api.getTransistors(),
+      // this.api.getCapacitors(),
+      // this.api.getMicrochips(),
+      // this.api.getResistors(),
+      this.api.getComponentsApiAll(payload),
       this.api.getAlias()
     ]).subscribe(res => {
-      this.storage.set(ComponentTypeRuEnum.DIOD, (res as any[])[0])
-      this.storage.set(ComponentTypeRuEnum.TRANSISTOR, (res as any[])[1])
-      this.storage.set(ComponentTypeRuEnum.CAPACITOR, (res as any[])[2])
-      this.storage.set(ComponentTypeRuEnum.MICROCHIP, (res as any[])[3])
-      this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[4])
-      const allias = (res as any[])[5]
+      this.storage.set(ComponentTypeRuEnum.DIOD, (res as any[])[0]["diods"])
+      this.storage.set(ComponentTypeRuEnum.TRANSISTOR, (res as any[])[0]["transistors"])
+      this.storage.set(ComponentTypeRuEnum.CAPACITOR, (res as any[])[0]["capacitors"])
+      this.storage.set(ComponentTypeRuEnum.MICROCHIP, (res as any[])[0]["microchips"])
+      this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[0]["resistors"])
+      const allias = (res as any[])[1]
+      this.allias = new Map<string, string>(Object.entries(allias))
+      console.log(this.allias)
       if (this.storage.size === 5) {
         let componetns: ImageName[] = this.api.getComponentsFromConfig()
         this.storage.forEach((set: any) => {
@@ -117,83 +131,149 @@ export class CatalogComponent implements OnInit {
             let filters: string[] = []
             let satisfyCount: number = 0;
             payload.forEach((value, key) => {
-              if (item[key] && item[key] == value) {
+              if (item[key] && (item[key] == value || value == AppEnum.ALL) || key === 'page') {
                 satisfyCount++;
               }
             })
-            if (payload.size == satisfyCount) {
-              switch (item.ruComponentType) {
-                case ComponentTypeRuEnum.MICROCHIP:
-                  markup = `
+            let cItemIndex = componetns.findIndex(
+              (cItem: ImageName) => cItem.nameRu === item.ruComponentType
+            )
+            console.log(item.ruComponentType)
+            switch (item.ruComponentType) {
+              case ComponentTypeRuEnum.MICROCHIP:
+                markup = `
                     <p>${allias['ruTechnologyName']}: ${item.ruTechnologyName}</p>
                     <p>${allias['bitDepthValue']}: ${item.bitDepthValue}</p>
                     <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
                     <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
                     <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
                   `
-                  break;
-                case ComponentTypeRuEnum.DIOD:
-                  markup = `
+                break;
+              case ComponentTypeRuEnum.DIOD:
+                markup = `
                     <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
                     <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
                     <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
                   `
-                  break;
-                case ComponentTypeRuEnum.TRANSISTOR:
-                  markup = `
+                break;
+              case ComponentTypeRuEnum.TRANSISTOR:
+                markup = `
                     <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
                     <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
                     <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
                   `
-                  break;
-                case ComponentTypeRuEnum.RESISTOR:
-                  markup = `
+                break;
+              case ComponentTypeRuEnum.RESISTOR:
+                markup = `
                     <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
                     <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
                     <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
                   `
-                  break;
-                case ComponentTypeRuEnum.CAPACITOR:
-                  markup = `
+                break;
+              case ComponentTypeRuEnum.CAPACITOR:
+                markup = `
                     <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
                     <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
                     <p>${allias['maxCapacity']}: ${item.maxCapacity}</p>                   
                     <p>${allias['minCapacity']}: ${item.minCapacity}</p>
                   `
-                  break;
-              }
-              let cItemIndex = componetns.findIndex(
-                (cItem: ImageName) => cItem.nameRu === item.ruComponentType
-              )
-
-              this.all.push({
+                break;
+            }
+            if (payload.size == satisfyCount) {
+              this.orig.push({
                 component: item,
                 html: this.sanitizer.bypassSecurityTrustHtml(markup),
                 filters: filters,
                 img: componetns[cItemIndex].image
               })
             }
+            this.all.push({
+              component: item,
+              html: this.sanitizer.bypassSecurityTrustHtml(markup),
+              filters: filters,
+              img: componetns[cItemIndex].image
+            })
+            if (!this.tableColumns.get(item.ruComponentType)) {
+              const tmp = new Map()
+              for (const key in item) {
+                const componentProps = this.dropBoxPropsMapConfig.get(key)
+                const alliasName = this.allias.get(`${key}`)
+                if (alliasName && componentProps && key !== 'ruComponentType') {
+                  tmp.set(key, alliasName)
+                }
+              }
+              this.tableColumns.set(item.ruComponentType, tmp)
+
+            }
           })
         })
-
-        this.allCopy = Array.from(this.all);
-        // this.last = Math.ceil(this.all.length / 20) === 0 ? 0 : Math.ceil(this.all.length / 20) - 1
-        // this.to = this.all.length / 20 <= 10 ? Math.ceil(this.all.length / 20) : 10
-        this.updatePages()
-        this.selectPage()
-        this.loader = false
-        // this.last = Math.ceil(this.allCopy.length / 20) === 0 ? 0 : Math.ceil(this.allCopy.length / 20) - 1
-        // this.to = this.allCopy.length / 20 <= 10 ? Math.ceil(this.allCopy.length / 20) : 10
-        if (payload) {
-          this.apply(payload)
+        this.copy = Array.from(this.orig);
+        this.from = 0
+        console.log(this.orig.length)
+        this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
+        if (payload.get('page')) {
+          if (!isNaN(parseInt(payload.get('page') as string))) {
+            const value = parseInt(payload.get('page') as string)
+            console.log(Math.ceil(this.orig.length / 20), value)
+            if (Math.ceil(this.orig.length / 20) < value) {
+              this.error = "Ничего не найдено"
+              this.iconName = "not_found"
+            }
+            else {
+              const rest = value % 10
+              this.from = value - rest
+              const n = 10 - rest
+              this.to = value + n
+              if(this.to>=this.last) {
+                this.to = this.last + 1
+              }
+              this.changeCurrentPage(value)
+              console.log(this.from, this.to)
+            }
+          }
+          else {
+            this.error = "Некорректный формат страницы"
+            this.iconName = "invalid_file"
+          }
         }
+        else {
+          this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
+        }
+
+        this.selectPage()
+        this.updatePages()
+
+        // this.reCountPagesNumbers()
+        console.log(this.all.length)
+        console.log(this.orig.length)
+        console.log(this.copy.length)
       }
       this.loader = false
     });
   }
 
+  // reCountPagesNumbers(): void {
+  //   this.from = 0
+  //   this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
+  //   this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
+  //   this.updatePages()
+  //   this.selectPage()
+  // }
+
   openComponentInfo(item: ComponentOptions): void {
     this.router.navigateByUrl(`component?ruComponentType=${item.component.ruComponentType}&&componentName=${item.component.componentName}`)
+  }
+
+  changeCurrentPage(value: number): void {
+    this.currentPage = value
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: this.currentPage
+      },
+      queryParamsHandling: 'merge',
+      skipLocationChange: false
+    });
   }
 
   updatePages(): void {
@@ -204,7 +284,7 @@ export class CatalogComponent implements OnInit {
   }
   selectPage(): void {
     this.records = []
-    this.allCopy.forEach((item: ComponentOptions, index: number) => {
+    this.copy.forEach((item: ComponentOptions, index: number) => {
       if (index >= (this.currentPage) * 20 && index < (this.currentPage + 1) * 20) {
         this.records.push(item)
       }
@@ -213,7 +293,7 @@ export class CatalogComponent implements OnInit {
 
   prev(): void {
     if (this.currentPage > 0) {
-      this.currentPage--
+      this.changeCurrentPage(this.currentPage - 1)
       if (this.currentPage !== 0 && (this.currentPage + 1) % 10 === 0) {
         this.from -= 10
         if (this.to % 10 === 0) {
@@ -230,7 +310,7 @@ export class CatalogComponent implements OnInit {
 
   next(): void {
     if (this.currentPage < this.last) {
-      this.currentPage++
+      this.changeCurrentPage(this.currentPage + 1)
       if (this.currentPage % 10 === 0) {
         this.from += 10
         this.to = this.to + 10 > this.last ? this.last + 1 : this.to + 10
@@ -243,7 +323,7 @@ export class CatalogComponent implements OnInit {
   getLatest(): void {
     this.from = this.last - this.last % 10
     this.to = this.last + 1
-    this.currentPage = this.last
+    this.changeCurrentPage(this.last)
     this.updatePages()
     this.selectPage()
   }
@@ -252,7 +332,7 @@ export class CatalogComponent implements OnInit {
     if (this.to <= this.last) {
       this.from += 10
       this.to = this.to + 10 > this.last ? this.last + 1 : this.to + 10
-      this.currentPage = this.from
+      this.changeCurrentPage(this.from)
       this.updatePages()
       this.selectPage()
     }
@@ -267,7 +347,7 @@ export class CatalogComponent implements OnInit {
       else {
         this.to = this.to - (this.to % 10)
       }
-      this.currentPage = this.from
+      this.changeCurrentPage(this.from)
       this.updatePages()
       this.selectPage()
     }
@@ -278,24 +358,24 @@ export class CatalogComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
-  getPdfUrl(item: any): string | null {    
-    return !item.component.remark1 ? null : `http://localhost:5000/datasheets/${item.component.remark1}.pdf` 
+  getPdfUrl(item: any): string | null {
+    return !item.component.remark1 ? null : `http://localhost:5000/datasheets/${item.component.remark1}.pdf`
   }
 
   search(event: any): void {
     let value: string = event.target.value
     // console.log(value)
     this.records = []
-    this.allCopy = []
-    this.all.forEach((item: ComponentOptions) => {
+    this.copy = []
+    this.orig.forEach((item: ComponentOptions) => {
       if (this.include(item, value)) {
-        this.allCopy.push(item)
+        this.copy.push(item)
       }
     })
     this.from = 0
-    this.currentPage = 0
-    this.last = Math.ceil(this.allCopy.length / 20) - 1
-    this.to = this.allCopy.length / 20 <= 10 ? Math.ceil(this.allCopy.length / 20) : 10
+    this.changeCurrentPage(0)
+    this.last = Math.ceil(this.copy.length / 20) - 1
+    this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
     this.updatePages()
     this.selectPage()
   }

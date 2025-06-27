@@ -13,7 +13,7 @@ export interface Microchip {
     minVoltage: number,
     maxVoltage: number,
     frequency: number,
-    bitDepthValue: number,
+    bitDepthValue: string,
     consumptionCurrent: number,
     minOperatingTemperature: number,
     maxOperatingTemperature: number,

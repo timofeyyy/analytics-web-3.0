@@ -1,0 +1,11 @@
+<app-dropbox-provider [alliasName]="`${allias.get('ruComponentType')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
+    [name]="'ruComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+<app-dropbox-provider [alliasName]="`${allias.get('ruComponentKind')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
+    [name]="'ruComponentKind'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+<app-dropbox-provider [alliasName]="`${allias.get('manufacturerName')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
+    [name]="'manufacturerName'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/> 
+<app-dropbox-provider [alliasName]="`${allias.get('bitDepthValue')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
+    [name]="'bitDepthValue'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/> 
+<app-dropbox-provider [alliasName]="`${allias.get('frequency')}`" [propsMap]="dropBoxPropsMap" [name]="'frequency'"
+    (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/>
+<app-manufacturer-count-table [all]="values"/>

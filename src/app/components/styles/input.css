@@ -1,0 +1,11 @@
+input {
+    color: black;
+    background-color: transparent;
+    border: none;
+    padding: 1vw;
+    font-size: max(1vw, 10px);
+    border: .1vw solid lightgray;
+    border-radius: .5vw;
+    padding: .5vw;
+    width: 100%;
+}

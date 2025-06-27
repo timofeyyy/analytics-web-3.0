@@ -1,0 +1,71 @@
+.records {
+    background-color: white;
+    border-radius: 1vw;
+    margin: 0;
+}
+
+.records .cols,
+.records .cols p {
+    color: gray;
+}
+
+.records .layout {
+    display: flex;
+    justify-content: space-between;
+}
+
+.records .layout .col {
+    margin: 0;
+
+}
+
+.records .view .row {
+    cursor: pointer;
+    font-size: max(1vw, 10px);
+
+}
+
+.records .view .row .col :nth-child(0) {
+    font-weight: 500;
+}
+
+
+.records .view .row .col :nth-child(1) {
+    margin-right: 2vw;
+}
+
+.records .cols-wrapper {
+    padding: 0.5vw 1.5vw;
+}
+
+.records .view .row {
+    padding: 1.5vw;
+}
+
+.records .col {
+    font-size: max(1.2vw, 12px);
+
+}
+
+.records .cols-wrapper {
+    background-color: #ececec;
+
+}
+
+.records .list-wrapper .list {
+    padding: 1vw;
+    border-radius: 1vw;
+}
+
+.records .list-wrapper .list .values {
+    margin: 0;
+}
+
+.records .values-wrapper ul {
+    left: 1vw;
+    right: unset;
+}
+
+.search input {
+    width: 10vw;
+}

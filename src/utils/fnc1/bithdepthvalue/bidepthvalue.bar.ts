@@ -2,6 +2,7 @@ import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
 
 const getBitDepthValueStatBar = (data: any): Partial<ChartOptions> => {
+    console.log(data)
     let apexChartData: Partial<ChartOptions> = {
         series: [],
         dataLabels: {

@@ -2,20 +2,6 @@
     "api" : {
         "url" : "http://localhost:5000/"
     },
-    "countries": [
-        {
-            "nameRu": "Беларусь",
-            "image": "assets/images/bel.svg"
-        },
-        {
-            "nameRu": "Россия",
-            "image": "assets/images/ru.svg"
-        },
-        {
-            "nameRu": "Китай",
-            "image": "assets/images/ch.svg"
-        }
-    ],
     "components": [
         {
             "nameRu": "Транзистор",

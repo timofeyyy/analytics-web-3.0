@@ -10,7 +10,8 @@ import { Transistor } from "../utils/types/transistor";
 import { AppEnum } from "../utils/enum/app.enum";
 import { ChartConfig, Config, ImageName } from "../utils/types/config";
 import { Resistor } from "../utils/types/resistors";
- 
+import { columnsMax, columnsMin, prioritySchemaWrapperMap, props, propsMap } from "../assets/fetch.config";
+
 @Injectable()
 export class ApiService1 {
 
@@ -50,11 +51,13 @@ export class ApiService1 {
     }
 
     getMicrochips(data: Map<string, any> | void): Observable<Microchip[]> | null {
-        let url: string = "api/microchips"
+        let url: string = "api/microchips?"
         if (data) {
-            let componentName: string | null = data.get('componentName')
-            if (componentName) {
-                url += `?componentName=${componentName}`
+            const obj = Object.fromEntries(data)
+            for (const key in obj) {
+                if (key && key != AppEnum.ALL) {
+                    url += `${key}=${obj[key]}&&`
+                }
             }
         }
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -69,11 +72,13 @@ export class ApiService1 {
     }
 
     getCapacitors(data: Map<string, any> | void): Observable<Capacitor[]> | null {
-        let url: string = "api/capacitors"
+        let url: string = "api/capacitors?"
         if (data) {
-            let componentName: string | null = data.get('componentName')
-            if (componentName) {
-                url += `?componentName=${componentName}`
+            const obj = Object.fromEntries(data)
+            for (const key in obj) {
+                if (key && key != AppEnum.ALL) {
+                    url += `${key}=${obj[key]}&&`
+                }
             }
         }
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -88,11 +93,13 @@ export class ApiService1 {
     }
 
     getDiods(data: Map<string, any> | void): Observable<Diod[]> | null {
-        let url: string = "api/diods"
+        let url: string = "api/diods?"
         if (data) {
-            let componentName: string | null = data.get('componentName')
-            if (componentName) {
-                url += `?componentName=${componentName}`
+            const obj = Object.fromEntries(data)
+            for (const key in obj) {
+                if (key && key != AppEnum.ALL) {
+                    url += `${key}=${obj[key]}&&`
+                }
             }
         }
 
@@ -108,11 +115,13 @@ export class ApiService1 {
     }
 
     getResistors(data: Map<string, any> | void): Observable<Resistor[]> | null {
-        let url: string = "api/resistors"
+        let url: string = "api/resistors?"
         if (data) {
-            let componentName: string | null = data.get('componentName')
-            if (componentName) {
-                url += `?componentName=${componentName}`
+            const obj = Object.fromEntries(data)
+            for (const key in obj) {
+                if (key && key != AppEnum.ALL) {
+                    url += `${key}=${obj[key]}&&`
+                }
             }
         }
 
@@ -128,11 +137,14 @@ export class ApiService1 {
     }
 
     getTransistors(data: Map<string, any> | void): Observable<Transistor[]> | null {
-        let url: string = "api/transistors"
+        let url: string = "api/transistors?"
+
         if (data) {
-            let componentName: string | null = data.get('componentName')
-            if (componentName) {
-                url += `?componentName=${componentName}`
+            const obj = Object.fromEntries(data)
+            for (const key in obj) {
+                if (key && key != AppEnum.ALL) {
+                    url += `${key}=${obj[key]}&&`
+                }
             }
         }
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -145,25 +157,18 @@ export class ApiService1 {
         }
         return obs;
     }
-    //create view tmp_view as select * from transistors where
-    //insert into resistors (docid, componentName, type_id, kind_id, manufacturername_id, powerrating, minvoltage, maxvoltage, minratedresistance, maxratedresistance, resistancetolerance, minoperatingtemperature, maxoperatingtemperature, currentlimit, package, qualicationSG, QualicationЕС, remark1, remark2 ) select top 100 docid, componentName, type_id, kind_id, manufacturername_id, null, null, null, null, null, null, minoperatingtemperature, maxoperatingtemperature, null, package, qualicationSG, QualicationЕС, remark1, remark2 from transistors;
+
+    // create view tmp_view as select top 100 * from transistors
+    // insert into resistors (docid, componentName, type_id, kind_id, manufacturername_id, powerrating, minvoltage, maxvoltage, minratedresistance, maxratedresistance, resistancetolerance, minoperatingtemperature, maxoperatingtemperature, currentlimit, package, qualicationSG, QualicationЕС, remark1, remark2 ) select top 100 docid, componentName, type_id, kind_id, manufacturername_id, null, null, null, null, null, null, minoperatingtemperature, maxoperatingtemperature, null, package, qualicationSG, QualicationЕС, remark1, remark2 from transistors;
     //SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_catalog = 'ComponentDB' AND table_name = 'resistors';    
     getBitDepthValue(data: Map<string, any>): Observable<BitDepthValue[]> | null {
         let url: string = "api/microchips/bitdepthvalue?"
-        let manufacturerName: string | null = data.get('manufacturerName')
-        let componentKind: string | null = data.get('ruComponentKind')
-        let componentName: string | null = data.get('componentName')
-
-        if (manufacturerName) {
-            url += `manufacturerName=${manufacturerName}&&`
+        const obj = Object.fromEntries(data)
+        for (const key in obj) {
+            if (key && key != AppEnum.ALL) {
+                url += `${key}=${obj[key]}&&`
+            }
         }
-        if (componentKind) {
-            url += `ruComponentKind=${componentKind}&&`
-        }
-        if (componentName) {
-            url += `componentName=${componentName}`
-        }
-        console.log(url)
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((items: BitDepthValue[]) => {
@@ -175,12 +180,13 @@ export class ApiService1 {
         return obs;
     }
 
-    getComponentsApi(data: Map<string, any> | void): Observable<ComponentLabel[]> | null {
+    getComponentsApiPreview(query: Map<string, any> | void): Observable<ComponentLabel[]> | null {
 
-        let url: string = "api/components?"
-        if (data) {
-            let manufacturerName: string | null = data.get('manufacturerName')
-            let componentType: string | null = data.get('ruComponentType')
+        let url: string = "api/components/short?"
+
+        if (query) {
+            let manufacturerName: string | null = query.get('manufacturerName')
+            let componentType: string | null = query.get('ruComponentType')
             if (componentType) {
                 url += `ruComponentType=${componentType}&&`
             }
@@ -190,12 +196,175 @@ export class ApiService1 {
         }
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
-            return obs.pipe(map((options: ComponentLabel[]) => {
-                return options.map(function (option: ComponentLabel): ComponentLabel {
+            return obs.pipe(map((components: any) => {
+                return components.map(function (option: ComponentLabel): ComponentLabel {
                     return option;
                 });
             }))
         }
         return obs;
+    }
+
+    getComponentsApiAll(query: Map<string, any> | void): Observable<any> | null {
+
+        let url: string = "api/components/all?"
+
+        // if (query) {
+        //     let manufacturerName: string | null = query.get('manufacturerName')
+        //     let componentType: string | null = query.get('ruComponentType')
+        //     if (componentType) {
+        //         url += `ruComponentType=${componentType}&&`
+        //     }
+        //     if (manufacturerName) {
+        //         url += `manufacturerName=${manufacturerName}`
+        //     }
+        // }
+        let obs: Observable<any> | null = this.getReqDomen(url);
+        if (obs != null) {
+            return obs.pipe(map((res: any) => {
+                if (query && res) {
+                    const queryObject = Object.fromEntries(query)
+                    let length = this.getActualQqueryLength(queryObject)
+                    for (const type in res) {
+                        let values = []
+                        for (const obj of res[type]) {
+                            let satisfyCount = 0;
+                            for (const key in queryObject) {
+                                if (
+                                    obj[key] && (
+                                        (this.existInColumnsMin(key) && obj[key] >= queryObject[key]) ||
+                                        (this.existInColumnsMax(key) && obj[key] <= queryObject[key]) ||
+                                        (obj[key] == queryObject[key])
+                                    )
+
+                                ) {
+                                    satisfyCount++
+                                }
+
+                                // if (obj[key] && this.existInColumnsMin(key)) {
+                                //     console.log(obj[key], queryObject[key], obj[key] >= queryObject[key])
+                                // }
+                                // if (obj[key] && this.existInColumnsMax(key)) {
+                                //     console.log(obj[key], queryObject[key], obj[key] <= queryObject[key])
+                                // }
+                            }
+                            // console.log(satisfyCount, length, satisfyCount == length)
+                            if (length == satisfyCount) {
+                                values.push(obj)
+                            }
+                        }
+                        res[type] = values
+                    }
+                }
+                console.log(res)
+                return res
+
+            }))
+        }
+        return obs;
+    }
+    getComponentsApiAllWithProirityLevels(query: Map<string, any> | void): Observable<any> | null {
+
+        let url: string = "api/components/all?"
+        let obs: Observable<any> | null = this.getReqDomen(url);
+        if (obs != null) {
+            return obs.pipe(map((res: any) => {
+                const priorities = new Map()
+                priorities.set(AppEnum.ALL, [])
+                let resWrapper = new Map()
+                if (query && query.size) {
+                    const queryObject = Object.fromEntries(query)
+                    const queryArr = this.getActualQqueryAsArray(queryObject)
+                    for (const type in res) {
+                        let values: any[] = []
+                        for (const obj of res[type]) {
+                            for (let index = -1; index < queryArr.length; index++) {
+                                let satisfyCount = 0;
+                                if (index == -1) {
+                                    for (const key in queryObject) {
+                                        if (
+                                            obj[key] && key !== 'ruComponentType' && (
+                                                (this.existInColumnsMin(key) && !isNaN(Number(queryObject[key])) && obj[key] >= Number(queryObject[key])) ||
+                                                (this.existInColumnsMax(key) && !isNaN(Number(queryObject[key])) && obj[key] <= queryObject[key]) ||
+                                                (obj[key] == queryObject[key]) ||
+                                                (obj[key] == Number(queryObject[key]))
+                                            )
+
+                                        ) {
+                                            satisfyCount++
+                                        }
+                                    }
+                                    if (queryArr.length == satisfyCount) {
+                                        (priorities.get(AppEnum.ALL) as any[]).push(obj)
+                                    }
+                                }
+                                else {
+                                    let j = 0;
+                                    for (; j < queryArr.length, j <= index; j++) {
+                                        if (
+                                            obj[queryArr[j]] && (
+                                                (this.existInColumnsMin(queryArr[j]) && !isNaN(Number(queryObject[queryArr[j]])) && obj[queryArr[j]] >= Number(queryObject[queryArr[j]])) ||
+                                                (this.existInColumnsMax(queryArr[j]) && !isNaN(Number(queryObject[queryArr[j]])) && obj[queryArr[j]] <= queryObject[queryArr[j]]) ||
+                                                (obj[queryArr[j]] == queryObject[queryArr[j]]) ||
+                                                (obj[queryArr[j]] == Number(queryObject[queryArr[j]]))
+                                            )
+                                        ) {
+                                            satisfyCount++
+                                        }
+                                    }
+                                    if (satisfyCount === j) {
+                                        if (!priorities.get(queryArr[index])) {
+                                            priorities.set(queryArr[index], [])
+                                        }
+                                        (priorities.get(queryArr[index]) as any[]).push(obj)
+                                    }
+                                }
+                            }
+                        }
+                        res[type] = values
+                    }
+                    if (queryObject['ruComponentType'] && prioritySchemaWrapperMap.get(queryObject['ruComponentType'])) {
+                        const name = prioritySchemaWrapperMap.get(queryObject['ruComponentType'])
+                        resWrapper.set(name, priorities)
+                    }
+                }
+                else {
+                    for (const type in res) {
+                        resWrapper.set(type, new Map().set(AppEnum.ALL, res[type]))
+                    }
+                }
+                console.log(resWrapper)
+                return resWrapper
+
+            }))
+        }
+        return obs;
+    }
+
+    private getActualQqueryLength(query: any): number {
+        let length = 0
+        for (const key in query) {
+            if (propsMap.get(key)) {
+                length++
+            }
+        }
+        return length
+    }
+    private getActualQqueryAsArray(query: any): string[] {
+        const columns = []
+        for (const key in query) {
+            if (propsMap.get(key) && key !== 'ruComponentType') {
+                columns.push(key)
+            }
+        }
+        return columns
+    }
+
+    private existInColumnsMax(column: string): boolean {
+        return columnsMax.findIndex((value) => value == column) !== -1
+    }
+
+    private existInColumnsMin(column: string): boolean {
+        return columnsMin.findIndex((value) => value == column) !== -1
     }
 }
