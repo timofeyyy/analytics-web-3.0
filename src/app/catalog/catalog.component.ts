@@ -42,6 +42,8 @@ export class CatalogComponent implements OnInit {
   dropBoxPropsMapConfig!: Map<string, any>
   error!: string
   iconName!: 'invalid_file' | 'not_found'
+  displayedRuComponentTypes!: string[]
+
   constructor(
     private api: ApiService1,
     private router: Router,
@@ -50,7 +52,7 @@ export class CatalogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const query: Map<string, string> = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
+    const query: Map<string, string> = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params))
     this.loader = true
     this.filter = false
     this.records = []
@@ -58,6 +60,7 @@ export class CatalogComponent implements OnInit {
     this.all = []
     this.copy = []
     this.pages = []
+    this.displayedRuComponentTypes = []
     this.to = 1
     this.from = 0
     this.currentPage = 0
@@ -70,13 +73,37 @@ export class CatalogComponent implements OnInit {
       dropBoxPropsClone[key] = { ...value };
     }
     this.dropBoxPropsMapConfig = new Map(Object.entries(dropBoxPropsClone));
+
+    query.forEach((value, key) => {
+      if (this.dropBoxPropsMapConfig.get(key)) {
+        this.dropBoxPropsMapConfig.get(key).currentValue = value
+      }
+    })
     this.getApi(query)
+  }
+
+  setQuery(query: Map<string, string>): Promise<Map<string, string>> {
+    const queryCopy: Map<string, string | null> = query
+    if (queryCopy.get('ruComponentType') === AppEnum.ALL) {
+      queryCopy.set('ruComponentType', null)
+    }
+    return this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: Object.fromEntries(queryCopy),
+      queryParamsHandling: 'merge',
+      skipLocationChange: false
+    }).then(() => {
+      if (queryCopy.get('ruComponentType') === null) {
+        queryCopy.delete('ruComponentType')
+      }
+      return queryCopy as Map<string, string>
+    });
   }
 
   apply(payload: Map<string, string>): void {
     if (payload) {
       this.copy = []
-      console.log(payload)
+      // console.log(payload, this.all)
       this.all.forEach((item: Partial<ComponentOptions>, index) => {
         let countProp: number = payload.size
         let countMatch: number = 0;
@@ -92,7 +119,7 @@ export class CatalogComponent implements OnInit {
           this.copy.push(item as ComponentOptions)
         }
       })
-      console.log(window.location.href)
+      // console.log(window.location.href)
       this.changeCurrentPage(0)
       this.from = 0
       this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
@@ -103,6 +130,28 @@ export class CatalogComponent implements OnInit {
     this.filter = false
   }
 
+  getSimpleKeyValueMap(): Map<string, string> {
+    const map: Map<string, string> = new Map()
+    const object = Object.fromEntries(this.dropBoxPropsMapConfig)
+    for (const key in object) {
+      let val = object[key].currentValue
+      if ((object[key].input === false && val !== AppEnum.ALL && val) || (object[key].input && val)) {
+        map.set(key, val)
+      }
+      if (key === 'ruComponentType' && val) {
+        map.set(key, val)
+      }
+      if (key === 'ruComponentKind' && val !== AppEnum.ALL && val) {
+        map.set(key, val)
+      }
+      if (key === 'manufacturerName' && val !== AppEnum.ALL && val) {
+        map.set(key, val)
+      }
+    }
+    return map
+  }
+
+
   getApi(payload: Map<string, string>): void {
     forkJoin([
       // this.api.getDiods(),
@@ -110,7 +159,7 @@ export class CatalogComponent implements OnInit {
       // this.api.getCapacitors(),
       // this.api.getMicrochips(),
       // this.api.getResistors(),
-      this.api.getComponentsApiAll(payload),
+      this.api.getComponentsApiAll(),
       this.api.getAlias()
     ]).subscribe(res => {
       this.storage.set(ComponentTypeRuEnum.DIOD, (res as any[])[0]["diods"])
@@ -120,8 +169,9 @@ export class CatalogComponent implements OnInit {
       this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[0]["resistors"])
       const allias = (res as any[])[1]
       this.allias = new Map<string, string>(Object.entries(allias))
-      console.log(this.allias)
+      // console.log(this.allias)
       if (this.storage.size === 5) {
+
         // let componetns: any[] = this.api.getComponentsFromConfig()
         this.storage.forEach((set: any) => {
           (set as []).forEach((item: any) => {
@@ -136,7 +186,7 @@ export class CatalogComponent implements OnInit {
             // let cItemIndex = componetns.findIndex(
             //   (cItem: any) => cItem.nameRu === item.ruComponentType
             // )
-            console.log(item.ruComponentType)
+            // console.log(item.ruComponentType)
             switch (item.ruComponentType) {
               case ComponentTypeRuEnum.MICROCHIP:
                 markup = `
@@ -205,14 +255,15 @@ export class CatalogComponent implements OnInit {
             }
           })
         })
+        this.displayedRuComponentTypes = Array.from(this.storage.keys())
         this.copy = Array.from(this.orig);
         this.from = 0
-        console.log(this.orig.length)
+        // console.log(this.orig.length)
         this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
         if (payload.get('page')) {
           if (!isNaN(parseInt(payload.get('page') as string))) {
             const value = parseInt(payload.get('page') as string)
-            console.log(Math.ceil(this.orig.length / 20), value)
+            // console.log(Math.ceil(this.orig.length / 20), value)
             if (Math.ceil(this.orig.length / 20) < value) {
               this.error = "Ничего не найдено"
               this.iconName = "not_found"
@@ -222,11 +273,11 @@ export class CatalogComponent implements OnInit {
               this.from = value - rest
               const n = 10 - rest
               this.to = value + n
-              if(this.to>=this.last) {
+              if (this.to >= this.last) {
                 this.to = this.last + 1
               }
               this.changeCurrentPage(value)
-              console.log(this.from, this.to)
+              // console.log(this.from, this.to)
             }
           }
           else {
@@ -242,21 +293,26 @@ export class CatalogComponent implements OnInit {
         this.updatePages()
 
         // this.reCountPagesNumbers()
-        console.log(this.all.length)
-        console.log(this.orig.length)
-        console.log(this.copy.length)
+        // console.log(this.all.length)
+        // console.log(this.orig.length)
+        // console.log(this.copy.length)
       }
       this.loader = false
     });
   }
 
-  // reCountPagesNumbers(): void {
-  //   this.from = 0
-  //   this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
-  //   this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
-  //   this.updatePages()
-  //   this.selectPage()
-  // }
+  onTypeSelected(ruComponentType: string): void {
+    let value = ruComponentType
+    if (this.dropBoxPropsMapConfig.get('ruComponentType').currentValue === ruComponentType) {
+      value = AppEnum.ALL
+    }
+    this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = value
+    let map = this.getSimpleKeyValueMap()
+    this.setQuery(map).then((res) => {
+      // console.log(res.size, res)
+      this.apply(res)
+    })
+  }
 
   openComponentInfo(item: ComponentOptions): void {
     this.router.navigateByUrl(`component?ruComponentType=${item.component.ruComponentType}&&componentName=${item.component.componentName}`)
@@ -264,14 +320,7 @@ export class CatalogComponent implements OnInit {
 
   changeCurrentPage(value: number): void {
     this.currentPage = value
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: this.currentPage
-      },
-      queryParamsHandling: 'merge',
-      skipLocationChange: false
-    });
+    this.setQuery(new Map().set('page', value))
   }
 
   updatePages(): void {
@@ -280,6 +329,7 @@ export class CatalogComponent implements OnInit {
       this.pages.push(i)
     }
   }
+
   selectPage(): void {
     this.records = []
     this.copy.forEach((item: ComponentOptions, index: number) => {
@@ -351,10 +401,9 @@ export class CatalogComponent implements OnInit {
     }
   }
 
-
-  getSafeUrl(url: string): any {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
-  }
+  // getSafeUrl(url: string): any {
+  //   return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+  // }
 
   getPdfUrl(item: any): string | null {
     return !item.component.remark1 ? null : `http://localhost:5000/datasheets/${item.component.remark1}.pdf`
@@ -388,5 +437,9 @@ export class CatalogComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  openTable(): void {
+    this.router.navigateByUrl('table-view')
   }
 }

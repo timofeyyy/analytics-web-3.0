@@ -12,58 +12,73 @@
                     <img [src]="'assets/images/'+iconName+'.svg'" alt="img">
                     <p>{{error}}</p>
                 </div>
-                <!-- <p class="warning-msg">{{errorMsg}}</p> -->
             </div>
         </div>
         <ng-template #templateName>
             <header class="h-widget">
                 <h1>Просмотр данных</h1>
+                <button class="def" (click)="openTable()">Просмотр в виде таблицы</button>
             </header>
-            <main>
-
-                <main class="catalog">
-                    <div class="head">
-                        <div class="filter">
-                            <div class="preview" (click)="filter=!filter">
-                                <p>Фильтры</p>
-                            </div>
-                            <li class="search">
-                                <input type="text" placeholder="Индетификатор компонента" (input)="search($event)">
-                            </li>
+            <div class="filter-options">
+                <div class="options-head">
+                    <p>Фильтрация по параметрам</p>
+                </div>
+                <div class="options-body">
+                    <div class="option-wrapper">
+                        <p class="option-wrapper-header">Тип компонента</p>
+                        <div class="options-wrapper-body">
+                            <p *ngFor="let ruComponentType of displayedRuComponentTypes"
+                                [ngClass]="{type: true,  activated: dropBoxPropsMapConfig.get('ruComponentType').currentValue === ruComponentType}"
+                                (click)="onTypeSelected(ruComponentType)">{{ruComponentType}}</p>
                         </div>
                     </div>
-                    <div class="body">
-                        <div class="item" *ngFor="let item of records">
-                            <div class="info">
-                                <div class="h">
-                                    <!-- <img [src]="getSafeUrl(item.img)" alt="" /> -->
-                                    <h1>Тип компонента: {{item.component.ruComponentType}}</h1>
-                                </div>
-                                <h5>Производитель: {{item.component.manufacturerName}}</h5>
-                                <h5>Индетификатор компонента: {{item.component.componentName}}</h5>
-                                <div [innerHTML]="item.html">
-                                </div>
+                </div>
+                <div class="option-footer">
+                    <div class="preview" (click)="filter=!filter">
+                        <p>Дополнительные параметры</p>
+                    </div>
+                </div>
+            </div>
+            <main class="catalog">
+                <div class="head">
+                    <div class="filter">
+                        <p>Найдено {{copy.length}}</p>
+                        <li class="search">
+                            <input type="text" placeholder="Индетификатор компонента" (input)="search($event)">
+                        </li>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="item" *ngFor="let item of records">
+                        <div class="info">
+                            <div class="h">
+                                <!-- <img [src]="getSafeUrl(item.img)" alt="" /> -->
+                                <h1>Тип компонента: {{item.component.ruComponentType}}</h1>
                             </div>
-                            <div class="block">
-                                <p *ngIf="!getPdfUrl(item); else templateName"></p>
-                                <ng-template #templateName>
-                                    <a [href]="getPdfUrl(item)" class="spec">Спецификация</a>
-                                </ng-template>
-                                <button (click)="openComponentInfo(item)" class="def">Подробнее</button>
+                            <h5>Производитель: {{item.component.manufacturerName}}</h5>
+                            <h5>Индетификатор компонента: {{item.component.componentName}}</h5>
+                            <div [innerHTML]="item.html">
                             </div>
                         </div>
+                        <div class="block">
+                            <p *ngIf="!getPdfUrl(item); else templateName"></p>
+                            <ng-template #templateName>
+                                <a [href]="getPdfUrl(item)" class="spec">Спецификация</a>
+                            </ng-template>
+                            <button (click)="openComponentInfo(item)" class="def">Подробнее</button>
+                        </div>
                     </div>
-                    <div class="footer">
-                        <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
-                        <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
-                        <p *ngFor="let page of pages" (click)="changeCurrentPage(page); selectPage()"
-                            [ngClass]="{active: page === currentPage}">{{page}}</p>
-                        <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
-                        <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
-                        <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}
-                        </p>
-                    </div>
-                </main>
+                </div>
+                <div class="footer">
+                    <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
+                    <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
+                    <p *ngFor="let page of pages" (click)="changeCurrentPage(page); selectPage()"
+                        [ngClass]="{active: page === currentPage}">{{page}}</p>
+                    <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
+                    <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
+                    <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}
+                    </p>
+                </div>
             </main>
         </ng-template>
     </div>

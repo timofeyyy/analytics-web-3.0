@@ -25,7 +25,7 @@ interface ComponentProp {
 interface ChartOptionsStorage {
   [endpoint: string]: {
     chartData: {
-      [chart: string]: (data: any, query: Map<string, string>, router: Router) => Partial<ChartOptions>
+      [chart: string]: (data: any, query: Map<string, string>) => Partial<ChartOptions>
     },
     chartName: (data: any) => string
   }
@@ -158,7 +158,7 @@ export const chartOptionsData: ChartOptionsStorage = {
   },
   "ruComponentType-next-chart": {
     chartData: {
-      "bar": (data: any, query: Map<string, string>, router: Router) => {
+      "bar": (data: any, query: Map<string, string>) => {
         const res = getManufacturersChartOptionBar1(data)
         if (res && res.chart) {
           res.chart = {
@@ -180,7 +180,7 @@ export const chartOptionsData: ChartOptionsStorage = {
         }
         return res
       },
-      "donut": (data: any, query: Map<string, string>, router: Router) => {
+      "donut": (data: any, query: Map<string, string>) => {
         const res = getManufacturersChartOptionDonut1(data)
         if (res && res.chart) {
           res.chart = {
@@ -202,7 +202,7 @@ export const chartOptionsData: ChartOptionsStorage = {
         }
         return res
       },
-      "pie": (data: any, query: Map<string, string>, router: Router) => {
+      "pie": (data: any, query: Map<string, string>) => {
         const res = getManufacturersChartOptionPie1(data)
         if (res && res.chart) {
           res.chart = {
@@ -224,7 +224,7 @@ export const chartOptionsData: ChartOptionsStorage = {
         }
         return res
       },
-      "mixed": (data: any, query: Map<string, string>, router: Router) => {
+      "mixed": (data: any, query: Map<string, string>) => {
         const res = getManufacturersChartOptionBarMixed1(data)
         if (res && res.chart) {
           res.chart = {

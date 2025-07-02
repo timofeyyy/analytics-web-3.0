@@ -1,14 +1,14 @@
 <div class="popup-window">
     <div class="filters">
         <div class="head">
-            <h1>Фильтры</h1>
+            <h1>Дополнительные параметры</h1>
         </div>
         <div class="body">
             <div class="base">
-                <app-dropbox-provider [alliasName]="`${allias.get('ruComponentType')}`"
+                <!-- <app-dropbox-provider [alliasName]="`${allias.get('ruComponentType')}`"
                     [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig"
                     [name]="'ruComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"
-                    (onStateChanged)="onRuComponentTypeChanged($event)" />
+                    (onStateChanged)="onRuComponentTypeChanged($event)" /> -->
                 <app-dropbox-provider [alliasName]="`${allias.get('manufacturerName')}`"
                     [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig"
                     [name]="'manufacturerName'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />

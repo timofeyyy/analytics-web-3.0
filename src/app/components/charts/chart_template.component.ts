@@ -12,8 +12,8 @@ import { NgIf, NgStyle, Location } from '@angular/common';
   selector: 'app-chart',
   imports: [NgApexchartsModule, HttpClientModule, NgIf],
   providers: [ApiService1],
-  templateUrl: './chart_type_template.component.html',
-  styleUrls: ['./chart_type_template.component.css', '../styles/button.css']
+  templateUrl: './chart_template.component.html',
+  styleUrls: ['./chart_template.component.css', '../styles/button.css']
 })
 export class ChartTemplateComponent implements OnInit {
   chartOptions!: Partial<ChartOptions>
@@ -22,9 +22,7 @@ export class ChartTemplateComponent implements OnInit {
   disabled!: boolean
   constructor(
     private api: ApiService1,
-    private router: Router,
     private route: ActivatedRoute,
-    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -49,11 +47,10 @@ export class ChartTemplateComponent implements OnInit {
   getChartData(query: Map<string, any>, req_name: string, chart_name: string, type_name: string): Partial<ChartOptions> | null {
     let getObservable: ((injector: ApiService1, data: Map<string, any>) => Observable<any> | null) | undefined = observableApiMap.get(req_name);
     let res: Partial<ChartOptions> | null = null;
-    console.log('req')
     if (getObservable) {
       getObservable(this.api, query)?.pipe(
         map((api: any) => {
-          let data = chartOptionsData[chart_name].chartData[type_name](api, query, this.router) as ChartOptions;
+          let data = chartOptionsData[chart_name].chartData[type_name](api, query) as ChartOptions;
           this.chartName = chartOptionsData[chart_name].chartName(query);
           this.chartOptions = {
             ...data,
@@ -83,7 +80,7 @@ export class ChartTemplateComponent implements OnInit {
         }),
         catchError((err: any) => {
           this.loader = false
-          this.router.navigateByUrl('/not-found')
+          // this.router.navigateByUrl('/not-found')
           console.log(err.message)
           return [];
         })

@@ -13,10 +13,10 @@
     <div class="values-wrapper">
         <ul [ngStyle]="{display: name === currentName ? 'block' : 'none'}">
             <li class="search">
-                <input type="text" placeholder="поиск">
-                <!-- (input)="search($event)" -->
+                <input type="text" placeholder="поиск" (input)="search($event)">
+                
             </li>
-            <li *ngFor="let value of values" 
+            <li *ngFor="let value of copy" 
             (click)="openClose(value)"
             >
                 {{value}}

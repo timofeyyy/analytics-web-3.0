@@ -8,9 +8,9 @@ import { ItemInfoTemplateComponent } from './item_info_template/item_info_templa
 // import { ChartBuilderComponent } from './chart-builder/chart-builder.component';
 import { TableBuilderComponent } from './table-builder/table-builder.component';
 import { TestPageComponent } from './test-page/test-page.component';
-import { ChartTemplateComponent } from './components/charts/chart_type_template.component';
+import { ChartTemplateComponent } from './components/charts/chart_template.component';
 import { TablePage } from './table-page/table-page.component';
-
+ 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: Main1Component },
