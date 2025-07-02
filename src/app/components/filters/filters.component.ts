@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { PropNameSelectionComponent } from '../selection/prop_name_selection/prop_name_selection.component';
-import { PropSelectionComponent } from '../selection/prop_selection/prop_selection.component';
 import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import manufacturerNameFilters from '../../../utils/fnc1/filters/manufacturerName';
 import componentKindFilters from '../../../utils/fnc1/filters/componentKind';

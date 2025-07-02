@@ -16,10 +16,14 @@ p {
 }
 
 apx-chart {
-    width: 70%;
+    width: 60%;
 }
 
 .apexcharts-text tspan {
     font-size: max(1vw, 8px) !important;
 
+}
+
+.chart-wrapper button {
+    margin-left: 4vw;
 }

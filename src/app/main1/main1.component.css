@@ -4,25 +4,41 @@ iframe {
     border-radius: 1vw;
 }
 
+/* 
+.workspace {
+    height: 100vh;
+} */
+
 .workspace main .t-wrapper {
     display: flex;
-    margin-bottom: 2vw;
+    /* height: 100%; */
+    margin-bottom: 1vw;
 }
 
 .workspace main .t-wrapper .fav,
 .workspace main .t-wrapper .stat,
 .workspace main .b-wrapper .records {
-    background-color: white;
     border-radius: 1vw;
-    height: 30vw;
+}
+
+.workspace main .b-wrapper .records {
+    background-color: white;
+}
+
+.workspace main .t-wrapper .stat {
+    /* height: 100%;
+    background-color: aquamarine; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .workspace main .t-wrapper .fav {
     padding-right: 1vw;
     width: 40%;
-    overflow-y: scroll;
-    display: grid;
-    grid-template-columns: repeat(2, 47%);
+    /* overflow-y: scroll; */
+    /* display: grid;
+    grid-template-columns: repeat(2, 47%); */
     justify-content: space-around;
     background-color: unset;
     gap: 1.5vw;
@@ -30,18 +46,19 @@ iframe {
 }
 
 .workspace main .t-wrapper .fav .item input {
-    margin-right: 0.5vw;
-    width: max(1vw, 10px);
-    height: max(1vw, 10px);
+    margin: 0 0.5vw 0 0;
+    width: max(0.8vw, 8px);
+    height: max(0.8vw, 8px);
 }
 
 .workspace main .t-wrapper .fav .item {
     background-color: white;
-    border-radius: 1vw;
+    border-radius: 0.5vw;
     width: 100%;
     box-sizing: border-box;
-    padding: 1vw;
+    padding: 1vw 1.5vw;
     position: relative;
+    margin-bottom: 0.5vw;
 }
 
 .item-header {
@@ -62,26 +79,27 @@ iframe {
     margin: 0;
 }
 
+.workspace main .t-wrapper .fav .item span {
+    color: red;
+    font-size: max(0.8vw, 8px);
+}
 
 .workspace main .t-wrapper .fav .item .type {
     color: gray;
-    font-size: max(1.5vw, 15px);
+    font-size: max(1vw, 10px);
+    padding: 0 1vw 0 0;
 }
 
-.workspace main .t-wrapper .fav .item .info img {
-    width: max(4vw, 20px);
-    height: max(4vw, 20px);
-    margin: 1.5vw 0;
+.workspace main .t-wrapper .fav .item .info p {
+    font-size: max(0.8vw, 8px);
 }
 
-.workspace main .t-wrapper .fav .item .info {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+.workspace main .t-wrapper .fav .item .info .info-header {
+    margin-bottom: 0.5vw;
 }
 
 .workspace main .t-wrapper .fav .item .info .proc {
-    font-size: max(2.5vw, 12px);
+    font-size: max(1vw, 10px);
 }
 
 .workspace main .t-wrapper .fav .item {
@@ -100,19 +118,34 @@ iframe {
     margin: 0;
 }
 
+.workspace main .t-wrapper .fav .item .info {
+    margin-top: 1vw;
+}
+
 .workspace main .t-wrapper .stat {
     width: 60%;
-    margin-left: 1.5vw;
+    /* margin-left: 1.5vw; */
+}
+
+.workspace main .t-wrapper .stat iframe {
+    height: 70%;
 }
 
 .workspace main .b-wrapper {
     display: flex;
     justify-content: space-between;
+    width: 100%;
+    /* height: 30%; */
 }
 
-.workspace main .b-wrapper .records {
+/* .workspace main .stat .b-wrapper iframe {
+    height: 100%;
+} */
+
+.workspace main .b-wrapper .records-wrapper {
     width: 40%;
     margin: 0;
+    overflow: hidden;
 }
 
 .workspace main .b-wrapper .records .view {
@@ -184,7 +217,7 @@ iframe {
     right: unset;
 }
 
-.workspace main .b-wrapper .prod-stat, 
+.workspace main .b-wrapper .prod-stat,
 .workspace main .b-wrapper .total-stat {
     background-color: white;
     border-radius: 1vw;

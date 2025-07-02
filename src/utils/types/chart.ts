@@ -12,6 +12,7 @@ import {
     ApexLegend,
     ApexPlotOptions
 } from "ng-apexcharts";
+import { ChartActions } from "../enum/app.enum";
 
 export type ChartOptions = {
     series: ApexAxisChartSeries;
@@ -29,5 +30,10 @@ export type ChartOptions = {
     theme: ApexTheme;
     title: ApexTitleSubtitle;
     values: string[];
-    propName: string
+    propName: string,
+    chartName: string,
+    column: {
+        action: ChartActions
+    },
+    back: boolean
 };

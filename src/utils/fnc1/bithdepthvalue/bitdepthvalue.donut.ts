@@ -1,9 +1,11 @@
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
+import getManufacturer from "../other/get_manufacturer";
 
 
 
 const getBitDepthValueStatDonut = (data: any): Partial<ChartOptions> => {
+    let manufacturerName = getManufacturer(data)
     let apexChartData: Partial<ChartOptions> = {
         series: [],
         chart: {

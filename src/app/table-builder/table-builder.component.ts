@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigatorComponent } from "../components/navigator/navigator.component";
-import { TableComponent } from "../components/table/table.component";
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { DropboxProviderComponent } from "../components/dropbox-provider/dropbox-provider.component";
 import { ApiService1 } from '../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
 import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { forkJoin } from 'rxjs';
-import { prioritySchemaMap, prioritySchemaWrapper, prioritySchemaWrapperMap, props, propsMap } from '../../assets/fetch.config';
+import { prioritySchemaMap, prioritySchemaWrapperMap, props, propsMap } from '../../assets/fetch.config';
 import { ThisReceiver } from '@angular/compiler';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../components/loader/loader.component";
@@ -21,8 +20,8 @@ interface IStepper {
   selector: 'app-table-builder',
   imports: [NavigatorComponent, NgStyle, HttpClientModule, NgClass, DropboxProviderComponent, NgFor, LoaderComponent],
   providers: [ApiService1],
-  templateUrl: './table-viewer.component.html',
-  styleUrls: ['./table-viewer.component.css', '../components/styles/button.css']
+  templateUrl: './table-builder.component.html',
+  styleUrls: ['./table-builder.component.css', '../components/styles/button.css']
 })
 
 

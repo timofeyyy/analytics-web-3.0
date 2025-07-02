@@ -1,8 +1,8 @@
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
+import getManufacturer from "../other/get_manufacturer";
 
 const getBitDepthValueStatMixed = (data: any): Partial<ChartOptions> => {
-    console.log(data)
     let apexChartData: Partial<ChartOptions> = {
         series: [{
             name: "количество",
@@ -62,7 +62,7 @@ const getBitDepthValueStatMixed = (data: any): Partial<ChartOptions> => {
         var map = new Map();
 
         data.forEach((obj: BitDepthValue) => {
-            let bitDepthValue : string = obj.bitDepthValue === null || obj.bitDepthValue === "" ? "null" : obj.bitDepthValue;
+            let bitDepthValue: string = obj.bitDepthValue === null || obj.bitDepthValue === "" ? "null" : obj.bitDepthValue;
 
             if (!map.has(bitDepthValue)) {
                 map.set(bitDepthValue, 0);
@@ -83,7 +83,8 @@ const getBitDepthValueStatMixed = (data: any): Partial<ChartOptions> => {
         });
     }
     // console.log(apexChartData)
-    // apexChartData.values = apexChartData.xaxis?.categories
+    apexChartData.values = apexChartData.xaxis?.categories
+    // console.log(apexChartData.values)
     apexChartData.propName = "bitDepthValue"
     return apexChartData
 }

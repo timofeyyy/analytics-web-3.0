@@ -5,8 +5,8 @@ export interface Config {
         url: string
     },
     chart: ChartConfig[],
-    countries: ImageName[],
-    components: ImageName[]
+    // countries: ImageName[],
+    // components: ImageName[]
 }
 
 
@@ -23,7 +23,7 @@ export interface ChartRoute {
 }
 
 
-export interface ImageName {
-    nameRu: string | ComponentTypeRuEnum, 
-    image: string
-}
+// export interface ImageName {
+//     nameRu: string | ComponentTypeRuEnum, 
+//     image: string
+// }

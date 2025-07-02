@@ -1,16 +1,15 @@
 <div class="app-main">
     <div class="navigator-wrapper">
         <app-navigator />
-    </div>
+    </div> 
     <div class="workspace">
+        <header class="h-widget">
+            <h1>{{ruComponentType === undefined ? "Charts" : ruComponentType}}</h1>
+        </header>
         <main>
-            <header class="h-widget">
-                <h1>{{ruComponentType === undefined ? "Charts" : ruComponentType}}</h1>
-                <!-- <app-country-selection style="display: none;" /> -->
-            </header>
             <div class="wrapper">
                 <section class="chart-wrapper">
-                    <iframe [src]="url!" frameborder="0"></iframe>
+                    <iframe [src]="url" frameborder="0"></iframe>
                 </section>
                 <section class="selection">
                     <div class="column" *ngFor="let column of displayedColumns">

@@ -1,4 +1,3 @@
-import { ComponentLabel } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
 
@@ -15,8 +14,10 @@ const getManufacturersChartOptionPie1 = (data: any): Partial<ChartOptions> => {
         },
         labels: [],
         legend: {
-            fontSize: `10vw`
-        },
+            show: true,
+            position: 'bottom',
+            horizontalAlign: 'center'
+          },
         values: []
     };
 

@@ -3,70 +3,40 @@
         <app-navigator />
     </div>
     <div class="workspace">
+        <header class="h-widget">
+            <h1>Количественная статистика выпускаемых электронных компонентов производителями</h1>
+        </header>
         <main>
-            <header class="h-widget">
-                <h1>Общая статистика</h1>
-                <app-country-selection style="display: none;" />
-            </header>
             <div class="t-wrapper">
                 <section class="fav">
                     <div class="item" *ngFor="let component of componentTypes">
                         <div class="item-header">
                             <div class="item-header-wrapper">
-                                <input type="checkbox" (click)="selectComponentTypes(component.image.nameRu)"
-                                    [checked]="component.checked" />
+                                <input type="radio" [checked]="type === component[0]" (click)="selectComponentTypes(component[0])" />
                                 <a class="type"
-                                    [href]="getSafeUrl(`componentType/${component.image.nameRu!}`)">{{component.image.nameRu}}</a>
+                                    [href]="getSafeUrl(`componentType/${component[0]}`)">{{component[0]}}</a>
+                                <span>{{component[1].countAll}} шт</span>
                             </div>
-                            <img class="context-menu" src="assets/images/context_menu.svg" />
                         </div>
-
                         <div class="info">
-                            <img [src]="getSafeUrl(component.image.image!)" />
-                            <p class="proc">{{component.manufacturer.prodProcent}}%</p>
+                            <p class="info-header">Производители по наибольшему количеству выпускаемых компонентов типа
+                                "{{component[0]}}"</p>
+                            <!-- <p>- {{getManufacturersAsString(component[1].manufacturers)}}</p> -->
+                            <p [innerHTML]="displayManufacturers(component[1].manufacturers)"></p>
                         </div>
-                        <p class="manufacturer">{{component.manufacturer.manufacturerName}}</p>
                     </div>
                 </section>
                 <section class="stat">
                     <iframe [src]="url" frameborder="0"></iframe>
+
                 </section>
+
             </div>
             <div class="b-wrapper">
                 <section class="prod-stat">
-                    <iframe src="chart/components/statistic/donut" frameborder="0"></iframe>
+                    <iframe src="chart/components/statistic-catalog/donut" frameborder="0"></iframe>
                 </section>
-                <section class="records">
-                    <div class="list-wrapper">
-                        <div class="list">
-                            <div class="values">
-                                <div class="search">
-                                    <input type="text" placeholder="Производитель" (input)="search($event)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cols-wrapper">
-                        <div class="cols layout">
-                            <div class="col">
-                                <p>Производитель</p>
-                            </div>
-                            <div class="col">
-                                <p>Количество</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="view">
-                        <div class="row layout" *ngFor="let row of rows" (click)="openCatalog(row.manufacturerName)">
-                            <div class="col">
-                                <p>{{row.manufacturerName}}</p>
-                            </div>
-                            <div class="col">
-                                <p>{{row.prodSummary}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <app-manufacturer-count-table [all]="all" class="records-wrapper" />
             </div>
         </main>
     </div>

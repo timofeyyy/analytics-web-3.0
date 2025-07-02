@@ -12,3 +12,17 @@ export enum ComponentTypeRuEnum {
     DIOD = "Диод",
 
 }
+
+export enum ComponentTypeEnEnum {
+    MICROCHIP = "microchips",
+    TRANSISTOR = "transistors",
+    RESISTOR = "resistors",
+    CAPACITOR = "capacitors",
+    DIOD = "diods",
+
+}
+
+export enum ChartActions {
+    NEWWINDOW = 0,
+    NAVIGATE = 1
+}

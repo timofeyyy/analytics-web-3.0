@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
-import { CountrySelectionComponent } from '../components/selection/country_selection/country_selection.component';
 import { FiltersComponent } from '../components/filters/filters.component';
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,14 +8,13 @@ import { catchError, forkJoin, map, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentOptions } from '../../utils/types/app';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ImageName } from '../../utils/types/config';
 import { LoaderComponent } from '../components/loader/loader.component';
 import { ApiService1 } from '../../services/api.services1';
 import { props } from '../../assets/fetch.config';
 
 @Component({
   selector: 'app-catalog',
-  imports: [NavigatorComponent, CountrySelectionComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent, NgIf],
+  imports: [NavigatorComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent, NgIf],
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css', '../components/selection/selection.css', '../components/styles/button.css'],
   providers: [ApiService1],
@@ -124,7 +122,7 @@ export class CatalogComponent implements OnInit {
       this.allias = new Map<string, string>(Object.entries(allias))
       console.log(this.allias)
       if (this.storage.size === 5) {
-        let componetns: ImageName[] = this.api.getComponentsFromConfig()
+        // let componetns: any[] = this.api.getComponentsFromConfig()
         this.storage.forEach((set: any) => {
           (set as []).forEach((item: any) => {
             let markup: string = ''
@@ -135,9 +133,9 @@ export class CatalogComponent implements OnInit {
                 satisfyCount++;
               }
             })
-            let cItemIndex = componetns.findIndex(
-              (cItem: ImageName) => cItem.nameRu === item.ruComponentType
-            )
+            // let cItemIndex = componetns.findIndex(
+            //   (cItem: any) => cItem.nameRu === item.ruComponentType
+            // )
             console.log(item.ruComponentType)
             switch (item.ruComponentType) {
               case ComponentTypeRuEnum.MICROCHIP:
@@ -184,14 +182,14 @@ export class CatalogComponent implements OnInit {
                 component: item,
                 html: this.sanitizer.bypassSecurityTrustHtml(markup),
                 filters: filters,
-                img: componetns[cItemIndex].image
+                // img: componetns[cItemIndex].image
               })
             }
             this.all.push({
               component: item,
               html: this.sanitizer.bypassSecurityTrustHtml(markup),
               filters: filters,
-              img: componetns[cItemIndex].image
+              // img: componetns[cItemIndex].image
             })
             if (!this.tableColumns.get(item.ruComponentType)) {
               const tmp = new Map()

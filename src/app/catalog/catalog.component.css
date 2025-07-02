@@ -102,8 +102,10 @@
     box-shadow: 0 0 1vw 0.1vw gray;
 }
 
-.filter .search input {
-    width: unset;
+
+.filter .search {
+    margin-right: 1vw;
+    width: 15vw;
 }
 
 .item {
@@ -134,7 +136,7 @@
 }
 
 .item h5 {
-    margin: 0.5vw 0;
+    
     font-weight: 200;
     font-size: max(1vw, 10px);  
     color: #3D83A9;

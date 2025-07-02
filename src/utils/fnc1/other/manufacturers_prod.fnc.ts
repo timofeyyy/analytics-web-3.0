@@ -1,16 +1,11 @@
-import { Manufacturer, ComponentLabel } from "../../types/app";
-import { ChartOptions } from "../../types/chart";
+const getManufacturersProd = (data: any): any[] => {
 
-
-
-const getManufacturersProd = (data: any): Partial<Manufacturer>[] => {
-
-    let records: Partial<Manufacturer>[] = []
+    let records: any[] = []
     if (Array.isArray(data)) {
         data.forEach((obj: any) => {
             if (obj.manufacturerName) {
                 let recordIndex: number = records.findIndex(
-                    (record: Partial<Manufacturer>) => record.manufacturerName === obj.manufacturerName
+                    (record: any) => record.manufacturerName === obj.manufacturerName
                 )
                 if (recordIndex === -1) {
                     records.push({

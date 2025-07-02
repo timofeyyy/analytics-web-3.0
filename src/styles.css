@@ -34,11 +34,13 @@ app-table {
     width: 100%;
 }
 
+app-chart-parent,
+app-chart-child,
 app-chart {
     height: 100vh;
     display: block;
     background-color: white;
-}
+} 
 
 /* app-navigator {
     transition: 0.5s ease all;
@@ -60,10 +62,10 @@ app-country-selection {
 
 .h-widget {
     height: 5vw;
-    background-color: white;
-    margin-bottom: 1vw;
+    /* background-color: white; */
+    /* margin-bottom: 1vw; */
     width: 100%;
-    border-radius: 1vw;
+    /* border-radius: 1vw; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -74,11 +76,11 @@ app-country-selection {
 .h-widget h1 {
     margin: 0;
     font-weight: lighter;
-    font-size: max(2vw, 15px);
+    font-size: max(1.5vw, 15px);
 }
 
 .workspace {
-    display: flex;
+    /* display: flex; */
     width: 85%;
 }
 
@@ -90,7 +92,7 @@ iframe {
 
 .workspace main {
     box-sizing: border-box;
-    margin: 1.5vw;
+    padding: 1.5vw;
     /* margin: 1.5vw 1.5vw 1.5vw 16.5%; */
     width: 100%;
 }

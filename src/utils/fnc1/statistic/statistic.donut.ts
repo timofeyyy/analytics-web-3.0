@@ -1,4 +1,3 @@
-import { ComponentLabel } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
 
 // const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions> => {
@@ -48,11 +47,15 @@ const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions
                 enabled: true
             }
         },
-        labels: []
+        legend: {
+            show: true,
+            position: 'bottom',
+            horizontalAlign: 'center'
+        },
+        labels: [],
+        values: []
     };
-
     let tmp: any = {}
-
     for (const key in data) {
         for (const obj of data[key]) {
             let labelsItemIndex: number = (apexChartData as ChartOptions).labels.findIndex(
@@ -67,14 +70,10 @@ const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions
             tmp[obj.ruComponentType] += 1
         }
     }
-
     (apexChartData as ChartOptions).labels.forEach((label: string) => {
         (apexChartData as ChartOptions).series.push(tmp[label]);
     })
-
-
-    console.log(tmp)
-
+    apexChartData.values = (apexChartData as ChartOptions).labels
     return apexChartData;
 }
 

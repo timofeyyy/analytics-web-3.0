@@ -1,6 +1,5 @@
 import { NgFor } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ChartType } from '../../../utils/types/app';
 import { chartNamesMap } from '../../../assets/fetch.config';
 
 @Component({
@@ -13,7 +12,7 @@ export class ChartTypesCheckboxesComponent implements OnInit {
 
   @Output()
   public onChnage = new EventEmitter<string>();
-  list!: ChartType[]
+  list!: any[]
   currentValue!: string
   ngOnInit(): void {
     this.list = [{

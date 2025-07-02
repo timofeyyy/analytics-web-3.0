@@ -1,4 +1,3 @@
-import { ComponentLabel } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
 
 

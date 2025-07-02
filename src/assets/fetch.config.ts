@@ -10,35 +10,35 @@ import getComponentTypesStatChartOptionsDonut from "../utils/fnc1/statistic/stat
 import getBitDepthValueStatPie from "../utils/fnc1/bithdepthvalue/bitdepthvalue.pie";
 import getBitDepthValueStatDonut from "../utils/fnc1/bithdepthvalue/bitdepthvalue.donut";
 import getBitDepthValueStatBar from "../utils/fnc1/bithdepthvalue/bidepthvalue.bar";
-import { AppEnum, ComponentTypeRuEnum } from "../utils/enum/app.enum";
+import { AppEnum } from "../utils/enum/app.enum";
 import { ComponentOptions } from "../utils/types/app";
 import manufacturerNameFilters from "../utils/fnc1/filters/manufacturerName";
 import componentKindFilters from "../utils/fnc1/filters/componentKind";
-import componentTypeFilters from "../utils/fnc1/filters/componentType";
 import getBitDepthValueStatMixed from "../utils/fnc1/bithdepthvalue/bidepthvalue.mixed";
+import { Router } from "@angular/router";
 
-export interface ComponentProp {
+interface ComponentProp {
   value: string,
   allias: string
 }
 
-export interface ChartOptionsStorage {
+interface ChartOptionsStorage {
   [endpoint: string]: {
     chartData: {
-      [chart: string]: (data: any) => Partial<ChartOptions>
+      [chart: string]: (data: any, query: Map<string, string>, router: Router) => Partial<ChartOptions>
     },
     chartName: (data: any) => string
   }
 }
-export interface ObservableStorage {
+interface ObservableStorage {
   [chart: string]: (injector: ApiService1, data: Map<string, any>) => Observable<any> | null
 }
-export interface PropsStroage {
-  [componentType: string]: ComponentProp[]
-}
-export interface AliasStorage {
-  [propName: string]: string
-}
+// interface PropsStroage {
+//   [componentType: string]: ComponentProp[]
+// }
+// interface AliasStorage {
+//   [propName: string]: string
+// }
 
 export const chartOptionsData: ChartOptionsStorage = {
   "bitDepthValue": {
@@ -49,7 +49,96 @@ export const chartOptionsData: ChartOptionsStorage = {
       "mixed": (data: any) => getBitDepthValueStatMixed(data),
       // "mixed": (data: any) => getBitDepthValueStatBar(data),
     },
-    chartName: (data: any) => `Битность микроcхем производителя ${data.get('manufacturerName')}`
+    chartName: (data: any) => {
+      return `Количественный график параметра битности микросхем по ${data.get('manufacturerName') ? 'производителю ' + data.get('manufacturerName') : 'по всем производителям'}`
+    }
+  },
+  "bitDepthValue-catalog": {
+    chartData: {
+      "pie": (data: any, query: Map<string, string>) => {
+        const res = getBitDepthValueStatPie(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
+                window.parent.location.href = `/catalog${queryStr}`
+              }
+            }
+          }
+        }
+        res.back = true
+        return res
+      },
+      "donut": (data: any, query: Map<string, string>) => {
+        const res = getBitDepthValueStatDonut(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
+                window.parent.location.href = `/catalog${queryStr}`
+              }
+            }
+          }
+        }
+        res.back = true
+        return res
+      },
+      "bar": (data: any, query: Map<string, string>) => {
+        const res = getBitDepthValueStatBar(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
+                window.parent.location.href = `/catalog${queryStr}`
+              }
+            }
+          }
+        }
+        res.back = true
+        return res
+      },
+      "mixed": (data: any, query: Map<string, string>) => {
+        const res = getBitDepthValueStatMixed(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
+                window.parent.location.href = `/catalog${queryStr}`
+              }
+            }
+          }
+        }
+        res.back = true
+        return res
+      },
+    },
+    chartName: (data: any) => {
+      return `Количественный график параметра битности микросхем по ${data.get('manufacturerName') ? 'производителю ' + data.get('manufacturerName') : 'по всем производителям'}`
+    }
   },
   "ruComponentType": {
     chartData: {
@@ -59,17 +148,117 @@ export const chartOptionsData: ChartOptionsStorage = {
       "mixed": (data: any) => getManufacturersChartOptionBarMixed1(data)
     },
     chartName: (data: any) => {
-      let label = "Общая статистика по всем типам компонентам"
+      let label = "Количественная статистика по всем типам компонентам производетелей"
       let componentType = data.get('ruComponentType')
       if (componentType) {
-        label = `Статистика по компоненту "${componentType}"`
+        label = `Количественная статистика производителей по компонентам типа "${componentType}"`
+      }
+      return label
+    }
+  },
+  "ruComponentType-next-chart": {
+    chartData: {
+      "bar": (data: any, query: Map<string, string>, router: Router) => {
+        const res = getManufacturersChartOptionBar1(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `manufacturerName=${res.values![opts.dataPointIndex]}`
+                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
+                // router.navigateByUrl(`chart/components/componentKinds-catalog/bar${queryStr}`).then(() => {
+                //   window.location.reload();
+                // });
+              }
+            }
+          }
+        }
+        return res
+      },
+      "donut": (data: any, query: Map<string, string>, router: Router) => {
+        const res = getManufacturersChartOptionDonut1(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `manufacturerName=${res.values![opts.dataPointIndex]}`
+                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
+                // router.navigateByUrl(`chart/components/componentKinds/donut${queryStr}`).then(() => {
+                //   window.location.reload();
+                // });
+              }
+            }
+          }
+        }
+        return res
+      },
+      "pie": (data: any, query: Map<string, string>, router: Router) => {
+        const res = getManufacturersChartOptionPie1(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `manufacturerName=${res.values![opts.dataPointIndex]}`
+                // router.navigateByUrl(`chart/components/componentKinds/pie${queryStr}`).then(() => {
+                //   window.location.reload();
+                // });
+                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
+              }
+            }
+          }
+        }
+        return res
+      },
+      "mixed": (data: any, query: Map<string, string>, router: Router) => {
+        const res = getManufacturersChartOptionBarMixed1(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `manufacturerName=${res.values![opts.dataPointIndex]}`
+                // router.navigateByUrl(`chart/components/componentKinds/mixed${queryStr}`).then(() => {
+                //   window.location.reload();
+                // });
+                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
+              }
+            }
+          }
+        }
+        return res
+      }
+    },
+    chartName: (data: any) => {
+      let label = "Количественная статистика по всем типам компонентам производетелей"
+      let componentType = data.get('ruComponentType')
+      if (componentType) {
+        label = `Количественная статистика производителей по компонентам типа "${componentType}"`
       }
       return label
     }
   },
   "componentKinds": {
     chartData: {
-      "bar": (data: any) => getComponentKindStatChartOptions1(data),
+      "bar": (data: any, query: Map<string, string>) => getComponentKindStatChartOptions1(data),
     },
     chartName: (data: any) => {
       let componentType = data.get('ruComponentType')
@@ -77,22 +266,86 @@ export const chartOptionsData: ChartOptionsStorage = {
       let label = ""
 
       if (componentType) {
-        label = `Статистика вида компонентов типа "${componentType}"`
+        label = `Количественная статистика видов компонентов`
       }
       if (manufacturerName) {
-        label = `Статистика вида компонентов производителя "${manufacturerName}"`
+        label = `Количественная статистика видов компонентов производителя "${manufacturerName}"`
       }
       if (componentType && manufacturerName) {
-        label = `Статистика вида компонентов производителя "${manufacturerName}" типа "${componentType}"`
+        label = `Количественная статистика видов компонентов производителя "${manufacturerName}"`
+      }
+      return label
+    }
+  },
+  "componentKinds-catalog": {
+    chartData: {
+      "bar": (data: any, query: Map<string, string>) => {
+        const res = getComponentKindStatChartOptions1(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `ruComponentKind=${res.values![opts.dataPointIndex]}`
+                window.parent.location.href = `/catalog${queryStr}`
+              }
+            }
+          }
+        }
+        res.back = true
+        return res
+      },
+    },
+    chartName: (data: any) => {
+      let componentType = data.get('ruComponentType')
+      let manufacturerName = data.get('manufacturerName')
+      let label = ""
+
+      if (componentType) {
+        label = `Количественная статистика видов компонентов`
+      }
+      if (manufacturerName) {
+        label = `Количественная статистика видов компонентов производителя "${manufacturerName}"`
+      }
+      if (componentType && manufacturerName) {
+        label = `Количественная статистика видов компонентов производителя "${manufacturerName}"`
       }
       return label
     }
   },
   "statistic": {
     chartData: {
-      "donut": (data: any) => getComponentTypesStatChartOptionsDonut(data)
+      "donut": (data: any, query: Map<string, string>) => getComponentTypesStatChartOptionsDonut(data),
     },
-    chartName: (data: any) => "Количественная статистка всех записей"
+    chartName: (data: any) => "Соотношение типов компонентов к общему количеству"
+  },
+  "statistic-catalog": {
+    chartData: {
+      "donut": (data: any, query: Map<string, string>) => {
+        const res = getComponentTypesStatChartOptionsDonut(data)
+        if (res && res.chart) {
+          res.chart = {
+            ...res.chart,
+            events: {
+              dataPointSelection: (event, chartContext, opts) => {
+                let queryStr = "?"
+                query.forEach((value, key) => {
+                  queryStr += `${key}=${value}&`
+                })
+                queryStr += `ruComponentType=${res.values![opts.dataPointIndex]}`
+                window.parent.location.href = `/catalog${queryStr}`
+              }
+            }
+          }
+        }
+        return res
+      },
+    },
+    chartName: (data: any) => "Соотношение типов компонентов к общему количеству"
   }
 }
 
@@ -131,14 +384,14 @@ const observableApi: ObservableStorage = {
   "Конденсатор": (injector: ApiService1, data: Map<string, any>) => injector.getCapacitors(data),
   "Диод": (injector: ApiService1, data: Map<string, any>) => injector.getDiods(data),
 }
-const propsNames: PropsStroage = {
-  "Микросхема": [
-    {
-      value: "bitdepthvalue",
-      allias: "битность"
-    }
-  ]
-}
+// const propsNames: PropsStroage = {
+//   "Микросхема": [
+//     {
+//       value: "bitdepthvalue",
+//       allias: "битность"
+//     }
+//   ]
+// }
 
 const sortObj = {
   'manufacturerName': (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all),
@@ -336,11 +589,14 @@ export const prioritySchemaWrapperMap: Map<string, string> = new Map(Object.entr
 export const chartNamesMap: Map<string, string> = new Map(Object.entries(chartNames));
 export const propsMap: Map<string, any> = new Map(Object.entries(props));
 export const observableApiMap: Map<string, (injector: ApiService1, data: Map<string, any>) => Observable<any> | null> = new Map(Object.entries(observableApi));
-export const propsNamesMap: Map<string, ComponentProp[]> = new Map(Object.entries(propsNames));
+// export const propsNamesMap: Map<string, ComponentProp[]> = new Map(Object.entries(propsNames));
 export const defaultChartOptions: Partial<ChartOptions> = {
   series: [],
   chart: {
-    type: "bar"
+    type: "bar",
+    toolbar: {
+      show: false
+    }
   },
   plotOptions: {
     bar: {

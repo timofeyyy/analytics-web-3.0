@@ -3,7 +3,6 @@ import { NavigatorComponent } from '../components/navigator/navigator.component'
 import { ActivatedRoute } from '@angular/router';
 import { ChartTypesCheckboxesComponent } from '../components/chart_types_checkboxes/chart_types_checkboxes.component';
 import { DomSanitizer } from '@angular/platform-browser';
-import { PropNameSelectionComponent } from '../components/selection/prop_name_selection/prop_name_selection.component';
 import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { ComponentOptions, FilterDropBox } from '../../utils/types/app';
 import componentTypeFilters from '../../utils/fnc1/filters/componentType';
@@ -33,6 +32,7 @@ export class TypeTemplateComponent implements OnInit {
   tableColumns!: Map<string, Map<string, string>>
   displayedColumns!: string[]
   dropBoxPropsMapConfig!: Map<string, any>
+  chartName!: string
 
   constructor(
     private route: ActivatedRoute,
@@ -82,7 +82,7 @@ export class TypeTemplateComponent implements OnInit {
               for (const key in item) {
                 const componentProps = this.dropBoxPropsMapConfig.get(key)
                 const alliasName = this.allias.get(`${key}`)
-                console.log(chartOptionsData[key], key)
+                // console.log(chartOptionsData[key], key)
                 if (alliasName && componentProps && chartOptionsData[key]) {
                   tmp.set(key, alliasName)
                 }
@@ -91,7 +91,7 @@ export class TypeTemplateComponent implements OnInit {
             }
           })
         })
-        console.log(this.tableColumns)
+        // console.log(this.tableColumns)
         this.displayedColumns = Array.from(this.tableColumns.get(`${this.ruComponentType}`)!.keys())
       }
     });
@@ -117,7 +117,12 @@ export class TypeTemplateComponent implements OnInit {
       // if (prop != AppEnum.NONE) {
       //   url += `&&child_req_name=${this.props["propNames"].currentvalue}&&child_chart_name=${this.props["propNames"].currentvalue}`
       // }
-      console.log(url)
+      // console.log(url)
+      // if(this.chart)
+      //   this.url = url
+      // console.log(chartOptionsData)
+      // if (chartOptionsData[this.currentPropName])
+      //   this.chartName = chartOptionsData[this.currentPropName].chartName(params)
       this.url = this.santizer.bypassSecurityTrustResourceUrl(url)
       // }
     })

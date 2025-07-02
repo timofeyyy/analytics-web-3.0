@@ -16,11 +16,11 @@
             </div>
         </div>
         <ng-template #templateName>
+            <header class="h-widget">
+                <h1>Просмотр данных</h1>
+            </header>
             <main>
-                <header class="h-widget">
-                    <h1>Просмотр данных</h1>
-                    <app-country-selection style="display: none;" />
-                </header>
+
                 <main class="catalog">
                     <div class="head">
                         <div class="filter">
@@ -28,7 +28,7 @@
                                 <p>Фильтры</p>
                             </div>
                             <li class="search">
-                                <input type="text" placeholder="имя компонента" (input)="search($event)">
+                                <input type="text" placeholder="Индетификатор компонента" (input)="search($event)">
                             </li>
                         </div>
                     </div>
@@ -36,10 +36,11 @@
                         <div class="item" *ngFor="let item of records">
                             <div class="info">
                                 <div class="h">
-                                    <img [src]="getSafeUrl(item.img)" alt="" />
-                                    <h1>{{item.component.ruComponentType}}</h1>
+                                    <!-- <img [src]="getSafeUrl(item.img)" alt="" /> -->
+                                    <h1>Тип компонента: {{item.component.ruComponentType}}</h1>
                                 </div>
-                                <h5>{{item.component.manufacturerName}}, {{item.component.componentName}}</h5>
+                                <h5>Производитель: {{item.component.manufacturerName}}</h5>
+                                <h5>Индетификатор компонента: {{item.component.componentName}}</h5>
                                 <div [innerHTML]="item.html">
                                 </div>
                             </div>

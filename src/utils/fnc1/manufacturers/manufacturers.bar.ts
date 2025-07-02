@@ -1,4 +1,3 @@
-import { ComponentLabel } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
 
 const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
@@ -28,7 +27,7 @@ const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
         yaxis: {
             opposite: false,
             title: {
-                text: "Проценты"
+                text: ""
             },
             labels: {
                 formatter: (val) => {
@@ -45,7 +44,6 @@ const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
     };
 
     let tmp: any = {}
-
     //     if (Array.isArray(data)) {
     //         data.forEach((obj: ComponentLabel) => {
     for (const key in data) {

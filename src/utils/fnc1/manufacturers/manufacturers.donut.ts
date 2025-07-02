@@ -1,4 +1,3 @@
-import { ComponentLabel } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
 
@@ -15,8 +14,10 @@ const getManufacturersChartOptionDonut1 = (data: any): Partial<ChartOptions> => 
         },
         labels: [],
         legend: {
-            fontSize: `max(5vw, 15px)`
-        },
+            show: true,
+            position: 'bottom',
+            horizontalAlign: 'center'
+          },
         values: []
     };
 
@@ -47,7 +48,6 @@ const getManufacturersChartOptionDonut1 = (data: any): Partial<ChartOptions> => 
     })
     // }
 
-    console.log(tmp)
     apexChartData.values = apexChartData.labels
     return apexChartData
 }

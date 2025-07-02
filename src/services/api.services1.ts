@@ -1,14 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import config from '../assets/app.config.json'
+import config from '../assets/api.config.json' 
 import { map, Observable } from "rxjs";
-import { ComponentLabel } from "../utils/types/app";
 import { BitDepthValue, Microchip } from "../utils/types/microchip";
 import { Capacitor } from "../utils/types/capacitor";
 import { Diod } from "../utils/types/diod";
 import { Transistor } from "../utils/types/transistor";
 import { AppEnum } from "../utils/enum/app.enum";
-import { ChartConfig, Config, ImageName } from "../utils/types/config";
+import { ChartConfig, Config } from "../utils/types/config";
 import { Resistor } from "../utils/types/resistors";
 import { columnsMax, columnsMin, prioritySchemaWrapperMap, props, propsMap } from "../assets/fetch.config";
 
@@ -32,13 +31,13 @@ export class ApiService1 {
         }
     }
 
-    getCountriesFromConfig(): ImageName[] {
-        return this.config.countries;
-    }
+    // getCountriesFromConfig(): ImageName[] {
+    //     return this.config.countries;
+    // }
 
-    getComponentsFromConfig(): ImageName[] {
-        return this.config.components;
-    }
+    // getComponentsFromConfig(): ImageName[] {
+    //     return this.config.components;
+    // }
 
     getAlias(): Observable<any> | null {
         let obs: Observable<any> | null = this.getReqDomen("allias.json");
@@ -53,11 +52,9 @@ export class ApiService1 {
     getMicrochips(data: Map<string, any> | void): Observable<Microchip[]> | null {
         let url: string = "api/microchips?"
         if (data) {
-            const obj = Object.fromEntries(data)
-            for (const key in obj) {
-                if (key && key != AppEnum.ALL) {
-                    url += `${key}=${obj[key]}&&`
-                }
+            let componentName: string | undefined = data.get('componentName')
+            if(componentName) {
+                url += `componentName=${componentName}`
             }
         }
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -73,12 +70,10 @@ export class ApiService1 {
 
     getCapacitors(data: Map<string, any> | void): Observable<Capacitor[]> | null {
         let url: string = "api/capacitors?"
-        if (data) {
-            const obj = Object.fromEntries(data)
-            for (const key in obj) {
-                if (key && key != AppEnum.ALL) {
-                    url += `${key}=${obj[key]}&&`
-                }
+         if (data) {
+            let componentName: string | undefined = data.get('componentName')
+            if(componentName) {
+                url += `componentName=${componentName}`
             }
         }
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -95,11 +90,9 @@ export class ApiService1 {
     getDiods(data: Map<string, any> | void): Observable<Diod[]> | null {
         let url: string = "api/diods?"
         if (data) {
-            const obj = Object.fromEntries(data)
-            for (const key in obj) {
-                if (key && key != AppEnum.ALL) {
-                    url += `${key}=${obj[key]}&&`
-                }
+            let componentName: string | undefined = data.get('componentName')
+            if(componentName) {
+                url += `componentName=${componentName}`
             }
         }
 
@@ -117,11 +110,9 @@ export class ApiService1 {
     getResistors(data: Map<string, any> | void): Observable<Resistor[]> | null {
         let url: string = "api/resistors?"
         if (data) {
-            const obj = Object.fromEntries(data)
-            for (const key in obj) {
-                if (key && key != AppEnum.ALL) {
-                    url += `${key}=${obj[key]}&&`
-                }
+            let componentName: string | undefined = data.get('componentName')
+            if(componentName) {
+                url += `componentName=${componentName}`
             }
         }
 
@@ -140,11 +131,9 @@ export class ApiService1 {
         let url: string = "api/transistors?"
 
         if (data) {
-            const obj = Object.fromEntries(data)
-            for (const key in obj) {
-                if (key && key != AppEnum.ALL) {
-                    url += `${key}=${obj[key]}&&`
-                }
+            let componentName: string | undefined = data.get('componentName')
+            if(componentName) {
+                url += `componentName=${componentName}`
             }
         }
         let obs: Observable<any> | null = this.getReqDomen(url);
@@ -180,7 +169,7 @@ export class ApiService1 {
         return obs;
     }
 
-    getComponentsApiPreview(query: Map<string, any> | void): Observable<ComponentLabel[]> | null {
+    getComponentsApiPreview(query: Map<string, any> | void): Observable<any[]> | null {
 
         let url: string = "api/components/short?"
 
@@ -197,7 +186,7 @@ export class ApiService1 {
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((components: any) => {
-                return components.map(function (option: ComponentLabel): ComponentLabel {
+                return components.map(function (option: any): any {
                     return option;
                 });
             }))
@@ -256,7 +245,7 @@ export class ApiService1 {
                         res[type] = values
                     }
                 }
-                console.log(res)
+                // console.log(res)
                 return res
 
             }))
@@ -333,7 +322,7 @@ export class ApiService1 {
                         resWrapper.set(type, new Map().set(AppEnum.ALL, res[type]))
                     }
                 }
-                console.log(resWrapper)
+                // console.log(resWrapper)
                 return resWrapper
 
             }))

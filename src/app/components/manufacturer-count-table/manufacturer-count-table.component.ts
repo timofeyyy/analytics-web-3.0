@@ -1,12 +1,10 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ComponentLabel, ComponentOptions, ComponentTypesCheckBoxes, Manufacturer } from '../../../utils/types/app';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, catchError } from 'rxjs';
 import { ApiService1 } from '../../../services/api.services1';
 import getBestManufacturer from '../../../utils/fnc1/other/best_manufacturer_prod.fnc';
 import getManufacturersProd from '../../../utils/fnc1/other/manufacturers_prod.fnc';
-import { ImageName } from '../../../utils/types/config';
 import { HttpClientModule } from '@angular/common/http';
 import { NgFor } from '@angular/common';
 
@@ -18,8 +16,8 @@ import { NgFor } from '@angular/common';
 })
 export class ManufacturerCountTableComponent implements OnChanges {
 
-  rows!: Manufacturer[]
-  orig!: Manufacturer[]
+  rows!: any[]
+  orig!: any[]
   @Input()
   all!: any[]
 
@@ -28,21 +26,21 @@ export class ManufacturerCountTableComponent implements OnChanges {
     private route: ActivatedRoute
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    this.rows = getManufacturersProd(this.all) as Manufacturer[]
+    this.rows = getManufacturersProd(this.all) as any[]
     this.orig = Array.from(this.rows)
 
   }
   search(event: any): void {
     let value: string = event.target.value
     this.rows = []
-    this.orig.forEach((manufacturer: Manufacturer) => {
+    this.orig.forEach((manufacturer: any) => {
       if (this.include(manufacturer, value)) {
         this.rows.push(manufacturer)
       }
     })
   }
 
-  include(manufacturer: Manufacturer, value: string): boolean {
+  include(manufacturer: any, value: string): boolean {
     let manufacturerName: string = manufacturer.manufacturerName
     let length: number = manufacturerName.length >= value.length ? value.length : manufacturerName.length
     let extractedPart = manufacturerName.slice(0, length).split('')
