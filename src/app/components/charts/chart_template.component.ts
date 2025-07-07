@@ -1,8 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostListener, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ChartType, NgApexchartsModule } from 'ng-apexcharts';
 import { catchError, combineLatest, map, Observable } from 'rxjs';
-import { chartOptionsData, defaultChartOptions, observableApiMap } from '../../../assets/fetch.config';
+import { chartOptionsData, observableApiMap } from '../../../assets/fetch.config';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ChartOptions } from '../../../utils/types/chart';
 import { ApiService1 } from '../../../services/api.services1';
@@ -20,6 +20,53 @@ export class ChartTemplateComponent implements OnInit {
   chartName!: string
   loader!: boolean
   disabled!: boolean
+  defaultChartOptions: Partial<ChartOptions> = {
+    series: [],
+    chart: {
+      type: "bar",
+      toolbar: {
+        show: false
+      }
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "80%"
+      }
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    ],
+    colors: ['#d4526e', '#13d8aa', '#A5978B', '#2b908f', '#f9a3a4',
+      '#90ee7e', '#f48024', '#69d2e7', 'brown', 'blue', 'black', 'gold'
+    ],
+
+    yaxis: {
+
+    },
+    xaxis: {
+      categories: [
+
+      ],
+      title: {
+        text: "example"
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+  }
+
   constructor(
     private api: ApiService1,
     private route: ActivatedRoute,
@@ -28,7 +75,7 @@ export class ChartTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.disabled = false
     this.loader = true
-    this.chartOptions = defaultChartOptions
+    this.chartOptions = this.defaultChartOptions
     const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
     this.route.paramMap.subscribe(params => {
       const req_name = params.get('req_name');
@@ -39,7 +86,7 @@ export class ChartTemplateComponent implements OnInit {
       }
     })
     // query.forEach((value, key) => {
-      // console.log(value, key);
+    // console.log(value, key);
     // })
   }
 
@@ -54,13 +101,23 @@ export class ChartTemplateComponent implements OnInit {
           this.chartName = chartOptionsData[chart_name].chartName(query);
           this.chartOptions = {
             ...data,
+            // dataLabels: {
+            //   enabled: false,
+            //   // style: {
+            //   //   fontSize: '0.5vw', // Set font size using vw units
+            //   //   fontFamily: 'Helvetica, Arial, sans-serif',
+            //   //   fontWeight: 'bold',
+            //   //   colors: ['#000'] // Optional: set label color
+            //   // }
+            // },
             legend: {
               onItemClick: {
                 toggleDataSeries: false
               },
               onItemHover: {
                 highlightDataSeries: false
-              }
+              },
+              // fontSize: `${window.innerWidth * 0.01}px`
             },
 
             chart: {
@@ -76,6 +133,7 @@ export class ChartTemplateComponent implements OnInit {
               },
             }
           }
+          // console.log(this.chartOptions)
           this.loader = false
         }),
         catchError((err: any) => {
@@ -94,4 +152,17 @@ export class ChartTemplateComponent implements OnInit {
     this.disabled = true
     window.history.back()
   }
+  // @HostListener('window:resize', ['$event'])
+
+  // onResize(event: any) {
+    // if (this.chartOptions && this.chartOptions.legend && this.chartOptions.legend.fontSize) {
+    //   this.chartOptions = {
+    //     ...this.chartOptions,
+    //     legend: {
+    //       ...this.chartOptions.legend,
+    //       fontSize: `${window.innerWidth * 0.0075}px`
+    //     }
+    //   }
+    // }
+  // }
 }

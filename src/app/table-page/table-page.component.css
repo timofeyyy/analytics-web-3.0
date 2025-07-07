@@ -15,46 +15,6 @@
     display: inline-block;
 }
 
-.tabs .horizontal {
-    margin-right: 0.3vw;
-    border-radius: 1vw 1vw 0 0;
-}
-
-.tabs .vertical {
-    margin: 0 0 0.3vw 0;
-    border-radius: 0 1vw 1vw 0;
-}
-
-.tabs .tab {
-
-    background-color: #e5e3e3;
-    color: grey;
-    display: inline-block;
-    cursor: pointer;
-    transition: 0.2s all ease;
-
-}
-
-.tabs .tab:hover {
-    background-color: #7490f8;
-    color: white;
-}
-
-.tabs .active {
-    background-color: white;
-    color: #7490f8;
-}
-
-.tabs-vertical {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.tabs .tab p {
-    padding: 0.5vw 1vw;
-    font-size: max(1vw, 10px);
-}
 
 .header>p {
     font-size: max(1.4vw, 14px);

@@ -33,12 +33,17 @@
     width: 65%;
 }
 
+.controlles .step-description {
+    font-size: max(1.5vw, 15px);
+    font-weight: lighter;
+    margin-bottom: 2vw;
+}
 
 .controlles .steps-panel {
     height: 25vw;
     margin: 1.5vw;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .controlles .steps-panel .step {
@@ -48,7 +53,7 @@
     transition: 0.5s all ease;
     background-color: white;
     left: 0;
-    padding: 0.5vw;
+    padding: 0 0.5vw 0.5vw;
     overflow: scroll;
 }
 
@@ -69,9 +74,13 @@
 }
 
 .view .info h1 {
-    font-size: max(2vw, 20px);
+    font-size: max(1.5vw, 15px);
     font-weight: lighter;
     margin-bottom: 1.5vw;
+}
+
+.view .info .info-header {
+    font-size: max(1.5vw, 15px);
 }
 
 .view .info p {

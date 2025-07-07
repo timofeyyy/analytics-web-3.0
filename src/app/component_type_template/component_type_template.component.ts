@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChartTypesCheckboxesComponent } from '../components/chart_types_checkboxes/chart_types_checkboxes.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { ComponentOptions, FilterDropBox } from '../../utils/types/app';
 import componentTypeFilters from '../../utils/fnc1/filters/componentType';
-import { NgFor } from '@angular/common';
+import { NgClass, NgFor } from '@angular/common';
 import { ApiService1 } from '../../services/api.services1';
 import { forkJoin } from 'rxjs';
-import { chartOptionsData, props } from '../../assets/fetch.config';
+import { chartNamesMap, chartOptionsData, props } from '../../assets/fetch.config';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-component-template',
-  imports: [NavigatorComponent, ChartTypesCheckboxesComponent, NgFor, HttpClientModule],
+  imports: [NavigatorComponent, NgFor, HttpClientModule, NgClass],
   providers: [ApiService1],
   templateUrl: './component_type_template.component.html',
-  styleUrl: './component_type_template.component.css'
+  styleUrls: ['./component_type_template.component.css', '../components/styles/button.css', '../components/styles/tabs.css']
 })
 export class TypeTemplateComponent implements OnInit {
 
   prop!: string | null
-  chart!: string | null
+  type!: string | null
   url: any
   props: any
   currentPropName!: string
@@ -33,14 +33,21 @@ export class TypeTemplateComponent implements OnInit {
   displayedColumns!: string[]
   dropBoxPropsMapConfig!: Map<string, any>
   chartName!: string
-
+  chartNames!: string[]
+  mainChartUrl!: any
+  statMax!: any
+  statMin!: any
+  query!: Map<string, string>
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private santizer: DomSanitizer,
     private api: ApiService1
   ) { }
 
   ngOnInit(): void {
+    this.query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params))
+    this.chartNames = Array.from(chartNamesMap.keys())
     this.displayedColumns = []
     this.storage = new Map()
     this.tableColumns = new Map()
@@ -52,10 +59,18 @@ export class TypeTemplateComponent implements OnInit {
     this.dropBoxPropsMapConfig = new Map(Object.entries(dropBoxPropsClone));
     this.route.paramMap.subscribe(params => {
       this.ruComponentType = params.get('ruComponentType') as string
+      let chartName = this.query.get('chartName')
+      if (this.ruComponentType) {
+        this.getApi()        
+        if (!chartName) {
+          chartName = 'ruComponentType'
+        }
+        this.onColumnSelected(chartName)
+        this.onChartTypeChanged("bar")
+        this.buildChart()
+      }
     })
-    this.currentPropName = 'ruComponentType'
-    this.getApi()
-    this.buildChart()
+
   }
 
   getApi(): void {
@@ -98,33 +113,78 @@ export class TypeTemplateComponent implements OnInit {
   }
 
   onColumnSelected(column: string): void {
+    console.log(column)
     this.currentPropName = column
-    this.buildChart()
-  }
-
-
-  onChartTypeChnage(value: string): void {
-    this.chart = value
-    this.buildChart()
-  }
-
-  buildChart(): void {
-    this.route.paramMap.subscribe(params => {
-      this.ruComponentType = params.get('ruComponentType') as string
-      // let prop = this.props["propNames"].currentvalue
-      // if (prop && this.chart) {
-      let url: string = `chart/${this.currentPropName === 'ruComponentType' ? 'components' : this.currentPropName}/${this.currentPropName}/${this.chart}?ruComponentType=${this.ruComponentType}`
-      // if (prop != AppEnum.NONE) {
-      //   url += `&&child_req_name=${this.props["propNames"].currentvalue}&&child_chart_name=${this.props["propNames"].currentvalue}`
-      // }
-      // console.log(url)
-      // if(this.chart)
-      //   this.url = url
-      // console.log(chartOptionsData)
-      // if (chartOptionsData[this.currentPropName])
-      //   this.chartName = chartOptionsData[this.currentPropName].chartName(params)
-      this.url = this.santizer.bypassSecurityTrustResourceUrl(url)
-      // }
+    this.query.set('chartName', column)
+    console.log(this.query)
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: Object.fromEntries(this.query),
+      queryParamsHandling: 'merge',
+      skipLocationChange: false
     })
   }
+
+
+  buildChart(): void {
+    let url: string = `chart/${this.currentPropName === 'ruComponentType' ? 'components' : this.currentPropName}/${this.currentPropName}/${this.type}?ruComponentType=${this.ruComponentType}`
+    this.url = this.santizer.bypassSecurityTrustResourceUrl(url)
+    setTimeout(() => {
+      this.statMax = JSON.parse(window.localStorage.getItem('mapWithMaxValues') as string)
+      this.statMin = JSON.parse(window.localStorage.getItem('mapWithMinValues') as string)
+    }, 200);
+  }
+
+  openTable(): void {
+    this.router.navigateByUrl(`/catalog?ruComponentType=${this.ruComponentType}`)
+  }
+
+  getChartAllias(name: string): string {
+    return chartNamesMap.get(name) as string
+  }
+
+  onChartTypeChanged(type: string): void {
+    this.type = type
+    // this.statMax = JSON.parse(window.localStorage.getItem('mapWithMaxValues') as string)
+    // this.buildChart()
+  }
+
+  getKeysMax(): string[] {
+    let res: string[] = []
+    if (this.statMax) {
+      for (const key in this.statMax) {
+        res.push(`${key}:\t${this.statMax[key]}`)
+      }
+    }
+    return res
+  }
+  getKeysMin(): string[] {
+    let res: string[] = []
+    if (this.statMin) {
+      for (const key in this.statMin) {
+        res.push(`${key}:\t${this.statMin[key]}`)
+      }
+    }
+    return res
+  }
+
+  getValues(): string[] {
+    let res: string[] = []
+    if (this.statMax) {
+      for (const key in this.statMax) {
+        res.push(this.statMax[key])
+      }
+    }
+    return res
+  }
+  // makeQueryStr(url: string): string {
+  //   const queryObj = (this.route.snapshot.queryParamMap as any).params
+  //   url += "?"
+  //   for (const key in queryObj) {
+  //     url += `${key}=${queryObj[key]}&`
+  //   }
+  //   url = url.replace('+', '%2B0')
+  //   return url
+  // }
+
 }

@@ -17,7 +17,7 @@ import { ManufacturerCountTableComponent } from '../components/manufacturer-coun
   imports: [HttpClientModule, NgFor, NgClass, NavigatorComponent, LoaderComponent, NgStyle, NgIf, ManufacturerCountTableComponent],
   providers: [ApiService1],
   templateUrl: './table-page.component.html',  
-  styleUrls: ['./table-page.component.css', '../components/selection/selection.css']
+  styleUrls: ['./table-page.component.css', '../components/selection/selection.css', '../components/styles/tabs.css']
 })
 export class TablePage implements OnInit {
   storage: any;
@@ -110,6 +110,7 @@ export class TablePage implements OnInit {
       this.api.getAlias()
     ])
       .subscribe(res => {
+        console.log(res)
         this.storage = res[0] as any
         const allias = (res as any[])[1]
         this.allias = new Map<string, string>(Object.entries(allias))

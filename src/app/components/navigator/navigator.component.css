@@ -25,6 +25,7 @@
     color: black;
     margin: 0;
     font-size: max(1vw, 8px);
+    text-decoration: underline;
 }
 
 .menu ul li img {

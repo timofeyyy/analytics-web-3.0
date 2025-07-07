@@ -44,6 +44,7 @@
     box-sizing: border-box;
     border: 0.1vw solid lightgray;
     border-radius: 0.5vw;
+    font-size: max(1vw, 10px);
 }
 
 
@@ -105,6 +106,7 @@
 
 .filter p {
     margin: 0;
+    font-size: max(1vw, 12px);
 }
 
 .filter {

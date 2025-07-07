@@ -16,7 +16,7 @@ import { props } from '../../assets/fetch.config';
   selector: 'app-catalog',
   imports: [NavigatorComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent, NgIf],
   templateUrl: './catalog.component.html',
-  styleUrls: ['./catalog.component.css', '../components/selection/selection.css', '../components/styles/button.css'],
+  styleUrls: ['./catalog.component.css', '../components/selection/selection.css', '../components/styles/button.css', '../components/styles/tabs.css'],
   providers: [ApiService1],
   encapsulation: ViewEncapsulation.None
 })
@@ -440,6 +440,6 @@ export class CatalogComponent implements OnInit {
   }
 
   openTable(): void {
-    this.router.navigateByUrl('table-view')
+    this.router.navigateByUrl('table-builder')
   }
 }

@@ -35,5 +35,6 @@ export type ChartOptions = {
     column: {
         action: ChartActions
     },
-    back: boolean
+    back: boolean,
+    mapWithMaxValues: Map<string, number>
 };

@@ -119,7 +119,7 @@ iframe {
 }
 
 .workspace main .t-wrapper .fav .item .info {
-    margin-top: 1vw;
+    margin-top: 0.5vw;
 }
 
 .workspace main .t-wrapper .stat {
@@ -128,7 +128,8 @@ iframe {
 }
 
 .workspace main .t-wrapper .stat iframe {
-    height: 70%;
+    /* height: 70%; */
+    height: 28vw;
 }
 
 .workspace main .b-wrapper {
@@ -140,6 +141,10 @@ iframe {
 
 /* .workspace main .stat .b-wrapper iframe {
     height: 100%;
+} */
+
+/* .workspace main iframe {
+    height: 22vw;
 } */
 
 .workspace main .b-wrapper .records-wrapper {

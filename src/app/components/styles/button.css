@@ -4,7 +4,6 @@ button {
     border-radius: 0.2vw;
     border: none;
     margin: 0;
-    align-self: flex-start;
     cursor: pointer;
 }
 

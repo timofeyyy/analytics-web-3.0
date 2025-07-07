@@ -253,7 +253,7 @@ export class ApiService1 {
         return obs;
     }
     getComponentsApiAllWithProirityLevels(query: Map<string, any> | void): Observable<any> | null {
-
+        console.log('getComponentsApiAllWithProirityLevels')
         let url: string = "api/components/all?"
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {

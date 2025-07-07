@@ -13,7 +13,9 @@ import { LoaderComponent } from "../components/loader/loader.component";
 
 interface IStepper {
   step: number,
-  obj: any
+  obj: any, 
+  description: string,
+  index: number
 }
 
 @Component({
@@ -27,7 +29,7 @@ interface IStepper {
 
 export class TableBuilderComponent implements OnInit {
   step!: 0 | -1 | -2
-  stepper!: Map<string, IStepper>
+  stepper!: Map<string, Partial<IStepper>>
   currentDropBoxName: string | undefined
   allias!: Map<string, string>
   dropBoxPropsMapConfig!: Map<string, any>
@@ -38,6 +40,7 @@ export class TableBuilderComponent implements OnInit {
   selectedColumns!: string[]
   displayedRuComponentTypes!: string[]
   loader!: boolean
+
 
   constructor(private api: ApiService1, private router: Router) { }
 
@@ -53,6 +56,10 @@ export class TableBuilderComponent implements OnInit {
     this.tableColumns = new Map()
     this.step = 0
     this.move()
+    this.stepper.get('step1')!.description = "Шаг 1: Выбор типа компонента"
+    this.stepper.get('step2')!.description = "Шаг 2: Выбор назначаемых параметров и расстонавления приоритетов"
+    this.stepper.get('step3')!.description = "Шаг 3: Заполнение значений"
+    console.log(this.stepper)
     const dropBoxPropsClone: any = {};
     for (const [key, value] of Object.entries(props)) {
       dropBoxPropsClone[key] = { ...value };
@@ -76,9 +83,12 @@ export class TableBuilderComponent implements OnInit {
   move(): void {
     for (let index = this.step, i = 1; index < this.step + 3; index++, i++) {
       let obj: any = this.stepper.get(`step${i}`)?.obj;
+      let description: any = this.stepper.get(`step${i}`)?.description
       this.stepper.set(`step${i}`, {
         step: index * 100,
-        obj: obj
+        obj: obj,
+        index: index,
+        description: description
       })
     }
   }
@@ -128,7 +138,7 @@ export class TableBuilderComponent implements OnInit {
     for (const key in object) {
       let val = object[key].currentValue
       if (!this.selectedColumnsContains(key)) {
-        if (!val.trim()) {
+        if (!val.trim() || val == AppEnum.ALL) {
           this.stepper.get('step3')!.obj = undefined
           return
         }
@@ -183,9 +193,19 @@ export class TableBuilderComponent implements OnInit {
   }
 
   onTypeSelected(ruComponentType: string): void {
-    this.stepper.get('step1')!.obj = ruComponentType
-    this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = ruComponentType
-    this.displayedColumns = Array.from(this.tableColumns.get(`${ruComponentType}`)!.keys())
+    let value: string = AppEnum.ALL
+    let displayedColumns: string[] = []
+    this.stepper.get('step1')!.obj = null
+    if (this.dropBoxPropsMapConfig.get('ruComponentType').currentValue !== ruComponentType) {
+      value = ruComponentType
+      displayedColumns = Array.from(this.tableColumns.get(`${ruComponentType}`)!.keys())
+      this.stepper.get('step1')!.obj = value
+    }
+    
+    this.displayedColumns = displayedColumns
+    this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = value
+    console.log(this.dropBoxPropsMapConfig.get('ruComponentType').currentValue)
+    console.log(this.displayedColumns)
   }
 
   onColumnSelected(column: string): void {
@@ -199,6 +219,6 @@ export class TableBuilderComponent implements OnInit {
   }
   displayedRuComponentTypeHeader(): string {
     let value = this.dropBoxPropsMapConfig.get('ruComponentType').currentValue
-    return value === AppEnum.ALL ? "Тип компонента" : value
+    return value === AppEnum.ALL ? "" : value
   }
 }

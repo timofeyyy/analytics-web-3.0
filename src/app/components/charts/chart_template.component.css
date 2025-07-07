@@ -27,3 +27,8 @@ apx-chart {
 .chart-wrapper button {
     margin-left: 4vw;
 }
+
+.chart-wrapper .apexcharts-legend-text {
+    font-size: 2vw !important;
+    color: red;
+}

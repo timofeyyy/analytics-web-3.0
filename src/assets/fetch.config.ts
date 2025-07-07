@@ -590,52 +590,6 @@ export const chartNamesMap: Map<string, string> = new Map(Object.entries(chartNa
 export const propsMap: Map<string, any> = new Map(Object.entries(props));
 export const observableApiMap: Map<string, (injector: ApiService1, data: Map<string, any>) => Observable<any> | null> = new Map(Object.entries(observableApi));
 // export const propsNamesMap: Map<string, ComponentProp[]> = new Map(Object.entries(propsNames));
-export const defaultChartOptions: Partial<ChartOptions> = {
-  series: [],
-  chart: {
-    type: "bar",
-    toolbar: {
-      show: false
-    }
-  },
-  plotOptions: {
-    bar: {
-      horizontal: false,
-      columnWidth: "80%"
-    }
-  },
-  responsive: [
-    {
-      breakpoint: 480,
-      options: {
-        chart: {
-          width: 200
-        },
-        legend: {
-          position: "bottom"
-        }
-      }
-    }
-  ],
-  colors: ['#d4526e', '#13d8aa', '#A5978B', '#2b908f', '#f9a3a4',
-    '#90ee7e', '#f48024', '#69d2e7', 'brown', 'blue', 'black', 'gold'
-  ],
-
-  yaxis: {
-
-  },
-  xaxis: {
-    categories: [
-
-    ],
-    title: {
-      text: "example"
-    }
-  },
-  dataLabels: {
-    enabled: false
-  },
-}
 
 
 
