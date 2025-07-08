@@ -6,6 +6,9 @@
 .tabs .vertical {
     margin: 0 0 0.3vw 0;
     border-radius: 0 1vw 1vw 0;
+    border-top: 0.1vw solid lightgray;
+    border-right: 0.1vw solid lightgray;
+    border-bottom: 0.1vw solid lightgrey;
 }
 
 .tabs .tab {

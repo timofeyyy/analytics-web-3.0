@@ -1,3 +1,10 @@
-<div [innerHTML]="layout">
-
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator />
+    </div>
+    <div class="workspace">
+        <div class="header" [innerHTML]="header"></div>
+        <div class="body" [innerHTML]="body"></div>
+    </div>
+    <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />
 </div>

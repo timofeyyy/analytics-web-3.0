@@ -36,14 +36,58 @@
 .controlles .step-description {
     font-size: max(1.5vw, 15px);
     font-weight: lighter;
-    margin-bottom: 2vw;
+    margin-bottom: 1vw;
+}
+
+.hint p {
+    font-size: max(1vw, 10px);
+    text-decoration: underline;
+    color: #7490f8;
+    cursor: pointer;
+}
+
+.hint {
+    margin-bottom: 1vw;
+    position: relative;
+}
+
+.hint .hint-popup {
+    background-color: white;
+    border-radius: 0.5vw;
+    padding: 1vw;
+    box-sizing: border-box;
+    width: 32vw;
+    position: fixed;
+    right: 7vw;
+    z-index: 11;
+}
+
+.hint .hint-popup .def {
+    margin-top: 1vw;
+    display: flex;
+    justify-self: flex-end;
+}
+
+.hint .hint-popup p {
+    color: black;
+    font-size: max(1vw, 10px);
+    text-decoration: unset;
+    margin-bottom: 1vw;
+}
+
+.blocked {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .controlles .steps-panel {
     height: 25vw;
     margin: 1.5vw;
     position: relative;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .controlles .steps-panel .step {
@@ -54,6 +98,7 @@
     background-color: white;
     left: 0;
     padding: 0 0.5vw 0.5vw;
+    box-sizing: border-box;
     overflow: scroll;
 }
 
@@ -73,6 +118,13 @@
     overflow: scroll;
 }
 
+.view .info span {
+    font-size: max(1vw, 10px);
+    color: #7490f8;
+    display: block;
+    margin-bottom: 0.5vw;
+}
+
 .view .info h1 {
     font-size: max(1.5vw, 15px);
     font-weight: lighter;
@@ -84,9 +136,9 @@
 }
 
 .view .info p {
-    font-size: max(1.4vw, 14px);
+    font-size: max(1.2vw, 12px);
     font-weight: lighter;
-    padding: 0.5vw 0;
+    padding: 0.5vw 0 0 0;
     border-top: 0.1vw solid grey;
     margin-right: 0.5vw;
 }
@@ -138,10 +190,10 @@
     padding-top: 1vw;
 }
 
-.columns {
+/* .columns {
     height: 80%;
     overflow: scroll;
-}
+} */
 
 /* .step2 {
     display: flex;

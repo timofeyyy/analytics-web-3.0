@@ -70,7 +70,7 @@ export class Main1Component implements OnInit {
     if (manufacturers.size) {
       const object = Object.fromEntries(manufacturers)
       for (const key in object) {
-        res += `<p>${key} - ${object[key].procentComapredToAll}%</p>`
+        res += `<p>${key} - ${object[key].procentComparedToComponentTypes}%</p>`
       }
     }
 

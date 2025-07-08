@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import config from '../assets/api.config.json' 
+import config from '../assets/api.config.json'
 import { map, Observable } from "rxjs";
 import { BitDepthValue, Microchip } from "../utils/types/microchip";
 import { Capacitor } from "../utils/types/capacitor";
@@ -53,7 +53,7 @@ export class ApiService1 {
         let url: string = "api/microchips?"
         if (data) {
             let componentName: string | undefined = data.get('componentName')
-            if(componentName) {
+            if (componentName) {
                 url += `componentName=${componentName}`
             }
         }
@@ -70,9 +70,9 @@ export class ApiService1 {
 
     getCapacitors(data: Map<string, any> | void): Observable<Capacitor[]> | null {
         let url: string = "api/capacitors?"
-         if (data) {
+        if (data) {
             let componentName: string | undefined = data.get('componentName')
-            if(componentName) {
+            if (componentName) {
                 url += `componentName=${componentName}`
             }
         }
@@ -91,7 +91,7 @@ export class ApiService1 {
         let url: string = "api/diods?"
         if (data) {
             let componentName: string | undefined = data.get('componentName')
-            if(componentName) {
+            if (componentName) {
                 url += `componentName=${componentName}`
             }
         }
@@ -111,7 +111,7 @@ export class ApiService1 {
         let url: string = "api/resistors?"
         if (data) {
             let componentName: string | undefined = data.get('componentName')
-            if(componentName) {
+            if (componentName) {
                 url += `componentName=${componentName}`
             }
         }
@@ -132,7 +132,7 @@ export class ApiService1 {
 
         if (data) {
             let componentName: string | undefined = data.get('componentName')
-            if(componentName) {
+            if (componentName) {
                 url += `componentName=${componentName}`
             }
         }
@@ -301,10 +301,11 @@ export class ApiService1 {
                                             satisfyCount++
                                         }
                                     }
+                                    if (!priorities.get(queryArr[index])) {
+                                        priorities.set(queryArr[index], [])
+                                    }
                                     if (satisfyCount === j) {
-                                        if (!priorities.get(queryArr[index])) {
-                                            priorities.set(queryArr[index], [])
-                                        }
+
                                         (priorities.get(queryArr[index]) as any[]).push(obj)
                                     }
                                 }

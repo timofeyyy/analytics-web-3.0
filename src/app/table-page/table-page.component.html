@@ -13,7 +13,7 @@
                 </div>
             </div>
             <ng-template #templateName>
-                <div class="charts">
+                <div class="charts" *ngIf="mainChartUrl">
                     <div class="chart-wrapper">
                         <div class="chart-wrapper-main">
                             <header>
@@ -34,7 +34,7 @@
                                 <iframe [src]="donutChartUrl" frameborder="0"></iframe>
                             </div> -->
                             <div class="manufacturersTable">
-                                <app-manufacturer-count-table [all]="all" />
+                                <app-manufacturer-count-table [all]="all" [activatedColumns]="activatedColumns" />
                             </div>
                         </div>
                     </div>
@@ -43,8 +43,8 @@
                     <div class="tabs">
                         <div *ngFor="let ruComponentType of getKeyArrayFromStorage()"
                             [ngClass]="{tab: true, horizontal: true, active: selectedRuComponentType===ruComponentType}"
-                            (click)="onRuComponentTypeSelected(ruComponentType)">
-                            <p>{{ruComponentType}}</p>
+                            (click)="onRuComponentTypeSelected(ruComponentType); initColumns()">
+                            <p>{{prioritySchemaWrapper2Map.get(ruComponentType)}}</p>
                         </div>
                     </div>
                     <div class="header">
@@ -55,22 +55,23 @@
                     </div>
                 </header>
                 <div class="body-main">
-                    <div class="priorities">
+                    <div class="priorities" *ngIf="priorities.length">
                         <div class="tabs tabs-vertical">
-                            <div [ngClass]="{tab: true, vertical: true, active: priority==='Все'}"
+                            <!-- <div [ngClass]="{tab: true, vertical: true, active: priority==='Все'}"
                                 (click)="onPriorityChange('Все')">
                                 <p>Все</p>
-                            </div>
-                            <div *ngFor="let p of priorities"
+                            </div> -->
+                            <div *ngFor="let p of priorities; let i = index"
                                 [ngClass]="{tab: true, vertical: true, active: priority===p}"
-                                (click)="onPriorityChange(p)">
-                                <p>{{allias.get(p)}}</p>
+                                (click)="onPriorityChange(p); initColumns()">
+                                <p>
+                                <span *ngIf="i !== 0"><span *ngFor="let prev of getArraFromLastIndex(i)">{{i}}+</span></span>{{i + 1}} приоритет - {{allias.get(p)}}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="t-body">
+                    <div class="t-body" [ngStyle]="{'width': priorities.length ? '83%': '96%'}">
                         <div class="t-body-wrapper">
-                            <table align="left">
+                            <table align="left" *ngIf="all.length; else template">
                                 <thead>
                                     <tr>
                                         <td *ngFor="let column of columns">{{column}}</td>
@@ -82,6 +83,16 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <ng-template #template>
+                                <div class="warning">
+                                    <div class="warning-wrapper">
+                                        <div class="warning-header">
+                                            <img [src]="'assets/images/not_found.svg'" alt="img">
+                                            <p>Ничего не найдено</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
                         </div>
                     </div>
                 </div>

@@ -113,10 +113,8 @@ export class TypeTemplateComponent implements OnInit {
   }
 
   onColumnSelected(column: string): void {
-    console.log(column)
     this.currentPropName = column
     this.query.set('chartName', column)
-    console.log(this.query)
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: Object.fromEntries(this.query),

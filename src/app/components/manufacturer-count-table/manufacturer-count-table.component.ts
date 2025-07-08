@@ -20,7 +20,8 @@ export class ManufacturerCountTableComponent implements OnChanges {
   orig!: any[]
   @Input()
   all!: any[]
-
+  @Input()
+  activatedColumns!: any[]
   constructor(
     private router: Router,
     private route: ActivatedRoute
@@ -54,13 +55,13 @@ export class ManufacturerCountTableComponent implements OnChanges {
 
   openCatalog(manufacturer: string): any {
     let url = "/catalog?"
-    console.log(this.route.snapshot.queryParamMap)
-    const object = (this.route.snapshot.queryParamMap as any).params
-    if (!object['manufacturerName']) {
-      url += `manufacturerName=${manufacturer}&`
+    this.activatedColumns = []
+    if (this.activatedColumns.findIndex((val) => val['manufacturerName']) === -1) {
+      this.activatedColumns.push({ manufacturerName: manufacturer })
     }
-    for (const key in object) {
-      url += `${key}=${object[key]}&`
+    for (const column of this.activatedColumns) {
+      const pair = Object.entries(column)
+      url += `${pair[0][0]}=${pair[0][1]}&`
     }
     this.router.navigateByUrl(url)
   }

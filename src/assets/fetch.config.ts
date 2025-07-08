@@ -16,6 +16,7 @@ import manufacturerNameFilters from "../utils/fnc1/filters/manufacturerName";
 import componentKindFilters from "../utils/fnc1/filters/componentKind";
 import getBitDepthValueStatMixed from "../utils/fnc1/bithdepthvalue/bidepthvalue.mixed";
 import { Router } from "@angular/router";
+import { input } from "@angular/core";
 
 interface ComponentProp {
   value: string,
@@ -356,22 +357,31 @@ export const columnsMax = [
   "maxPermissibleDCCollectorCurrent",
   "maxVoltage",
   "maxOperatingTemperature",
-  "maxCapacity"
+  "maxCapacity",
+  "maxRatedResistance"
 ]
 
 export const columnsMin = [
   "minCapacity",
   "minOperatingTemperature",
   "minVoltage",
-  "consumptionCurrent"
+  "minRatedResistance"
 ]
-
+//временно
 export const prioritySchemaWrapper = {
   "Микросхема": "microchips",
   "Диод": "diods",
   "Транзистор": "transistors",
   "Конденсатор": "capacitors",
   "Резистор": "resistors"
+}
+//временно
+export const prioritySchemaWrapper2 = {
+  "microchips": "Микросхема",
+  "diods": "Диод",
+  "transistors": "Транзистор",
+  "capacitors": "Конденсатор",
+  "resistors": "Резистор"
 }
 
 const observableApi: ObservableStorage = {
@@ -526,6 +536,26 @@ export const props = {
   'acceptableCapacityIncrease': {
     currentValue: "",
     input: true
+  },
+  'powerRating': {
+    currentValue: "",
+    input: true
+  },
+  'currentLimit': {
+    currentValue: "",
+    input: true
+  },
+  'maxRatedResistance': {
+    currentValue: "",
+    input: true
+  },
+  'minRatedResistance': {
+    currentValue: "",
+    input: true
+  },
+  'resistanceTolerance': {
+    currentValue: "",
+    input: true
   }
 }
 
@@ -568,10 +598,27 @@ const prioritySchema = {
     "package"
   ],
   "capacitors": [
+    "qualicationSG",
+    "minCapacity",
+    "maxCapacity",
+    "acceptableСapacityReduction",
+    "acceptableCapacityIncrease",
+    "manufacturerName",
+    "outputType",
+    "maxOperatingTemperature",
+    "maxVoltage",
+    "ruComponentKind"
 
   ],
   "resistors": [
-
+    "powerRating",
+    "minRatedResistance",
+    "maxRatedResistance",
+    "manufacturerName",
+    "currentLimit",
+    "resistanceTolerance",
+    "maxOperatingTemperature",
+    "maxVoltage"
   ]
 }
 
@@ -586,6 +633,7 @@ const prioritySchema = {
 // 3
 export const prioritySchemaMap: Map<string, string[]> = new Map(Object.entries(prioritySchema));
 export const prioritySchemaWrapperMap: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper));
+export const prioritySchemaWrapper2Map: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper2));
 export const chartNamesMap: Map<string, string> = new Map(Object.entries(chartNames));
 export const propsMap: Map<string, any> = new Map(Object.entries(props));
 export const observableApiMap: Map<string, (injector: ApiService1, data: Map<string, any>) => Observable<any> | null> = new Map(Object.entries(observableApi));
