@@ -21,15 +21,16 @@ export class TableChartTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.type_name = params.get('type_name') as string;
-      let obj = JSON.parse(window.localStorage.getItem('chartPages') as string)
-      if (obj && obj[this.type_name]) {
-        console.log(obj[this.type_name ])
+      let obj = JSON.parse(window.localStorage.getItem('selection') as string)
+      if (obj && obj.chartPages && obj.chartPages[this.type_name]) {
+        console.log(obj.chartPages[this.type_name])
         this.url = this.sanitizer.bypassSecurityTrustResourceUrl(
-          obj[this.type_name]
+          obj.chartPages[this.type_name]
         )
       }
       else {
         this.location.back()
+        console.log("sdsdsdsdsd")
       }
     })
   }
