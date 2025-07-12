@@ -19,6 +19,16 @@ const getBitDepthValueStatDonut = (data: any): Partial<ChartOptions> => {
             fontSize: `max(5vw, 15px)`
         },
         labels: [],
+         responsive: [
+            {
+                breakpoint: 300,
+                options: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        ],
     };
 
     var map = new Map();

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import manufacturerNameFilters from '../../../utils/fnc1/filters/manufacturerName';
 import componentKindFilters from '../../../utils/fnc1/filters/componentKind';
@@ -18,18 +18,22 @@ import { Router } from '@angular/router';
   styleUrl: './filters.component.css',
   providers: [ApiService1]
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnInit, OnChanges {
   @Input()
   all!: Partial<ComponentOptions>[]
   @Input()
   allias!: Map<string, string>
   @Input()
-  tableColumns!: Map<string, Map<string, string>>
+  tableColumns!: Map<string, string>
 
   constructor(
     private api: ApiService1,
     private router: Router
   ) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("onchange", this.tableColumns)
+    this.onRuComponentTypeChanged()
+  }
 
   @Output()
   public onChange = new EventEmitter<any>()
@@ -89,43 +93,6 @@ export class FiltersComponent implements OnInit {
       this.onChange.emit(payload)
     })
   }
-
-  // update(options: { option: Partial<FilterDropBox>, currentProp: string | undefined }): void {
-  //   // let componentProps: Map<string, { [key: string]: FilterDropBox }> = this.props['ruComponentType'].componentProps
-  //   // this.currentPropName = options.currentProp as string
-
-  //   // let mainCategoryProp: boolean = true
-  //   // for (const key of componentProps.keys()) {
-  //   //   for (const key_ in componentProps.get(key)) {
-  //   //     if (key_ === options.option.propName) {
-  //   //       mainCategoryProp = false;
-  //   //       (componentProps as Map<string, any>).get(this.props['ruComponentType'].currentvalue)[key_].currentvalue = options.option.currentValue
-  //   //     }
-  //   //   }
-  //   // }
-  //   // if (mainCategoryProp) {
-  //   //   this.props[options.option.propName as string].currentvalue = options.option.currentValue
-  //   // }
-
-  //   // if (!options.currentProp && options.option.propName === 'ruComponentType') {
-  //   //   this.props['ruComponentKind'].currentvalue = AppEnum.ALL
-  //   //   this.props['manufacturerName'].currentvalue = AppEnum.ALL
-  //   // }
-  //   // if (!options.currentProp && options.option.propName === 'ruComponentKind') {
-  //   //   this.props['manufacturerName'].currentvalue = AppEnum.ALL
-  //   // }
-
-  //   // let currentcomponentTypeValue: string = this.props['ruComponentType'].currentvalue
-
-  //   // this.componentTypeProp = componentProps.get(currentcomponentTypeValue)
-  //   // this.isSelectedComponentType = currentcomponentTypeValue !== AppEnum.ALL
-  //   // this.additionalProps = []
-  //   // if (this.componentTypeProp) {
-  //   //   for (const key in this.componentTypeProp) {
-  //   //     this.additionalProps.push(key)
-  //   //   }
-  //   // }
-  // }
   selectedColumns!: string[]
 
   ngOnInit(): void {
@@ -141,20 +108,14 @@ export class FiltersComponent implements OnInit {
     this.dropBoxPropsMapConfig = obj.propsMap
   }
 
-  onRuComponentTypeChanged(obj: { propsMap: Map<string, any>, currentName: string | undefined }): void {
-    // console.log(obj.propsMap.get('ruComponentType').currentValue)
-    const ruComponentType = obj.propsMap.get('ruComponentType').currentValue
-    if (ruComponentType !== AppEnum.ALL) {
-      // console.log(ruComponentType, this.tableColumns)
-      // console.log(this.tableColumns.get(ruComponentType))
-      // console.log(this.tableColumns.get(ruComponentType)?.keys())
-      let keys: any = this.tableColumns.get(ruComponentType)!.keys()
+  onRuComponentTypeChanged(): void {
+    if (this.tableColumns.size) {
+      let keys: any = this.tableColumns!.keys()
       let columns: string[] = Array.from(keys)
-      // console.log(columns)
+      console.log(columns)
       this.selectedColumns = columns
         .filter(function (value) {
           if (value === 'ruComponentType' || value === 'ruComponentKind' || value === 'manufacturerName') {
-            // console.log(value)
             return false
           }
           return true
@@ -164,4 +125,22 @@ export class FiltersComponent implements OnInit {
       this.selectedColumns = []
     }
   }
+  // onRuComponentTypeChanged(obj: { propsMap: Map<string, any>, currentName: string | undefined }): void {
+  // const ruComponentType = obj.propsMap.get('ruComponentType').currentValue
+  // if (ruComponentType !== AppEnum.ALL) {
+  //   let keys: any = this.tableColumns.get(ruComponentType)!.keys()
+  //   let columns: string[] = Array.from(keys)
+  //   console.log(columns)
+  //   this.selectedColumns = columns
+  //     .filter(function (value) {
+  //       if (value === 'ruComponentType' || value === 'ruComponentKind' || value === 'manufacturerName') {
+  //         return false
+  //       }
+  //       return true
+  //     })
+  // }
+  // else {
+  //   this.selectedColumns = []
+  // }
+  // }
 }

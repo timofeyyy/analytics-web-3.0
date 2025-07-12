@@ -53,7 +53,17 @@ const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions
             horizontalAlign: 'center'
         },
         labels: [],
-        values: []
+        values: [],
+        responsive: [
+            {
+                breakpoint: 300,
+                options: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        ],
     };
     let tmp: any = {}
     for (const key in data) {

@@ -34,19 +34,7 @@ export class ChartTemplateComponent implements OnInit {
         columnWidth: "80%"
       }
     },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200
-          },
-          legend: {
-            position: "bottom"
-          }
-        }
-      }
-    ],
+
     colors: ['#d4526e', '#13d8aa', '#A5978B', '#2b908f', '#f9a3a4',
       '#90ee7e', '#f48024', '#69d2e7', 'brown', 'blue', 'black', 'gold'
     ],
@@ -110,16 +98,15 @@ export class ChartTemplateComponent implements OnInit {
             //   //   colors: ['#000'] // Optional: set label color
             //   // }
             // },
-            legend: {
-              onItemClick: {
-                toggleDataSeries: false
-              },
-              onItemHover: {
-                highlightDataSeries: false
-              },
-              // fontSize: `${window.innerWidth * 0.01}px`
-            },
-
+            // legend: {
+            //   onItemClick: {
+            //     toggleDataSeries: false
+            //   },
+            //   onItemHover: {
+            //     highlightDataSeries: false
+            //   },
+            //   // fontSize: `${window.innerWidth * 0.01}px`
+            // },
             chart: {
               ...data.chart,
               toolbar: {
@@ -133,12 +120,25 @@ export class ChartTemplateComponent implements OnInit {
               },
             }
           }
-          // console.log(this.chartOptions)
+
+          if (!window.localStorage.getItem('chartOptions')) {
+            window.localStorage.setItem('chartOptions', JSON.stringify({}))
+          }
+          let chartOptions = JSON.parse((window.localStorage.getItem('chartOptions') as string))
+          let chartOptionsName = chartOptions[chart_name] 
+          if(!chartOptionsName) {
+            chartOptionsName = {}
+          } 
+          chartOptionsName[type_name] = this.chartOptions
+          chartOptions[chart_name]  = chartOptionsName
+          
+          window.localStorage.setItem('chartOptions', JSON.stringify(chartOptions))
+          console.log(JSON.parse((window.localStorage.getItem('chartOptions') as string)))
+
           this.loader = false
         }),
         catchError((err: any) => {
           this.loader = false
-          // this.router.navigateByUrl('/not-found')
           console.log(err.message)
           return [];
         })
@@ -155,14 +155,14 @@ export class ChartTemplateComponent implements OnInit {
   // @HostListener('window:resize', ['$event'])
 
   // onResize(event: any) {
-    // if (this.chartOptions && this.chartOptions.legend && this.chartOptions.legend.fontSize) {
-    //   this.chartOptions = {
-    //     ...this.chartOptions,
-    //     legend: {
-    //       ...this.chartOptions.legend,
-    //       fontSize: `${window.innerWidth * 0.0075}px`
-    //     }
-    //   }
-    // }
+  // if (this.chartOptions && this.chartOptions.legend && this.chartOptions.legend.fontSize) {
+  //   this.chartOptions = {
+  //     ...this.chartOptions,
+  //     legend: {
+  //       ...this.chartOptions.legend,
+  //       fontSize: `${window.innerWidth * 0.0075}px`
+  //     }
+  //   }
+  // }
   // }
 }

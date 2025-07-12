@@ -1,23 +1,22 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { ApiService1 } from '../../services/api.services1';
-import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
-import { ComponentOptions } from '../../utils/types/app';
+import { ApiService1 } from '../../../services/api.services1';
+import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
+import { ComponentOptions } from '../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
-import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../assets/fetch.config';
+import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../../assets/fetch.config';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavigatorComponent } from '../components/navigator/navigator.component';
-import { LoaderComponent } from '../components/loader/loader.component';
-import { ManufacturerCountTableComponent } from '../components/manufacturer-count-table/manufacturer-count-table.component';
+import { NavigatorComponent } from '../../components/navigator/navigator.component';
+import { LoaderComponent } from '../../components/loader/loader.component';
 
 @Component({
   selector: 'app-table',
-  imports: [HttpClientModule, NgFor, NgClass, NavigatorComponent, LoaderComponent, NgStyle, NgIf, ManufacturerCountTableComponent],
+  imports: [HttpClientModule, NgFor, NgClass, NavigatorComponent, LoaderComponent, NgStyle, NgIf],
   providers: [ApiService1],
   templateUrl: './table-page.component.html',
-  styleUrls: ['./table-page.component.css', '../components/selection/selection.css', '../components/styles/tabs.css']
+  styleUrls: ['./table-page.component.css', '../../components/selection/selection.css', '../../components/styles/tabs.css', '../../components/styles/button.css']
 })
 export class TablePage implements OnInit {
   storage: any;
@@ -29,17 +28,24 @@ export class TablePage implements OnInit {
   iconName!: 'not_found'
   records!: any[]
   mainChartUrl!: any
-  type!: string
   chartNames!: string[]
   priority!: string
   priorities!: string[]
   columns!: string[]
   prioritySchemaWrapper2Map!: any
   activatedColumns!: any[]
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService1, private sanitizer: DomSanitizer, private cdref: ChangeDetectorRef) {
+  url!: string
+  actionState!: boolean
+  constructor(
+    private route: ActivatedRoute,
+    private api: ApiService1,
+    private location: Location,
+    private router: Router
+  ) {
   }
 
   ngOnInit(): void {
+    this.actionState = !this.lastSavedSessionExists()
     this.prioritySchemaWrapper2Map = prioritySchemaWrapper2Map
     this.chartNames = Array.from(chartNamesMap.keys())
     this.allias = new Map()
@@ -58,6 +64,15 @@ export class TablePage implements OnInit {
     this.getApi(query)
   }
 
+  lastSavedSessionExists(): boolean {
+    return JSON.parse(window.localStorage.getItem('selection') as string) !== null
+  }
+
+  onStateChange(): void {
+    this.actionState =! this.actionState
+    this.actionState ? this.resetStorage() : this.saveToStorage()
+  }
+
   getPriorityArrayFromQuery(): string[] {
     const priorities: string[] = []
     const queryObj = (this.route.snapshot.queryParamMap as any).params
@@ -69,30 +84,14 @@ export class TablePage implements OnInit {
     return priorities
   }
 
-  onPriorityChange(priority: string): void {
-    this.priority = priority
-    this.initColumns()
-    this.onChartTypeChanged(this.type)
-  }
-
-
   getChartAllias(name: string): string {
     return chartNamesMap.get(name) as string
   }
 
-  onChartTypeChanged(type: string): void {
-    this.type = type
-    this.onChartUrlChnaged()
-
+  onChartUrlChnaged(type: string): string {
+    let mainUrl = `/chart/components/ruComponentType/${type}`
+    return this.makeQueryStr(mainUrl)
   }
-
-  onChartUrlChnaged(): void {
-    let mainUrl = `/chart/components/ruComponentType/${this.type}`
-    this.mainChartUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      this.makeQueryStr(mainUrl)
-    )
-  }
-
 
   makeQueryStr(url: string): string {
     const queryObj = (this.route.snapshot.queryParamMap as any).params
@@ -136,8 +135,6 @@ export class TablePage implements OnInit {
         if (value) {
           this.selectedRuComponentType = value
         }
-        this.onChartTypeChanged("mixed")
-
         this.initColumns()
         this.loader = false
       });
@@ -163,7 +160,6 @@ export class TablePage implements OnInit {
   onRuComponentTypeSelected(ruComponentType: any): void {
     this.selectedRuComponentType = ruComponentType
     this.initColumns()
-    this.onChartUrlChnaged()
   }
   initColumns(): void {
     let columns = []
@@ -186,8 +182,8 @@ export class TablePage implements OnInit {
 
   getArraFromLastIndex(last: number): number[] {
     let res = []
-    for (let index = 0; index < last; index++) {
-      res.push(index)      
+    for (let index = 1; index <= last; index++) {
+      res.push(index)
     }
     return res
   }
@@ -196,10 +192,6 @@ export class TablePage implements OnInit {
     let rows = []
     try {
       rows = (this.storage.get(this.selectedRuComponentType)).get(this.priority)
-      console.log((this.storage.get(this.selectedRuComponentType)).get(this.priority), this.priority)
-      console.log((this.storage.get(this.selectedRuComponentType)))
-      console.log(this.storage)
-      // console.log((this.storage.get(this.selectedRuComponentType)), this.priority, rows)
       this.all = rows
     }
     catch { }
@@ -210,5 +202,28 @@ export class TablePage implements OnInit {
       values.push(object[key] ?? "null")
     }
     return values
+  }
+
+  saveToStorage(): void {
+    let obj: any = {}
+    for (const type of ['mixed', 'bar', 'pie', 'donut']) {
+      obj[type] = this.onChartUrlChnaged(type)
+    }
+    window.localStorage.setItem('selection', JSON.stringify({
+      tableUrl: this.location.path(),
+      chartPages: obj
+    }))
+  }
+
+  resetStorage(): void {
+    window.localStorage.removeItem('selection')
+  }
+
+  isStorageEmpty(): boolean {
+    return window.localStorage.getItem('selection') === null
+  }
+
+  back(): void {
+    this.router.navigateByUrl("/table-builder")
   }
 }

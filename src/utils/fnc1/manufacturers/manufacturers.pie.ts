@@ -19,7 +19,17 @@ const getManufacturersChartOptionPie1 = (data: any): Partial<ChartOptions> => {
             position: 'bottom',
             horizontalAlign: 'center'
         },
-        values: []
+        values: [],
+         responsive: [
+            {
+                breakpoint: 300,
+                options: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        ],
     };
 
     var map = new Map();

@@ -1,7 +1,0 @@
-<div class="components">
-    <p>Тип граифка</p>
-    <div class="component" *ngFor="let item of list">
-        <input type="checkbox" (click)="onSelected(item.value)" name="btn" [checked]="item.value == currentValue">
-        <p>{{getName(item.value)}}</p>
-    </div>
-</div>

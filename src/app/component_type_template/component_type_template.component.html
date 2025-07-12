@@ -3,10 +3,10 @@
         <app-navigator />
     </div>
     <div class="workspace">
-        <header class="h-widget">
+        <!-- <header class="h-widget">
             <h1>{{ruComponentType === undefined ? "Charts" : ruComponentType}}</h1>
             <button class="def" (click)="openTable()">Просмотр компонентов</button>
-        </header>
+        </header> -->
         <main>
             <div class="chart-wrapper">
                 <div class="chart-wrapper-main">
@@ -14,61 +14,22 @@
                         <div class="tabs">
                             <div *ngFor="let chart of chartNames"
                                 [ngClass]="{tab: true, horizontal: true, active: type===chart}"
-                                (click)="onChartTypeChanged(chart); buildChart()">
+                                (click)="type = chart; buildChart()">
                                 <p>{{getChartAllias(chart)}}</p>
                             </div>
-                            <!-- <div [ngClass]="{tab: true, horizontal: true}">
-                                <p>sdsd</p>
-                            </div> -->
                         </div>
                     </header>
                     <section class="chart-window">
-                        <!-- <div class="priorities">
-                            <div class="tabs tabs-vertical">
-                                <div [ngClass]="{tab: true, vertical: true, active: priority==='Все'}"
-                                    (click)="onPriorityChange('Все')">
-                                    <p>Все</p>
-                                </div>
-                                <div *ngFor="let p of priorities"
-                                    [ngClass]="{tab: true, vertical: true, active: priority===p}"
-                                    (click)="onPriorityChange(p)">
-                                    <p>{{allias.get(p)}}</p>
-                                </div>
-                            </div>
-                        </div> -->
                         <div class="tabs tabs-vertical">
-                            <p class="tab-header">Сравниваемый тип</p>
                             <div *ngFor="let column of displayedColumns"
                                 [ngClass]="{tab: true, vertical: true, active: currentPropName === column}"
                                 (click)="onColumnSelected(column); buildChart()">
                                 <p>{{allias.get(column)}}</p>
                             </div>
-                            <!-- <div [ngClass]="{tab: true, horizontal: true}">
-                                <p>sdsd</p>
-                            </div> -->
                         </div>
                         <iframe [src]="url" frameborder="0"></iframe>
                     </section>
                 </div>
-
-                <div class="side-panel">
-                    <h1>Максимум: </h1>
-                    <h3>Столбцы: </h3>
-                    <p *ngFor="let key of getKeysMax()">{{key}}</p>
-                    <h1>Минимум: </h1>
-                    <h3>Столбцы: </h3>
-                    <p *ngFor="let key of getKeysMin()">{{key}}</p>
-                    <!-- <h3>Значения: </h3>
-                    <p *ngFor="let value of getValues()">{{value}}</p> -->
-                </div>
-                <!-- <section class="selection">
-                    <div class="column" *ngFor="let column of displayedColumns">
-                        <input type="checkbox" (click)="onColumnSelected(column)"
-                            [checked]="currentPropName === column" />
-                        <p>{{allias.get(column)}}</p>
-                    </div> -->
-                <!-- <app-chart-types-checkboxes (onChnage)="onChartTypeChnage($event)" /> -->
-                <!-- </section> -->
             </div>
         </main>
     </div>

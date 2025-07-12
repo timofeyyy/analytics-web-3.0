@@ -1,8 +1,8 @@
 <div class="app-main">
     <div class="navigator-wrapper">
-        <app-navigator />
+        <app-navigator [current]="'/catalog'" />
     </div>
-    <app-filters [all]="all" [allias]="allias" [tableColumns]="tableColumns"
+    <app-filters  [all]="all" [allias]="allias" [tableColumns]="tableColumns"
         [dropBoxPropsMapConfig]="dropBoxPropsMapConfig" [ngStyle]="{'display' : filter ? 'block' : 'none'}"
         (onChange)="apply($event)" />
     <div class="workspace">
@@ -15,10 +15,6 @@
             </div>
         </div>
         <ng-template #templateName>
-            <header class="h-widget">
-                <h1>Просмотр данных</h1>
-                <button class="def" (click)="openTable()">Просмотр в виде таблицы</button>
-            </header>
             <div class="filter-options">
                 <div class="options-head">
                     <p>Фильтрация по параметрам</p>

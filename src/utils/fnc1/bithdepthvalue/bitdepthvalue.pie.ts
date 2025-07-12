@@ -16,7 +16,17 @@ const getBitDepthValueStatPie = (data: any): Partial<ChartOptions> => {
             }
         },
         labels: [],
-        chartName: `Количественный график битности по ${manufacturerName ? 'производителю ' + manufacturerName : 'по всем производителям'}`
+        chartName: `Количественный график битности по ${manufacturerName ? 'производителю ' + manufacturerName : 'по всем производителям'}`,
+        responsive: [
+            {
+                breakpoint: 300,
+                options: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        ],
 
     };
 

@@ -3,9 +3,9 @@
         <app-navigator />
     </div>
     <div class="workspace">
-        <header class="h-widget">
+        <!-- <header class="h-widget">
             <h1>Количественная статистика выпускаемых электронных компонентов производителями</h1>
-        </header>
+        </header> -->
         <main>
             <div class="t-wrapper">
                 <section class="fav">
@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="info">
-                            <p class="info-header">Лидеры производства</p>
+                            <p class="info-header">Лидеры производства по колличеству</p>
                             <!-- <p>- {{getManufacturersAsString(component[1].manufacturers)}}</p> -->
                             <p [innerHTML]="displayManufacturers(component[1].manufacturers)"></p>
                         </div>

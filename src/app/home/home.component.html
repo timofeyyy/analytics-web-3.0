@@ -1,0 +1,41 @@
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator [current]="'/'" />
+    </div>
+    <div class="workspace">
+        <main>
+            <div class="main-view">
+                <div class="upper">
+                    <div class="list">
+                        <div class="list-h">
+                            <p class="type">Тип Компонента</p>
+                            <p class="manufacturer">Лидер в количественном производстве</p>
+                        </div>
+                        <div class="records">
+                            <div class="record" *ngFor="let component of componentTypes">
+                                <span class="type"> <a  [href]="getSafeUrl(`componentType/${component[0]}`)">{{component[0]}}</a> ({{component[1].countAll}})</span>
+                               
+                                <p class="manufacturer" [innerHTML]="displayManufacturers(component[1].manufacturers)"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart">
+                        <iframe src="chart/components/ruComponentType-next-chart/bar" frameborder="0"></iframe>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="chart">
+                        <iframe src="chart/components/statistic-catalog/donut" frameborder="0"></iframe>
+                    </div>
+                    <div class="list">
+                        <app-manufacturer-count-table [all]="all" class="records-wrapper" />
+                    </div>
+                </div>
+
+
+
+            </div>
+        </main>
+    </div>
+    <app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />
+</div>

@@ -53,7 +53,17 @@ const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> 
                 horizontal: false
             }
         },
-        values: []
+        values: [],
+         responsive: [
+            {
+                breakpoint: 300,
+                options: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        ],
     };
     var map = new Map();
     let length = 0

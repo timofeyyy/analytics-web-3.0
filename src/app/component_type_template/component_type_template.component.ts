@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChartTypesCheckboxesComponent } from '../components/chart_types_checkboxes/chart_types_checkboxes.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { ComponentOptions, FilterDropBox } from '../../utils/types/app';
@@ -66,7 +65,7 @@ export class TypeTemplateComponent implements OnInit {
           chartName = 'ruComponentType'
         }
         this.onColumnSelected(chartName)
-        this.onChartTypeChanged("bar")
+        this.type = "bar"
         this.buildChart()
       }
     })
@@ -127,10 +126,6 @@ export class TypeTemplateComponent implements OnInit {
   buildChart(): void {
     let url: string = `chart/${this.currentPropName === 'ruComponentType' ? 'components' : this.currentPropName}/${this.currentPropName}/${this.type}?ruComponentType=${this.ruComponentType}`
     this.url = this.santizer.bypassSecurityTrustResourceUrl(url)
-    setTimeout(() => {
-      this.statMax = JSON.parse(window.localStorage.getItem('mapWithMaxValues') as string)
-      this.statMin = JSON.parse(window.localStorage.getItem('mapWithMinValues') as string)
-    }, 200);
   }
 
   openTable(): void {
@@ -139,12 +134,6 @@ export class TypeTemplateComponent implements OnInit {
 
   getChartAllias(name: string): string {
     return chartNamesMap.get(name) as string
-  }
-
-  onChartTypeChanged(type: string): void {
-    this.type = type
-    // this.statMax = JSON.parse(window.localStorage.getItem('mapWithMaxValues') as string)
-    // this.buildChart()
   }
 
   getKeysMax(): string[] {

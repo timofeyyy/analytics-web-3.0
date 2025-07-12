@@ -1,0 +1,12 @@
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator [current]="'/table-chart/'+type_name" />
+    </div>
+    <div class="workspace">
+        <main>
+            <section class="chart-window" *ngIf="url">
+                <iframe [src]="url" frameborder="0"></iframe>
+            </section>
+        </main>
+    </div>
+</div>

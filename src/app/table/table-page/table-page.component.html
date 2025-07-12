@@ -1,6 +1,6 @@
 <div class="app-main">
     <div class="navigator-wrapper">
-        <app-navigator />
+        <app-navigator [current]="'/table-builder'" [chartBlocked]="isStorageEmpty()" />
     </div>
     <div class="workspace">
         <main>
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <ng-template #templateName>
-                <div class="charts" *ngIf="mainChartUrl">
+                <!-- <div class="charts" *ngIf="mainChartUrl">
                     <div class="chart-wrapper">
                         <div class="chart-wrapper-main">
                             <header>
@@ -30,46 +30,47 @@
                             </div>
                         </div>
                         <div class="chart-wrapper-manufacturers">
-                            <!-- <div class="diagramm">
-                                <iframe [src]="donutChartUrl" frameborder="0"></iframe>
-                            </div> -->
                             <div class="manufacturersTable">
                                 <app-manufacturer-count-table [all]="all" [activatedColumns]="activatedColumns" />
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <header>
                     <div class="tabs">
                         <div *ngFor="let ruComponentType of getKeyArrayFromStorage()"
                             [ngClass]="{tab: true, horizontal: true, active: selectedRuComponentType===ruComponentType}"
                             (click)="onRuComponentTypeSelected(ruComponentType); initColumns()">
-                            <p>{{prioritySchemaWrapper2Map.get(ruComponentType)}}</p>
+                            <p>{{prioritySchemaWrapper2Map.get(ruComponentType)}} <span
+                                    *ngIf="selectedRuComponentType===ruComponentType">({{all.length}})</span> </p>
                         </div>
                     </div>
-                    <div class="header">
-                        <p>Приоритеты</p>
-                        <div class="search">
-                            <input type="text" placeholder="Поиск(не работает пока)">
-                        </div>
-                    </div>
+
                 </header>
                 <div class="body-main">
-                    <div class="priorities" *ngIf="priorities.length">
-                        <div class="tabs tabs-vertical">
-                            <!-- <div [ngClass]="{tab: true, vertical: true, active: priority==='Все'}"
-                                (click)="onPriorityChange('Все')">
-                                <p>Все</p>
-                            </div> -->
-                            <div *ngFor="let p of priorities; let i = index"
-                                [ngClass]="{tab: true, vertical: true, active: priority===p}"
-                                (click)="onPriorityChange(p); initColumns()">
-                                <p>
-                                <span *ngIf="i !== 0"><span *ngFor="let prev of getArraFromLastIndex(i)">{{i}}+</span></span>{{i + 1}} приоритет - {{allias.get(p)}}</p>
+                    <div class="t-header">
+                    </div>
+                    <div class="t-aside">
+                        <div class="priorities-wrapper">
+                            <div class="tabs-wrapper" *ngIf="priorities.length">
+                                <p class="tabs-header">Приоритеты</p>
+                                <div class="tabs tabs-vertical">
+                                    <div *ngFor="let p of priorities; let i = index"
+                                        [ngClass]="{tab: true, vertical: true, active: priority===p}"
+                                        (click)="priority = p; initColumns()">
+                                        <p>
+                                            {{i + 1}}
+                                            <span *ngIf="i !== 0">
+                                                Добавление приоритета
+                                            </span>
+                                            {{allias.get(p)}}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="t-body" [ngStyle]="{'width': priorities.length ? '83%': '96%'}">
+                    <div class="t-body" [ngStyle]="{'width': priorities.length ? '80%': '96%'}">
                         <div class="t-body-wrapper">
                             <table align="left" *ngIf="all.length; else template">
                                 <thead>
@@ -94,6 +95,10 @@
                                 </div>
                             </ng-template>
                         </div>
+                    </div>
+                    <div class="t-footer">
+                        <button class="rev" (click)="back()"><span>Вернуться к построению</span></button>
+                        <button [ngClass]="{def: this.actionState, rev: !this.actionState}" (click)="onStateChange()">{{this.actionState ? 'Сохранить': 'Отчистить'}}</button>
                     </div>
                 </div>
             </ng-template>

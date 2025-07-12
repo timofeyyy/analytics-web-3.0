@@ -1,14 +1,17 @@
 .workspace main {
     border-radius: 1vw;
-    overflow: hidden;
+    height: 100vh;
+    /* display: flex;
+    flex-direction: column; */
 }
 
 .header {
     padding: 1.5vw 2vw;
     background-color: white;
-    border-radius: 0 1.5vw 0 0;
+    border-radius: 0 .5vw 0 0;
     display: flex;
     justify-content: space-between;
+    height: 10%;
 }
 
 .header .search {
@@ -24,8 +27,8 @@
 }
 
 .t-body {
-    height: 100%;
-    width: 83%;
+    height: 83%;
+    width: 80%;
     overflow: hidden;
     background-color: white;
     border-radius: 1vw;
@@ -33,7 +36,7 @@
 }
 
 .t-body-wrapper {
-    height: 50vw;
+    height: 100%;
     overflow-x: scroll;
     overflow-y: scroll;
 }
@@ -56,7 +59,7 @@ thead td {
 }
 
 tbody td {
-    font-size: max(1vw, 10px);
+    font-size: max(0.8vw, 8px);
     padding: 0.5vw 1.5vw;
     vertical-align: top;
     border: 0.1vw solid lightgray;
@@ -66,29 +69,78 @@ tbody td {
     display: flex;
     justify-content: space-evenly;
     background-color: white;
-    padding: 0 1vw 1vw 0vw;
+    padding: 0 1vw 1vw 0;
+    border-radius: 0 .5vw .5vw .5vw;
+    height: 93%;
+    flex-wrap: wrap;
 }
 
 
-.body-main .priorities {
+.body-main .t-aside {
     width: 18%;
     margin-right: 1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+.body-main .t-aside .tabs {
+    height: 54vh;
+    overflow-y: scroll;
+    padding-right: .5vw;
+}
 
-.priorities h1 {
+.body-main .t-header {
+    height: 7%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.t-aside h1 {
     font-size: max(2vw, 20px);
     font-weight: lighter;
     margin-bottom: 1.5vw;
 }
 
-.priorities p {
+.t-aside p{
     font-size: max(1.4vw, 14px);
     font-weight: 300;
     padding: 0.5vw 0;
-
     margin-right: 0.5vw;
+}
 
+.t-header p {
+    font-size: max(1vw, 10px);
+    margin: 0 2vw;
+}
+
+.tabs-header {
+    margin: 0 1vw 1vw 1vw;
+}
+
+.t-aside>p {
+    margin: 1vw 0 1vw 1vw;
+}
+
+.priorities-wrapper {
+    height: 60%;
+}
+
+.t-footer {
+    height: 10%;
+    display: flex;
+    padding: 1.5vw 0 0 0;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    margin: 0;
+    width: 100%;
+    align-items: flex-end;
+}
+
+.t-footer button {
+    margin-right: 0.5vw;
 }
 
 /* 

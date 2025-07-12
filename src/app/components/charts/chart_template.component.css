@@ -2,7 +2,7 @@
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     background-color: white;
     position: relative;
@@ -10,9 +10,10 @@
 }
 
 p {
-    margin: 0;
+    margin: 0 1vw 1vw 1vw;
     font-weight: lighter;
-    font-size: max(2vw, 15px);
+    font-size: max(1.5vw, 15px);
+    text-align: center;
 }
 
 apx-chart {
@@ -28,7 +29,8 @@ apx-chart {
     margin-left: 4vw;
 }
 
-.chart-wrapper .apexcharts-legend-text {
-    font-size: 2vw !important;
-    color: red;
+@media (max-width:400px) {
+    apx-chart {
+        width: 90%;
+    }
 }

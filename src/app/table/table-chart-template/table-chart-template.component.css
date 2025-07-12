@@ -1,0 +1,9 @@
+.workspace main {
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.workspace main .chart-window {
+    height: 100%;
+
+}

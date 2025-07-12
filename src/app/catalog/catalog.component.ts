@@ -38,11 +38,13 @@ export class CatalogComponent implements OnInit {
   currentPage!: number
   last!: number
   loader!: boolean
-  tableColumns!: Map<string, Map<string, string>>
+  allTableColumns!: Map<string, Map<string, string>>
+  tableColumns!: Map<string, string>
   dropBoxPropsMapConfig!: Map<string, any>
   error!: string
   iconName!: 'invalid_file' | 'not_found'
   displayedRuComponentTypes!: string[]
+
 
   constructor(
     private api: ApiService1,
@@ -68,6 +70,7 @@ export class CatalogComponent implements OnInit {
     this.storage = new Map()
     this.allias = new Map()
     this.tableColumns = new Map()
+    this.allTableColumns = new Map()
     const dropBoxPropsClone: any = {};
     for (const [key, value] of Object.entries(props)) {
       dropBoxPropsClone[key] = { ...value };
@@ -241,7 +244,7 @@ export class CatalogComponent implements OnInit {
               filters: filters,
               // img: componetns[cItemIndex].image
             })
-            if (!this.tableColumns.get(item.ruComponentType)) {
+            if (!this.allTableColumns.get(item.ruComponentType)) {
               const tmp = new Map()
               for (const key in item) {
                 const componentProps = this.dropBoxPropsMapConfig.get(key)
@@ -250,7 +253,7 @@ export class CatalogComponent implements OnInit {
                   tmp.set(key, alliasName)
                 }
               }
-              this.tableColumns.set(item.ruComponentType, tmp)
+              this.allTableColumns.set(item.ruComponentType, tmp)
 
             }
           })
@@ -258,7 +261,7 @@ export class CatalogComponent implements OnInit {
         this.displayedRuComponentTypes = Array.from(this.storage.keys())
         this.copy = Array.from(this.orig);
         this.from = 0
-        // console.log(this.orig.length)
+        console.log(this.allTableColumns)
         this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
         if (payload.get('page')) {
           if (!isNaN(parseInt(payload.get('page') as string))) {
@@ -307,6 +310,13 @@ export class CatalogComponent implements OnInit {
       value = AppEnum.ALL
     }
     this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = value
+    
+    if (this.dropBoxPropsMapConfig.get('ruComponentType').currentValue === AppEnum.ALL) {
+      this.tableColumns = new Map()
+    }
+    else {
+      this.tableColumns = this.allTableColumns.get(value)!
+    }
     let map = this.getSimpleKeyValueMap()
     this.setQuery(map).then((res) => {
       // console.log(res.size, res)

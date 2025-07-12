@@ -61,7 +61,6 @@ app-country-selection {
 }
 
 .h-widget {
-    height: 5vw;
     background-color: white;
     /* margin-bottom: 1vw; */
     width: 100%;
@@ -69,19 +68,19 @@ app-country-selection {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1vw 2vw;
+    padding: 1vw;
     box-sizing: border-box;
 }
 
 .h-widget h1 {
     margin: 0;
     font-weight: lighter;
-    font-size: max(1.75vw, 17.5px);
+    font-size: max(1vw, 10px);
 }
 
 .workspace {
     /* display: flex; */
-    width: 85%;
+    width: 80%;
 }
 
 iframe {
@@ -92,7 +91,7 @@ iframe {
 
 .workspace main {
     box-sizing: border-box;
-    padding: 1.5vw;
+    padding: 1vw;
     /* margin: 1.5vw 1.5vw 1.5vw 16.5%; */
     width: 100%;
 }
@@ -102,7 +101,7 @@ iframe {
 }
 
 .navigator-wrapper {
-    width: 15%;
+    width: 20%;
     margin: 0;
 }
 

@@ -6,14 +6,17 @@ import { CatalogComponent } from './catalog/catalog.component';
 
 import { ItemInfoTemplateComponent } from './item_info_template/item_info_template.component';
 // import { ChartBuilderComponent } from './chart-builder/chart-builder.component';
-import { TableBuilderComponent } from './table-builder/table-builder.component';
+import { TableBuilderComponent } from './table/table-builder/table-builder.component';
 import { TestPageComponent } from './test-page/test-page.component';
 import { ChartTemplateComponent } from './components/charts/chart_template.component';
-import { TablePage } from './table-page/table-page.component';
+import { TablePage } from './table/table-page/table-page.component';
+import { HomeComponent } from './home/home.component';
+import { TableChartTemplateComponent } from './table/table-chart-template/table-chart-template.component';
  
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: Main1Component },
+    { path: 'home', component: HomeComponent },
+    { path: 'main1', component: Main1Component },
     { path: 'component', component: ItemInfoTemplateComponent },
     { path: 'catalog', component: CatalogComponent },
     { path: 'not-found', component: NotfoundComponent },
@@ -22,4 +25,5 @@ export const routes: Routes = [
     { path: 'table-builder', component: TableBuilderComponent },
     { path: 'table-view', component: TablePage },
     { path: 'test-page', component: TestPageComponent },
+    { path: 'table-chart/:type_name', component: TableChartTemplateComponent },
 ];

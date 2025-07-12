@@ -1,6 +1,6 @@
 .records {
     background-color: white;
-    border-radius: 1vw;
+    border-radius: .5vw;
     margin: 0;
 }
 
@@ -19,10 +19,15 @@
 
 }
 
+.records .view {
+    margin-left: 0.5vw;
+}
+
 .records .view .row {
     cursor: pointer;
     font-size: max(1vw, 10px);
-
+    padding: 0.5vw;
+    border-top: 0.1vw solid lightgray;
 }
 
 .records .view .row .col :nth-child(0) {
@@ -31,15 +36,13 @@
 
 
 .records .view .row .col :nth-child(1) {
-    margin-right: 2vw;
+    margin: 0 1vw;
+    font-size: max(1vw, 10px);
+    word-break: break-all;
 }
 
 .records .cols-wrapper {
     padding: 0.5vw 1.5vw;
-}
-
-.records .view .row {
-    padding: 1.5vw;
 }
 
 .records .col {
@@ -54,7 +57,7 @@
 
 .records .list-wrapper .list {
     padding: 1vw;
-    border-radius: 1vw;
+    border-radius: .5vw;
 }
 
 .records .list-wrapper .list .values {

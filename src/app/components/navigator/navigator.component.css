@@ -12,20 +12,32 @@
     align-items: center;
     border-radius: 0.5vw;
     margin-bottom: 0.5vw;
-    width: 100%;
+    /* width: 100%; */
     box-sizing: border-box;
     padding: 0.5vw;
 }
 
-.menu ul li:hover {
-    background-color: lightgray;
+
+.menu ul li:hover,
+.menu ul .current {
+    background: rgba(47, 55, 67);
 }
 
-.menu ul li a {
-    color: black;
+.menu ul li {
+    cursor: pointer;
+}
+
+
+.menu ul li a,
+.menu ul li p {
+    color: white;
+    /* color: black; */
     margin: 0;
     font-size: max(1vw, 8px);
-    text-decoration: underline;
+    /* text-decoration: underline; */
+}
+.menu ul .blocked li a {
+    color: #939292;
 }
 
 .menu ul li img {
@@ -53,25 +65,28 @@
 
 .menu-wrapper {
     transition: 0.5s ease all;
-    background-color: white;
-    width: 15%;
+    background-color: rgba(75, 88, 108);
+    width: 20%;
     box-sizing: border-box;
     margin: 0;
     height: 100vh;
-    padding: 1.5vw;
+    padding: 1vw;
     position: fixed;
     z-index: 10;
     left: 0%;
 }
 
-/* @media (max-width: 820px) {
-    .menu-icon {
-        display: block;
-    }
-    .menu ul li {
-        justify-content: center;
-    }
-    .menu-wrapper {
-        border-right: 0.1vw solid gray;
-    }
-} */
+.section {
+    height: 0.1vw;
+    background-color: white;
+    border-radius: 2vw;
+    margin-bottom: 1vw;
+}
+
+.section-item {
+    margin-left: 2vw;
+}
+
+.section-link {
+    margin-left: 5vw;
+}
