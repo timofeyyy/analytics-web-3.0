@@ -3,43 +3,43 @@
 <div class="menu-wrapper" [ngStyle]="{left: isOpen ? '-40%' : '0' }">
     <nav class="menu">
         <ul>
-            <li [ngClass]="{current: current === '/'}">
+            <li [ngClass]="{current: current === '/'}" (click)="openNewPage('/')">
                 <img src="assets/images/home_white.svg" alt="img">
-                <a (click)="openNewPage('/')">Главная</a>
+                <a >Главная</a>
             </li>
-            <li [ngClass]="{current: current === '/catalog'}">
+            <li [ngClass]="{current: current === '/catalog'}" (click)="openNewPage('/catalog')">
                 <img src="assets/images/catalog_white.svg" alt="img">
-                <a (click)="openNewPage('/catalog')">Фильтры</a>
+                <a >Фильтры</a>
             </li>
             <div class="section"></div>
-            <li>
+            <li (click)="openCloseSelectionSection()">
                 <img src="assets/images/list_white.svg" alt="img">
-                <p (click)="openCloseSelectionSection()">Назначение выборки</p>
+                <p >Назначение выборки</p>
             </li>
             <div [ngClass]="{'section-selection':true}" [ngStyle]="{'display': selectionSection ? 'block' : 'none'}">
-                <li [ngClass]="{current: current === '/table-builder'}" class="section-item">
+                <li [ngClass]="{current: current === '/table-builder'}" class="section-item" (click)="openNewPage('/table-builder')">
                     <img src="assets/images/table_white.svg" alt="img">
-                    <a (click)="openNewPage('/table-builder')">Построение таблицы</a>
+                    <a >Построение таблицы</a>
                 </li>
-                <li class="section-item">
+                <li class="section-item" (click)="openCloseChartSection()">
                     <img src="assets/images/chart_white.svg" alt="img">
-                    <p (click)="openCloseChartSection()">Графики к выборке
+                    <p >Графики к выборке
                     <p>
                 </li>
 
                 <div [ngClass]="{'section-chart-wrapper': true, blocked: chartBlocked}"
                     [ngStyle]="{'display': chartSection ? 'block' : 'none'}">
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/mixed'}">
-                        <a (click)="openChartPage('/table-chart/mixed')">Паррето</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/mixed'}" (click)="openChartPage('/table-chart/mixed')">
+                        <a >Паррето</a>
                     </li>
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/bar'}">
-                        <a (click)="openChartPage('/table-chart/bar')">Гистограмма</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/bar'}" (click)="openChartPage('/table-chart/bar')">
+                        <a >Гистограмма</a>
                     </li>
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/donut'}">
-                        <a (click)="openChartPage('/table-chart/donut')">Кольцевая</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/donut'}" (click)="openChartPage('/table-chart/donut')">
+                        <a >Кольцевая</a>
                     </li>
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/pie'}">
-                        <a (click)="openChartPage('/table-chart/pie')">Кругавая</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/pie'}" (click)="openChartPage('/table-chart/pie')">
+                        <a >Кругавая</a>
                     </li>
                 </div>
             </div>

@@ -57,7 +57,7 @@
                                 <div class="tabs tabs-vertical">
                                     <div *ngFor="let p of priorities; let i = index"
                                         [ngClass]="{tab: true, vertical: true, active: priority===p}"
-                                        (click)="priority = p; initColumns()">
+                                        (click)="priority = p; changePriorityInStorage(p); initColumns()">
                                         <p>
                                             {{i + 1}}
                                             <span *ngIf="i !== 0">
@@ -98,7 +98,7 @@
                     </div>
                     <div class="t-footer">
                         <button class="rev" (click)="back()"><span>Вернуться к построению</span></button>
-                        <button [ngClass]="{def: this.actionState, rev: !this.actionState}" (click)="onStateChange()">{{this.actionState ? 'Сохранить': 'Отчистить'}}</button>
+                        <button [ngClass]="{def: this.save, rev: !this.save}" (click)="onStateChange()">{{this.save ? 'Сохранить': 'Отчистить'}}</button>
                     </div>
                 </div>
             </ng-template>

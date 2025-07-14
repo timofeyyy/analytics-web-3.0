@@ -30,7 +30,6 @@ export class TableChartTemplateComponent implements OnInit {
       }
       else {
         this.location.back()
-        console.log("sdsdsdsdsd")
       }
     })
   }

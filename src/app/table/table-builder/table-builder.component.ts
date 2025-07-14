@@ -77,7 +77,7 @@ export class TableBuilderComponent implements OnInit {
 
   getLastSavedUrl(): any {
     let obj = JSON.parse(window.localStorage.getItem('selection') as string)
-    if (obj && Object.keys(obj).length == 2 && obj.tableUrl) {
+    if (obj && obj.tableUrl) {
       // this.router.navigateByUrl(obj.tableUrl)
       return this.sanitizer.bypassSecurityTrustResourceUrl(obj.tableUrl)
     }

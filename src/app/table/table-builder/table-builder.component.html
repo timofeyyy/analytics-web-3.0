@@ -14,7 +14,7 @@
                 </div>
                 <a *ngIf="lastSavedSessionExists()" [href]="getLastSavedUrl()">Посмотреть предыдущую сохраненную
                     выборку</a>
-                <a href="/table-view">Пропустить и просмтореть все таблицы</a>
+                <a href="/table-view" (click)="resetStorage()">Пропустить и просмтореть все таблицы</a>
             </div>
             <div class="controlles">
                 <div class="steps-panel">

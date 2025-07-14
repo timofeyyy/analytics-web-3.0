@@ -65,7 +65,7 @@ export class NavigatorComponent implements OnInit {
   }
   initChartBlockedState(): void {
     let obj = JSON.parse(window.localStorage.getItem('selection') as string)
-    if (obj && Object.keys(obj).length == 2 && new Map(Object.entries(obj.chartPages)).size) {
+    if (obj && new Map(Object.entries(obj.chartPages)).size) {
       this.chartBlocked = false
     }
     else {

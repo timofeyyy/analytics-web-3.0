@@ -35,42 +35,66 @@ export class TablePage implements OnInit {
   prioritySchemaWrapper2Map!: any
   activatedColumns!: any[]
   url!: string
-  actionState!: boolean
+  save!: boolean
   constructor(
     private route: ActivatedRoute,
     private api: ApiService1,
     private location: Location,
     private router: Router
   ) {
-  }
-
-  ngOnInit(): void {
-    this.actionState = !this.lastSavedSessionExists()
-    this.prioritySchemaWrapper2Map = prioritySchemaWrapper2Map
-    this.chartNames = Array.from(chartNamesMap.keys())
     this.allias = new Map()
     this.records = []
     this.all = []
     this.columns = []
     this.activatedColumns = []
-    this.priorities = this.getPriorityArrayFromQuery()
-    this.priority = AppEnum.ALL
-    if (this.priorities.length) {
-      this.priority = this.priorities[this.priorities.length - 1]
-    }
     this.storage = new Map()
-    const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
     this.loader = true
+  }
+
+  ngOnInit(): void {
+    this.prioritySchemaWrapper2Map = prioritySchemaWrapper2Map
+    this.chartNames = Array.from(chartNamesMap.keys())
+
+    this.priorities = this.getPriorityArrayFromQuery()
+    this.priority = this.getSavedPriorityFromStorage() as string
+    if (this.priority === undefined) {
+      this.priority = AppEnum.ALL
+      if (this.priorities.length) {
+        this.priority = this.priorities[this.priorities.length - 1]
+      }
+      this.save = true
+    }
+    else {
+      this.save = false
+    }
+    const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
     this.getApi(query)
   }
 
-  lastSavedSessionExists(): boolean {
-    return JSON.parse(window.localStorage.getItem('selection') as string) !== null
+  getSavedPriorityFromStorage(): string | undefined {
+    const selection = JSON.parse(window.localStorage.getItem('selection') as string)
+    if (selection && selection.priority) {
+      return selection.priority
+    }
+    return undefined
+  }
+
+  changePriorityInStorage(priority: string): void {
+    if (!this.isStorageEmpty()) {
+      console.log(window.localStorage.getItem('selection') as string)
+      const selection = JSON.parse(window.localStorage.getItem('selection') as string)
+      // window.localStorage.setItem('selection', JSON.stringify(selection))
+      this.save = (priority !== selection.priority)
+    }
+    else {
+      this.save = true
+    }
+
   }
 
   onStateChange(): void {
-    this.actionState =! this.actionState
-    this.actionState ? this.resetStorage() : this.saveToStorage()
+    this.save = !this.save
+    this.save ? this.resetStorage() : this.saveToStorage()
   }
 
   getPriorityArrayFromQuery(): string[] {
@@ -150,7 +174,6 @@ export class TablePage implements OnInit {
   }
   getKeyArrayFromStorage(): string[] {
     const object = Object.fromEntries(this.storage)
-    // console.log(object)
     const keys = []
     for (const key in object) {
       keys.push(key)
@@ -211,7 +234,8 @@ export class TablePage implements OnInit {
     }
     window.localStorage.setItem('selection', JSON.stringify({
       tableUrl: this.location.path(),
-      chartPages: obj
+      chartPages: obj,
+      priority: this.priority
     }))
   }
 
