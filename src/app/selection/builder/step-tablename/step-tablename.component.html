@@ -1,0 +1,5 @@
+<p class="step-description">Шаг {{index}}: Выбор таблицы компонента</p>
+<p *ngFor="let enComponentType of enComponentTypes"
+        [ngClass]="{type: true, activated: current === enComponentType}"
+        (click)="changeState(enComponentType);onTypeSelected($event);"
+        >{{enComponentType | ruComponentTypeFormat}}</p>

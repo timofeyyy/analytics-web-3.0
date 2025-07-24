@@ -2,7 +2,7 @@
     <div class="list-wrapper">
         <div class="list">
             <p class="label">{{allias}}</p>
-            <input type="text" (input)="onValueChanged($event)">
+            <input type="text" [value]="currentValue === undefined ? '' : currentValue" [disabled]="inputDisabled" (input)="onValueChanged($event)">
         </div>
     </div>
-</div> 
+</div>

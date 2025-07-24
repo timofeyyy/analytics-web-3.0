@@ -1,0 +1,8 @@
+<div [ngClass]="{box: true, disabled: disabled, warning: warning}">
+    <div class="quantity">
+        <span class="quantity-remove quantity-button" (click)="decrement()"></span>
+        <input type="number" [value]="value" [disabled]="true">
+        <span class="quantity-add quantity-button" (click)="increment()"></span>
+    </div>
+</div>
+<p>{{label}}</p>

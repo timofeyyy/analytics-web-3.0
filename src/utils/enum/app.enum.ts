@@ -1,7 +1,8 @@
 export enum AppEnum {
     EXAMPLE = "example",
     ALL = "Все",
-    NONE = " - "
+    NONE = " - ",
+    NOTDEFINED = "Не указано"
 };
 
 export enum ComponentTypeRuEnum {

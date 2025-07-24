@@ -20,7 +20,7 @@
 
 .menu ul li:hover,
 .menu ul .current {
-    background: rgba(47, 55, 67);
+    background: rgb(230, 230, 230);
 }
 
 .menu ul li {
@@ -30,14 +30,14 @@
 
 .menu ul li a,
 .menu ul li p {
-    color: white;
+    color: black;
     /* color: black; */
     margin: 0;
     font-size: max(1vw, 8px);
     /* text-decoration: underline; */
 }
-.menu ul .blocked li a {
-    color: #939292;
+.menu ul .blocked  {
+    opacity: 0.4;
 }
 
 .menu ul li img {
@@ -65,7 +65,7 @@
 
 .menu-wrapper {
     transition: 0.5s ease all;
-    background-color: rgba(75, 88, 108);
+    /* background-color: rgba(75, 88, 108); */
     width: 20%;
     box-sizing: border-box;
     margin: 0;
@@ -74,19 +74,28 @@
     position: fixed;
     z-index: 10;
     left: 0%;
+    background: white;
 }
 
 .section {
     height: 0.1vw;
-    background-color: white;
+    background-color: rgba(75, 88, 108);
     border-radius: 2vw;
     margin-bottom: 1vw;
 }
 
-.section-item {
+.reveal-section {
     margin-left: 2vw;
 }
 
-.section-link {
-    margin-left: 5vw;
+.menu ul .reveal-section-child li {
+    padding-left: 1.5vw;
 }
+
+/* .section-item {
+    margin-left: 2vw;
+} */
+
+/* .section-link {
+    margin-left: 5vw;
+} */

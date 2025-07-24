@@ -3,52 +3,73 @@
 <div class="menu-wrapper" [ngStyle]="{left: isOpen ? '-40%' : '0' }">
     <nav class="menu">
         <ul>
-            <li [ngClass]="{current: current === '/'}" (click)="openNewPage('/')">
-                <img src="assets/images/home_white.svg" alt="img">
-                <a >Главная</a>
+            <li [ngClass]="{current: current === '/home'}" (click)="openNewPage('/home')">
+                <img src="assets/images/home.svg" alt="img">
+                <a>Главная</a>
             </li>
-            <li [ngClass]="{current: current === '/catalog'}" (click)="openNewPage('/catalog')">
-                <img src="assets/images/catalog_white.svg" alt="img">
-                <a >Фильтры</a>
+            <li [ngClass]="{current: current === '/filters'}" (click)="openNewPage('/filters')">
+                <img src="assets/images/catalog.svg" alt="img">
+                <a>Фильтры</a>
             </li>
             <div class="section"></div>
-            <li (click)="openCloseSelectionSection()">
-                <img src="assets/images/list_white.svg" alt="img">
-                <p >Назначение выборки</p>
+            <li 
+                (click)="openCloseSelectionSection()">
+                <img src="assets/images/list.svg" alt="img">
+                <p>Выборка</p>
             </li>
-            <div [ngClass]="{'section-selection':true}" [ngStyle]="{'display': selectionSection ? 'block' : 'none'}">
-                <li [ngClass]="{current: current === '/table-builder'}" class="section-item" (click)="openNewPage('/table-builder')">
-                    <img src="assets/images/table_white.svg" alt="img">
-                    <a >Построение таблицы</a>
+            <div [ngClass]="{'reveal-section':true}" [ngStyle]="{'display': selectionSection ? 'block' : 'none'}">
+                <li [ngClass]="{'section-item': true, current: current === '/selection-builder'}"
+                    (click)="openNewPage('/selection-builder')">
+                    <img src="assets/images/add-square.svg" alt="img">
+                    <a>Создание</a>
                 </li>
+                <li [ngClass]="{'section-item': true}"
+                    (click)="openCloseViewSection()">
+                    <img src="assets/images/table.svg" alt="img">
+                    <a>Просмотр</a>
+                </li>
+                <div [ngClass]="{'reveal-section': true, 'reveal-section-child': true}"
+                    [ngStyle]="{'display': viewSection ? 'block' : 'none'}">
+                    <li [ngClass]="{'section-link': true, current: current === '/selection-view', blocked: lastSavedBlocked}"
+                        (click)="openLastSaved()">
+                        <a>Последняя сохраненная</a>
+                    </li>
+                    <li [ngClass]="{'section-link': true, current: current === '/selection-view-all'}"
+                        (click)="openNewPage('/selection-view-all')">
+                        <a>Все компоненты</a>
+                    </li>
+                </div>
                 <li class="section-item" (click)="openCloseChartSection()">
-                    <img src="assets/images/chart_white.svg" alt="img">
-                    <p >Графики к выборке
+                    <img src="assets/images/chart.svg" alt="img">
+                    <p>Графики к выборке
                     <p>
                 </li>
-
-                <div [ngClass]="{'section-chart-wrapper': true, blocked: chartBlocked}"
+                <div [ngClass]="{'reveal-section': true, 'reveal-section-child': true}"
                     [ngStyle]="{'display': chartSection ? 'block' : 'none'}">
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/mixed'}" (click)="openChartPage('/table-chart/mixed')">
-                        <a >Паррето</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/mixed', blocked: chartBlocked}"
+                        (click)="openChartPage('/table-chart/mixed')">
+                        <a>Паррето</a>
                     </li>
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/bar'}" (click)="openChartPage('/table-chart/bar')">
-                        <a >Гистограмма</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/bar', blocked: chartBlocked}"
+                        (click)="openChartPage('/table-chart/bar')">
+                        <a>Гистограмма</a>
                     </li>
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/donut'}" (click)="openChartPage('/table-chart/donut')">
-                        <a >Кольцевая</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/donut', blocked: chartBlocked}"
+                        (click)="openChartPage('/table-chart/donut')">
+                        <a>Кольцевая диаграмма</a>
                     </li>
-                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/pie'}" (click)="openChartPage('/table-chart/pie')">
-                        <a >Кругавая</a>
+                    <li [ngClass]="{'section-link': true, current: current === '/table-chart/pie', blocked: chartBlocked}"
+                        (click)="openChartPage('/table-chart/pie')">
+                        <a>Кругавая диаграмма</a>
                     </li>
                 </div>
             </div>
             <!-- <li [ngClass]="{current: current === '/table-builder'}" class="section-item">
-                <img src="assets/images/table_white.svg" alt="img">
+                <img src="assets/images/table.svg" alt="img">
                 <a (click)="openNewPage('/table-builder')">Построение таблицы</a>
             </li>
             <li class="section-item">
-                <img src="assets/images/chart_white.svg" alt="img">
+                <img src="assets/images/chart.svg" alt="img">
                 <p (click)="openCloseChartSection()">Графики к выборке
                 <p>
             </li>

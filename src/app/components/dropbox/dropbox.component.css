@@ -41,7 +41,8 @@ li {
 }
 
 .values-wrapper {
-    position: relative;
+    /* position: relative; */
+    position: fixed;
 }
 
 .options .values-wrapper {

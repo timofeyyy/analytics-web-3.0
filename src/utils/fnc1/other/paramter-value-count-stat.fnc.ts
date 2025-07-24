@@ -1,15 +1,16 @@
-const getManufacturersProd = (data: any): any[] => {
+const getParameterValueCountStat = (data: any, key: string): any[] => {
 
     let records: any[] = []
     if (Array.isArray(data)) {
         data.forEach((obj: any) => {
-            if (obj.manufacturerName) {
+            if (obj[key] !== undefined) {
+                let value = obj[key] ? obj[key] : 'Не указано' 
                 let recordIndex: number = records.findIndex(
-                    (record: any) => record.manufacturerName === obj.manufacturerName
+                    (record: any) => record.value === value
                 )
                 if (recordIndex === -1) {
                     records.push({
-                        manufacturerName: obj.manufacturerName,
+                        value: value,
                         prodSummary: 1
                     })
                 }
@@ -19,8 +20,7 @@ const getManufacturersProd = (data: any): any[] => {
             }
         });
     }
-
     return records;
 }
 
-export default getManufacturersProd
+export default getParameterValueCountStat

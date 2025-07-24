@@ -1,6 +1,6 @@
 <div class="app-main">
     <div class="navigator-wrapper">
-        <app-navigator [current]="'/'" />
+        <app-navigator [current]="'/home'" />
     </div>
     <div class="workspace">
         <main>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="bottom">
                     <div class="chart">
-                        <iframe src="chart/components/statistic-catalog/donut" frameborder="0"></iframe>
+                        <iframe src="chart/components/statistic-filters/donut" frameborder="0"></iframe>
                     </div>
                     <div class="list">
                         <app-manufacturer-count-table [all]="all" class="records-wrapper" />

@@ -1,6 +1,6 @@
 <div class="app-main">
     <div class="navigator-wrapper">
-        <app-navigator [current]="'/catalog'" />
+        <app-navigator [current]="'/filters'" />
     </div>
     <app-filters  [all]="all" [allias]="allias" [tableColumns]="tableColumns"
         [dropBoxPropsMapConfig]="dropBoxPropsMapConfig" [ngStyle]="{'display' : filter ? 'block' : 'none'}"
@@ -39,9 +39,9 @@
                 <div class="head">
                     <div class="filter">
                         <p>Найдено {{copy.length}}</p>
-                        <li class="search">
+                        <div class="search">
                             <input type="text" placeholder="Индетификатор компонента" (input)="search($event)">
-                        </li>
+                        </div>
                     </div>
                 </div>
                 <div class="body">

@@ -1,5 +1,5 @@
 <p *ngIf="input; else templateName">
-    <app-input [allias]="alliasName" [name]="name" (onChanged)="openClose($event)"/>
+    <app-input [currentValue]="inputValue" [inputDisabled]="inputDisabled" [allias]="alliasName" [name]="name" (onChanged)="openClose($event)"/>
 </p>
 <ng-template #templateName>
     <app-dropbox

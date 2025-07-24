@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { Main1Component } from './main1/main1.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { TypeTemplateComponent } from './component_type_template/component_type_template.component';
 import { CatalogComponent } from './catalog/catalog.component';
@@ -12,18 +11,20 @@ import { ChartTemplateComponent } from './components/charts/chart_template.compo
 import { TablePage } from './table/table-page/table-page.component';
 import { HomeComponent } from './home/home.component';
 import { TableChartTemplateComponent } from './table/table-chart-template/table-chart-template.component';
+import { StepWindowComponent } from './selection/builder/step-window/step-window.component';
+import { SelectionViewAllPage } from './selection/view-all/table-page.component';
  
 export const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '', redirectTo: 'selection-builder', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-    { path: 'main1', component: Main1Component },
     { path: 'component', component: ItemInfoTemplateComponent },
-    { path: 'catalog', component: CatalogComponent },
-    { path: 'not-found', component: NotfoundComponent },
+    { path: 'filters', component: CatalogComponent },    { path: 'not-found', component: NotfoundComponent },
     { path: 'componentType/:ruComponentType', component: TypeTemplateComponent },
     { path: 'chart/:req_name/:chart_name/:type_name', component: ChartTemplateComponent },
+    { path: 'selection-builder', component: StepWindowComponent },
     { path: 'table-builder', component: TableBuilderComponent },
-    { path: 'table-view', component: TablePage },
+    { path: 'selection-view-all', component: SelectionViewAllPage },
+    { path: 'selection-view', component: TablePage },
     { path: 'test-page', component: TestPageComponent },
     { path: 'table-chart/:type_name', component: TableChartTemplateComponent },
 ];

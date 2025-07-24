@@ -17,6 +17,10 @@ import componentKindFilters from "../utils/fnc1/filters/componentKind";
 import getBitDepthValueStatMixed from "../utils/fnc1/bithdepthvalue/bidepthvalue.mixed";
 import { Router } from "@angular/router";
 import { input } from "@angular/core";
+import getColumnStatBarChartOptions from "../utils/fnc1/column-values/column.bar";
+import getColumnStatDonutChartOptions from "../utils/fnc1/column-values/column.donut";
+import getColumnStatPieChartOptions from "../utils/fnc1/column-values/column.pie";
+import getColumnStatMixedChartOptions from "../utils/fnc1/column-values/column.mixed";
 
 interface ComponentProp {
   value: string,
@@ -54,7 +58,7 @@ export const chartOptionsData: ChartOptionsStorage = {
       return `Количественный график параметра битности микросхем по ${data.get('manufacturerName') ? 'производителю ' + data.get('manufacturerName') : 'по всем производителям'}`
     }
   },
-  "bitDepthValue-catalog": {
+  "bitDepthValue-filters": {
     chartData: {
       "pie": (data: any, query: Map<string, string>) => {
         const res = getBitDepthValueStatPie(data)
@@ -68,7 +72,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
-                window.parent.location.href = `/catalog${queryStr}`
+                window.parent.location.href = `/filters${queryStr}`
               }
             }
           }
@@ -88,7 +92,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
-                window.parent.location.href = `/catalog${queryStr}`
+                window.parent.location.href = `/filters${queryStr}`
               }
             }
           }
@@ -108,7 +112,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
-                window.parent.location.href = `/catalog${queryStr}`
+                window.parent.location.href = `/filters${queryStr}`
               }
             }
           }
@@ -128,7 +132,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `bitDepthValue=${res.values![opts.dataPointIndex]}`
-                window.parent.location.href = `/catalog${queryStr}`
+                window.parent.location.href = `/filters${queryStr}`
               }
             }
           }
@@ -157,6 +161,27 @@ export const chartOptionsData: ChartOptionsStorage = {
       return label
     }
   },
+  "column": {
+    chartData: {
+      "bar": (data: any, query: Map<string, string>) => getColumnStatBarChartOptions(data, query),
+      "donut": (data: any, query: Map<string, string>) => getColumnStatDonutChartOptions(data, query),
+      "pie": (data: any, query: Map<string, string>) => getColumnStatPieChartOptions(data, query),
+      "mixed": (data: any, query: Map<string, string>) => getColumnStatMixedChartOptions(data, query),
+    },
+    chartName: (data: any) => {
+      const param = data.get('param')
+      const ruComponentType = data.get('ruComponentType')
+      const manufacturerName = data.get('manufacturerName')
+      const allias = data.get('allias')
+
+      // let label = "Количественная статистика по всем типам компонентам производетелей"
+      // let componentType = data.get('ruComponentType')
+      // if (componentType) {
+      //   label = `Количественная статистика производителей по компонентам типа "${componentType}"`
+      // }
+      return `Количественная статистика значений параметра ${allias}`
+    }
+  },
   "ruComponentType-next-chart": {
     chartData: {
       "bar": (data: any, query: Map<string, string>) => {
@@ -171,8 +196,8 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `manufacturerName=${res.values![opts.dataPointIndex]}`
-                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
-                // router.navigateByUrl(`chart/components/componentKinds-catalog/bar${queryStr}`).then(() => {
+                window.location.href = `chart/components/componentKinds-filters/bar${queryStr}`
+                // router.navigateByUrl(`chart/components/componentKinds-filters/bar${queryStr}`).then(() => {
                 //   window.location.reload();
                 // });
               }
@@ -193,7 +218,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `manufacturerName=${res.values![opts.dataPointIndex]}`
-                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
+                window.location.href = `chart/components/componentKinds-filters/bar${queryStr}`
                 // router.navigateByUrl(`chart/components/componentKinds/donut${queryStr}`).then(() => {
                 //   window.location.reload();
                 // });
@@ -218,7 +243,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                 // router.navigateByUrl(`chart/components/componentKinds/pie${queryStr}`).then(() => {
                 //   window.location.reload();
                 // });
-                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
+                window.location.href = `chart/components/componentKinds-filters/bar${queryStr}`
               }
             }
           }
@@ -240,7 +265,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                 // router.navigateByUrl(`chart/components/componentKinds/mixed${queryStr}`).then(() => {
                 //   window.location.reload();
                 // });
-                window.location.href = `chart/components/componentKinds-catalog/bar${queryStr}`
+                window.location.href = `chart/components/componentKinds-filters/bar${queryStr}`
               }
             }
           }
@@ -278,7 +303,7 @@ export const chartOptionsData: ChartOptionsStorage = {
       return label
     }
   },
-  "componentKinds-catalog": {
+  "componentKinds-filters": {
     chartData: {
       "bar": (data: any, query: Map<string, string>) => {
         const res = getComponentKindStatChartOptions1(data)
@@ -292,7 +317,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `ruComponentKind=${res.values![opts.dataPointIndex]}`
-                window.parent.location.href = `/catalog${queryStr}`
+                window.parent.location.href = `/filters${queryStr}`
               }
             }
           }
@@ -324,7 +349,7 @@ export const chartOptionsData: ChartOptionsStorage = {
     },
     chartName: (data: any) => "Соотношение типов компонентов к общему количеству"
   },
-  "statistic-catalog": {
+  "statistic-filters": {
     chartData: {
       "donut": (data: any, query: Map<string, string>) => {
         const res = getComponentTypesStatChartOptionsDonut(data)
@@ -338,7 +363,7 @@ export const chartOptionsData: ChartOptionsStorage = {
                   queryStr += `${key}=${value}&`
                 })
                 queryStr += `ruComponentType=${res.values![opts.dataPointIndex]}`
-                window.parent.location.href = `/catalog${queryStr}`
+                window.parent.location.href = `/filters${queryStr}`
               }
             }
           }
@@ -394,32 +419,24 @@ const observableApi: ObservableStorage = {
   "Конденсатор": (injector: ApiService1, data: Map<string, any>) => injector.getCapacitors(data),
   "Диод": (injector: ApiService1, data: Map<string, any>) => injector.getDiods(data),
 }
-// const propsNames: PropsStroage = {
-//   "Микросхема": [
-//     {
-//       value: "bitdepthvalue",
-//       allias: "битность"
-//     }
-//   ]
+
+// const sortObj = {
+//   'manufacturerName': (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all),
+//   'ruComponentKind': (props: any, all: ComponentOptions[]) => componentKindFilters(props, all)
 // }
 
-const sortObj = {
-  'manufacturerName': (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all),
-  'ruComponentKind': (props: any, all: ComponentOptions[]) => componentKindFilters(props, all)
-}
-
-export const sortObjMap: Map<string, any> = new Map(Object.entries(sortObj));
+// export const sortObjMap: Map<string, any> = new Map(Object.entries(sortObj));
 
 export const props = {
   'manufacturerName': {
     currentValue: AppEnum.ALL,
     input: false,
-    sort: (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all)
+    // sort: (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all)
   },
   'ruComponentKind': {
     currentValue: AppEnum.ALL,
     input: false,
-    sort: (props: any, all: ComponentOptions[]) => componentKindFilters(props, all)
+    // sort: (props: any, all: ComponentOptions[]) => componentKindFilters(props, all)
   },
   'bitDepthValue': {
     currentValue: AppEnum.ALL,
@@ -466,6 +483,10 @@ export const props = {
     input: false
   },
   'ruComponentType': {
+    currentValue: AppEnum.ALL,
+    input: false
+  },
+  'enComponentType': {
     currentValue: AppEnum.ALL,
     input: false
   },
@@ -520,6 +541,158 @@ export const props = {
   'memoryFormat': {
     currentValue: AppEnum.ALL,
     input: false
+  },
+  'maxCapacity': {
+    currentValue: "",
+    input: true
+  },
+  'consumptionCurrent': {
+    currentValue: "",
+    input: true
+  },
+  'acceptableСapacityReduction': {
+    currentValue: "",
+    input: true
+  },
+  'acceptableCapacityIncrease': {
+    currentValue: "",
+    input: true
+  },
+  'powerRating': {
+    currentValue: "",
+    input: true
+  },
+  'currentLimit': {
+    currentValue: "",
+    input: true
+  },
+  'maxRatedResistance': {
+    currentValue: "",
+    input: true
+  },
+  'minRatedResistance': {
+    currentValue: "",
+    input: true
+  },
+  'resistanceTolerance': {
+    currentValue: "",
+    input: true
+  }
+}
+
+
+export const propsInput = {
+  'manufacturerName': {
+    currentValue: "",
+    input: true,
+  },
+  'ruComponentKind': {
+    currentValue: "",
+    input: true,
+  },
+  'bitDepthValue': {
+    currentValue: "",
+    input: true
+  },
+  'ruTechnologyName': {
+    currentValue: "",
+    input: true
+  },
+  'frequency': {
+    currentValue: "",
+    input: true
+  },
+  'minOperatingTemperature': {
+    currentValue: "",
+    input: true
+  },
+  'maxOperatingTemperature': {
+    currentValue: "",
+    input: true
+  },
+  'radiationResistance': {
+    currentValue: "",
+    input: true
+  },
+  'radiationResistanceI': {
+    currentValue: "",
+    input: true
+  },
+  'samplingTime': {
+    currentValue: "",
+    input: true
+  },
+  'minVoltage': {
+    currentValue: "",
+    input: true
+  },
+  'maxVoltage': {
+    currentValue: "",
+    input: true
+  },
+  'outputType': {
+    currentValue: "",
+    input: true
+  },
+  'ruComponentType': {
+    currentValue: "",
+    input: true
+  },
+  'enComponentType': {
+    currentValue: "",
+    input: true
+  },
+  'maxPermissibleAverageDirectCurrent': {
+    currentValue: "",
+    input: true
+  },
+  'maxiPermissibleDirectCurrent': {
+    currentValue: "",
+    input: true
+  },
+  'package': {
+    currentValue: "",
+    input: true
+  },
+  'maxPermissibleDCVoltage': {
+    currentValue: "",
+    input: true
+  },
+  'maxPermissibleDCCollectorCurrent': {
+    currentValue: "",
+    input: true
+  },
+  'qualication': {
+    currentValue: "",
+    input: true
+  },
+  'interfaces': {
+    currentValue: "",
+    input: true
+  },
+  'remark2': {
+    currentValue: "",
+    input: true
+  },
+  'remark1': {
+    currentValue: "",
+    input: true
+  },
+  'qualicationЕС': {
+    currentValue: "",
+    input: true
+  },
+  'qualicationSG': {
+    currentValue: "",
+    input: true
+  },
+  'minCapacity': {
+    currentValue: "",
+    input: true
+  },
+  'memoryFormat': {
+    currentValue: "",
+    input: true
   },
   'maxCapacity': {
     currentValue: "",
@@ -619,12 +792,65 @@ const prioritySchema = {
     "resistanceTolerance",
     "maxOperatingTemperature",
     "maxVoltage"
+  ],
+  "Микросхема": [
+    "consumptionCurrent",
+    "qualication",
+    "manufacturerName",
+    "samplingTime",
+    "minOperatingTemperature",
+    "frequency",
+    "minVoltage"
+  ],
+  "Диод": [
+    "minOperatingTemperature",
+    "qualicationЕС",
+    "manufacturerName",
+    "radiationResistance",
+    "maxOperatingTemperature",
+    "maxPermissibleDCCollectorCurrent",
+    "maxPermissibleDCVoltage",
+    "package",
+  ],
+  "Транзистор": [
+    "maxOperatingTemperature",
+    "radiationResistance",
+    "qualicationЕС",
+    "maxPermissibleDCVoltage",
+    "minOperatingTemperature",
+    "maxiPermissibleDirectCurrent",
+    "ruComponentKind",
+    "manufacturerName",
+    "package"
+  ],
+  "Конденсатор": [
+    "qualicationSG",
+    "minCapacity",
+    "maxCapacity",
+    "acceptableСapacityReduction",
+    "acceptableCapacityIncrease",
+    "manufacturerName",
+    "outputType",
+    "maxOperatingTemperature",
+    "maxVoltage",
+    "ruComponentKind"
+
+  ],
+  "Резистор": [
+    "powerRating",
+    "minRatedResistance",
+    "maxRatedResistance",
+    "manufacturerName",
+    "currentLimit",
+    "resistanceTolerance",
+    "maxOperatingTemperature",
+    "maxVoltage"
   ]
 }
 
 
 //microchips 
-// 200
+// 2800
 // 7.К11- 60 МэВ см2/мг
 // АО НТЦ Модуль
 // -1.7976931348623157e+308
@@ -636,6 +862,7 @@ export const prioritySchemaWrapperMap: Map<string, string> = new Map(Object.entr
 export const prioritySchemaWrapper2Map: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper2));
 export const chartNamesMap: Map<string, string> = new Map(Object.entries(chartNames));
 export const propsMap: Map<string, any> = new Map(Object.entries(props));
+export const propsInputMap: Map<string, any> = new Map(Object.entries(propsInput));
 export const observableApiMap: Map<string, (injector: ApiService1, data: Map<string, any>) => Observable<any> | null> = new Map(Object.entries(observableApi));
 // export const propsNamesMap: Map<string, ComponentProp[]> = new Map(Object.entries(propsNames));
 

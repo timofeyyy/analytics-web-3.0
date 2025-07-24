@@ -72,3 +72,23 @@
 .search input {
     width: 10vw;
 }
+
+.header {
+    padding: 0.5vw;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header {
+    font-size: max(1vw, 10px);
+}
+
+.header .search:nth-child(1) {
+    margin-left: .5vw;
+}
+
+.header p:nth-child(2) {
+    margin-right: .5vw;
+}

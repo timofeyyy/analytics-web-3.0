@@ -17,6 +17,10 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
   propsMap!: Map<string, any>
   currentValue!: string
   input!: boolean
+  @Input()
+  inputValue!: string
+  @Input()
+  inputDisabled!: boolean
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isTableProp() && !this.isTableInput()) {
       if (this.propsMap.get(this.name).sort) {
@@ -27,13 +31,9 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
       }
       this.currentValue = this.propsMap.get(this.name).currentValue
     }
-    // if (this.isCompoenntProp()) {
-    //   if (this.isCompoenntPropInput() === false) {
-    //     this.values = componentTypeFilters(this.name, this.all)
-    //   }
-    //   this.currentValue = this.getCompoenntPropCurrentValue() as string
+    // if (this.isTableProp() && this.isTableInput()) { 
+
     // }
-    // console.log(this.propsMap)
   }
 
   changeCurrentValueByName(name: string, value: string): never | void {

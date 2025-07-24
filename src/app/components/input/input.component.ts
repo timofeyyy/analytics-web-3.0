@@ -11,11 +11,14 @@ export class InputComponent {
   name!: string
   @Input()
   allias: string | undefined
+  @Input()
+  currentValue!: string
+  @Input()
+  inputDisabled!: boolean
   @Output()
   public onChanged = new EventEmitter<{ currentValue: string, currentName: string }>()
   onValueChanged(event: any): void {
-    let value: string = event.target.value
-    console.log(value)
-    this.onChanged.emit({ currentValue: value, currentName: this.name })
+    this.currentValue= event.target.value
+    this.onChanged.emit({ currentValue: this.currentValue, currentName: this.name })
   }
 }

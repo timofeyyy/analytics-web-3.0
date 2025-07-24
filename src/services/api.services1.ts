@@ -10,6 +10,8 @@ import { AppEnum } from "../utils/enum/app.enum";
 import { ChartConfig, Config } from "../utils/types/config";
 import { Resistor } from "../utils/types/resistors";
 import { columnsMax, columnsMin, prioritySchemaWrapperMap, props, propsMap } from "../assets/fetch.config";
+import existInColumnsMin from "../utils/fnc1/other/existInColumnsMin";
+import existInColumnsMax from "../utils/fnc1/other/existsInColumnsMax";
 
 @Injectable()
 export class ApiService1 {
@@ -195,22 +197,11 @@ export class ApiService1 {
     }
 
     getComponentsApiAll(query: Map<string, any> | void): Observable<any> | null {
-
         let url: string = "api/components/all?"
-
-        // if (query) {
-        //     let manufacturerName: string | null = query.get('manufacturerName')
-        //     let componentType: string | null = query.get('ruComponentType')
-        //     if (componentType) {
-        //         url += `ruComponentType=${componentType}&&`
-        //     }
-        //     if (manufacturerName) {
-        //         url += `manufacturerName=${manufacturerName}`
-        //     }
-        // }
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((res: any) => {
+                console.log(query)
                 if (query && res) {
                     const queryObject = Object.fromEntries(query)
                     let length = this.getActualQqueryLength(queryObject)
@@ -220,24 +211,18 @@ export class ApiService1 {
                             let satisfyCount = 0;
                             for (const key in queryObject) {
                                 if (
-                                    obj[key] && (
-                                        (this.existInColumnsMin(key) && obj[key] >= queryObject[key]) ||
-                                        (this.existInColumnsMax(key) && obj[key] <= queryObject[key]) ||
-                                        (obj[key] == queryObject[key])
-                                    )
+                                    (obj[key] == null && queryObject[key].replace(AppEnum.NOTDEFINED, null) == `${obj[key]}`) ||
+                                    (obj[key] == '' && queryObject[key].replace(AppEnum.NOTDEFINED, "") == `${obj[key]}`) ||
+                                    (existInColumnsMin(key) && !isNaN(Number(queryObject[key])) && obj[key] >= Number(queryObject[key])) ||
+                                    (existInColumnsMax(key) && !isNaN(Number(queryObject[key])) && obj[key] <= queryObject[key]) ||
+                                    (obj[key] == queryObject[key]) ||
+                                    (obj[key] == Number(queryObject[key]))
 
                                 ) {
                                     satisfyCount++
                                 }
 
-                                // if (obj[key] && this.existInColumnsMin(key)) {
-                                //     console.log(obj[key], queryObject[key], obj[key] >= queryObject[key])
-                                // }
-                                // if (obj[key] && this.existInColumnsMax(key)) {
-                                //     console.log(obj[key], queryObject[key], obj[key] <= queryObject[key])
-                                // }
                             }
-                            // console.log(satisfyCount, length, satisfyCount == length)
                             if (length == satisfyCount) {
                                 values.push(obj)
                             }
@@ -245,9 +230,8 @@ export class ApiService1 {
                         res[type] = values
                     }
                 }
-                // console.log(res)
+                console.log(res)
                 return res
-
             }))
         }
         return obs;
@@ -263,22 +247,28 @@ export class ApiService1 {
                 let resWrapper = new Map()
                 if (query && query.size) {
                     const queryObject = Object.fromEntries(query)
+                    const ruComponentType = query.get('ruComponentType')
                     const queryArr = this.getActualQqueryAsArray(queryObject)
+                    console.log(queryArr)
                     for (const type in res) {
                         let values: any[] = []
                         for (const obj of res[type]) {
+                            if (ruComponentType && ruComponentType !== AppEnum.ALL && obj['ruComponentType'] !== ruComponentType) {
+                                break
+                            }
                             for (let index = -1; index < queryArr.length; index++) {
                                 let satisfyCount = 0;
                                 if (index == -1) {
                                     for (const key in queryObject) {
                                         if (
-                                            obj[key] && key !== 'ruComponentType' && (
-                                                (this.existInColumnsMin(key) && !isNaN(Number(queryObject[key])) && obj[key] >= Number(queryObject[key])) ||
-                                                (this.existInColumnsMax(key) && !isNaN(Number(queryObject[key])) && obj[key] <= queryObject[key]) ||
+                                            key !== 'ruComponentType' && (
+                                                (obj[key] == '' && queryObject[key].replace(AppEnum.NOTDEFINED, '') == obj[key]) ||
+                                                (obj[key] == null && queryObject[key].replace(AppEnum.NOTDEFINED, null) == `${obj[key]}`) ||
+                                                (existInColumnsMin(key) && !isNaN(Number(queryObject[key])) && obj[key] >= Number(queryObject[key])) ||
+                                                (existInColumnsMax(key) && !isNaN(Number(queryObject[key])) && obj[key] <= queryObject[key]) ||
                                                 (obj[key] == queryObject[key]) ||
                                                 (obj[key] == Number(queryObject[key]))
                                             )
-
                                         ) {
                                             satisfyCount++
                                         }
@@ -291,9 +281,11 @@ export class ApiService1 {
                                     let j = 0;
                                     for (; j < queryArr.length, j <= index; j++) {
                                         if (
-                                            obj[queryArr[j]] && (
-                                                (this.existInColumnsMin(queryArr[j]) && !isNaN(Number(queryObject[queryArr[j]])) && obj[queryArr[j]] >= Number(queryObject[queryArr[j]])) ||
-                                                (this.existInColumnsMax(queryArr[j]) && !isNaN(Number(queryObject[queryArr[j]])) && obj[queryArr[j]] <= queryObject[queryArr[j]]) ||
+                                            (
+                                                (obj[queryArr[j]] == '' && queryObject[queryArr[j]].replace(AppEnum.NOTDEFINED, '') == obj[queryArr[j]]) ||
+                                                (obj[queryArr[j]] == null && queryObject[queryArr[j]].replace(AppEnum.NOTDEFINED, null) == `${obj[queryArr[j]]}`) ||
+                                                (existInColumnsMin(queryArr[j]) && !isNaN(Number(queryObject[queryArr[j]])) && obj[queryArr[j]] >= Number(queryObject[queryArr[j]])) ||
+                                                (existInColumnsMax(queryArr[j]) && !isNaN(Number(queryObject[queryArr[j]])) && obj[queryArr[j]] <= queryObject[queryArr[j]]) ||
                                                 (obj[queryArr[j]] == queryObject[queryArr[j]]) ||
                                                 (obj[queryArr[j]] == Number(queryObject[queryArr[j]]))
                                             )
@@ -305,7 +297,6 @@ export class ApiService1 {
                                         priorities.set(queryArr[index], [])
                                     }
                                     if (satisfyCount === j) {
-
                                         (priorities.get(queryArr[index]) as any[]).push(obj)
                                     }
                                 }
@@ -348,13 +339,5 @@ export class ApiService1 {
             }
         }
         return columns
-    }
-
-    private existInColumnsMax(column: string): boolean {
-        return columnsMax.findIndex((value) => value == column) !== -1
-    }
-
-    private existInColumnsMin(column: string): boolean {
-        return columnsMin.findIndex((value) => value == column) !== -1
     }
 }

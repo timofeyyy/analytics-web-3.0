@@ -60,7 +60,7 @@ h1 {
 
 }
 
-.popup-window .filters .footer .cancel {
+/* .popup-window .filters .footer .cancel {
     color: black;
     background-color: white;
 }
@@ -68,7 +68,7 @@ h1 {
 .popup-window .filters .footer button {
     color: white;
     background-color: #3D83A9;
-}
+} */
 
 .popup-window .filters .body .base,
 .popup-window .filters .body .additional {

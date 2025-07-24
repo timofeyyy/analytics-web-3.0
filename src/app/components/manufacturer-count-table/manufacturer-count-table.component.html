@@ -1,27 +1,24 @@
 <section class="records">
-    <div class="list-wrapper">
+    <!-- <div class="list-wrapper">
         <div class="list">
             <div class="values">
                 <div class="search">
                     <input type="text" placeholder="Производитель" (input)="search($event)">
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- <div class="cols-wrapper">
-        <div class="cols layout">
-            <div class="col">
-                <p>Производитель</p>
-            </div>
-            <div class="col">
-                <p>Количество</p>
+                <p>Номенклатура</p>
             </div>
         </div>
     </div> -->
+    <div class="header">
+        <div class="search">
+            <input type="text" placeholder="Производитель" (input)="search($event)">
+        </div>
+        <p>Номенклатура</p>
+    </div>
     <div class="view">
-        <div class="row layout" *ngFor="let row of rows" (click)="openCatalog(row.manufacturerName)">
+        <div class="row layout" [ngStyle]="{background: currentValue === row.value ?  'rgba(211,211,211,0.5)' : 'unset'}" *ngFor="let row of rows" (click)="noRedirect ? getValue(row.value) : openCatalog(row.value)">
             <div class="col">
-                <p>{{row.manufacturerName}}</p>
+                <p>{{row.value}}</p>
             </div>
             <div class="col">
                 <p>{{row.prodSummary}}</p>

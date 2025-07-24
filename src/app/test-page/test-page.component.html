@@ -6,6 +6,6 @@
     [name]="'manufacturerName'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/> 
 <app-dropbox-provider [alliasName]="`${allias.get('bitDepthValue')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
     [name]="'bitDepthValue'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/> 
-<app-dropbox-provider [alliasName]="`${allias.get('frequency')}`" [propsMap]="dropBoxPropsMap" [name]="'frequency'"
+<app-dropbox-provider [inputValue]="'dsdsdsds'" [inputDisabled]="true" [alliasName]="`${allias.get('frequency')}`" [propsMap]="dropBoxPropsMap" [name]="'frequency'"
     (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/>
 <app-manufacturer-count-table [all]="values"/>

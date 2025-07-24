@@ -1,0 +1,93 @@
+.records {
+    background-color: white;
+    border-radius: .5vw;
+    margin: 0;
+}
+
+.records .cols,
+.records .cols p {
+    color: gray;
+}
+
+.records .layout {
+    display: flex;
+    justify-content: space-between;
+}
+
+.records .layout .col {
+    margin: 0;
+
+}
+
+.records .view {
+    margin-left: 0.5vw;
+}
+
+.records .view .row {
+    cursor: pointer;
+    font-size: max(1vw, 10px);
+    padding: 0.5vw;
+    border-top: 0.1vw solid lightgray;
+}
+
+.records .view .row .col :nth-child(0) {
+    font-weight: 500;
+}
+
+
+.records .view .row .col :nth-child(1) {
+    margin: 0 1vw;
+    font-size: max(1vw, 10px);
+    word-break: break-all;
+}
+
+.records .cols-wrapper {
+    padding: 0.5vw 1.5vw;
+}
+
+.records .col {
+    font-size: max(1.2vw, 12px);
+
+}
+
+.records .cols-wrapper {
+    background-color: #ececec;
+
+}
+
+.records .list-wrapper .list {
+    padding: 1vw;
+    border-radius: .5vw;
+}
+
+.records .list-wrapper .list .values {
+    margin: 0;
+}
+
+.records .values-wrapper ul {
+    left: 1vw;
+    right: unset;
+}
+
+.search input {
+    width: 10vw;
+}
+
+.header {
+    padding: 0.5vw;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header {
+    font-size: max(1vw, 10px);
+}
+
+.header p:nth-child(1) {
+    margin-left: .5vw;
+}
+
+.header p:nth-child(2) {
+    margin-right: .5vw;
+}

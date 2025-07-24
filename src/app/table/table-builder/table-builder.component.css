@@ -6,25 +6,84 @@
 }
 
 .workspace main {
-    display: flex;
-    justify-content: space-around;
     background-color: white;
-    width: 80%;
-    border-radius: 1.5vw;
+    width: 90%;
+    border-radius: .5vw;
+    height: 90%;
+}
+
+.workspace main section {
+    height: 100%;
 }
 
 .view {
-    width: 35%;
+    margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 0 0 1.5vw 0;
 }
 
-.view a {
-    font-size: max(1vw, 12px);
+.component-selection {
+    display: flex;
+}
+
+.component-selection .view {
+    width: 30%;
+}
+
+.componetn-selection .controlles {
+    width: 70%;
+}
+
+.view {
+    list-style-type: decimal;
+    font-size: max(1vw, 10px);
+    margin-left: 1vw;
+}
+
+.view .menu {
+    margin-left: 1vw;
+}
+
+.menu li a {
     color: black;
-    margin: 0 1.5vw;
+}
+
+.view li {
+    margin: 0 0 0 1vw;
+    font-size: max(1vw, 1px);
+}
+
+.view .disabled a {
+    text-decoration: none;
+    color: black;
+}
+
+.view .disabled {
+    pointer-events: none;
+    opacity: 0.35;
+}
+
+.view a {
+    cursor: pointer;
+    text-decoration: underline;
+    /* margin: 0 1.5vw; */
+}
+
+.menu h1 {
+    font-size: max(1.5vw, 15px);
+    font-weight: lighter;
+    margin: 0.5vw 0 1vw 2vw;
+}
+
+.menu li {
+    padding: 0.25vw 0.75vw;
+}
+
+.menu li:hover {
+    background: rgba(211, 211, 211, 0.5);
+    border-radius: 0.5vw;
 }
 
 .controlles {
@@ -84,7 +143,7 @@
 }
 
 .controlles .steps-panel {
-    height: 25vw;
+    height: 100%;
     margin: 1.5vw;
     position: relative;
     overflow: hidden;
@@ -189,66 +248,3 @@
     border-top: 0.1vw solid grey;
     padding-top: 1vw;
 }
-
-/* .columns {
-    height: 80%;
-    overflow: scroll;
-} */
-
-/* .step2 {
-    display: flex;
-    justify-content: space-between;
-}
-
-.action-blocks, .columns {
-    width: 50%;
-}
-
-.action-blocks {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-
-.action-blocks .action-block {
-    width: 45%;
-    height: 45%;
-    border-radius: 1vw;
-} */
-/* 
-.view .stepper {
-    height: 25vw;
-    margin: 1.5vw;
-    display: flex;
-}
-
-.view .stepper .indexes {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 80%;
-    position: relative;
-    width: 20%;
-}
-
-.view .stepper .indexes p {
-    color: white;
-    background-color: #7490f8;
-    padding: 45%;
-    clip-path: circle(40%);
-    font-size: max(1vw, 12px);
-    margin-left: 0;
-}
-
-.view .stepper .indexes .line {
-    background-color: #7490f8;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.view .stepper .labels {
-    width: 80%;
-} */

@@ -22,7 +22,7 @@ const getMinMax = (map: Map<string, number>): { min: Map<string, number>, max: M
             res.min.set(sortedMapEntriesArr[i][0], sortedMapEntriesArr[i][1])
         }
     }
-    console.log(res)
+    // console.log(res)
     return res
 }
 

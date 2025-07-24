@@ -1,6 +1,6 @@
 <div class="app-main">
     <div class="navigator-wrapper">
-        <app-navigator [current]="'/table-builder'" [chartBlocked]="isStorageEmpty()" />
+        <app-navigator [current]="'/selection-view'" [chartBlocked]="isChartBlocked()" [lastSavedBlocked]="isLastSavedBlocked() || isStorageEmpty()" />
     </div>
     <div class="workspace">
         <main>
@@ -53,16 +53,16 @@
                     <div class="t-aside">
                         <div class="priorities-wrapper">
                             <div class="tabs-wrapper" *ngIf="priorities.length">
-                                <p class="tabs-header">Приоритеты</p>
+                                <p class="tabs-header">Добавление приоритета</p>
                                 <div class="tabs tabs-vertical">
                                     <div *ngFor="let p of priorities; let i = index"
                                         [ngClass]="{tab: true, vertical: true, active: priority===p}"
                                         (click)="priority = p; changePriorityInStorage(p); initColumns()">
                                         <p>
                                             {{i + 1}}
-                                            <span *ngIf="i !== 0">
+                                            <!-- <span *ngIf="i !== 0">
                                                 Добавление приоритета
-                                            </span>
+                                            </span> -->
                                             {{allias.get(p)}}
                                         </p>
                                     </div>

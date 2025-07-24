@@ -16,7 +16,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
   imports: [HttpClientModule, NgFor, NgClass, NavigatorComponent, LoaderComponent, NgStyle, NgIf],
   providers: [ApiService1],
   templateUrl: './table-page.component.html',
-  styleUrls: ['./table-page.component.css', '../../components/selection/selection.css', '../../components/styles/tabs.css', '../../components/styles/button.css']
+  styleUrls: ['./table-page.component.css', '../../components/styles/tabs.css', '../../components/styles/button.css']
 })
 export class TablePage implements OnInit {
   storage: any;
@@ -54,7 +54,6 @@ export class TablePage implements OnInit {
   ngOnInit(): void {
     this.prioritySchemaWrapper2Map = prioritySchemaWrapper2Map
     this.chartNames = Array.from(chartNamesMap.keys())
-
     this.priorities = this.getPriorityArrayFromQuery()
     this.priority = this.getSavedPriorityFromStorage() as string
     if (this.priority === undefined) {
@@ -113,7 +112,7 @@ export class TablePage implements OnInit {
   }
 
   onChartUrlChnaged(type: string): string {
-    let mainUrl = `/chart/components/ruComponentType/${type}`
+    let mainUrl = `/chart/components/column/${type}`
     return this.makeQueryStr(mainUrl)
   }
 
@@ -122,17 +121,19 @@ export class TablePage implements OnInit {
     this.activatedColumns = []
     url += "?"
     for (const key in queryObj) {
+      if (key == this.priority) {
+        url+=`param=${key}&`
+        break
+      }
       url += `${key}=${queryObj[key]}&`
       let map = new Map().set(key, queryObj[key])
       this.activatedColumns.push(Object.fromEntries(map))
-      if (key == this.priority) {
-        break
-      }
+
     }
     if (this.selectedRuComponentType) {
       url += `ruComponentType=${prioritySchemaWrapper2Map.get(this.selectedRuComponentType)}`
     }
-
+    console.log(url)
     url = url.replace('+', '%2B0')
     return url
   }
@@ -152,15 +153,21 @@ export class TablePage implements OnInit {
       this.api.getAlias()
     ])
       .subscribe(res => {
+        console.log(res)
         this.storage = res[0] as any
+        console.log(this.storage)
         const allias = (res as any[])[1]
         this.allias = new Map<string, string>(Object.entries(allias))
+        console.log(this.all)
+
         const value = this.getFirstRuComponentType()
         if (value) {
           this.selectedRuComponentType = value
         }
+
         this.initColumns()
         this.loader = false
+        console.log(this.all)
       });
   }
 
@@ -233,7 +240,7 @@ export class TablePage implements OnInit {
       obj[type] = this.onChartUrlChnaged(type)
     }
     window.localStorage.setItem('selection', JSON.stringify({
-      tableUrl: this.location.path(),
+      tableUrl: this.location.path().replace('-all', ''),
       chartPages: obj,
       priority: this.priority
     }))
@@ -247,7 +254,21 @@ export class TablePage implements OnInit {
     return window.localStorage.getItem('selection') === null
   }
 
+  isChartBlocked(): boolean {
+    if (this.isStorageEmpty()) {
+      return true
+    }
+    return (window.localStorage.getItem('selection') as any).chartPages
+  }
+
+  isLastSavedBlocked(): boolean {
+    if (this.isStorageEmpty()) {
+      return true
+    }
+    return (window.localStorage.getItem('selection') as any).tableUrl
+  }
+
   back(): void {
-    this.router.navigateByUrl("/table-builder")
+    this.router.navigateByUrl("/selection-builder")
   }
 }

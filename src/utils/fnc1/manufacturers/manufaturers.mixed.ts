@@ -25,6 +25,9 @@ const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> 
             categories: [],
             tickPlacement: 'on',
             labels: {
+                formatter: (val) => {
+                    return `${val}`;
+                },
                 style: {
                     fontSize: '0px',
 
@@ -54,7 +57,7 @@ const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> 
             }
         },
         values: [],
-         responsive: [
+        responsive: [
             {
                 breakpoint: 300,
                 options: {
@@ -73,9 +76,7 @@ const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> 
             if (!map.has(obj.manufacturerName)) {
                 map.set(obj.manufacturerName, 0);
             }
-
             map.set(obj.manufacturerName, map.get(obj.manufacturerName) + 1)
-
         }
     }
     const sortedMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
@@ -86,9 +87,6 @@ const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> 
         sum += (value * 100 / length);
         (apexChartData as ChartOptions).series[1].data.push(sum.toFixed(1) as any);
     });
-    let res = getMinMax(sortedMap)
-    window.localStorage.setItem('mapWithMaxValues', JSON.stringify(Object.fromEntries(res.max)))
-    window.localStorage.setItem('mapWithMinValues', JSON.stringify(Object.fromEntries(res.min)))
     apexChartData.values = apexChartData.xaxis?.categories
     return apexChartData
 }

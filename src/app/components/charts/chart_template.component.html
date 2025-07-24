@@ -1,6 +1,6 @@
-<div class="chart-wrapper">
-    <p>{{chartName}}</p>
-    <apx-chart
+<div class="chart-wrapper" *ngIf="chartOptions">
+    <p *ngIf="!noHeader" [ngStyle]="{'font-size': headerFontSize}" >{{chartName}}</p>
+    <apx-chart 
     [series]="chartOptions.series!" 
     [chart]="chartOptions.chart!" 
     [dataLabels]="chartOptions.dataLabels!"
@@ -14,6 +14,6 @@
     [colors]="chartOptions.colors!"
     [legend]="chartOptions.legend!"
   ></apx-chart>
-  <button *ngIf="chartOptions.back" (click)="getBack()"  [disabled]="disabled" class="def">Назад</button>
+  <button *ngIf="chartOptions && chartOptions.back" (click)="getBack()"  [disabled]="disabled" class="def">Назад</button>
 </div>
     <!-- <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" /> -->

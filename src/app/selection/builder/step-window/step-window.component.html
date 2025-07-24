@@ -1,0 +1,95 @@
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator [current]="'/selection-builder'" />
+    </div>
+    <div class="workspace">
+        <main>
+            <section class="component-selection">
+                <div class="view"  >
+                    <!-- [ngStyle]="{width: step >= 2 ? '0': '30%'}" -->
+                    <div class="info">
+                        <h1>Таблица: 
+                            {{dropBoxPropsMapConfig.get('ruComponentType').currentValue === '' ? 'Не указано' :
+                            `${dropBoxPropsMapConfig.get('ruComponentType').currentValue}`}}
+                            </h1>
+                        <p *ngFor="let column of priorities; let i = index;" [ngClass]="{disabled:st && i > step - 2 }" >{{allias.get(column[0])}}{{activeKeys.get(column[0]) ? `: ${activeKeys.get(column[0])}` : ''}}  <span>Приоритет {{column[1]['priority'] === 0 ? 'неуказан': column[1]['priority']}}</span></p>
+                    </div>
+                </div>
+                <!-- [ngStyle]="{width: step >= 2 ? '100%': '70%'}" -->
+                <div class="controlles" >
+                    <div class="steps-panel">
+                        <app-step-tablename [storage]="storage" [enComponentTypes]="enComponentTypes" [index]="1" class="step step1" [ngStyle]="{'left': stepper.get('step1')?.positionX + '%'}" (typeChanged)="onTypeSelected($event)" (sourceChanged)="onSourceChanged($event)"/>
+                        <app-step-priorities  [allias]="allias" [columns]="columns" [index]="2" class="step step2" [ngStyle]="{'left': stepper.get('step2')?.positionX + '%'}" (onChanged)="onPriorityChanged($event)"/>
+                        <app-step-values 
+                            class="step"
+                            [allias]="allias" 
+                            [dropBoxPropsMapConfig]="dropBoxPropsMapConfig"
+                            [all]="all"
+                            *ngFor="let column of prioritiesNoJumps; let i = index"
+                            [columnName]="column[0]"
+                            [index]="i+3"
+                            [ngStyle]="{'left': getPositionX(i+3) + '%'}"
+                            (onValueChanged)="onDropBoxValueChnaged($event)"
+                            (onSourceChanged)="onDropBoxSourceChnaged($event)"
+                            [currentIndex]="step+1"
+                            [activeKeys]="activeKeys"
+                            [storage]="storage"
+                            [prevSelection]="getPrevSelection()"
+                        />
+
+                        <!-- <div class="step step1" [ngStyle]="{'left': stepper.get('step1')?.step + '%'}">
+                            <p class="step-description">Шаг 1: Выбор таблицы компонента</p>
+                            <p *ngFor="let ruComponentType of displayedRuComponentTypes"
+                                [ngClass]="{type: true,  activated: dropBoxPropsMapConfig.get('ruComponentType').currentValue === ruComponentType}"
+                                (click)="onTypeSelected(ruComponentType)">{{ruComponentType}}</p>
+                        </div>
+                        <div class="step step2" [ngStyle]="{'left': stepper.get('step2')?.step + '%'}">
+                            <p class="step-description">Шаг 2: Выбор назначаемых параметров и расстонавления приоритетов
+                            </p>
+                            <div class="hint">
+                                <p (click)="popupHint=true">Что такое приоритет?</p>
+                                <div class="hint-popup" [ngStyle]="{display: popupHint ? 'block' : 'none'}">
+                                    <p>Приоритет - это ранг столбца который будет учавствовать в поиске.</p>
+                                    <p>Сам поиск на основе приоритотв выполняется следующем образом:</p>
+                                    <p>Сначала, ищутся те записи в соответствии указанным параметрам который обладает
+                                        приоритетом 1. Дальше поиск осущестлвяется по параметру с приоритетом 1 и
+                                        приоритетом 2. Дальше осущестлвяется поиск с приоритетами 1, 2 и 3. И так далее,
+                                        в
+                                        зависимости от количества выбранных параметров на этом шаге.</p>
+                                    <p>Чем выше приоритет, тем он чаще учитывается в разных комбинациях поиска.</p>
+                                    <button class="def" (click)="popupHint=false">Закрыть</button>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column" *ngFor="let column of displayedColumns">
+                                    <input type="checkbox" (click)="onColumnSelected(column)"
+                                        [checked]="!selectedColumnsContains(column)" [disabled]="autoGeneratedSchema" />
+                                    <p>{{allias.get(column)}}</p>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <div class="column">
+                                    <input type="checkbox" (click)="onAutoGeneratedSchemaSelected()"
+                                        [checked]="autoGeneratedSchema" />
+                                    <p>Использовать рекомендуемую схему</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step step3" [ngStyle]="{'left': stepper.get('step3')?.step + '%'}">
+                            <p class="step-description">Шаг 3: Заполнение значений</p>
+                            <app-dropbox-provider *ngFor="let column of selectedColumns"
+                                [alliasName]="`${allias.get(column)}`" [currentName]="currentDropBoxName" [all]="all"
+                                [propsMap]="dropBoxPropsMapConfig" [name]="column"
+                                (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+                        </div> -->
+                    </div>
+                    <div class="btns">
+                        <button class="rev" (click)="prev()">Назад</button>
+                        <button class="def" (click)="st ? makeQueryStr() : next()">{{st && step > 1 ? 'Реузльтат' : 'Дальше' }}</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />
+</div>

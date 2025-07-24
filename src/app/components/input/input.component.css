@@ -32,7 +32,8 @@ li {
 }
 
 .list-wrapper .list .label {
-    font-size: max(1vw, 15px);
+    font-size: max(1vw, 10px);
+    font-weight: lighter;
 }
 
 .options .list-wrapper .list .label,
@@ -57,4 +58,8 @@ input {
 
 input:focus {
     outline: none;
+}
+
+input:disabled {
+    background-color: rgba(211, 211, 211, .5);
 }

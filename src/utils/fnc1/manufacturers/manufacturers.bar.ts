@@ -93,10 +93,10 @@ const getManufacturersChartOptionBar1 = (data: any): Partial<ChartOptions> => {
             }
         })
     })
-    const sortedMap = new Map([...manufacturersMap.entries()].sort((a, b) => b[1] - a[1]));
-    let res = getMinMax(sortedMap)
-    window.localStorage.setItem('mapWithMaxValues', JSON.stringify(Object.fromEntries(res.max)))
-    window.localStorage.setItem('mapWithMinValues', JSON.stringify(Object.fromEntries(res.min)))
+    // const sortedMap = new Map([...manufacturersMap.entries()].sort((a, b) => b[1] - a[1]));
+    // let res = getMinMax(sortedMap)
+    // window.localStorage.setItem('mapWithMaxValues', JSON.stringify(Object.fromEntries(res.max)))
+    // window.localStorage.setItem('mapWithMinValues', JSON.stringify(Object.fromEntries(res.min)))
     apexChartData.values = apexChartData.xaxis?.categories;
     return apexChartData;
 }

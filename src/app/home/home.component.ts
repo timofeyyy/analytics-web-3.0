@@ -57,7 +57,6 @@ export class HomeComponent {
     ).subscribe()
   }
 
-
   getSafeUrl(url: string): any {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }

@@ -96,7 +96,6 @@ export class TypeTemplateComponent implements OnInit {
               for (const key in item) {
                 const componentProps = this.dropBoxPropsMapConfig.get(key)
                 const alliasName = this.allias.get(`${key}`)
-                // console.log(chartOptionsData[key], key)
                 if (alliasName && componentProps && chartOptionsData[key]) {
                   tmp.set(key, alliasName)
                 }
@@ -105,7 +104,6 @@ export class TypeTemplateComponent implements OnInit {
             }
           })
         })
-        // console.log(this.tableColumns)
         this.displayedColumns = Array.from(this.tableColumns.get(`${this.ruComponentType}`)!.keys())
       }
     });
@@ -113,18 +111,19 @@ export class TypeTemplateComponent implements OnInit {
 
   onColumnSelected(column: string): void {
     this.currentPropName = column
-    this.query.set('chartName', column)
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: Object.fromEntries(this.query),
-      queryParamsHandling: 'merge',
-      skipLocationChange: false
-    })
+    // console.log(this.currentPropName) 
+    // this.query.set('chartName', column)
+    // this.router.navigate([], {
+    //   relativeTo: this.route,
+    //   queryParams: Object.fromEntries(this.query),
+    //   queryParamsHandling: 'merge',
+    //   skipLocationChange: false
+    // })
   }
 
 
   buildChart(): void {
-    let url: string = `chart/${this.currentPropName === 'ruComponentType' ? 'components' : this.currentPropName}/${this.currentPropName}/${this.type}?ruComponentType=${this.ruComponentType}`
+    let url: string = `chart/components/column/${this.type}?ruComponentType=${this.ruComponentType}${this.currentPropName == 'ruComponentType' ? '' : `&param=${this.currentPropName}`}`
     this.url = this.santizer.bypassSecurityTrustResourceUrl(url)
   }
 

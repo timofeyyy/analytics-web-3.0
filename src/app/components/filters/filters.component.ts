@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   selector: 'app-filters',
   imports: [HttpClientModule, DropboxProviderComponent, NgFor],
   templateUrl: './filters.component.html',
-  styleUrl: './filters.component.css',
+  styleUrls: ['./filters.component.css', '../styles/button.css'],
   providers: [ApiService1]
 })
 export class FiltersComponent implements OnInit, OnChanges {

@@ -50,7 +50,7 @@ table {
 
 
 thead td {
-    font-size: max(1vw, 10px);
+    font-size: max(.8vw, 8px);
     padding: 0.5vw 1.5vw;
     background-color: #7490f8;
     color: white;
@@ -63,6 +63,7 @@ tbody td {
     padding: 0.5vw 1.5vw;
     vertical-align: top;
     border: 0.1vw solid lightgray;
+   white-space: nowrap;
 }
 
 .body-main {
@@ -88,6 +89,7 @@ tbody td {
     height: 54vh;
     overflow-y: scroll;
     padding-right: .5vw;
+    overflow-x: hidden;
 }
 
 .body-main .t-header {
@@ -126,6 +128,7 @@ tbody td {
 
 .priorities-wrapper {
     height: 60%;
+    margin: 0;
 }
 
 .t-footer {
@@ -258,4 +261,8 @@ tbody {
     height: 93%;
     width: 100%;
     overflow-y: scroll;
+}
+
+.tabs-wrapper .tabs-vertical .tab {
+    width: 100%;
 }
