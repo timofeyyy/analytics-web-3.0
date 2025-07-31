@@ -99,8 +99,6 @@ export class StepValuesComponent implements OnChanges {
       console.log(this.prevSelection)
       for (const element of this.prevSelection) {
         let obj = element.component
-        //7.К11 - 60 МэВ×см2 /мг
-        // console.log(obj[`${this.columnName}`], currentValue, obj[`${this.columnName}`] != AppEnum.NOTDEFINED, currentValue.replace(AppEnum.NOTDEFINED, null))
         if (
           (obj[`${this.columnName}`] === '' && currentValue.replace(AppEnum.NOTDEFINED, '') == `${obj[`${this.columnName}`]}` ) ||
           (obj[`${this.columnName}`] === null && currentValue.replace(AppEnum.NOTDEFINED, null) == `${obj[`${this.columnName}`]}` ) ||

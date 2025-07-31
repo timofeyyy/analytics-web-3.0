@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import config from '../assets/api.config.json'
+import config from '../assets/appsetings.json'
 import { map, Observable } from "rxjs";
 import { BitDepthValue, Microchip } from "../utils/types/microchip";
 import { Capacitor } from "../utils/types/capacitor";
@@ -9,7 +9,7 @@ import { Transistor } from "../utils/types/transistor";
 import { AppEnum } from "../utils/enum/app.enum";
 import { ChartConfig, Config } from "../utils/types/config";
 import { Resistor } from "../utils/types/resistors";
-import { columnsMax, columnsMin, prioritySchemaWrapperMap, props, propsMap } from "../assets/fetch.config";
+import { columnsMax, columnsMin, prioritySchemaWrapperMap, props, propsMap } from "../app/fetch.config";
 import existInColumnsMin from "../utils/fnc1/other/existInColumnsMin";
 import existInColumnsMax from "../utils/fnc1/other/existsInColumnsMax";
 
@@ -171,37 +171,36 @@ export class ApiService1 {
         return obs;
     }
 
-    getComponentsApiPreview(query: Map<string, any> | void): Observable<any[]> | null {
+    // getComponentsApiPreview(query: Map<string, any> | void): Observable<any[]> | null {
 
-        let url: string = "api/components/short?"
+    //     let url: string = "api/components/short?"
 
-        if (query) {
-            let manufacturerName: string | null = query.get('manufacturerName')
-            let componentType: string | null = query.get('ruComponentType')
-            if (componentType) {
-                url += `ruComponentType=${componentType}&&`
-            }
-            if (manufacturerName) {
-                url += `manufacturerName=${manufacturerName}`
-            }
-        }
-        let obs: Observable<any> | null = this.getReqDomen(url);
-        if (obs != null) {
-            return obs.pipe(map((components: any) => {
-                return components.map(function (option: any): any {
-                    return option;
-                });
-            }))
-        }
-        return obs;
-    }
+    //     if (query) {
+    //         let manufacturerName: string | null = query.get('manufacturerName')
+    //         let componentType: string | null = query.get('ruComponentType')
+    //         if (componentType) {
+    //             url += `ruComponentType=${componentType}&&`
+    //         }
+    //         if (manufacturerName) {
+    //             url += `manufacturerName=${manufacturerName}`
+    //         }
+    //     }
+    //     let obs: Observable<any> | null = this.getReqDomen(url);
+    //     if (obs != null) {
+    //         return obs.pipe(map((components: any) => {
+    //             return components.map(function (option: any): any {
+    //                 return option;
+    //             });
+    //         }))
+    //     }
+    //     return obs;
+    // }
 
     getComponentsApiAll(query: Map<string, any> | void): Observable<any> | null {
         let url: string = "api/components/all?"
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
             return obs.pipe(map((res: any) => {
-                console.log(query)
                 if (query && res) {
                     const queryObject = Object.fromEntries(query)
                     let length = this.getActualQqueryLength(queryObject)
@@ -230,14 +229,12 @@ export class ApiService1 {
                         res[type] = values
                     }
                 }
-                console.log(res)
                 return res
             }))
         }
         return obs;
     }
     getComponentsApiAllWithProirityLevels(query: Map<string, any> | void): Observable<any> | null {
-        console.log('getComponentsApiAllWithProirityLevels')
         let url: string = "api/components/all?"
         let obs: Observable<any> | null = this.getReqDomen(url);
         if (obs != null) {
@@ -249,7 +246,6 @@ export class ApiService1 {
                     const queryObject = Object.fromEntries(query)
                     const ruComponentType = query.get('ruComponentType')
                     const queryArr = this.getActualQqueryAsArray(queryObject)
-                    console.log(queryArr)
                     for (const type in res) {
                         let values: any[] = []
                         for (const obj of res[type]) {
@@ -314,7 +310,6 @@ export class ApiService1 {
                         resWrapper.set(type, new Map().set(AppEnum.ALL, res[type]))
                     }
                 }
-                // console.log(resWrapper)
                 return resWrapper
 
             }))

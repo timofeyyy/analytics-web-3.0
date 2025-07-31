@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef, Component, HostListener, Input, input, OnChanges, OnDestroy, OnInit, Query, SimpleChanges } from '@angular/core';
 import { ChartType, NgApexchartsModule } from 'ng-apexcharts';
 import { catchError, combineLatest, forkJoin, map, Observable } from 'rxjs';
-import { chartOptionsData, observableApiMap } from '../../../assets/fetch.config';
+import { chartOptionsData, observableApiMap } from '../../fetch.config';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ChartOptions } from '../../../utils/types/chart';
 import { ApiService1 } from '../../../services/api.services1';
@@ -64,7 +64,7 @@ export class ChartTemplateComponent implements OnInit, OnChanges {
       this.getChartData(this.all, this.query, this.chart_name, this.type_name)
     }
   }
-
+  @Input()
   allias: Map<string, string> = new Map()
   getDataReady(query: Map<string, any>, req_name: string, chart_name: string, type_name: string): Partial<ChartOptions> | null {
     let getObservable: ((injector: ApiService1, data: Map<string, any>) => Observable<any> | null) | undefined = observableApiMap.get(req_name);

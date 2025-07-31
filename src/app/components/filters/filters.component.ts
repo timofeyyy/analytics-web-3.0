@@ -8,7 +8,6 @@ import { ComponentOptions, FilterDropBox } from '../../../utils/types/app';
 import { ApiService1 } from '../../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
 import { DropboxProviderComponent } from "../dropbox-provider/dropbox-provider.component";
-import { props } from '../../../assets/fetch.config';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./filters.component.css', '../styles/button.css'],
   providers: [ApiService1]
 })
-export class FiltersComponent implements OnInit, OnChanges {
+export class FiltersComponent implements OnChanges {
   @Input()
   all!: Partial<ComponentOptions>[]
   @Input()
@@ -31,7 +30,7 @@ export class FiltersComponent implements OnInit, OnChanges {
     private router: Router
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("onchange", this.tableColumns)
+    // console.log("onchange", this.tableColumns)
     this.onRuComponentTypeChanged()
   }
 
@@ -88,17 +87,12 @@ export class FiltersComponent implements OnInit, OnChanges {
   }
   apply(): void {
     const queryStr = this.makeQueryStr()
-    this.router.navigateByUrl(`/catalog${queryStr}`).then(() => {
+    this.router.navigateByUrl(`/filters${queryStr}`).then(() => {
       let payload = this.getSimpleKeyValueMap()
       this.onChange.emit(payload)
     })
   }
-  selectedColumns!: string[]
-
-  ngOnInit(): void {
-    this.selectedColumns = []
-  }
-
+  selectedColumns: string[] = []
   currentDropBoxName: string | undefined
   @Input()
   dropBoxPropsMapConfig!: Map<string, any>
@@ -112,7 +106,6 @@ export class FiltersComponent implements OnInit, OnChanges {
     if (this.tableColumns.size) {
       let keys: any = this.tableColumns!.keys()
       let columns: string[] = Array.from(keys)
-      console.log(columns)
       this.selectedColumns = columns
         .filter(function (value) {
           if (value === 'ruComponentType' || value === 'ruComponentKind' || value === 'manufacturerName') {

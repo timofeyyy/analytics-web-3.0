@@ -9,6 +9,11 @@
     margin: 1vw;
 }
 
+.workpsace-wrapper {
+    height: 100vh;
+    
+} 
+
 .catalog .body {
     margin: 1.5vw 0;
     height: 80%;

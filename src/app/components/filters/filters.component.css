@@ -37,7 +37,7 @@ h1 {
     padding: 1vw;
     box-sizing: border-box;
     width: 100%;
-    display: flex;
+    /* display: flex; */
     overflow-y: scroll;
 }
 
@@ -72,19 +72,18 @@ h1 {
 
 .popup-window .filters .body .base,
 .popup-window .filters .body .additional {
-    width: 50%;
+    width: 100%;
 }
 
 
 .popup-window .filters .body .additional {
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between;
-    align-items: center; */
-    border-left: 0.1vw solid lightgray;
+    border-top: 0.1vw solid lightgray;
     font-size: max(1.2vw, 12px);
     font-weight: 100;
-    padding-left: 1vw;
+    padding-top: 1vw;
+    margin-top: 2vw;
 }
 
 .popup-window .filters .body .additional p {

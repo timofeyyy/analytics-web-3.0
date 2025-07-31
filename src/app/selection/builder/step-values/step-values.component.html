@@ -2,7 +2,7 @@
 <div class="step-screen">
 
     <div class="step-body">
-        <app-chart *ngIf="queryObj.size" class="chart" [headerFontSize]="'max(1vw, 10px)'" [all]="obj"
+        <app-chart *ngIf="queryObj.size" class="chart" [allias]="allias" [headerFontSize]="'max(1vw, 10px)'" [all]="obj"
             [type_name]="'bar'" [chart_name]="'column'" [query]="queryObj" />
         <app-manufacturer-count-table class="table" [all]="manufacturersStat" [noRedirect]="true"
             (onValueChanged)="onManufacturerChanged($event)" />

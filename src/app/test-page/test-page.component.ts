@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentOptions } from '../../utils/types/app';
 import { forkJoin } from 'rxjs';
 import { ComponentTypeRuEnum } from '../../utils/enum/app.enum';
-import { props } from '../../assets/fetch.config';
+import { props } from '../fetch.config';
 import { ManufacturerCountTableComponent } from "../components/manufacturer-count-table/manufacturer-count-table.component";
 
 @Component({

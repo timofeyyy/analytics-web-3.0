@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ApiService1 } from '../../services/api.services1';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { observableApiMap, prioritySchemaWrapper2Map } from '../../assets/fetch.config';
+import { observableApiMap, prioritySchemaWrapper2Map } from '../fetch.config';
 import { forkJoin, map } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from "../components/navigator/navigator.component";

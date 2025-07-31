@@ -6,7 +6,7 @@ import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import { ComponentOptions } from '../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
-import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../../assets/fetch.config';
+import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../fetch.config';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from '../../components/navigator/navigator.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
@@ -30,7 +30,7 @@ export class TablePage implements OnInit {
   mainChartUrl!: any
   chartNames!: string[]
   priority!: string
-  priorities!: string[]
+  priorities!: [string, string][]
   columns!: string[]
   prioritySchemaWrapper2Map!: any
   activatedColumns!: any[]
@@ -59,7 +59,7 @@ export class TablePage implements OnInit {
     if (this.priority === undefined) {
       this.priority = AppEnum.ALL
       if (this.priorities.length) {
-        this.priority = this.priorities[this.priorities.length - 1]
+        this.priority = this.priorities[this.priorities.length - 1][0]
       }
       this.save = true
     }
@@ -96,12 +96,12 @@ export class TablePage implements OnInit {
     this.save ? this.resetStorage() : this.saveToStorage()
   }
 
-  getPriorityArrayFromQuery(): string[] {
-    const priorities: string[] = []
+  getPriorityArrayFromQuery(): [string, string][] {
+    const priorities: [string, string][] = []
     const queryObj = (this.route.snapshot.queryParamMap as any).params
     for (const key in queryObj) {
       if (propsMap.get(key) && key !== 'ruComponentType') {
-        priorities.push(key)
+        priorities.push([key, queryObj[key]])
       }
     }
     return priorities

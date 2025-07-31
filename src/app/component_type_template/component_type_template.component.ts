@@ -8,7 +8,7 @@ import componentTypeFilters from '../../utils/fnc1/filters/componentType';
 import { NgClass, NgFor } from '@angular/common';
 import { ApiService1 } from '../../services/api.services1';
 import { forkJoin } from 'rxjs';
-import { chartNamesMap, chartOptionsData, props } from '../../assets/fetch.config';
+import { chartNamesMap, chartOptionsData, prioritySchemaMap, props } from '../fetch.config';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -60,7 +60,7 @@ export class TypeTemplateComponent implements OnInit {
       this.ruComponentType = params.get('ruComponentType') as string
       let chartName = this.query.get('chartName')
       if (this.ruComponentType) {
-        this.getApi()        
+        this.getApi()
         if (!chartName) {
           chartName = 'ruComponentType'
         }
@@ -92,33 +92,21 @@ export class TypeTemplateComponent implements OnInit {
         this.storage.forEach((set: any) => {
           (set as []).forEach((item: any) => {
             if (!this.tableColumns.get(item.ruComponentType)) {
-              const tmp = new Map()
-              for (const key in item) {
-                const componentProps = this.dropBoxPropsMapConfig.get(key)
-                const alliasName = this.allias.get(`${key}`)
-                if (alliasName && componentProps && chartOptionsData[key]) {
-                  tmp.set(key, alliasName)
-                }
-              }
-              this.tableColumns.set(item.ruComponentType, tmp)
+              let columns = prioritySchemaMap.get(item.ruComponentType)! as string[]
+              this.tableColumns.set(item.ruComponentType, new Map(columns.map((value) => [value, this.allias.get(value) as string])).set("ruComponentType", this.allias.get("ruComponentType") as string))
             }
           })
         })
         this.displayedColumns = Array.from(this.tableColumns.get(`${this.ruComponentType}`)!.keys())
+        console.log(this.tableColumns)
+        console.log(this.displayedColumns)
       }
     });
   }
 
   onColumnSelected(column: string): void {
     this.currentPropName = column
-    // console.log(this.currentPropName) 
-    // this.query.set('chartName', column)
-    // this.router.navigate([], {
-    //   relativeTo: this.route,
-    //   queryParams: Object.fromEntries(this.query),
-    //   queryParamsHandling: 'merge',
-    //   skipLocationChange: false
-    // })
+
   }
 
 
@@ -135,24 +123,24 @@ export class TypeTemplateComponent implements OnInit {
     return chartNamesMap.get(name) as string
   }
 
-  getKeysMax(): string[] {
-    let res: string[] = []
-    if (this.statMax) {
-      for (const key in this.statMax) {
-        res.push(`${key}:\t${this.statMax[key]}`)
-      }
-    }
-    return res
-  }
-  getKeysMin(): string[] {
-    let res: string[] = []
-    if (this.statMin) {
-      for (const key in this.statMin) {
-        res.push(`${key}:\t${this.statMin[key]}`)
-      }
-    }
-    return res
-  }
+  // getKeysMax(): string[] {
+  //   let res: string[] = []
+  //   if (this.statMax) {
+  //     for (const key in this.statMax) {
+  //       res.push(`${key}:\t${this.statMax[key]}`)
+  //     }
+  //   }
+  //   return res
+  // }
+  // getKeysMin(): string[] {
+  //   let res: string[] = []
+  //   if (this.statMin) {
+  //     for (const key in this.statMin) {
+  //       res.push(`${key}:\t${this.statMin[key]}`)
+  //     }
+  //   }
+  //   return res
+  // }
 
   getValues(): string[] {
     let res: string[] = []

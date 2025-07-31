@@ -17,7 +17,7 @@
                     [name]="'ruComponentKind'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
             </div>
             <div class="additional">
-                <app-dropbox-provider *ngFor="let column of selectedColumns" [alliasName]="`${allias.get(column)}`"
+                <app-dropbox-provider *ngFor="let column of selectedColumns" [inputValue]="dropBoxPropsMapConfig.get(column).currentValue" [alliasName]="`${allias.get(column)}`"
                     [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig" [name]="column"
                     (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
             </div>

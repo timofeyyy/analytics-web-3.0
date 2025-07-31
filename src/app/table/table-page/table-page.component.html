@@ -56,14 +56,15 @@
                                 <p class="tabs-header">Добавление приоритета</p>
                                 <div class="tabs tabs-vertical">
                                     <div *ngFor="let p of priorities; let i = index"
-                                        [ngClass]="{tab: true, vertical: true, active: priority===p}"
-                                        (click)="priority = p; changePriorityInStorage(p); initColumns()">
+                                        [ngClass]="{tab: true, vertical: true, active: priority===p[0]}"
+                                        (click)="priority = p[0]; changePriorityInStorage(p[0]); initColumns()">
                                         <p>
                                             {{i + 1}}
                                             <!-- <span *ngIf="i !== 0">
                                                 Добавление приоритета
                                             </span> -->
-                                            {{allias.get(p)}}
+                                            {{allias.get(p[0])}}:
+                                            {{p[1]}}
                                         </p>
                                     </div>
                                 </div>

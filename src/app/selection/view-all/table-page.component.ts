@@ -6,7 +6,7 @@ import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import { ComponentOptions } from '../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
-import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../../assets/fetch.config';
+import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../fetch.config';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from '../../components/navigator/navigator.component';
 import { LoaderComponent } from '../../components/loader/loader.component';

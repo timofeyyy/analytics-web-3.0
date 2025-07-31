@@ -1,4 +1,4 @@
-import { columnsMax } from "../../../assets/fetch.config"
+import { columnsMax } from "../../../app/fetch.config"
 
 const existInColumnsMax = (column: string): boolean => {
     return columnsMax.findIndex((value) => value == column) !== -1

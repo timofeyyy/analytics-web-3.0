@@ -180,7 +180,7 @@ export const chartOptionsData: ChartOptionsStorage = {
       //   label = `Количественная статистика производителей по компонентам типа "${componentType}"`
       // }
       return `Количественная статистика значений параметра ${allias}`
-    }
+    }  
   },
   "ruComponentType-next-chart": {
     chartData: {
@@ -581,157 +581,6 @@ export const props = {
 }
 
 
-export const propsInput = {
-  'manufacturerName': {
-    currentValue: "",
-    input: true,
-  },
-  'ruComponentKind': {
-    currentValue: "",
-    input: true,
-  },
-  'bitDepthValue': {
-    currentValue: "",
-    input: true
-  },
-  'ruTechnologyName': {
-    currentValue: "",
-    input: true
-  },
-  'frequency': {
-    currentValue: "",
-    input: true
-  },
-  'minOperatingTemperature': {
-    currentValue: "",
-    input: true
-  },
-  'maxOperatingTemperature': {
-    currentValue: "",
-    input: true
-  },
-  'radiationResistance': {
-    currentValue: "",
-    input: true
-  },
-  'radiationResistanceI': {
-    currentValue: "",
-    input: true
-  },
-  'samplingTime': {
-    currentValue: "",
-    input: true
-  },
-  'minVoltage': {
-    currentValue: "",
-    input: true
-  },
-  'maxVoltage': {
-    currentValue: "",
-    input: true
-  },
-  'outputType': {
-    currentValue: "",
-    input: true
-  },
-  'ruComponentType': {
-    currentValue: "",
-    input: true
-  },
-  'enComponentType': {
-    currentValue: "",
-    input: true
-  },
-  'maxPermissibleAverageDirectCurrent': {
-    currentValue: "",
-    input: true
-  },
-  'maxiPermissibleDirectCurrent': {
-    currentValue: "",
-    input: true
-  },
-  'package': {
-    currentValue: "",
-    input: true
-  },
-  'maxPermissibleDCVoltage': {
-    currentValue: "",
-    input: true
-  },
-  'maxPermissibleDCCollectorCurrent': {
-    currentValue: "",
-    input: true
-  },
-  'qualication': {
-    currentValue: "",
-    input: true
-  },
-  'interfaces': {
-    currentValue: "",
-    input: true
-  },
-  'remark2': {
-    currentValue: "",
-    input: true
-  },
-  'remark1': {
-    currentValue: "",
-    input: true
-  },
-  'qualicationЕС': {
-    currentValue: "",
-    input: true
-  },
-  'qualicationSG': {
-    currentValue: "",
-    input: true
-  },
-  'minCapacity': {
-    currentValue: "",
-    input: true
-  },
-  'memoryFormat': {
-    currentValue: "",
-    input: true
-  },
-  'maxCapacity': {
-    currentValue: "",
-    input: true
-  },
-  'consumptionCurrent': {
-    currentValue: "",
-    input: true
-  },
-  'acceptableСapacityReduction': {
-    currentValue: "",
-    input: true
-  },
-  'acceptableCapacityIncrease': {
-    currentValue: "",
-    input: true
-  },
-  'powerRating': {
-    currentValue: "",
-    input: true
-  },
-  'currentLimit': {
-    currentValue: "",
-    input: true
-  },
-  'maxRatedResistance': {
-    currentValue: "",
-    input: true
-  },
-  'minRatedResistance': {
-    currentValue: "",
-    input: true
-  },
-  'resistanceTolerance': {
-    currentValue: "",
-    input: true
-  }
-}
-
 const chartNames = {
   "donut": "Кольцевая диаграмма",
   "pie": "Круговая диаграмма",
@@ -862,7 +711,6 @@ export const prioritySchemaWrapperMap: Map<string, string> = new Map(Object.entr
 export const prioritySchemaWrapper2Map: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper2));
 export const chartNamesMap: Map<string, string> = new Map(Object.entries(chartNames));
 export const propsMap: Map<string, any> = new Map(Object.entries(props));
-export const propsInputMap: Map<string, any> = new Map(Object.entries(propsInput));
 export const observableApiMap: Map<string, (injector: ApiService1, data: Map<string, any>) => Observable<any> | null> = new Map(Object.entries(observableApi));
 // export const propsNamesMap: Map<string, ComponentProp[]> = new Map(Object.entries(propsNames));
 

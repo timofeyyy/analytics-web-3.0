@@ -11,6 +11,18 @@
     height: 100%;
 }
 
+.workspace main .chart-wrapper .chart-wrapper-main .chart-window iframe {
+    width: 85%;
+}
+
+.workspace main .chart-wrapper .chart-wrapper-main .chart-window .tabs-vertical {
+    width: 15%;
+}
+
+.workspace main .chart-wrapper .chart-wrapper-main .chart-window .tabs-vertical .tab {
+    width: 99%;
+}
+
 .workspace main .chart-wrapper .chart-wrapper-main .chart-window,
 .workspace main .wrapper .selection {
     background-color: white;
@@ -75,7 +87,7 @@
 }
 
 .chart-window .tabs-vertical {
-    margin-top: 5vw;
+    margin: 2vw 0;
 }
 
 .side-panel h1 {

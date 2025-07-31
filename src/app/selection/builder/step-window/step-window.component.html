@@ -6,10 +6,9 @@
         <main>
             <section class="component-selection">
                 <div class="view"  >
-                    <!-- [ngStyle]="{width: step >= 2 ? '0': '30%'}" -->
                     <div class="info">
                         <h1>Таблица: 
-                            {{dropBoxPropsMapConfig.get('ruComponentType').currentValue === '' ? 'Не указано' :
+                            {{dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все' ? 'Не указано' :
                             `${dropBoxPropsMapConfig.get('ruComponentType').currentValue}`}}
                             </h1>
                         <p *ngFor="let column of priorities; let i = index;" [ngClass]="{disabled:st && i > step - 2 }" >{{allias.get(column[0])}}{{activeKeys.get(column[0]) ? `: ${activeKeys.get(column[0])}` : ''}}  <span>Приоритет {{column[1]['priority'] === 0 ? 'неуказан': column[1]['priority']}}</span></p>

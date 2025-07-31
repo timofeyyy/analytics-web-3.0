@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, input, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
 import { FiltersComponent } from '../components/filters/filters.component';
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
@@ -10,7 +10,10 @@ import { ComponentOptions } from '../../utils/types/app';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoaderComponent } from '../components/loader/loader.component';
 import { ApiService1 } from '../../services/api.services1';
-import { props } from '../../assets/fetch.config';
+import { prioritySchemaMap, props } from '../fetch.config';
+import { setCurrentValue, store } from '../../utils/redux/storage';
+import existInColumnsMin from '../../utils/fnc1/other/existInColumnsMin';
+import existInColumnsMax from '../../utils/fnc1/other/existsInColumnsMax';
 
 @Component({
   selector: 'app-catalog',
@@ -25,25 +28,25 @@ import { props } from '../../assets/fetch.config';
 
 export class CatalogComponent implements OnInit {
 
-  filter!: boolean
-  records!: ComponentOptions[]
-  orig!: ComponentOptions[]
-  copy!: ComponentOptions[]
-  all!: ComponentOptions[]
-  storage!: Map<any, any[]>
-  allias!: Map<string, string>
-  pages!: number[]
-  from!: number
-  to!: number
-  currentPage!: number
-  last!: number
+  filter: boolean = false
+  records: ComponentOptions[] = []
+  // orig: ComponentOptions[] = []
+  searchBuffer: ComponentOptions[] = []
+  all: ComponentOptions[] = []
+  storage: Map<any, any[]> = new Map()
+  allias: Map<string, string> = new Map()
+  pages: number[] = []
+  from: number = 0
+  to: number = 1
+  currentPage: number = 0
+  last: number = 1
   loader!: boolean
-  allTableColumns!: Map<string, Map<string, string>>
-  tableColumns!: Map<string, string>
-  dropBoxPropsMapConfig!: Map<string, any>
+  allTableColumns: Map<string, Map<string, string>> = new Map()
+  tableColumns: Map<string, string> = new Map()
+  dropBoxPropsMapConfig: Map<string, any> = new Map()
   error!: string
   iconName!: 'invalid_file' | 'not_found'
-  displayedRuComponentTypes!: string[]
+  displayedRuComponentTypes: string[] = []
 
 
   constructor(
@@ -54,79 +57,89 @@ export class CatalogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+
+
     const query: Map<string, string> = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params))
-    this.loader = true
-    this.filter = false
-    this.records = []
-    this.orig = []
-    this.all = []
-    this.copy = []
-    this.pages = []
-    this.displayedRuComponentTypes = []
-    this.to = 1
-    this.from = 0
-    this.currentPage = 0
-    this.last = 1
-    this.storage = new Map()
-    this.allias = new Map()
-    this.tableColumns = new Map()
-    this.allTableColumns = new Map()
-    const dropBoxPropsClone: any = {};
-    for (const [key, value] of Object.entries(props)) {
-      dropBoxPropsClone[key] = { ...value };
-    }
-    this.dropBoxPropsMapConfig = new Map(Object.entries(dropBoxPropsClone));
+    this.initDropBoxMapConfig();
 
     query.forEach((value, key) => {
       if (this.dropBoxPropsMapConfig.get(key)) {
         this.dropBoxPropsMapConfig.get(key).currentValue = value
+        store.dispatch(setCurrentValue([key, value]))
+        // console.log(store.getState().currentValues)
+        //frequency=100&ruComponentType=Микросхема&page=0
       }
     })
     this.getApi(query)
   }
 
-  setQuery(query: Map<string, string>): Promise<Map<string, string>> {
-    const queryCopy: Map<string, string | null> = query
-    if (queryCopy.get('ruComponentType') === AppEnum.ALL) {
-      queryCopy.set('ruComponentType', null)
+  initDropBoxMapConfig(exceptions: Map<string, any> | void): void {
+    const dropBoxPropsClone: any = {};
+    for (const [key, value] of Object.entries(props)) {
+      dropBoxPropsClone[key] = (exceptions && exceptions.get(key)) ? exceptions.get(key) : { currentValue: AppEnum.ALL, input: false };
     }
+    this.dropBoxPropsMapConfig = new Map(Object.entries(dropBoxPropsClone));
+  }
+
+  setQuery(query: Map<string, string>, queryParamsHandlingState: 'replace' | 'merge'): Promise<Map<string, string>> {
+    const querysearchBuffer: Map<string, string | null> = query
+    if (querysearchBuffer.get('ruComponentType') === AppEnum.ALL) {
+      querysearchBuffer.set('ruComponentType', null)
+    }
+    // console.log(Object.fromEntries(querysearchBuffer))
     return this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: Object.fromEntries(queryCopy),
-      queryParamsHandling: 'merge',
-      skipLocationChange: false
+      queryParams: Object.fromEntries(querysearchBuffer),
+      queryParamsHandling: queryParamsHandlingState,
+      skipLocationChange: false,
     }).then(() => {
-      if (queryCopy.get('ruComponentType') === null) {
-        queryCopy.delete('ruComponentType')
+      if (querysearchBuffer.get('ruComponentType') === null) {
+        querysearchBuffer.delete('ruComponentType')
       }
-      return queryCopy as Map<string, string>
+      return querysearchBuffer as Map<string, string>
     });
   }
 
   apply(payload: Map<string, string>): void {
     if (payload) {
-      this.copy = []
-      // console.log(payload, this.all)
+      Array.from(payload).forEach((column: [string, string]) => {
+        if (column[0] != 'ruComponentType') {
+          store.dispatch(setCurrentValue(column))
+        }
+      })
+      this.searchBuffer = []
+      // console.log(this.all)
       this.all.forEach((item: Partial<ComponentOptions>, index) => {
         let countProp: number = payload.size
         let countMatch: number = 0;
         payload.forEach((value, key) => {
           let val = (item.component as any)[key]
           if (val !== undefined) {
-            if ((val === value || value === AppEnum.ALL) || (val === null && (value === null || value === "null"))) {
+            if (
+              (val == value || value == AppEnum.ALL) ||
+              (val == null && (value == null || value == "null"))
+              ||
+              // (val == null && queryObject[key].replace(AppEnum.NOTDEFINED, null) == `${obj[key]}`) ||
+              // (obj[key] == '' && queryObject[key].replace(AppEnum.NOTDEFINED, "") == `${obj[key]}`) ||
+              (existInColumnsMin(key) && !isNaN(Number(value)) && val >= Number(value)) ||
+              (existInColumnsMax(key) && !isNaN(Number(value)) && val <= value) ||
+              (val == value) ||
+              (val == Number(value))
+            ) {
               countMatch++
             }
           }
         })
         if (countProp == countMatch) {
-          this.copy.push(item as ComponentOptions)
+          this.searchBuffer.push(item as ComponentOptions)
         }
       })
-      // console.log(window.location.href)
+      this.resultBuffer = Array.from(this.searchBuffer);
       this.changeCurrentPage(0)
       this.from = 0
-      this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
-      this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
+      this.last = Math.ceil(this.searchBuffer.length / 20) === 0 ? 0 : Math.ceil(this.searchBuffer.length / 20) - 1
+      this.to = this.searchBuffer.length / 20 <= 10 ? Math.ceil(this.searchBuffer.length / 20) : 10
       this.updatePages()
       this.selectPage()
     }
@@ -156,6 +169,7 @@ export class CatalogComponent implements OnInit {
 
 
   getApi(payload: Map<string, string>): void {
+    this.loader = true
     forkJoin([
       // this.api.getDiods(),
       // this.api.getTransistors(),
@@ -172,24 +186,48 @@ export class CatalogComponent implements OnInit {
       this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[0]["resistors"])
       const allias = (res as any[])[1]
       this.allias = new Map<string, string>(Object.entries(allias))
-      // console.log(this.allias)
       if (this.storage.size === 5) {
-
-        // let componetns: any[] = this.api.getComponentsFromConfig()
         this.storage.forEach((set: any) => {
           (set as []).forEach((item: any) => {
             let markup: string = ''
             let filters: string[] = []
             let satisfyCount: number = 0;
+            // payload.forEach((value, key) => {
+            //   if (item[key] && (item[key] == value || value == AppEnum.ALL) || key === 'page') {
+            //     satisfyCount++;
+            //   }
+            // })
+            const actualPayload = payload
+            actualPayload.delete('page')
             payload.forEach((value, key) => {
-              if (item[key] && (item[key] == value || value == AppEnum.ALL) || key === 'page') {
-                satisfyCount++;
+              let val = (item as any)[key]
+              if (val !== undefined) {
+                // console.log([
+                //   (val == value || value == AppEnum.ALL),
+                //   (val == null && (value == null || value == "null")),
+                //   (existInColumnsMin(key) && !isNaN(Number(value)) && val >= Number(value)),
+                //   (existInColumnsMax(key) && !isNaN(Number(value)) && val <= value),
+                //   (val == value),
+                //   (val == Number(value)),
+                //   key,
+                //   value,
+                //   val
+                // ])
+                if (
+                  (val == value || value == AppEnum.ALL) ||
+                  (val == null && (value == null || value == "null"))
+                  ||
+                  // (val == null && queryObject[key].replace(AppEnum.NOTDEFINED, null) == `${obj[key]}`) ||
+                  // (obj[key] == '' && queryObject[key].replace(AppEnum.NOTDEFINED, "") == `${obj[key]}`) ||
+                  (existInColumnsMin(key) && !isNaN(Number(value)) && val >= Number(value)) ||
+                  (existInColumnsMax(key) && !isNaN(Number(value)) && val <= value) ||
+                  (val == value) ||
+                  (val == Number(value))
+                ) {
+                  satisfyCount++
+                }
               }
             })
-            // let cItemIndex = componetns.findIndex(
-            //   (cItem: any) => cItem.nameRu === item.ruComponentType
-            // )
-            // console.log(item.ruComponentType)
             switch (item.ruComponentType) {
               case ComponentTypeRuEnum.MICROCHIP:
                 markup = `
@@ -230,44 +268,37 @@ export class CatalogComponent implements OnInit {
                   `
                 break;
             }
-            if (payload.size == satisfyCount) {
-              this.orig.push({
+
+            if (actualPayload.size == satisfyCount) {
+              this.searchBuffer.push({
                 component: item,
                 html: this.sanitizer.bypassSecurityTrustHtml(markup),
                 filters: filters,
-                // img: componetns[cItemIndex].image
               })
             }
             this.all.push({
               component: item,
               html: this.sanitizer.bypassSecurityTrustHtml(markup),
               filters: filters,
-              // img: componetns[cItemIndex].image
             })
             if (!this.allTableColumns.get(item.ruComponentType)) {
-              const tmp = new Map()
-              for (const key in item) {
-                const componentProps = this.dropBoxPropsMapConfig.get(key)
-                const alliasName = this.allias.get(`${key}`)
-                if (alliasName && componentProps && key !== 'ruComponentType') {
-                  tmp.set(key, alliasName)
-                }
-              }
-              this.allTableColumns.set(item.ruComponentType, tmp)
-
+              let columns = prioritySchemaMap.get(item.ruComponentType)! as string[]
+              this.allTableColumns.set(item.ruComponentType, new Map(columns.map((value) => [value, this.allias.get(value) as string])))
             }
           })
         })
+        let ruComponentType = payload.get('ruComponentType')
+        if (ruComponentType) {
+          this.tableColumns = this.allTableColumns.get(ruComponentType)!
+        }
         this.displayedRuComponentTypes = Array.from(this.storage.keys())
-        this.copy = Array.from(this.orig);
+        this.resultBuffer = Array.from(this.searchBuffer);
         this.from = 0
-        console.log(this.allTableColumns)
-        this.last = Math.ceil(this.copy.length / 20) === 0 ? 0 : Math.ceil(this.copy.length / 20) - 1
+        this.last = Math.ceil(this.searchBuffer.length / 20) === 0 ? 0 : Math.ceil(this.searchBuffer.length / 20) - 1
         if (payload.get('page')) {
           if (!isNaN(parseInt(payload.get('page') as string))) {
             const value = parseInt(payload.get('page') as string)
-            // console.log(Math.ceil(this.orig.length / 20), value)
-            if (Math.ceil(this.orig.length / 20) < value) {
+            if (Math.ceil(this.searchBuffer.length / 20) < value) {
               this.error = "Ничего не найдено"
               this.iconName = "not_found"
             }
@@ -280,7 +311,6 @@ export class CatalogComponent implements OnInit {
                 this.to = this.last + 1
               }
               this.changeCurrentPage(value)
-              // console.log(this.from, this.to)
             }
           }
           else {
@@ -289,37 +319,54 @@ export class CatalogComponent implements OnInit {
           }
         }
         else {
-          this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
+          this.to = this.searchBuffer.length / 20 <= 10 ? Math.ceil(this.searchBuffer.length / 20) : 10
         }
 
         this.selectPage()
         this.updatePages()
-
-        // this.reCountPagesNumbers()
-        // console.log(this.all.length)
-        // console.log(this.orig.length)
-        // console.log(this.copy.length)
       }
+
       this.loader = false
     });
   }
 
   onTypeSelected(ruComponentType: string): void {
-    let value = ruComponentType
-    if (this.dropBoxPropsMapConfig.get('ruComponentType').currentValue === ruComponentType) {
-      value = AppEnum.ALL
-    }
-    this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = value
-    
-    if (this.dropBoxPropsMapConfig.get('ruComponentType').currentValue === AppEnum.ALL) {
+    let exceptions
+    let currentValues: any = store.getState().currentValues
+    // console.log(currentValues)
+    if (ruComponentType === AppEnum.ALL) {
       this.tableColumns = new Map()
     }
     else {
-      this.tableColumns = this.allTableColumns.get(value)!
+      this.tableColumns = this.allTableColumns.get(ruComponentType)!
+      exceptions = new Map()
+        .set('manufacturerName', this.dropBoxPropsMapConfig.get('manufacturerName'))
+        .set('ruComponentKind', this.dropBoxPropsMapConfig.get('ruComponentKind'))
+
     }
+
+    this.initDropBoxMapConfig(exceptions);
+    // console.log(this.tableColumns)
+    for (const key in currentValues) {
+      if (this.tableColumns.has(key)) {
+        this.dropBoxPropsMapConfig.get(key)!.currentValue = currentValues[key]
+        // exceptions.set(key, currentValues[key])
+      }
+    }
+    this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = ruComponentType
+    // console.log(this.dropBoxPropsMapConfig)
     let map = this.getSimpleKeyValueMap()
-    this.setQuery(map).then((res) => {
-      // console.log(res.size, res)
+    // let query = map
+    // if(exceptions) {
+    //   query = {...query, ...Object.fromEntries(exceptions) }
+    // }
+    // console.log(query)
+    // if (exceptions) {
+    //   for (const key in currentValues) {
+    //   }
+    // }
+    // console.log(map)
+    this.setQuery(map, 'replace').then((res) => {
       this.apply(res)
     })
   }
@@ -330,7 +377,7 @@ export class CatalogComponent implements OnInit {
 
   changeCurrentPage(value: number): void {
     this.currentPage = value
-    this.setQuery(new Map().set('page', value))
+    this.setQuery(new Map().set('page', value), 'merge')
   }
 
   updatePages(): void {
@@ -342,7 +389,7 @@ export class CatalogComponent implements OnInit {
 
   selectPage(): void {
     this.records = []
-    this.copy.forEach((item: ComponentOptions, index: number) => {
+    this.searchBuffer.forEach((item: ComponentOptions, index: number) => {
       if (index >= (this.currentPage) * 20 && index < (this.currentPage + 1) * 20) {
         this.records.push(item)
       }
@@ -411,28 +458,23 @@ export class CatalogComponent implements OnInit {
     }
   }
 
-  // getSafeUrl(url: string): any {
-  //   return this.sanitizer.bypassSecurityTrustResourceUrl(url)
-  // }
-
   getPdfUrl(item: any): string | null {
     return !item.component.remark1 ? null : `http://localhost:5000/datasheets/${item.component.remark1}.pdf`
   }
-
+  resultBuffer: ComponentOptions[] = []
   search(event: any): void {
     let value: string = event.target.value
-    // console.log(value)
     this.records = []
-    this.copy = []
-    this.orig.forEach((item: ComponentOptions) => {
+    this.resultBuffer = []
+    this.searchBuffer.forEach((item: ComponentOptions) => {
       if (this.include(item, value)) {
-        this.copy.push(item)
+        this.resultBuffer.push(item)
       }
     })
     this.from = 0
     this.changeCurrentPage(0)
-    this.last = Math.ceil(this.copy.length / 20) - 1
-    this.to = this.copy.length / 20 <= 10 ? Math.ceil(this.copy.length / 20) : 10
+    this.last = Math.ceil(this.searchBuffer.length / 20) - 1
+    this.to = this.searchBuffer.length / 20 <= 10 ? Math.ceil(this.searchBuffer.length / 20) : 10
     this.updatePages()
     this.selectPage()
   }
@@ -447,9 +489,5 @@ export class CatalogComponent implements OnInit {
       }
     }
     return true;
-  }
-
-  openTable(): void {
-    this.router.navigateByUrl('table-builder')
   }
 }

@@ -26,9 +26,12 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
       if (this.propsMap.get(this.name).sort) {
         this.values = this.propsMap.get(this.name).sort(this.propsMap, this.all)
       }
-      else {
-        this.values = componentTypeFilters(this.name, this.all)
-      }
+      else { 
+        if (!this.values.length) {
+          this.values = componentTypeFilters(this.name, this.all)
+          // console.log(this.values)
+        }
+      } 
       this.currentValue = this.propsMap.get(this.name).currentValue
     }
     // if (this.isTableProp() && this.isTableInput()) { 
@@ -76,9 +79,8 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
     this.onStateChanged.emit({ propsMap: this.propsMap, currentName: obj.currentName })
   }
   err!: Error
-  values!: string[]
+  values: string[] = []
   ngOnInit(): void {
-    this.values = []
     if (!this.isTableProp()) {
       this.err = new Error(`${this.name} key in propsMap does not exist`);
       throw this.err

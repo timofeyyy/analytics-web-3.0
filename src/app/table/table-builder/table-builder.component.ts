@@ -6,7 +6,7 @@ import { ApiService1 } from '../../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
 import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import { forkJoin } from 'rxjs';
-import { prioritySchemaMap, prioritySchemaWrapperMap, props, propsMap } from '../../../assets/fetch.config';
+import { prioritySchemaMap, prioritySchemaWrapperMap, props, propsMap } from '../../fetch.config';
 import { ThisReceiver } from '@angular/compiler';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../../components/loader/loader.component";

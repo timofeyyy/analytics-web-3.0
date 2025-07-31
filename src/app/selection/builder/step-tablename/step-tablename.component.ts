@@ -12,7 +12,10 @@ import { RuComponentTypeFormatPipe } from '../../../pipes/ruComponentTypesFormat
   styleUrls: ['./step-tablename.component.css', '../step-window/step-window.component.css']
 })
 
-export class StepTablenameComponent {
+export class StepTablenameComponent implements OnInit {
+  ngOnInit(): void {
+    
+  }
 
   @Input()
   index!: number
@@ -33,4 +36,5 @@ export class StepTablenameComponent {
     this.current = (this.current === enComponentType ? "" : enComponentType)
     this.sourceChanged.emit([enComponentType, this.storage.get(enComponentType)])
   }
+  
 }

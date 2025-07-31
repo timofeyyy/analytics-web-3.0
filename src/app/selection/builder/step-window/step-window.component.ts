@@ -8,7 +8,7 @@ import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { StepPrioritiesComponent } from "../step-priorities/step-priorities.component";
 import { StepValuesComponent } from "../step-values/step-values.component";
 import { AppEnum, ComponentTypeEnEnum } from '../../../../utils/enum/app.enum';
-import { prioritySchemaMap, props, propsInput, propsInputMap } from '../../../../assets/fetch.config';
+import { prioritySchemaMap, props } from '../../../fetch.config';
 import { LoaderComponent } from "../../../components/loader/loader.component";
 import { ComponentOptions } from '../../../../utils/types/app';
 import { Router } from '@angular/router';
@@ -55,8 +55,8 @@ export class StepWindowComponent implements OnInit {
 
   initDropBoxMapConfig(exceptionsMap: Map<string, any> | void): Map<string, any> {
     const dropBoxPropsClone: any = {};
-    for (const [key, value] of Object.entries(propsInput)) {
-      dropBoxPropsClone[key] = { ...value };
+    for (const [key, value] of Object.entries(props)) {
+      dropBoxPropsClone[key] = { currentValue: '', input: true };
       if (exceptionsMap) {
         let exceptionValue = exceptionsMap.get(key)
         if (exceptionsMap.get(key)) {
@@ -93,11 +93,6 @@ export class StepWindowComponent implements OnInit {
   }
   next(): void {
     if (this.step <= this.stepLength) {
-      // let old = this.stepper.get(`step${this.step}`)?.key
-      // let prevSeleciton: any = this.all
-      // if (old) {
-      //   prevSeleciton = this.activeKeys.get(old)?.selection
-      // }
       if (!this.stepper.get(`step${this.step + 1}`)?.isReady) {
         alert("Преждем чем перейти дальше заполните текущий этап полностью")
         return
@@ -109,11 +104,6 @@ export class StepWindowComponent implements OnInit {
       else {
         this.move()
       }
-      // let key = this.stepper.get(`step${this.step}`)?.key
-      // if(key) {
-      //   this.activeKeys.set(key, { value: "", selection: prevSeleciton })
-      // }
-      // console.log(this.activeKeys, key)
     }
   }
   priorities: [] = []
@@ -168,6 +158,11 @@ export class StepWindowComponent implements OnInit {
       this.move()
     }
   }
+
+  // tryInitType(query: Map<string, string>): void {
+  //   const ruComponentType = query.get('ruComponentType')
+  // }
+
   onTypeSelected(ruComponentType: string): void {
     this.activeKeys = new Map()
     let value: string = AppEnum.ALL
@@ -183,6 +178,7 @@ export class StepWindowComponent implements OnInit {
   }
   onSourceChanged(entries: [string, any[]]): void {
     this.all = entries[1].map((el) => { return { component: el } })
+    console.log(entries)
     let value: string = AppEnum.ALL
     // console.log(this.dropBoxPropsMapConfig.get('enComponentType'),)
 

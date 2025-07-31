@@ -38,11 +38,12 @@ li {
 .options .list-wrapper .list .values {
     margin-bottom: 1vw;
     word-wrap: break-word;
+    font-weight: 100;
 }
 
 .values-wrapper {
-    /* position: relative; */
-    position: fixed;
+    position: relative;
+    /* position: fixed; */
 }
 
 .options .values-wrapper {
