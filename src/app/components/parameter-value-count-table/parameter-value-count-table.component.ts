@@ -15,7 +15,9 @@ export class ParameterValueCountTableComponent implements OnChanges {
   @Input()
   all!: any[]
   @Input()
-  parameter!: string
+  parameter!: string     
+  @Input()
+  borderRadius: string = '.5vw'
   constructor(
     private router: Router,
     private route: ActivatedRoute
@@ -28,7 +30,8 @@ export class ParameterValueCountTableComponent implements OnChanges {
   @Input()
   currentValue: string | undefined
   getValue(value: string): void {
-    this.currentValue = (this.currentValue == value ? undefined : value)
+    this.currentValue = value
+    // this.currentValue = (this.currentValue == value ? undefined : value)
     this.onValueChanged.emit(value)
   }
 }

@@ -1,5 +1,4 @@
 import { ChartOptions } from "../../types/chart";
-import getMinMax from "../other/getMinMaxFromMap";
 const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
         series: [{

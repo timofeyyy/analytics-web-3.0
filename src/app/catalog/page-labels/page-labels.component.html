@@ -1,0 +1,10 @@
+<div class="footer">
+    <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
+    <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
+    <p *ngFor="let page of pages" (click)="changeCurrentPage(page); selectPage()"
+        [ngClass]="{active: page === currentPage}">{{page}}</p>
+    <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
+    <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
+    <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}
+    </p>
+</div>

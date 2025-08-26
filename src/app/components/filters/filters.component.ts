@@ -30,7 +30,6 @@ export class FiltersComponent implements OnChanges {
     private router: Router
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log("onchange", this.tableColumns)
     this.onRuComponentTypeChanged()
   }
 

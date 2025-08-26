@@ -8,7 +8,7 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
   templateUrl: './navigator.component.html',
   styleUrl: './navigator.component.css'
 })
-export class NavigatorComponent implements OnInit, OnChanges {
+export class NavigatorComponent implements OnInit {
   isOpen!: boolean
   chartSection!: boolean
   viewSection!: boolean
@@ -21,9 +21,6 @@ export class NavigatorComponent implements OnInit, OnChanges {
   current!: string
 
   constructor(private router: Router) { }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.current)
-  }
 
   ngOnInit(): void {
     this.isOpen = false

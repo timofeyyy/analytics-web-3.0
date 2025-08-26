@@ -26,17 +26,32 @@
                             <div class="options-wrapper-body">
                                 <p *ngFor="let ruComponentType of displayedRuComponentTypes"
                                     [ngClass]="{type: true,  activated: dropBoxPropsMapConfig.get('ruComponentType').currentValue === ruComponentType}"
-                                    (click)="onTypeSelected(ruComponentType)">
+                                    (click)="onTypeChanged(ruComponentType)">
                                     {{ruComponentType}}</p>
                                 <p [ngClass]="{type: true,  activated: dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все'}"
-                                    (click)="onTypeSelected('Все')">
+                                    (click)="onTypeChanged('Все')">
                                     Все</p>
+                            </div>
+                        </div>
+                        <div class="option-wrapper" [ngStyle]="{display: selectedKeysValues.length ? 'block' : 'none'}">
+                            <p class="option-wrapper-header">Выбранные параметры</p>
+                            <div class="options-wrapper-body view-panel">
+                                <p class="value" *ngFor="let record of selectedKeysValues">{{allias.get(record[0])}}: {{record[1]}}</p>
+                               
                             </div>
                         </div>
                     </div>
                     <div class="option-footer">
-                        <div class="preview" (click)="filter=!filter">
+                        <div class="action action-filters" (click)="filter=!filter" [ngStyle]="{width: selectedKeysValues.length ? '48%' : '100%'}">
                             <p>Дополнительные параметры</p>
+                        </div>
+                        <div class="action action-reset" 
+                            [ngStyle]="{display: selectedKeysValues.length ? 'flex' : 'none'}"
+                            (click)="
+                                resetKeyAndValues(dropBoxPropsMapConfig.get('ruComponentType').currentValue);
+                                onTypeChanged(dropBoxPropsMapConfig.get('ruComponentType').currentValue)
+                                ">
+                            <p>Отчистить выбранные параметры</p>
                         </div>
                     </div>
                 </div>
@@ -53,7 +68,6 @@
                         <div class="item" *ngFor="let item of records">
                             <div class="info">
                                 <div class="h">
-                                    <!-- <img [src]="getSafeUrl(item.img)" alt="" /> -->
                                     <h1>Тип компонента: {{item.component.ruComponentType}}</h1>
                                 </div>
                                 <h5>Производитель: {{item.component.manufacturerName}}</h5>
@@ -70,16 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="footer">
-                        <img class="prev-set" src="assets/images/double-left.svg" (click)="prevSet()" alt="prev-set">
-                        <img class="back" src="assets/images/left.svg" (click)="prev()" alt="prev">
-                        <p *ngFor="let page of pages" (click)="changeCurrentPage(page); selectPage()"
-                            [ngClass]="{active: page === currentPage}">{{page}}</p>
-                        <img class="next" src="assets/images/right.svg" (click)="next()" alt="next">
-                        <img class="next-set" src="assets/images/double-right.svg" (click)="nextSet()" alt="next-set">
-                        <p [ngStyle]="{'display': to === last + 1 ? 'none' : 'block'}" (click)="getLatest()">{{last}}
-                        </p>
-                    </div>
+                    <app-page-labels [records]="this.resultBuffer" (onPageSelected)="selectPage($event)" />
                 </main>
             </ng-template>
         </div>

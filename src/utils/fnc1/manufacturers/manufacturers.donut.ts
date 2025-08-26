@@ -1,8 +1,4 @@
 import { ChartOptions } from "../../types/chart";
-import { BitDepthValue } from "../../types/microchip";
-import getMinMax from "../other/getMinMaxFromMap";
-
-
 
 const getManufacturersChartOptionDonut1 = (data: any): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {

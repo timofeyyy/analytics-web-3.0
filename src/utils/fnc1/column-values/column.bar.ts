@@ -1,9 +1,4 @@
-import { JsonPipe } from "@angular/common";
 import { ChartOptions } from "../../types/chart";
-import getMinMax from "../other/getMinMaxFromMap";
-import existInColumnsMin from "../other/existInColumnsMin";
-import existInColumnsMax from "../other/existsInColumnsMax";
-import { AppEnum } from "../../enum/app.enum";
 import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar";
 
 const getColumnStatBarChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
@@ -59,15 +54,16 @@ const getColumnStatBarChartOptions = (data: any, query: Map<string, string>): Pa
     let manufacturerName = query.get('manufacturerName')
     const ruComponentType = query.get('ruComponentType')
     if (param && ruComponentType) {
+        console.log(data)
         for (const key in data) {
             for (const obj of data[key]) {
-                if (obj.ruComponentType != ruComponentType) {
+                if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
                     break;
                 }
                 const value = obj[param] ? `${obj[param]}` : 'Не указано'
                 if (value === undefined) {
                     for (const key in obj) {
-                        if (key.toLocaleLowerCase() === param.toLowerCase()) {
+                        if (key.toLowerCase() === param.toLowerCase()) {
                             param = key
                             break
                         }
@@ -90,7 +86,7 @@ const getColumnStatBarChartOptions = (data: any, query: Map<string, string>): Pa
                         (category: string) => category === value
                     )
                     let seriesItemIndex: number = (apexChartData as ChartOptions).series.findIndex(
-                        (item: any) => item.name === obj.ruComponentType
+                        (item: any) => item.name.toLowerCase() === obj.ruComponentType.toLowerCase()
                     )
 
                     if (categorieItemIndex === -1) {

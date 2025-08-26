@@ -10,6 +10,7 @@ import { FilterDropBox } from '../../../utils/types/app';
 })
 export class DropboxComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
+    // console.log(this.values, this.name)
     this.copy = this.values
   }
   @Input()

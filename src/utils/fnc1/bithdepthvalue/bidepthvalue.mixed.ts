@@ -1,7 +1,5 @@
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
-import getManufacturer from "../other/get_manufacturer";
-import getMinMax from "../other/getMinMaxFromMap";
 
 const getBitDepthValueStatMixed = (data: any): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
@@ -78,10 +76,6 @@ const getBitDepthValueStatMixed = (data: any): Partial<ChartOptions> => {
             sum += (value * 100 / data.length);
             (apexChartData as ChartOptions).series[1].data.push(sum.toFixed(1) as any);
         });
-        let res = getMinMax(sortedMap)
-        window.localStorage.setItem('mapWithMaxValues', JSON.stringify(Object.fromEntries(res.max)))
-        window.localStorage.setItem('mapWithMinValues', JSON.stringify(Object.fromEntries(res.min)))
-        // apexChartData.mapWithMaxValues = resMap
     }
     apexChartData.values = apexChartData.xaxis?.categories
     apexChartData.propName = "bitDepthValue"

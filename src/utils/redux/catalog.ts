@@ -22,8 +22,21 @@ const componentSlice = createSlice({
     setColumns: (state: any, action: PayloadAction<[string, string[]]>) => {
       state.columns[action.payload[0]] = action.payload[1]
     },
-    setCurrentValue: (state: any, action: PayloadAction<[string, string]>) => {
-      state.currentValues[action.payload[0]] = action.payload[1]
+    setCurrentValue: (state: any, action: PayloadAction<[string, string, string]>) => {
+      if (!state.currentValues[action.payload[0]]) {
+        state.currentValues[action.payload[0]] = {}
+      }
+      state.currentValues[action.payload[0]][action.payload[1]] = action.payload[2]
+    },
+    removeCurrentValue: (state: any, action: PayloadAction<[string, string]>) => {
+      if (state.currentValues[action.payload[0]] && state.currentValues[action.payload[0]][action.payload[1]]) {
+        delete state.currentValues[action.payload[0]][action.payload[1]]
+      }
+    },
+    removeRuComponentType: (state: any, action: PayloadAction<[string]>) => {
+      if (state.currentValues[action.payload[0]]) {
+        delete state.currentValues[action.payload[0]]
+      }
     },
     setAllias: (state: any, action: PayloadAction<any>) => {
       state.allias = action.payload
@@ -31,20 +44,10 @@ const componentSlice = createSlice({
     setComponentTypeAllias: (state: any, action: PayloadAction<ComponentTypes[]>) => {
       state.componentTypeAllias = action.payload
     },
-    // getRuComponentTypeByEn: (state: any, action: PayloadAction<string>) => {
-    //   let ruComponentType: string | undefined
-    //   let componentTypeAllias = state.componentTypeAllias as ComponentTypes[]
-    //   for (const el of componentTypeAllias) {
-    //     if(el.enComponentType == action.payload) {
-    //       ruComponentType = el.ruComponentType
-    //     }
-    //   } 
-    //   return state   
-    // }
   }
 })
 
-export const { setColumns, setCurrentValue, setAllias, setComponentTypeAllias } = componentSlice.actions
+export const { setColumns, setCurrentValue, setAllias, setComponentTypeAllias, removeCurrentValue, removeRuComponentType } = componentSlice.actions
 
 export const componentStorage = configureStore({
   reducer: componentSlice.reducer
@@ -52,4 +55,3 @@ export const componentStorage = configureStore({
 
 
 
- 

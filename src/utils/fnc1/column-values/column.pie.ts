@@ -1,8 +1,5 @@
 import { ChartOptions } from "../../types/chart";
-import { BitDepthValue } from "../../types/microchip";
-import getManufacturersChartOptionDonut1 from "../manufacturers/manufacturers.donut";
 import getManufacturersChartOptionPie1 from "../manufacturers/manufacturers.pie";
-import getMinMax from "../other/getMinMaxFromMap";
 
 
 
@@ -31,7 +28,7 @@ const getColumnStatPieChartOptions = (data: any, query: Map<string, string>): Pa
     if (param && ruComponentType) {
         for (const key in data) {
             for (const obj of data[key]) {
-                if (obj.ruComponentType != ruComponentType) {
+                if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
                     break;
                 }
                 const value = obj[param] ? `${obj[param]}` : 'Не указано'

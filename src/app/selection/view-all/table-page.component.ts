@@ -6,10 +6,11 @@ import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import { ComponentOptions } from '../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
-import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../fetch.config';
+import { chartNamesMap, columnsMax, columnsMin, propsMap } from '../../fetch.config';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from '../../components/navigator/navigator.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
+import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../../utils/redux/component';
 
 @Component({
   selector: 'app-table',
@@ -22,7 +23,7 @@ export class SelectionViewAllPage implements OnInit {
   storage: any;
   allias!: Map<string, string>;
   all!: Partial<ComponentOptions>[];
-  selectedRuComponentType!: string
+  selectedEnComponentType!: string
   loader!: boolean
   error!: string
   iconName!: 'not_found'
@@ -53,7 +54,18 @@ export class SelectionViewAllPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.prioritySchemaWrapper2Map = prioritySchemaWrapper2Map
+    componentStorage.dispatch(initComponentTypes())
+    if (!Object.entries(componentStorage.getState().componentTypes).length) {
+      componentStorage.dispatch(fetchComponentTypes(this.api));
+    }
+    const componentTypes: any[] = componentStorage.getState().componentTypes
+    const componentTypesObj: any = {}
+    componentTypes.forEach(val => {
+      const enComponentType = val['enComponentType'].toLowerCase()
+      const ruComponentType = val['ruComponentType'].toLowerCase()
+      componentTypesObj[enComponentType] = ruComponentType
+    })
+    this.prioritySchemaWrapper2Map = new Map(Object.entries(componentTypesObj))
     this.chartNames = Array.from(chartNamesMap.keys())
     // this.currentPath = `/${this.location.path().split('/')[1]}`
     // this.priorities = this.getPriorityArrayFromQuery()
@@ -86,7 +98,7 @@ export class SelectionViewAllPage implements OnInit {
     return chartNamesMap.get(name) as string
   }
 
- 
+
   findInColumnsMax(column: string): number {
     return columnsMax.findIndex((value, index) => value === column)
   }
@@ -111,7 +123,7 @@ export class SelectionViewAllPage implements OnInit {
 
         const value = this.getFirstRuComponentType()
         if (value) {
-          this.selectedRuComponentType = value
+          this.selectedEnComponentType = value
         }
 
         this.initColumns()
@@ -137,7 +149,7 @@ export class SelectionViewAllPage implements OnInit {
     return keys;
   }
   onRuComponentTypeSelected(ruComponentType: any): void {
-    this.selectedRuComponentType = ruComponentType
+    this.selectedEnComponentType = ruComponentType
     this.initColumns()
   }
   initColumns(): void {
@@ -170,7 +182,7 @@ export class SelectionViewAllPage implements OnInit {
   initRows(): void {
     let rows = []
     try {
-      rows = (this.storage.get(this.selectedRuComponentType)).get(AppEnum.ALL)
+      rows = (this.storage.get(this.selectedEnComponentType)).get(AppEnum.ALL)
       this.all = rows
     }
     catch { }

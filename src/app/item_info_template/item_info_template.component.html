@@ -3,8 +3,14 @@
         <app-navigator [current]="'/filters'" />
     </div>
     <div class="workspace">
-        <div class="header" [innerHTML]="header"></div>
-        <div class="body" [innerHTML]="body"></div>
+        <main>
+            <div class="wrapper">
+                <div class="header" [innerHTML]="header"></div>
+                <div class="body" [innerHTML]="body"></div>
+            </div>
+            <button (click)="getBack()" class="def">Назад</button>
+        </main>
     </div>
     <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />
+
 </div>

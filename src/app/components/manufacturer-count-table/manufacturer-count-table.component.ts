@@ -10,7 +10,7 @@ import { NgFor, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-manufacturer-count-table',
-  imports: [NgFor, NgStyle],  
+  imports: [NgFor, NgStyle],
   templateUrl: './manufacturer-count-table.component.html',
   styleUrls: ['./manufacturer-count-table.component.css', '../styles/input.css']
 })
@@ -20,10 +20,12 @@ export class ManufacturerCountTableComponent implements OnChanges {
   orig!: any[]
   @Input()
   all!: any[]
-  @Input()
+  @Input() 
   noRedirect!: boolean
-  @Input()
-  activatedColumns!: any[]
+   @Input()
+  borderRadius: string= '.5vw'
+  // @Input()
+  // activatedColumns!: any[]
   currentValue: string | undefined
   constructor(
     private router: Router,
@@ -32,7 +34,6 @@ export class ManufacturerCountTableComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.rows = getManufacturersProd(this.all, 'manufacturerName') as any[]
     this.orig = Array.from(this.rows)
-
   }
   search(event: any): void {
     let value: string = event.target.value
@@ -53,7 +54,6 @@ export class ManufacturerCountTableComponent implements OnChanges {
         return false;
       }
     }
-
     return true;
   }
 
@@ -61,13 +61,13 @@ export class ManufacturerCountTableComponent implements OnChanges {
     let url = "/filters?"
     // this.activatedColumns = []
     // if (this.activatedColumns.findIndex((val) => val['manufacturerName']) === -1) {
-      // this.activatedColumns.push({ manufacturerName: manufacturer })
+    // this.activatedColumns.push({ manufacturerName: manufacturer })
     // }
     // for (const column of this.activatedColumns) {
-      // const pair = Object.entries(column)
-      url += `manufacturerName=${manufacturer}`
+    // const pair = Object.entries(column)
+    url += `manufacturerName=${manufacturer}`
     // }
-    
+ 
     this.router.navigateByUrl(url)
   }
   @Output()

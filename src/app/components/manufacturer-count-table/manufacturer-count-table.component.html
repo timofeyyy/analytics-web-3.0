@@ -1,4 +1,4 @@
-<section class="records">
+<section class="records"  [ngStyle]="{'border-radius': borderRadius}">
     <!-- <div class="list-wrapper">
         <div class="list">
             <div class="values">
@@ -16,7 +16,9 @@
         <p>Номенклатура</p>
     </div>
     <div class="view">
-        <div class="row layout" [ngStyle]="{background: currentValue === row.value ?  'rgba(211,211,211,0.5)' : 'unset'}" *ngFor="let row of rows" (click)="noRedirect ? getValue(row.value) : openCatalog(row.value)">
+        <div class="row layout" [ngStyle]="{background: currentValue === row.value ?  'rgba(211,211,211,0.5)' : 'unset'}"
+         *ngFor="let row of rows"
+         (click)="noRedirect ? getValue(row.value) : openCatalog(row.value)">
             <div class="col">
                 <p>{{row.value}}</p>
             </div>

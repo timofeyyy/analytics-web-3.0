@@ -1,7 +1,4 @@
 import { ChartOptions } from "../../types/chart";
-import { BitDepthValue } from "../../types/microchip";
-import getMinMax from "../other/getMinMaxFromMap";
-
 
 
 const getManufacturersChartOptionPie1 = (data: any): Partial<ChartOptions> => {

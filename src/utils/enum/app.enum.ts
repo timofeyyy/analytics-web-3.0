@@ -15,11 +15,11 @@ export enum ComponentTypeRuEnum {
 }
 
 export enum ComponentTypeEnEnum {
-    MICROCHIP = "microchips",
-    TRANSISTOR = "transistors",
-    RESISTOR = "resistors",
-    CAPACITOR = "capacitors",
-    DIOD = "diods",
+    MICROCHIP = "microchip",
+    TRANSISTOR = "transistor",
+    RESISTOR = "resistor",
+    CAPACITOR = "capacitor",
+    DIOD = "diod",
 
 }
 

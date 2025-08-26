@@ -1,4 +1,4 @@
-export interface RuComponentTypeStatistic {
+export interface ComponentTypeStatistic {
     procentAll: number,
     manufacturers: Map<string, ManufacturerStatistic>,
     countAll: number
@@ -9,20 +9,21 @@ export interface ManufacturerStatistic {
     procentComparedToComponentTypes: number
 }
 
-const getComponentTypesStat = (data: any): Map<string, RuComponentTypeStatistic> => {
-    let map: Map<string, RuComponentTypeStatistic> = new Map()
+const getComponentTypesStat = (data: any, ru: boolean): Map<string, ComponentTypeStatistic> => {
+    let map: Map<string, ComponentTypeStatistic> = new Map()
     let summary = 0
+    const componentType = ru ? 'ruComponentType' : 'enComponentType'
     for (const key in data) {
         summary += data[key].length
         for (const obj of data[key]) {
-            if (!map.get(obj.ruComponentType)) {
-                map.set(obj.ruComponentType, {
+            if (!map.get(obj[componentType])) {
+                map.set(obj[componentType], {
                     procentAll: 0,
                     countAll: data[key].length,
                     manufacturers: new Map()
                 })
             }
-            let manufacturers = map.get(obj.ruComponentType)?.manufacturers
+            let manufacturers = map.get(obj[componentType])?.manufacturers
             if (!manufacturers?.get(obj.manufacturerName)) {
                 manufacturers?.set(obj.manufacturerName, {
                     procentComapredToAll: 0,
@@ -46,7 +47,7 @@ const getComponentTypesStat = (data: any): Map<string, RuComponentTypeStatistic>
             }
         }
         // console.log(new Map(Object.entries(manufacturers)))
-        let obj: RuComponentTypeStatistic = {
+        let obj: ComponentTypeStatistic = {
             procentAll: Number(((object[key].countAll * 100) / summary).toFixed(1)),
             countAll: object[key].countAll,
             manufacturers: getTopManufacturers(new Map(Object.entries(manufacturers)))

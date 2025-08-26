@@ -23,20 +23,17 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
   inputDisabled!: boolean
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isTableProp() && !this.isTableInput()) {
+      console.log(this.propsMap.get(this.name))
       if (this.propsMap.get(this.name).sort) {
         this.values = this.propsMap.get(this.name).sort(this.propsMap, this.all)
       }
-      else { 
-        if (!this.values.length) {
+      else {
+        if (!this.values.length && this.all.length) {
           this.values = componentTypeFilters(this.name, this.all)
-          // console.log(this.values)
         }
-      } 
+      }
       this.currentValue = this.propsMap.get(this.name).currentValue
     }
-    // if (this.isTableProp() && this.isTableInput()) { 
-
-    // }
   }
 
   changeCurrentValueByName(name: string, value: string): never | void {
@@ -64,8 +61,8 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
         this.changeCurrentValueByName('ruComponentKind', AppEnum.ALL)
         this.changeCurrentValueByName('manufacturerName', AppEnum.ALL)
       }
-      if (this.name === 'ruComponentKind') {
-        this.changeCurrentValueByName('manufacturerName', AppEnum.ALL)
+      if (this.name === 'manufacturerName') {
+        this.changeCurrentValueByName('ruComponentKind', AppEnum.ALL)
       }
       // if (this.isCompoenntProp()) {
       //   let componentProps: Map<string, any> = propsMap.get('ruComponentType').componentProps

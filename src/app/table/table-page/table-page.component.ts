@@ -6,10 +6,11 @@ import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
 import { ComponentOptions } from '../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
-import { chartNamesMap, columnsMax, columnsMin, prioritySchemaWrapper2Map, propsMap } from '../../fetch.config';
+import { chartNamesMap, columnsMax, columnsMin, propsMap } from '../../fetch.config';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from '../../components/navigator/navigator.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
+import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../../utils/redux/component';
 
 @Component({
   selector: 'app-table',
@@ -52,7 +53,18 @@ export class TablePage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.prioritySchemaWrapper2Map = prioritySchemaWrapper2Map
+    componentStorage.dispatch(initComponentTypes())
+    if (!Object.entries(componentStorage.getState().componentTypes).length) {
+      componentStorage.dispatch(fetchComponentTypes(this.api));
+    }
+    const componentTypes: any[] = componentStorage.getState().componentTypes
+    const componentTypesObj: any = {}
+    componentTypes.forEach(val => {
+      const enComponentType = val['enComponentType'].toLowerCase()
+      const ruComponentType = val['ruComponentType'].toLowerCase()
+      componentTypesObj[enComponentType] = ruComponentType
+    })
+    this.prioritySchemaWrapper2Map = new Map(Object.entries(componentTypesObj))
     this.chartNames = Array.from(chartNamesMap.keys())
     this.priorities = this.getPriorityArrayFromQuery()
     this.priority = this.getSavedPriorityFromStorage() as string
@@ -69,7 +81,7 @@ export class TablePage implements OnInit {
     const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
     this.getApi(query)
   }
-
+  
   getSavedPriorityFromStorage(): string | undefined {
     const selection = JSON.parse(window.localStorage.getItem('selection') as string)
     if (selection && selection.priority) {
@@ -122,7 +134,7 @@ export class TablePage implements OnInit {
     url += "?"
     for (const key in queryObj) {
       if (key == this.priority) {
-        url+=`param=${key}&`
+        url += `param=${key}&`
         break
       }
       url += `${key}=${queryObj[key]}&`
@@ -131,7 +143,7 @@ export class TablePage implements OnInit {
 
     }
     if (this.selectedRuComponentType) {
-      url += `ruComponentType=${prioritySchemaWrapper2Map.get(this.selectedRuComponentType)}`
+      url += `ruComponentType=${this.prioritySchemaWrapper2Map.get(this.selectedRuComponentType)}`
     }
     console.log(url)
     url = url.replace('+', '%2B0')

@@ -392,27 +392,27 @@ export const columnsMin = [
   "minVoltage",
   "minRatedResistance"
 ]
-//временно
-export const prioritySchemaWrapper = {
-  "Микросхема": "microchips",
-  "Диод": "diods",
-  "Транзистор": "transistors",
-  "Конденсатор": "capacitors",
-  "Резистор": "resistors"
-}
-//временно
-export const prioritySchemaWrapper2 = {
-  "microchips": "Микросхема",
-  "diods": "Диод",
-  "transistors": "Транзистор",
-  "capacitors": "Конденсатор",
-  "resistors": "Резистор"
-}
+// //временно
+// export const prioritySchemaWrapper = {
+//   "Микросхема": "microchips",
+//   "Диод": "diods",
+//   "Транзистор": "transistors",
+//   "Конденсатор": "capacitors",
+//   "Резистор": "resistors"
+// }
+// //временно
+// export const prioritySchemaWrapper2 = {
+//   "microchips": "Микросхема",
+//   "diods": "Диод",
+//   "transistors": "Транзистор",
+//   "capacitors": "Конденсатор",
+//   "resistors": "Резистор"
+// }
 
 const observableApi: ObservableStorage = {
   // "components1": (injector: ApiService1, data: Map<string, any>) => injector.getComponentsApiPreview(data),
   "components": (injector: ApiService1, data: Map<string, any>) => injector.getComponentsApiAll(data),
-  "bitDepthValue": (injector: ApiService1, data: Map<string, any>) => injector.getBitDepthValue(data),
+  // "bitDepthValue": (injector: ApiService1, data: Map<string, any>) => injector.getBitDepthValue(data),
   "Микросхема": (injector: ApiService1, data: Map<string, any>) => injector.getMicrochips(data),
   "Транзистор": (injector: ApiService1, data: Map<string, any>) => injector.getTransistors(data),
   "Резистор": (injector: ApiService1, data: Map<string, any>) => injector.getTransistors(data),
@@ -431,12 +431,12 @@ export const props = {
   'manufacturerName': {
     currentValue: AppEnum.ALL,
     input: false,
-    // sort: (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all)
+    sort: (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all)
   },
   'ruComponentKind': {
     currentValue: AppEnum.ALL,
     input: false,
-    // sort: (props: any, all: ComponentOptions[]) => componentKindFilters(props, all)
+    sort: (props: any, all: ComponentOptions[]) => componentKindFilters(props, all)
   },
   'bitDepthValue': {
     currentValue: AppEnum.ALL,
@@ -582,10 +582,10 @@ export const props = {
 
 
 const chartNames = {
-  "donut": "Кольцевая диаграмма",
-  "pie": "Круговая диаграмма",
-  "bar": "Гистаграмма",
-  "mixed": "График Парето"
+  "donut": "Кольцевая",
+  "pie": "Секторная",
+  "bar": "Гистограмма",
+  "mixed": "Парето"
 }
 
 const prioritySchema = {
@@ -707,8 +707,8 @@ const prioritySchema = {
 // 200
 // 3
 export const prioritySchemaMap: Map<string, string[]> = new Map(Object.entries(prioritySchema));
-export const prioritySchemaWrapperMap: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper));
-export const prioritySchemaWrapper2Map: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper2));
+// export const prioritySchemaWrapperMap: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper));
+// export const prioritySchemaWrapper2Map: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper2));
 export const chartNamesMap: Map<string, string> = new Map(Object.entries(chartNames));
 export const propsMap: Map<string, any> = new Map(Object.entries(props));
 export const observableApiMap: Map<string, (injector: ApiService1, data: Map<string, any>) => Observable<any> | null> = new Map(Object.entries(observableApi));
@@ -716,3 +716,4 @@ export const observableApiMap: Map<string, (injector: ApiService1, data: Map<str
 
 
 
+ 

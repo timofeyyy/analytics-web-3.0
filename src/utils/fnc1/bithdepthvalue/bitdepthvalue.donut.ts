@@ -1,7 +1,6 @@
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
 import getManufacturer from "../other/get_manufacturer";
-import getMinMax from "../other/getMinMaxFromMap";
 
 
 
@@ -50,10 +49,6 @@ const getBitDepthValueStatDonut = (data: any): Partial<ChartOptions> => {
         (apexChartData as ChartOptions).labels.forEach((label: string) => {
             (apexChartData as ChartOptions).series.push(map.get(label));
         })
-        const sortedMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
-        let res = getMinMax(sortedMap)
-        window.localStorage.setItem('mapWithMaxValues', JSON.stringify(Object.fromEntries(res.max)))
-        window.localStorage.setItem('mapWithMinValues', JSON.stringify(Object.fromEntries(res.min)))
     }
     apexChartData.values = apexChartData.labels
     apexChartData.propName = "bitDepthValue"

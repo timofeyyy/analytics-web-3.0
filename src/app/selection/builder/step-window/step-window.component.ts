@@ -7,11 +7,12 @@ import { StepTablenameComponent } from "../step-tablename/step-tablename.compone
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { StepPrioritiesComponent } from "../step-priorities/step-priorities.component";
 import { StepValuesComponent } from "../step-values/step-values.component";
-import { AppEnum, ComponentTypeEnEnum } from '../../../../utils/enum/app.enum';
+import { AppEnum } from '../../../../utils/enum/app.enum';
 import { prioritySchemaMap, props } from '../../../fetch.config';
 import { LoaderComponent } from "../../../components/loader/loader.component";
 import { ComponentOptions } from '../../../../utils/types/app';
 import { Router } from '@angular/router';
+import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../../../utils/redux/component';
 
 interface IStepper {
   positionX: number,
@@ -36,7 +37,7 @@ export class StepWindowComponent implements OnInit {
   allias: Map<string, string> = new Map()
   storage: Map<string, any> = new Map()
   dropBoxPropsMapConfig!: Map<string, any>
-  enComponentTypes: ComponentTypeEnEnum[] = []
+  // enComponentTypes: ComponentTypeEnEnum[] = []
   columns: string[] = []
   all: Partial<ComponentOptions>[] = []
   showWarning!: boolean
@@ -48,12 +49,18 @@ export class StepWindowComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.dropBoxPropsMapConfig = this.initDropBoxMapConfig()
     this.move()
     this.getApi()
+    componentStorage.dispatch(initComponentTypes())
+    if (!Object.entries(componentStorage.getState().componentTypes).length) {
+      componentStorage.dispatch(fetchComponentTypes(this.api));
+    }
   }
 
   initDropBoxMapConfig(exceptionsMap: Map<string, any> | void): Map<string, any> {
+
     const dropBoxPropsClone: any = {};
     for (const [key, value] of Object.entries(props)) {
       dropBoxPropsClone[key] = { currentValue: '', input: true };
@@ -67,6 +74,7 @@ export class StepWindowComponent implements OnInit {
     return new Map(Object.entries(dropBoxPropsClone));
   }
   move(): void {
+
     for (let index = -this.step, i = 1; index < -this.step + this.stepLength + 1; index++, i++) {
       let isReady: boolean = this.stepper.get(`step${i}`)?.isReady as boolean;
       let warningMessage: string = this.stepper.get(`step${i}`)?.warningMessage as string;
@@ -80,6 +88,7 @@ export class StepWindowComponent implements OnInit {
     }
   }
   getApi(): void {
+
     this.loader = true
     forkJoin([
       this.api.getComponentsApiAll(),
@@ -87,17 +96,19 @@ export class StepWindowComponent implements OnInit {
     ]).subscribe((res: any) => {
       this.storage = new Map(Object.entries(res[0] as any))
       this.allias = new Map(Object.entries(res[1] as any[]))
-      this.enComponentTypes = Array.from(this.storage.keys() as unknown as ComponentTypeEnEnum[])
+      // this.enComponentTypes = Array.from(this.storage.keys() as unknown as ComponentTypeEnEnum[])
       this.loader = false
     })
   }
   next(): void {
+
     if (this.step <= this.stepLength) {
       if (!this.stepper.get(`step${this.step + 1}`)?.isReady) {
         alert("Преждем чем перейти дальше заполните текущий этап полностью")
         return
       }
       this.step++
+      console.log(this.stepper)
       if (this.stepLength + 1 === this.step) {
         this.makeQueryStr()
       }
@@ -109,6 +120,7 @@ export class StepWindowComponent implements OnInit {
   priorities: [] = []
   prioritiesNoJumps: [] = []
   onPriorityChanged(obj: any): void {
+
     this.activeKeys = new Map()
     this.priorities = []
     this.prioritiesNoJumps = []
@@ -142,6 +154,7 @@ export class StepWindowComponent implements OnInit {
     this.cdr.detectChanges();
   }
   prev(): void {
+
     if (this.step > 0) {
       let key = this.stepper.get(`step${this.step}`)?.key
       if (key) {
@@ -164,6 +177,7 @@ export class StepWindowComponent implements OnInit {
   // }
 
   onTypeSelected(ruComponentType: string): void {
+    console.log(componentStorage.getState().componentTypes)
     this.activeKeys = new Map()
     let value: string = AppEnum.ALL
     this.stepper.get('step1')!.isReady = false
@@ -177,8 +191,9 @@ export class StepWindowComponent implements OnInit {
     this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = value
   }
   onSourceChanged(entries: [string, any[]]): void {
-    this.all = entries[1].map((el) => { return { component: el } })
+
     console.log(entries)
+    this.all = entries[1].map((el) => { return { component: el } })
     let value: string = AppEnum.ALL
     // console.log(this.dropBoxPropsMapConfig.get('enComponentType'),)
 
@@ -186,8 +201,10 @@ export class StepWindowComponent implements OnInit {
       value = entries[0]
     }
     this.dropBoxPropsMapConfig.get('enComponentType').currentValue = value
+    // this.prevSelection = this.getPrevSelection()
   }
   getPositionX(index: number): number {
+
     if (this.stepper.get(`step${index}`) && this.stepper.get(`step${index}`)?.positionX) {
       return this.stepper.get(`step${index}`)?.positionX as number
     }
@@ -196,6 +213,7 @@ export class StepWindowComponent implements OnInit {
   st!: boolean
   activeKeys: Map<string, string> = new Map()
   onDropBoxValueChnaged(obj: [string, string]): void {
+
     this.stepper.get(`step${this.step}`)!.key = obj[0]
     this.stepper.get(`step${this.step + 1}`)!.isReady = false
     if (obj[1] !== AppEnum.ALL && obj[1]) {
@@ -207,7 +225,7 @@ export class StepWindowComponent implements OnInit {
       this.activeKeys.set(key, copy[key])
     }
     this.activeKeys.set(obj[0], obj[1])
-    console.log(this.activeKeys)
+    // console.log(this.activeKeys)
     // console.log(this.activeKeys)
     // let nextKey = this.priorities[this.step - 3][0]
     //     console.log(nextKey)
@@ -220,7 +238,10 @@ export class StepWindowComponent implements OnInit {
   // disablePriorities: boolean = false
 
   selections: Map<string, { prev: any[], current: any[] }> = new Map()
+  // prevSelection: any[] = [];
+
   onDropBoxSourceChnaged(obj: [string, any[], boolean]): void {
+
     let prev: any = Array.from(this.all)
     let current = obj[1]
     if (this.step > 2) {
@@ -231,11 +252,12 @@ export class StepWindowComponent implements OnInit {
     // console.log(this.selections.get(obj[0])?.current.length)
     // this.disablePriorities = (current.length === 0)
     this.st = (this.selections.get(obj[0])?.current.length == 0)
-
+    console.log(this.selections)
 
   }
 
   getPriorityState(): boolean {
+
     let currentPriority = this.priorities[this.step - 2]
     if (currentPriority && currentPriority[0]) {
       return this.selections.get(currentPriority[0]) !== undefined && this.selections.get(currentPriority[0])?.current.length === 0
@@ -244,6 +266,7 @@ export class StepWindowComponent implements OnInit {
   }
 
   makeQueryStr(): void {
+
     let str = "?"
     let obj = Object.fromEntries(this.activeKeys)
     for (const key in obj) {
@@ -258,9 +281,9 @@ export class StepWindowComponent implements OnInit {
     this.router.navigateByUrl(`/selection-view${str}`)
   }
   resetStorage(): void {
+
     window.localStorage.removeItem('selection')
   }
-
   getPrevSelection(): any[] {
     let prev: any = Array.from(this.all)
     if (this.step > 2) {

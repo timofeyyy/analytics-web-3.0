@@ -17,7 +17,7 @@
                 <!-- [ngStyle]="{width: step >= 2 ? '100%': '70%'}" -->
                 <div class="controlles" >
                     <div class="steps-panel">
-                        <app-step-tablename [storage]="storage" [enComponentTypes]="enComponentTypes" [index]="1" class="step step1" [ngStyle]="{'left': stepper.get('step1')?.positionX + '%'}" (typeChanged)="onTypeSelected($event)" (sourceChanged)="onSourceChanged($event)"/>
+                        <app-step-tablename [storage]="storage" [index]="1" class="step step1" [ngStyle]="{'left': stepper.get('step1')?.positionX + '%'}" (typeChanged)="onTypeSelected($event)" (sourceChanged)="onSourceChanged($event)"/>
                         <app-step-priorities  [allias]="allias" [columns]="columns" [index]="2" class="step step2" [ngStyle]="{'left': stepper.get('step2')?.positionX + '%'}" (onChanged)="onPriorityChanged($event)"/>
                         <app-step-values 
                             class="step"

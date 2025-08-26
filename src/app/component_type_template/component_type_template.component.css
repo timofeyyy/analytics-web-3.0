@@ -3,46 +3,176 @@
     box-sizing: border-box;
 }
 
-.workspace main .chart-wrapper {
+.chart-wrapper {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2vw;
+    border-radius: 0.5vw;
+    overflow: hidden;
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
+    padding: 0 1vw 1vw 0;
+    background-color: rgb(66 66 66);
 }
 
-.workspace main .chart-wrapper .chart-wrapper-main .chart-window iframe {
-    width: 85%;
+.chart-wrapper .chart-wrapper-main .chart-window iframe {
+    /* width: 75%; */
+    border-radius: unset;
 }
 
-.workspace main .chart-wrapper .chart-wrapper-main .chart-window .tabs-vertical {
+.chart-wrapper .chart-wrapper-main .chart-window .tabs-vertical {
     width: 15%;
 }
 
-.workspace main .chart-wrapper .chart-wrapper-main .chart-window .tabs-vertical .tab {
+.chart-wrapper .chart-wrapper-main .chart-window .tabs-vertical .tab {
     width: 99%;
+
 }
 
-.workspace main .chart-wrapper .chart-wrapper-main .chart-window,
-.workspace main .wrapper .selection {
+.chart-wrapper .chart-wrapper-main .chart-window,
+.wrapper .selection {
     background-color: white;
-    border-radius: 0 0.5vw 0.5vw 0.5vw;
-    /* height: 35vw; */
     margin: 0;
 }
 
-.workspace main .chart-wrapper .chart-wrapper-main .chart-window {
-    height: 95%;
+header,
+.chart-wrapper .chart-wrapper-main .space-section,
+.chart-wrapper .aside-panel .panel-name {
+    height: 5%;
+}
+
+header .tabs .tab {
+    border-left: 0.1vw solid gray;
+    border-right: 0.1vw solid gray;
+    margin: 0;
+}
+
+header .tabs .tab,
+header .tabs {
+    height: 100%;
     display: flex;
-    /* padding: 2vw 0 4vw 0; */
 }
 
-.workspace main .chart-wrapper .chart-wrapper-main {
+.table,
+.list {
     width: 100%;
+}
+
+.chart-wrapper .chart-wrapper-main .bottom-section {
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: flex;
+}
+
+.chart-wrapper .chart-wrapper-main .event-border {
+    height: 0.5vw;
+    width: 100%;
+    background-color: lightgrey;
+    transition: all ease 0.3s;
+    cursor: grab;
+}
+
+as-split,
+as-split-area {
+    touch-action: none;
+    background: white;
+}
+
+.wrapper-body {
+    height: 95%;
+}
+
+.chart-wrapper .chart-wrapper-main .chart-window {
+    height: 100%;
+    display: flex;
+    box-sizing: border-box;
+}
+
+.chart-wrapper .chart-wrapper-main {
+    width: 80%;
     margin: 0;
 }
 
-.workspace main .chart-wrapper .selection {
+.chart-wrapper .aside-panel {
+    width: 20%;
+    height: 100%;
+}
+
+.chart-wrapper .aside-panel .tabs {
+    height: 95%;
+    padding: 0.5vw;
+}
+
+
+.chart-wrapper .aside-panel .panel-name {
+    /* background-color: rgba(51, 51, 51, 80%); */
+    border-bottom: 0.1vw solid gray;
+    background: rgb(88, 88, 88);
+    display: flex;
+    align-items: center;
+}
+
+.chart-wrapper .aside-panel .tabs .activated {
+    background-color: gray;
+}
+
+
+
+.chart-wrapper .aside-panel .tabs .children {
+    position: relative;
+}
+
+.chart-wrapper .aside-panel .tabs .line {
+    display: flex;
+    align-self: center;
+    position: absolute;
+    left: 1.2vw;
+    height: 100%;
+    z-index: 0;
+    width: .05vw;
+    background-color: white;
+    top: 0;
+}
+
+.chart-wrapper .aside-panel .tabs .tab p {
+    align-self: flex-start;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    color: white;
+    font-size: max(0.8vw, 8px);
+}
+
+
+
+.chart-wrapper .aside-panel .tabs .tab {
+    background-color: unset;
+    padding-top: 0.3vw;
+    padding-bottom: 0.3vw;
+    position: relative;
+    z-index: 1;
+}
+
+.chart-wrapper .aside-panel .tabs .tab:hover,
+.chart-wrapper .aside-panel .tabs .active {
+    background-color: grey;
+}
+
+.chart-wrapper .aside-panel .panel-name p {
+    font-size: max(1vw, 10px);
+    font-weight: lighter;
+    margin: 0;
+    padding: 0.5vw 1vw;
+    font-size: max(1vw, 10px);
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chart-wrapper .selection {
     width: 34%;
     box-sizing: border-box;
     padding: 1.5vw;
@@ -53,6 +183,8 @@
     display: flex;
 
 }
+
+
 
 .column p,
 .column input {
@@ -105,21 +237,22 @@
 
 }
 
+/* 
 @media (max-width: 1020px) {
-    .workspace main .chart-wrapper {
+     .chart-wrapper {
         display: block;
     }
 
-    .workspace main .chart-wrapper .chart-wrapper-main {
+     .chart-wrapper .chart-wrapper-main {
         margin-bottom: 1vw;
         height: 50vw;
         width: 100%;
     }
 
-    .workspace main .chart-wrapper .selection {
+     .chart-wrapper .selection {
         width: 100%;
         height: unset;
     }
 
 
-}
+} */

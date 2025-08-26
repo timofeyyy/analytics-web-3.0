@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ApiService1 } from '../../services/api.services1';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { observableApiMap, prioritySchemaWrapper2Map } from '../fetch.config';
+import { observableApiMap } from '../fetch.config';
 import { forkJoin, map } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from "../components/navigator/navigator.component";
@@ -14,7 +14,7 @@ import { NgStyle } from '@angular/common';
   imports: [HttpClientModule, NavigatorComponent, LoaderComponent, NgStyle],
   templateUrl: './item_info_template.component.html',
   providers: [ApiService1],
-  styleUrl: './item_info_template.component.css',
+  styleUrls: ['./item_info_template.component.css', '../components/styles/button.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class ItemInfoTemplateComponent implements OnInit {
@@ -23,7 +23,6 @@ export class ItemInfoTemplateComponent implements OnInit {
   loader!: boolean
   constructor(
     private api: ApiService1,
-    private router: Router,
     private route: ActivatedRoute,
     private santizer: DomSanitizer
   ) { }
@@ -46,10 +45,10 @@ export class ItemInfoTemplateComponent implements OnInit {
         const obj = res[1][0]
         const allias = res[0]
         for (const key in obj) {
-          if (key == 'ruComponentType') {
-            header += `<h1>${obj[key]}</h1>`
-            continue
-          }
+          // if (key == 'ruComponentType') {
+          //   header += `<h1>${obj[key]}</h1>`
+          //   continue
+          // }
           if (key == 'componentName' || key == 'manufacturerName') {
             header += `<h3>${allias[key] === undefined ? key : allias[key]}: ${obj[key]}</h1>`
             continue
@@ -61,29 +60,8 @@ export class ItemInfoTemplateComponent implements OnInit {
       })
       this.loader = false
     }
-    // else {
-    //   this.router.navigateByUrl('/not-found')
-    // }
-    // if (getObservable) {
-    //   forkJoin([
-    //     this.api.getAlias(),
-    //     getObservable(this.api, (query as unknown) as Map<string, string>)
-    //   ]).subscribe((res: any[]) => {
-    //     console.log(res)
-    // let markup = ''
-    // const obj = res[1][0]
-    // const allias = res[0]
-    // for (const key in obj) {
-    //   markup += `<p>${allias[key]}: ${obj[key]}</p>`
-    // }
-    // console.log(markup, obj)
-    // this.layout = this.santizer.bypassSecurityTrustHtml(markup)
-    //   })
-    // }
-    // this.route.paramMap.subscribe(params => {
-
-    //   // console.log(this.params, this.params.get("componentName"))
-    // })
   }
-
+  getBack(): void {
+     window.history.back()
+  }
 }

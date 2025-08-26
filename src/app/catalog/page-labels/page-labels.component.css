@@ -1,0 +1,30 @@
+.footer {
+    display: flex;
+    align-items: center;
+    height: 4%;
+    overflow-x: hidden;
+}
+
+.footer .active {
+    background-color: rgba(51, 51, 51, 90%);
+    color: white;
+}
+
+.footer img {
+    width: max(1.5vw, 15px);
+    height: max(1.5vw, 15px);
+}
+
+.footer img,
+.footer p {
+    margin: 0 0.2vw;
+    cursor: pointer;
+}
+
+.footer p {
+    padding: 0.5vw 1vw;
+    box-sizing: border-box;
+    border: 0.1vw solid lightgray;
+    border-radius: 0.5vw;
+    font-size: max(1vw, 10px);
+}

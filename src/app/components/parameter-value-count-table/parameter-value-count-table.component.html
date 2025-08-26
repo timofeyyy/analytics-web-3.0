@@ -1,10 +1,11 @@
-<section class="records">
+<section class="records" [ngStyle]="{'border-radius': borderRadius}">
    <div class="header">
         <p>Значение</p>
         <p>Количество</p>
    </div>
     <div class="view">
-        <div class="row layout" [ngStyle]="{background: currentValue == row.value ?  'rgba(211,211,211,0.5)' : 'unset'}"  *ngFor="let row of rows" (click)="getValue(row.value)">
+        <!-- [ngStyle]="{background: currentValue == row.value ?  'rgba(211,211,211,0.5)' : 'unset'}"  -->
+        <div class="row layout"  *ngFor="let row of rows" (click)="getValue(row.value)">
             <div class="col">
                 <p>{{row.value}}</p>
             </div>

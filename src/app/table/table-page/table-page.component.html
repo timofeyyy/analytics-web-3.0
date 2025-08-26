@@ -1,10 +1,146 @@
 <div class="app-main">
     <div class="navigator-wrapper">
-        <app-navigator [current]="'/selection-view'" [chartBlocked]="isChartBlocked()" [lastSavedBlocked]="isLastSavedBlocked() || isStorageEmpty()" />
+        <app-navigator [current]="'/selection-view'" [chartBlocked]="isChartBlocked()"
+            [lastSavedBlocked]="isLastSavedBlocked() || isStorageEmpty()" />
     </div>
     <div class="workspace">
         <main>
-            <div class="warning" *ngIf="error; else templateName">
+            <div class="chart-wrapper">
+                <aside class="aside-panel">
+                    <div class="panel-name">
+                        <p>{{allias.get(priority)}}</p>
+                    </div>
+                    <div class="tabs">
+                        <ul class="parent">
+                            <li class="tab parent-tab">
+                                <p>Приоритеты</p>
+                            </li>
+                            <!-- <div class="t-aside">
+                                <div class="priorities-wrapper">
+                                    <div class="tabs-wrapper" *ngIf="priorities.length">
+                                        <p class="tabs-header">Добавление приоритета</p>
+                                        <div class="tabs tabs-vertical">
+                                            <div *ngFor="let p of priorities; let i = index"
+                                                [ngClass]="{tab: true, vertical: true, active: priority===p[0]}"
+                                                (click)="priority = p[0]; changePriorityInStorage(p[0]); initColumns()">
+                                                <p>
+                                                    {{i + 1}}
+                                                    {{allias.get(p[0])}}:
+                                                    {{p[1]}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <ul class="children">
+                                <li *ngFor="let p of priorities; let i = index"
+                                    [ngClass]="{tab: true, active: priority === p[0]}"
+                                    (click)="priority = p[0]; changePriorityInStorage(p[0]); initColumns()">
+                                    <p>
+                                        {{i + 1}}
+                                        {{allias.get(p[0])}}:
+                                        {{p[1]}}
+                                    </p>
+                                </li>
+                                <div class="line"></div>
+                            </ul>
+                        </ul>
+                    </div>
+                </aside>
+                <div class="chart-wrapper-main">
+                    <header>
+                        <div class="tabs">
+                            <div *ngFor="let ruComponentType of getKeyArrayFromStorage()"
+                                [ngClass]="{tab: true, horizontal: true, active: selectedRuComponentType===ruComponentType}"
+                                (click)="onRuComponentTypeSelected(ruComponentType); initColumns()">
+                                <p>{{prioritySchemaWrapper2Map.get(ruComponentType)}} <span
+                                        *ngIf="selectedRuComponentType===ruComponentType">({{all.length}})</span> </p>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="body-main">
+                        <!-- <div class="t-aside">
+                            <div class="priorities-wrapper">
+                                <div class="tabs-wrapper" *ngIf="priorities.length">
+                                    <p class="tabs-header">Добавление приоритета</p>
+                                    <div class="tabs tabs-vertical">
+                                        <div *ngFor="let p of priorities; let i = index"
+                                            [ngClass]="{tab: true, vertical: true, active: priority===p[0]}"
+                                            (click)="priority = p[0]; changePriorityInStorage(p[0]); initColumns()">
+                                            <p>
+                                                {{i + 1}}
+                                                {{allias.get(p[0])}}:
+                                                {{p[1]}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="t-body">
+                            <div class="t-body-wrapper">
+                                <table align="left" *ngIf="all.length; else template">
+                                    <thead>
+                                        <tr>
+                                            <td *ngFor="let column of columns">{{column}}</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let record of all">
+                                            <td *ngFor="let value of getRecordsFromObjAsArray(record)">{{value}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <ng-template #template>
+                                    <div class="warning">
+                                        <div class="warning-wrapper">
+                                            <div class="warning-header">
+                                                <img [src]="'assets/images/not_found.svg'" alt="img">
+                                                <p>Ничего не найдено</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="t-footer">
+                            <button class="rev" (click)="back()"><span>Вернуться к построению</span></button>
+                            <button [ngClass]="{def: this.save, rev: !this.save}" (click)="onStateChange()">{{this.save
+                                ? 'Сохранить': 'Отчистить'}}</button>
+                        </div>
+                    </div>
+                    <!-- <div class="body-main">
+                        <div class="t-body">
+                            <div class="t-body-wrapper">
+                                <table align="left" *ngIf="all.length; else template">
+                                    <thead>
+                                        <tr>
+                                            <td *ngFor="let column of columns">{{column}}</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let record of all">
+                                            <td *ngFor="let value of getRecordsFromObjAsArray(record)">{{value}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <ng-template #template>
+                                    <div class="warning">
+                                        <div class="warning-wrapper">
+                                            <div class="warning-header">
+                                                <img [src]="'assets/images/not_found.svg'" alt="img">
+                                                <p>Ничего не найдено</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <!-- <div class="warning" *ngIf="error; else templateName">
                 <div class="warning-wrapper">
                     <div class="warning-header">
                         <img [src]="'assets/images/'+iconName+'.svg'" alt="img">
@@ -13,29 +149,55 @@
                 </div>
             </div>
             <ng-template #templateName>
-                <!-- <div class="charts" *ngIf="mainChartUrl">
-                    <div class="chart-wrapper">
-                        <div class="chart-wrapper-main">
-                            <header>
-                                <div class="tabs">
-                                    <div *ngFor="let chart of chartNames"
-                                        [ngClass]="{tab: true, horizontal: true, active: type===chart}"
-                                        (click)="onChartTypeChanged(chart)">
-                                        <p>{{getChartAllias(chart)}}</p>
-                                    </div>
-                                </div>
-                            </header>
-                            <div class="chart-window">
-                                <iframe [src]="mainChartUrl" frameborder="0"></iframe>
-                            </div>
-                        </div>
-                        <div class="chart-wrapper-manufacturers">
-                            <div class="manufacturersTable">
-                                <app-manufacturer-count-table [all]="all" [activatedColumns]="activatedColumns" />
-                            </div>
+                <header>
+                    <div class="tabs">
+                        <div *ngFor="let enComponentType of getKeyArrayFromStorage()"
+                            [ngClass]="{tab: true, horizontal: true, active: selectedEnComponentType===enComponentType}"
+                            (click)="onRuComponentTypeSelected(enComponentType); initColumns()">
+                            <p>{{prioritySchemaWrapper2Map.get(enComponentType)}} <span
+                                    *ngIf="selectedEnComponentType===enComponentType">({{all.length}})</span> </p>
                         </div>
                     </div>
-                </div> -->
+
+                </header>
+                <div class="body-main">
+                    <div class="t-body">
+                        <div class="t-body-wrapper">
+                            <table align="left" *ngIf="all.length; else template">
+                                <thead>
+                                    <tr>
+                                        <td *ngFor="let column of columns">{{column}}</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let record of all">
+                                        <td *ngFor="let value of getRecordsFromObjAsArray(record)">{{value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <ng-template #template>
+                                <div class="warning">
+                                    <div class="warning-wrapper">
+                                        <div class="warning-header">
+                                            <img [src]="'assets/images/not_found.svg'" alt="img">
+                                            <p>Ничего не найдено</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-template> -->
+            <!-- <div class="warning" *ngIf="error; else templateName">
+                <div class="warning-wrapper">
+                    <div class="warning-header">
+                        <img [src]="'assets/images/'+iconName+'.svg'" alt="img">
+                        <p>{{error}}</p>
+                    </div>
+                </div>
+            </div>
+            <ng-template #templateName>
                 <header>
                     <div class="tabs">
                         <div *ngFor="let ruComponentType of getKeyArrayFromStorage()"
@@ -60,9 +222,6 @@
                                         (click)="priority = p[0]; changePriorityInStorage(p[0]); initColumns()">
                                         <p>
                                             {{i + 1}}
-                                            <!-- <span *ngIf="i !== 0">
-                                                Добавление приоритета
-                                            </span> -->
                                             {{allias.get(p[0])}}:
                                             {{p[1]}}
                                         </p>
@@ -102,7 +261,7 @@
                         <button [ngClass]="{def: this.save, rev: !this.save}" (click)="onStateChange()">{{this.save ? 'Сохранить': 'Отчистить'}}</button>
                     </div>
                 </div>
-            </ng-template>
+            </ng-template> -->
         </main>
     </div>
     <app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />

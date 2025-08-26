@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { DropboxProviderComponent } from "../../../components/dropbox-provider/dropbox-provider.component";
-import existInColumnsMin from '../../../../utils/fnc1/other/existInColumnsMin';
-import existInColumnsMax from '../../../../utils/fnc1/other/existsInColumnsMax';
+import existInColumnsMin from '../../../../utils/fnc1/other/exist_in_columns_min';
+import existInColumnsMax from '../../../../utils/fnc1/other/exists_in_columns_max';
 import { filter } from 'rxjs';
 import { TableChartTemplateComponent } from "../../../table/table-chart-template/table-chart-template.component";
 import { ChartTemplateComponent } from "../../../components/charts/chart_template.component";
@@ -16,21 +16,25 @@ import { AppEnum } from '../../../../utils/enum/app.enum';
   templateUrl: './step-values.component.html',
   styleUrls: ['./step-values.component.css', '../step-window/step-window.component.css']
 
-})
+}) 
 export class StepValuesComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges | void): void {
     if (this.currentIndex == this.index) {
       let currentValue = this.dropBoxPropsMapConfig.get(this.columnName).currentValue
+      // console.log(currentValue)
       if (!currentValue) {
+        console.log("emptyyyyyyyy", this.prevSelection)
         this.currentSelection = Array.from(this.prevSelection)
-      }
-      let enComponentType = this.dropBoxPropsMapConfig.get('enComponentType').currentValue
+      }  
+      let enComponentType:string = this.dropBoxPropsMapConfig.get('enComponentType').currentValue 
       let storageCopy = Object.fromEntries(this.storage)
+      // console.log(this.storage, !Object.entries(this.obj).length)
+      // console.log(storageCopy, enComponentType)
       if (!Object.entries(this.obj).length) {
         for (const key in storageCopy) {
           if (!this.obj[key])
             this.obj[key] = []
-          if (enComponentType === key) {
+          if (enComponentType.toLowerCase() === key.toLowerCase()) {
             let prevSelection = this.prevSelection.map((el) => el.component)
             if (this.obj[key].length !== prevSelection.length) {
               this.obj[key] = this.prevSelection.map((el) => el.component)
@@ -39,7 +43,7 @@ export class StepValuesComponent implements OnChanges {
         }
       }
       for (const key in storageCopy) {
-        if (enComponentType === key) {
+        if (enComponentType.toLowerCase() === key.toLowerCase()) {
           this.parameterStat = this.prevSelection.map((el) => el.component)
           this.manufacturersStat = this.currentSelection.map((el) => el.component)
         }
@@ -55,7 +59,7 @@ export class StepValuesComponent implements OnChanges {
         this.prevManufacturerName = this.manufacturerName
       }
     }
-  }
+  } 
   @Input()
   storage!: Map<string, any>
   @Input()
@@ -96,7 +100,6 @@ export class StepValuesComponent implements OnChanges {
     this.currentSelection = []
     let currentValue = this.dropBoxPropsMapConfig.get(this.columnName).currentValue
     if (currentValue) {
-      console.log(this.prevSelection)
       for (const element of this.prevSelection) {
         let obj = element.component
         if (
@@ -120,6 +123,7 @@ export class StepValuesComponent implements OnChanges {
   prevManufacturerName: string | undefined
 
   onManufacturerChanged(manufacturerName: string): void {
+    // console.log(manufacturerName)
     this.manufacturerName = (this.manufacturerName == manufacturerName ? undefined : manufacturerName)
     this.ngOnChanges()
   }
@@ -128,7 +132,8 @@ export class StepValuesComponent implements OnChanges {
   onParameterChnaged(value: string): void {
     value = value.toString()
     this.inputDisabled = (value === AppEnum.NOTDEFINED && this.inputValue != value)
-    this.inputValue = (value === this.inputValue ? "" : value)
+    // this.inputValue = (value === this.inputValue ? "" : value)
+    this.inputValue = value
     this.dropBoxPropsMapConfig.get(this.columnName).currentValue = this.inputValue
     this.onCurrentDropBoxNameChnaged({ propsMap: this.dropBoxPropsMapConfig, currentName: undefined })
   }

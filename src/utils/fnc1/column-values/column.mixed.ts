@@ -1,6 +1,4 @@
-import { JsonPipe } from "@angular/common";
 import { ChartOptions } from "../../types/chart";
-import getMinMax from "../other/getMinMaxFromMap";
 import getManufacturersChartOptionBarMixed1 from "../manufacturers/manufaturers.mixed";
 
 const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
@@ -63,7 +61,7 @@ const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): 
         for (const key in data) {
             length += data[key].length
             for (const obj of data[key]) {
-                if (obj.ruComponentType != ruComponentType) {
+                if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
                     break;
                 }
                 const value = obj[param] ? obj[param] : 'Не указано'
