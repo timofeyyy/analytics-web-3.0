@@ -3,7 +3,7 @@ import getManufacturersChartOptionDonut1 from "../manufacturers/manufacturers.do
 
 
 
-const getColumnStatDonutChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
+const getColumnDonutChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
         series: [],
         chart: {
@@ -14,7 +14,7 @@ const getColumnStatDonutChartOptions = (data: any, query: Map<string, string>): 
         },
         labels: [],
         legend: {
-            show: true,
+            show: false,
             position: 'bottom',
             horizontalAlign: 'center'
         },
@@ -22,9 +22,10 @@ const getColumnStatDonutChartOptions = (data: any, query: Map<string, string>): 
     };
 
     const map = new Map()
-    let param = query.get('param')
-    let manufacturerName = query.get('manufacturerName')
+    const param = query.get('param')
+    const manufacturerName = query.get('manufacturerName')
     const ruComponentType = query.get('ruComponentType')
+    const all = query.get('all')
     if (param && ruComponentType) {
         for (const key in data) {
             for (const obj of data[key]) {
@@ -32,16 +33,9 @@ const getColumnStatDonutChartOptions = (data: any, query: Map<string, string>): 
                     break;
                 }
                 const value = obj[param] ? `${obj[param]}` : 'Не указано'
-
-                if (value === undefined) {
-                    for (const key in obj) {
-                        if (key.toLowerCase() === param.toLowerCase()) {
-                            param = key
-                            break
-                        }
-                    }
+                if (!obj[param] && all === "1") {
+                    continue;
                 }
-
                 if (
                     manufacturerName ?
                         (value && obj.manufacturerName == manufacturerName) :
@@ -73,4 +67,4 @@ const getColumnStatDonutChartOptions = (data: any, query: Map<string, string>): 
     return apexChartData
 }
 
-export default getColumnStatDonutChartOptions
+export default getColumnDonutChartOptions

@@ -17,7 +17,7 @@ const getManufacturersChartOptionPie1 = (data: any): Partial<ChartOptions> => {
             horizontalAlign: 'center'
         },
         values: [],
-         responsive: [
+        responsive: [
             {
                 breakpoint: 300,
                 options: {

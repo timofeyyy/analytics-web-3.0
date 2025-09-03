@@ -198,10 +198,10 @@ header,
 }
 
 table {
-    background-color: v;
     border-radius: 0 0 1vw 1vw;
     border-collapse: collapse;
     overflow-x: scroll;
+    height: 100%;
 }
 
 

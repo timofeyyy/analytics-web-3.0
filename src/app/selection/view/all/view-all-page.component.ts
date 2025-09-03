@@ -1,23 +1,24 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { ApiService1 } from '../../../services/api.services1';
-import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
-import { ComponentOptions } from '../../../utils/types/app';
+import { ApiService1 } from '../../../../services/api.services1';
+import { AppEnum, ComponentTypeRuEnum } from '../../../../utils/enum/app.enum';
+import { ComponentOptions } from '../../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
-import { chartNamesMap, columnsMax, columnsMin, propsMap } from '../../fetch.config';
-import { DomSanitizer } from '@angular/platform-browser';
-import { NavigatorComponent } from '../../components/navigator/navigator.component';
-import { LoaderComponent } from '../../components/loader/loader.component';
-import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../../utils/redux/component';
+import { propsMap } from '../../../fetch.config';
+import { NavigatorComponent } from '../../../components/navigator/navigator.component';
+import { LoaderComponent } from '../../../components/loader/loader.component';
+import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../../../utils/redux/component';
+import { columnsMax, columnsMin } from '../../../../utils/static-data/compared-min-max';
+import { chartNamesMap } from '../../../../utils/static-data/chart-names';
 
 @Component({
   selector: 'app-table',
   imports: [HttpClientModule, NgFor, NgClass, NavigatorComponent, LoaderComponent, NgStyle, NgIf],
   providers: [ApiService1],
-  templateUrl: './table-page.component.html',
-  styleUrls: ['./table-page.component.css', '../../components/styles/tabs.css', '../../components/styles/button.css']
+  templateUrl: './view-all-page.component.html',
+  styleUrls: ['./view-all-page.component.css', '../../../components/styles/tabs.css', '../../../components/styles/button.css']
 })
 export class SelectionViewAllPage implements OnInit {
   storage: any;

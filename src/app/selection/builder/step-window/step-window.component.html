@@ -5,36 +5,33 @@
     <div class="workspace">
         <main>
             <section class="component-selection">
-                <div class="view"  >
+                <div class="view">
                     <div class="info">
-                        <h1>Таблица: 
+                        <h1>Таблица:
                             {{dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все' ? 'Не указано' :
                             `${dropBoxPropsMapConfig.get('ruComponentType').currentValue}`}}
-                            </h1>
-                        <p *ngFor="let column of priorities; let i = index;" [ngClass]="{disabled:st && i > step - 2 }" >{{allias.get(column[0])}}{{activeKeys.get(column[0]) ? `: ${activeKeys.get(column[0])}` : ''}}  <span>Приоритет {{column[1]['priority'] === 0 ? 'неуказан': column[1]['priority']}}</span></p>
+                        </h1>
+                        <p *ngFor="let column of priorities; let i = index;" [ngClass]="{disabled:st && i > step - 2 }">
+                            {{allias.get(column[0])}}{{activeKeys.get(column[0]) ? `: ${activeKeys.get(column[0])}` :
+                            ''}} <span>Приоритет {{column[1]['priority'] === 0 ? 'неуказан':
+                                column[1]['priority']}}</span></p>
                     </div>
                 </div>
                 <!-- [ngStyle]="{width: step >= 2 ? '100%': '70%'}" -->
-                <div class="controlles" >
+                <div class="controlles">
                     <div class="steps-panel">
-                        <app-step-tablename [storage]="storage" [index]="1" class="step step1" [ngStyle]="{'left': stepper.get('step1')?.positionX + '%'}" (typeChanged)="onTypeSelected($event)" (sourceChanged)="onSourceChanged($event)"/>
-                        <app-step-priorities  [allias]="allias" [columns]="columns" [index]="2" class="step step2" [ngStyle]="{'left': stepper.get('step2')?.positionX + '%'}" (onChanged)="onPriorityChanged($event)"/>
-                        <app-step-values 
-                            class="step"
-                            [allias]="allias" 
-                            [dropBoxPropsMapConfig]="dropBoxPropsMapConfig"
-                            [all]="all"
-                            *ngFor="let column of prioritiesNoJumps; let i = index"
-                            [columnName]="column[0]"
-                            [index]="i+3"
-                            [ngStyle]="{'left': getPositionX(i+3) + '%'}"
+                        <app-step-tablename [storage]="storage" [index]="1" class="step step1"
+                            [ngStyle]="{'left': stepper.get('step1')?.positionX + '%'}"
+                            (typeChanged)="onTypeSelected($event)" (sourceChanged)="onSourceChanged($event)" />
+                        <app-step-priorities [allias]="allias" [columns]="columns" [index]="2" class="step step2"
+                            [ngStyle]="{'left': stepper.get('step2')?.positionX + '%'}"
+                            (onChanged)="onPriorityChanged($event)" />
+                        <app-step-values class="step" [allias]="allias" [dropBoxPropsMapConfig]="dropBoxPropsMapConfig"
+                            [all]="all" *ngFor="let column of prioritiesNoJumps; let i = index" [columnName]="column[0]"
+                            [index]="i+3" [ngStyle]="{'left': getPositionX(i+3) + '%'}"
                             (onValueChanged)="onDropBoxValueChnaged($event)"
-                            (onSourceChanged)="onDropBoxSourceChnaged($event)"
-                            [currentIndex]="step+1"
-                            [activeKeys]="activeKeys"
-                            [storage]="storage"
-                            [prevSelection]="getPrevSelection()"
-                        />
+                            (onSourceChanged)="onDropBoxSourceChnaged($event)" [currentIndex]="step+1"
+                            [activeKeys]="activeKeys" [storage]="storage" [prevSelection]="getPrevSelection()" />
 
                         <!-- <div class="step step1" [ngStyle]="{'left': stepper.get('step1')?.step + '%'}">
                             <p class="step-description">Шаг 1: Выбор таблицы компонента</p>
@@ -83,8 +80,14 @@
                         </div> -->
                     </div>
                     <div class="btns">
-                        <button class="rev" (click)="prev()">Назад</button>
-                        <button class="def" (click)="st ? makeQueryStr() : next()">{{st && step > 1 ? 'Реузльтат' : 'Дальше' }}</button>
+                        <!-- <div class="block">
+                            <button class="rev" (click)="prev()">Назад</button>
+                        </div>
+                        <div class="block"> -->
+                            <button class="rev" (click)="prev()">Назад</button>
+                            <button class="def" (click)="st ? makeQueryStr() : next()">{{st && step > 1 ? 'Реузльтат' :
+                                'Дальше' }}</button>
+                        <!-- </div> -->
                     </div>
                 </div>
             </section>

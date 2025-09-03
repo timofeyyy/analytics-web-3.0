@@ -26,6 +26,9 @@
                             </ul>
                         </ul>
                     </div>
+                    <div class="panel-footer">
+                        <button (click)="getBack()" class="def">Назад</button>
+                    </div>
                 </aside>
                 <div class="chart-wrapper-main">
                     <header>
@@ -46,9 +49,8 @@
 
                         <as-split-area [size]="20" [maxSize]="40">
                             <footer class="bottom-section">
-                                <app-parameter-value-count-table class="list" [all]="storage.get(enComponentType) ?? []"
-                                    [borderRadius]="'0'" [parameter]="currentPropName"
-                                    (onValueChanged)="onParameterChnaged($event)" />
+                                <app-parameter-value-count-table class="list" [allowNull]="false" [noRedirect]="true" [all]="storage.get(enComponentType) ?? []"
+                                    [borderRadius]="'0'" [currentValue]="currentTableValue" [parameter]="currentPropName" [hideLabel]="false" [alliasName]="allias.get(currentPropName)!" (onValueChanged)="onTableRowSelected($event)" />
                             </footer>
                             <!-- <div class="bottom-wrapper">
                                 <as-split direction="horizontal" class="bottom-section">

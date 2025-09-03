@@ -13,7 +13,7 @@
     [responsive]="chartOptions.responsive!"
     [colors]="chartOptions.colors!"
     [legend]="chartOptions.legend!"
+    [tooltip]="chartOptions.tooltip!"
   ></apx-chart>
   <button *ngIf="chartOptions && chartOptions.back" (click)="getBack()"  [disabled]="disabled" class="def">Назад</button>
 </div>
-    <!-- <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" /> -->

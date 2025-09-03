@@ -1,7 +1,7 @@
 import { ChartOptions } from "../../types/chart";
 import getManufacturersChartOptionBarMixed1 from "../manufacturers/manufaturers.mixed";
 
-const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
+const getColumnMixedChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
         series: [{
             name: "количество",
@@ -36,14 +36,24 @@ const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): 
                 },
             }
         },
-        yaxis: {
-            opposite: false,
+        yaxis: [
+            {
+                opposite: false,
+                title: {
+                    text: ""
+                },
+                labels: {
+                }
+            },
+            {
+            opposite: true,
             title: {
                 text: ""
             },
             labels: {
             }
-        },
+        }
+        ],
         plotOptions: {
             bar: {
                 horizontal: false
@@ -52,11 +62,12 @@ const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): 
         values: []
     };
 
-    var map = new Map();
+    const map = new Map();
     let length = 0
-    let param = query.get('param')
-    let manufacturerName = query.get('manufacturerName')
+    const param = query.get('param')
+    const manufacturerName = query.get('manufacturerName')
     const ruComponentType = query.get('ruComponentType')
+    const all = query.get('all')
     if (param && ruComponentType) {
         for (const key in data) {
             length += data[key].length
@@ -64,15 +75,10 @@ const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): 
                 if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
                     break;
                 }
-                const value = obj[param] ? obj[param] : 'Не указано'
-                if (value === undefined) {
-                    for (const key in obj) {
-                        if (key.toLocaleLowerCase() === param.toLowerCase()) {
-                            param = key
-                            break
-                        }
-                    }
+                if (!obj[param] && all === "1") {
+                    continue;
                 }
+                const value = obj[param] ? obj[param] : 'Не указано'
                 if (
                     manufacturerName ?
                         (value && obj.manufacturerName == manufacturerName) :
@@ -93,6 +99,7 @@ const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): 
             sum += (value * 100 / length);
             (apexChartData as ChartOptions).series[1].data.push(sum.toFixed(1) as any);
         });
+        console.log(apexChartData)
     }
     else {
         apexChartData = getManufacturersChartOptionBarMixed1(data)
@@ -102,4 +109,4 @@ const getColumnStatMixedChartOptions = (data: any, query: Map<string, string>): 
 }
 
 
-export default getColumnStatMixedChartOptions
+export default getColumnMixedChartOptions

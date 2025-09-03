@@ -1,10 +1,13 @@
-const getParameterValueCountStat = (data: any, key: string): any[] => {
+const getParameterValueCountStat = (data: any, key: string,  allowNull: boolean): any[] => {
 
     let records: any[] = []
     if (Array.isArray(data)) {
-        data.forEach((obj: any) => {
+        for (const obj of data) {
             if (obj[key] !== undefined) {
-                let value = obj[key] ? obj[key] : 'Не указано' 
+                let value = obj[key] ? obj[key] : 'Не указано'
+                if (!obj[key] && !allowNull) {
+                    continue
+                }
                 let recordIndex: number = records.findIndex(
                     (record: any) => record.value === value
                 )
@@ -18,7 +21,7 @@ const getParameterValueCountStat = (data: any, key: string): any[] => {
                     (records[recordIndex].prodSummary as number) += 1
                 }
             }
-        });
+        }
     }
     return records;
 }

@@ -3,7 +3,7 @@ import getManufacturersChartOptionPie1 from "../manufacturers/manufacturers.pie"
 
 
 
-const getColumnStatPieChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
+const getColumnPieChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
         series: [],
         chart: {
@@ -14,17 +14,18 @@ const getColumnStatPieChartOptions = (data: any, query: Map<string, string>): Pa
         },
         labels: [],
         legend: {
-            show: true,
+            show: false,
             position: 'bottom',
-            horizontalAlign: 'center'
+            horizontalAlign: 'center',
         },
         values: []
     };
 
     const map = new Map()
-    let param = query.get('param')
-    let manufacturerName = query.get('manufacturerName')
+    const param = query.get('param')
+    const manufacturerName = query.get('manufacturerName')
     const ruComponentType = query.get('ruComponentType')
+    const all = query.get('all')
     if (param && ruComponentType) {
         for (const key in data) {
             for (const obj of data[key]) {
@@ -32,14 +33,8 @@ const getColumnStatPieChartOptions = (data: any, query: Map<string, string>): Pa
                     break;
                 }
                 const value = obj[param] ? `${obj[param]}` : 'Не указано'
-
-                if (value === undefined) {
-                    for (const key in obj) {
-                        if (key.toLocaleLowerCase() === param.toLowerCase()) {
-                            param = key
-                            break
-                        }
-                    }
+                if (!obj[param] && all === "1") {
+                    continue;
                 }
 
                 if (
@@ -70,7 +65,8 @@ const getColumnStatPieChartOptions = (data: any, query: Map<string, string>): Pa
     else {
         apexChartData = getManufacturersChartOptionPie1(data)
     }
+    console.log(apexChartData)
     return apexChartData
 }
 
-export default getColumnStatPieChartOptions
+export default getColumnPieChartOptions

@@ -7,33 +7,33 @@ import getBestManufacturer from '../../../utils/fnc1/other/best_manufacturer_pro
 import getManufacturersProd from '../../../utils/fnc1/other/paramter-value-count-stat.fnc';
 import { HttpClientModule } from '@angular/common/http';
 import { NgFor, NgStyle } from '@angular/common';
+import { RecordSortingComponent } from "../record-sorting/record-sorting.component";
 
 @Component({
   selector: 'app-manufacturer-count-table',
-  imports: [NgFor, NgStyle],
+  imports: [NgFor, NgStyle, RecordSortingComponent],
   templateUrl: './manufacturer-count-table.component.html',
   styleUrls: ['./manufacturer-count-table.component.css', '../styles/input.css']
 })
 export class ManufacturerCountTableComponent implements OnChanges {
-
   rows!: any[]
   orig!: any[]
   @Input()
   all!: any[]
-  @Input() 
+  @Input()
   noRedirect!: boolean
-   @Input()
-  borderRadius: string= '.5vw'
-  // @Input()
-  // activatedColumns!: any[]
+  @Input()
+  borderRadius: string = '.5vw'
   currentValue: string | undefined
   constructor(
     private router: Router,
     private route: ActivatedRoute
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    this.rows = getManufacturersProd(this.all, 'manufacturerName') as any[]
-    this.orig = Array.from(this.rows)
+    if (!this.rows || !this.rows.length) {
+      this.rows = getManufacturersProd(this.all, 'manufacturerName', false) as any[]
+      this.orig = Array.from(this.rows)
+    }
   }
   search(event: any): void {
     let value: string = event.target.value
@@ -59,15 +59,8 @@ export class ManufacturerCountTableComponent implements OnChanges {
 
   openCatalog(manufacturer: string): any {
     let url = "/filters?"
-    // this.activatedColumns = []
-    // if (this.activatedColumns.findIndex((val) => val['manufacturerName']) === -1) {
-    // this.activatedColumns.push({ manufacturerName: manufacturer })
-    // }
-    // for (const column of this.activatedColumns) {
-    // const pair = Object.entries(column)
     url += `manufacturerName=${manufacturer}`
-    // }
- 
+    localStorage.removeItem('savedFilterValues')
     this.router.navigateByUrl(url)
   }
   @Output()

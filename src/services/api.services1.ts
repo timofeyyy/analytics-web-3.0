@@ -10,9 +10,8 @@ import { AppEnum } from "../utils/enum/app.enum";
 import { Config } from "../utils/types/config";
 import { Resistor } from "../utils/types/resistors";
 import { propsMap } from "../app/fetch.config";
-import existInColumnsMin from "../utils/fnc1/other/exist_in_columns_min";
-import existInColumnsMax from "../utils/fnc1/other/exists_in_columns_max";
 import { componentStorage, fetchComponentTypes, initComponentTypes } from "../utils/redux/component";
+import { existInColumnsMax, existInColumnsMin } from "../utils/static-data/compared-min-max";
 
 @Injectable()
 export class ApiService1 {

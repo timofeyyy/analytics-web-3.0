@@ -1,6 +1,4 @@
-<img src="assets/images/menu.svg" class="menu-icon" alt="img" (click)="openClose()">
-
-<div class="menu-wrapper" [ngStyle]="{left: isOpen ? '-40%' : '0' }">
+<div class="menu-wrapper" [ngStyle]="{width: isOpen ? '0' : '100%', padding: isOpen ? '0': '1vw' }">
     <nav class="menu">
         <ul>
             <li [ngClass]="{current: current === '/home'}" (click)="openNewPage('/home')">
@@ -12,8 +10,7 @@
                 <a>Фильтры</a>
             </li>
             <div class="section"></div>
-            <li 
-                (click)="openCloseSelectionSection()">
+            <li (click)="openCloseSelectionSection()">
                 <img src="assets/images/list.svg" alt="img">
                 <p>Выборка</p>
             </li>
@@ -23,8 +20,7 @@
                     <img src="assets/images/add-square.svg" alt="img">
                     <a>Создание</a>
                 </li>
-                <li [ngClass]="{'section-item': true}"
-                    (click)="openCloseViewSection()">
+                <li [ngClass]="{'section-item': true}" (click)="openCloseViewSection()">
                     <img src="assets/images/table.svg" alt="img">
                     <a>Просмотр</a>
                 </li>
@@ -56,11 +52,15 @@
                     </li>
                     <li [ngClass]="{'section-link': true, current: current === '/table-chart/donut', blocked: chartBlocked}"
                         (click)="openChartPage('/table-chart/donut')">
-                        <a>Кольцевая диаграмма</a>
+                        <a>Кольцевая</a>
                     </li>
                     <li [ngClass]="{'section-link': true, current: current === '/table-chart/pie', blocked: chartBlocked}"
                         (click)="openChartPage('/table-chart/pie')">
-                        <a>Кругавая диаграмма</a>
+                        <a>Секторная</a>
+                    </li>
+                     <li [ngClass]="{'section-link': true, current: current === '/table-chart/line', blocked: chartBlocked}"
+                        (click)="openChartPage('/table-chart/line')">
+                        <a>Тенденция</a>
                     </li>
                 </div>
             </div>
@@ -91,4 +91,8 @@
             </div> -->
         </ul>
     </nav>
+    <img src="assets/images/menu.svg" class="menu-icon" alt="img" (click)="openClose()">
+    <div class="floated-menu-btn" [ngStyle]="{display: isOpen ? 'flex' : 'none' }" (click)="openClose()">
+        <img src="assets/images/menu.svg" class="menu-icon" alt="img" >
+    </div>
 </div>

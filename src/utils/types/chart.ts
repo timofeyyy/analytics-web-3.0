@@ -10,7 +10,7 @@ import {
     ApexYAxis,
     ApexFill,
     ApexLegend,
-    ApexPlotOptions
+    ApexPlotOptions, ApexTooltip
 } from "ng-apexcharts";
 import { ChartActions } from "../enum/app.enum";
 
@@ -35,6 +35,7 @@ export type ChartOptions = {
     column: {
         action: ChartActions
     },
+    tooltip: ApexTooltip,
     back: boolean,
     mapWithMaxValues: Map<string, number>
 };

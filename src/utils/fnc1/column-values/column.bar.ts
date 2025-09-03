@@ -1,7 +1,7 @@
 import { ChartOptions } from "../../types/chart";
 import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar";
 
-const getColumnStatBarChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
+const getColumnBarChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
         series: [],
         dataLabels: {
@@ -49,37 +49,24 @@ const getColumnStatBarChartOptions = (data: any, query: Map<string, string>): Pa
         values: []
     };
     const map = new Map();
-    // const ParamMap = new Map()
-    let param = query.get('param')
-    let manufacturerName = query.get('manufacturerName')
+    const param = query.get('param')
+    const manufacturerName = query.get('manufacturerName')
     const ruComponentType = query.get('ruComponentType')
+    const all = query.get('all')
     if (param && ruComponentType) {
-        console.log(data)
         for (const key in data) {
             for (const obj of data[key]) {
                 if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
                     break;
                 }
                 const value = obj[param] ? `${obj[param]}` : 'Не указано'
-                if (value === undefined) {
-                    for (const key in obj) {
-                        if (key.toLowerCase() === param.toLowerCase()) {
-                            param = key
-                            break
-                        }
-                    }
+                if(!obj[param] && all === "1") {
+                    continue;
                 }
                 if (
                     manufacturerName ?
                         (value && obj.manufacturerName == manufacturerName) :
                         value
-                    //     || (
-                    //     paramValue &&
-                    //     (existInColumnsMin(param) && !isNaN(Number(paramValue)) && obj[param] >= paramValue) ||
-                    //     (existInColumnsMax(param) && !isNaN(Number(paramValue)) && obj[param] <= paramValue!) ||
-                    //     (obj[param] == paramValue) ||
-                    //     (obj[param] == Number(paramValue))
-                    // )
                 ) {
 
                     let categorieItemIndex: number = (apexChartData.xaxis?.categories as Array<string>).findIndex(
@@ -127,4 +114,4 @@ const getColumnStatBarChartOptions = (data: any, query: Map<string, string>): Pa
 }
 
 
-export default getColumnStatBarChartOptions
+export default getColumnBarChartOptions

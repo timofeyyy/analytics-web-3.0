@@ -1,0 +1,29 @@
+<div class="box">
+
+    <!-- <div class="box-wrapper">
+        <div [ngClass]="{activated: desc === false}" class="asc" (click)="changeState('asc'); desc = false">
+            <img src="assets/images/arrow-bottom.svg" />
+        </div>
+        <div class="desc" [ngClass]="{activated: desc === true}" (click)="changeState('desc'); desc = true">
+            <img src="assets/images/arrow-bottom.svg" />
+        </div>
+    </div>
+   
+    <div class="selection-wrapper current">
+        <p>Сорт.</p>
+    </div> -->
+    <div class="icon" (click)="isOpen=!isOpen">
+        <img src="assets/images/sort.svg" alt="сорт.">
+
+    </div>
+
+    <div class="popup-parent selection" [ngStyle]="{display: isOpen ? 'block' : 'none'}">
+        <div class="popup-child selection-wrapper">
+            <!-- <li class="activated">Производитель (возр)</li>
+            <li>Номенклатура (убыв)</li>
+            <li>Производитель (возр)</li>
+            <li>Номенклатура (убыв)</li> -->
+            <li [ngClass]="{activated: current[0] == label[0]}" *ngFor="let label of labels" (click)="onLabelSelcted(label)">{{label[0]}}</li>
+        </div>
+    </div>
+</div>

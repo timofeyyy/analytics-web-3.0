@@ -1,20 +1,17 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
-import { ComponentOptions, FilterDropBox } from '../../utils/types/app';
-import componentTypeFilters from '../../utils/fnc1/filters/componentType';
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { ApiService1 } from '../../services/api.services1';
 import { forkJoin } from 'rxjs';
-import { chartNamesMap, chartOptionsData, prioritySchemaMap, props } from '../fetch.config';
+import { props } from '../fetch.config';
 import { HttpClientModule } from '@angular/common/http';
 import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../utils/redux/component';
-import { CdkDrag } from '@angular/cdk/drag-drop';
 import { AngularSplitModule } from 'angular-split';
 import { ParameterValueCountTableComponent } from "../components/parameter-value-count-table/parameter-value-count-table.component";
-import { ManufacturerCountTableComponent } from "../components/manufacturer-count-table/manufacturer-count-table.component";
+import { chartNamesMap } from '../../utils/static-data/chart-names';
+import { isException } from '../../utils/static-data/filter-exceptions';
 
 @Component({
   selector: 'app-component-template',
@@ -24,9 +21,15 @@ import { ManufacturerCountTableComponent } from "../components/manufacturer-coun
   styleUrls: ['./component_type_template.component.css', '../components/styles/button.css', '../components/styles/tabs.css'],
 })
 export class TypeTemplateComponent implements OnInit {
-  onParameterChnaged($event: string) {
-    throw new Error('Method not implemented.');
+
+  onTableRowSelected($event: string) {
+    $event ? this.buildValueLineChart($event) : this.buildChart()
   }
+
+  getBack() {
+    this.router.navigateByUrl('home')
+  }
+  currentTableValue!: string | undefined
   type!: string | null
   chartUrl: any
   chartWidth: number = 85
@@ -101,31 +104,45 @@ export class TypeTemplateComponent implements OnInit {
     ]).subscribe(res => {
       const tableColumns: Map<string, Map<string, string>> = new Map()
       this.storage = new Map()
+      this.allias = new Map(Object.entries((res as any)[1]))
       for (const key in res[0]) {
         const set = (res[0] as any)[key]
         this.storage.set(key, set);
         if (set.length) {
-          let columns = prioritySchemaMap.get(set[0].ruComponentType)! as string[]
-          tableColumns.set(set[0].enComponentType.toLowerCase(), new Map(columns.map((value) => [value, this.allias.get(value) as string])))
+          const item = set[0]
+          const columnBuffer: string[] = []
+          for (const key in item) {
+            if (!isException(key)) {
+              columnBuffer.push(key)
+            }
+          }
+          tableColumns.set(set[0].enComponentType.toLowerCase(), new Map(columnBuffer.map((value) => [value, this.allias.get(value) as string])).set('manufacturerName', this.allias.get('manufacturerName') as string))
         }
       }
       this.allias = new Map<string, string>(Object.entries((res as any[])[1]))
       this.displayedColumns = Array.from(tableColumns.get(`${this.enComponentType}`)!.keys())
-      console.log(tableColumns)
-      console.log(this.displayedColumns)
 
     });
   }
 
   onColumnSelected(column: string): void {
     this.currentPropName = column
+    this.currentTableValue = undefined
+    // console.log(this.currentTableValue)
   }
 
   buildChart(): void {
     const ruComponentType = this.getRuComponentTypeByEn(this.enComponentType)
-    console.log(ruComponentType)
     if (ruComponentType) {
-      let url: string = `chart/components/column/${this.type}?ruComponentType=${ruComponentType}${this.currentPropName == 'ruComponentType' ? '' : `&param=${this.currentPropName}`}`
+      let url: string = `chart/components/column/${this.type}?ruComponentType=${ruComponentType}&param=${this.currentPropName}&all=1`
+      this.chartUrl = this.santizer.bypassSecurityTrustResourceUrl(url)
+    }
+  }
+
+  buildValueLineChart(value: string): void {
+    const ruComponentType = this.getRuComponentTypeByEn(this.enComponentType)
+    if (ruComponentType) {
+      let url: string = `chart/components/column-value/line?ruComponentType=${ruComponentType}&param=${this.currentPropName}&paramValue=${value}&all=1`
       this.chartUrl = this.santizer.bypassSecurityTrustResourceUrl(url)
     }
   }

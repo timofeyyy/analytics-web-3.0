@@ -23,7 +23,7 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
   inputDisabled!: boolean
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isTableProp() && !this.isTableInput()) {
-      console.log(this.propsMap.get(this.name))
+      // console.log(this.propsMap.get(this.name))
       if (this.propsMap.get(this.name).sort) {
         this.values = this.propsMap.get(this.name).sort(this.propsMap, this.all)
       }

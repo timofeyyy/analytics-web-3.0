@@ -8,12 +8,12 @@ import { ItemInfoTemplateComponent } from './item_info_template/item_info_templa
 import { TableBuilderComponent } from './table/table-builder/table-builder.component';
 import { TestPageComponent } from './test-page/test-page.component';
 import { ChartTemplateComponent } from './components/charts/chart_template.component';
-import { TablePage } from './table/table-page/table-page.component';
 import { HomeComponent } from './home/home.component';
 import { TableChartTemplateComponent } from './table/table-chart-template/table-chart-template.component';
 import { StepWindowComponent } from './selection/builder/step-window/step-window.component';
-import { SelectionViewAllPage } from './selection/view-all/table-page.component';
- 
+import { TablePage } from './table/table-page/table-page.component';
+import { SelectionViewAllPage } from './selection/view/all/view-all-page.component';
+  
 export const routes: Routes = [
     { path: '', redirectTo: 'selection-builder', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },

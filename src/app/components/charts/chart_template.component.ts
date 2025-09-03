@@ -2,11 +2,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef, Component, HostListener, Input, input, OnChanges, OnDestroy, OnInit, Query, SimpleChanges } from '@angular/core';
 import { ChartType, NgApexchartsModule } from 'ng-apexcharts';
 import { catchError, combineLatest, forkJoin, map, Observable } from 'rxjs';
-import { chartOptionsData, observableApiMap } from '../../fetch.config';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ChartOptions } from '../../../utils/types/chart';
 import { ApiService1 } from '../../../services/api.services1';
 import { NgIf, NgStyle, Location, NgClass } from '@angular/common';
+import { chartOptionsData } from '../../../utils/static-data/chart-options';
+import { observableApiMap } from '../../../utils/static-data/observables';
 
 @Component({
   selector: 'app-chart',
@@ -89,7 +90,7 @@ export class ChartTemplateComponent implements OnInit, OnChanges {
       query.set('allias', this.allias.get('ruComponentType'))
     }
     let data = chartOptionsData[chart_name].chartData[type_name](api, query) as ChartOptions;
-    this.chartName = chartOptionsData[chart_name].chartName(query);
+    this.chartName = chartOptionsData[chart_name].chartName(api, query);
     this.chartOptions = {
 
       ...data,
@@ -124,6 +125,7 @@ export class ChartTemplateComponent implements OnInit, OnChanges {
         },
       }
     }
+    console.log(this.chartOptions)
   }
 
   getBack(): void {

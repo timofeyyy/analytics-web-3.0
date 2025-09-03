@@ -25,7 +25,7 @@
 
 .records .view .row {
     cursor: pointer;
-    font-size: max(1vw, 10px);
+    font-size: max(.8vw, 8px);
     padding: 0.5vw;
     border-top: 0.1vw solid lightgray;
 }
@@ -37,7 +37,7 @@
 
 .records .view .row .col :nth-child(1) {
     margin: 0 1vw;
-    font-size: max(1vw, 10px);
+    font-size: max(.8vw, 8px);
     word-break: break-all;
 }
 
@@ -71,24 +71,33 @@
 
 .search input {
     width: 10vw;
+    ;
 }
 
 .header {
-    padding: 0.5vw;
+    padding: 0.5vw 1vw;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.header {
+    height: 3.9vw;
     font-size: max(1vw, 10px);
 }
 
-.header .search:nth-child(1) {
-    margin-left: .5vw;
+.header .block {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
 }
 
-.header p:nth-child(2) {
-    margin-right: .5vw;
+/* 
+.block p {
+    margin-right: 1vw;
+} */
+
+.record-sorting {
+    margin-left: 0.2vw;
+    height: 100%;
 }

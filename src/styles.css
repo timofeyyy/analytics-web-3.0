@@ -40,7 +40,7 @@ app-chart {
     height: 100vh;
     display: block;
     background-color: white;
-} 
+}
 
 /* app-navigator {
     transition: 0.5s ease all;
@@ -80,7 +80,12 @@ app-country-selection {
 
 .workspace {
     /* display: flex; */
-    width: 80%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.workspace::-webkit-scrollbar {
+    width: 0;
 }
 
 iframe {
@@ -100,18 +105,7 @@ iframe {
     display: flex;
 }
 
-.navigator-wrapper {
-    width: 20%;
-    margin: 0;
-}
-
-/* @media (max-width: 820px) {
-    .workspace {
-        width: 100%;
-    }
-} */
-
-
-app-dropbox-provider {
+app-dropbox-provider,
+.record-sorting {
     margin: 0;
 }

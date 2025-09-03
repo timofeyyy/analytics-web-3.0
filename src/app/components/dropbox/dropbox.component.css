@@ -103,16 +103,6 @@ li {
     width: 100%;
 }
 
-
-/* ul li input[type=text]::-webkit-input-placeholder::after {
-    content: url('../../assets/images/search.svg');
-    width: max(1vw, 10px);
-    height: max(1vw, 10px);
-    display: block;
-    visibility: visible;
-
-} */
-
 ul li input:focus {
     outline: none;
 }

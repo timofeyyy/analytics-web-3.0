@@ -1,11 +1,28 @@
 <section class="records" [ngStyle]="{'border-radius': borderRadius}">
-   <div class="header">
+    <!-- <div class="header">
         <p>Значение</p>
         <p>Количество</p>
-   </div>
+        <div class="block">
+            <p>Значение</p>
+            <app-record-sorting [rows]="rows" class="record-sorting" />
+        </div>
+        <div class="block">
+            <p>Номенклатура</p>
+        </div>
+    </div> -->
+     <div class="header">
+        <div class="block">
+            <div class="search">
+                <input type="text" [placeholder]="alliasName" (input)="search($event)">
+            </div>
+            <app-record-sorting [rows]="rows" [countName]="'Количество'" [valueName]="'Производитель'" class="record-sorting"/>
+        </div>
+        <div class="block" [ngStyle]="{display: hideLabel ? 'none' : 'flex' }">
+            <p>Кол-во компонентов с этим параметром</p>
+        </div>
+    </div>
     <div class="view">
-        <!-- [ngStyle]="{background: currentValue == row.value ?  'rgba(211,211,211,0.5)' : 'unset'}"  -->
-        <div class="row layout"  *ngFor="let row of rows" (click)="getValue(row.value)">
+        <div class="row layout" *ngFor="let row of rows" (click)="noRedirect ? getValue(row.value) : openCatalog(row.value)" [ngClass]="{activated: row.value == currentValue}">
             <div class="col">
                 <p>{{row.value}}</p>
             </div>

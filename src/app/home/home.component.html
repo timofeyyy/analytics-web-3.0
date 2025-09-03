@@ -28,12 +28,10 @@
                         <iframe src="chart/components/statistic-filters/donut" frameborder="0"></iframe>
                     </div>
                     <div class="list">
-                        <app-manufacturer-count-table [all]="all" class="records-wrapper" />
+                        <app-parameter-value-count-table class="records-wrapper" [all]="all" [alliasName]="'Производитель'" [parameter]="'manufacturerName'" [allowNull]="false" />
+                        <!-- <app-manufacturer-count-table [all]="all" class="records-wrapper" /> -->
                     </div>
                 </div>
-
-
-
             </div>
         </main>
     </div>

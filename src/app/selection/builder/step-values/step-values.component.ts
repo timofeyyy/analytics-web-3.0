@@ -1,14 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output,  SimpleChanges } from '@angular/core';
 import { DropboxProviderComponent } from "../../../components/dropbox-provider/dropbox-provider.component";
-import existInColumnsMin from '../../../../utils/fnc1/other/exist_in_columns_min';
-import existInColumnsMax from '../../../../utils/fnc1/other/exists_in_columns_max';
-import { filter } from 'rxjs';
-import { TableChartTemplateComponent } from "../../../table/table-chart-template/table-chart-template.component";
 import { ChartTemplateComponent } from "../../../components/charts/chart_template.component";
 import { ManufacturerCountTableComponent } from "../../../components/manufacturer-count-table/manufacturer-count-table.component";
 import { NgIf } from '@angular/common';
 import { ParameterValueCountTableComponent } from "../../../components/parameter-value-count-table/parameter-value-count-table.component";
 import { AppEnum } from '../../../../utils/enum/app.enum';
+import { existInColumnsMax, existInColumnsMin } from '../../../../utils/static-data/compared-min-max';
 
 @Component({
   selector: 'app-step-values',
@@ -23,7 +20,6 @@ export class StepValuesComponent implements OnChanges {
       let currentValue = this.dropBoxPropsMapConfig.get(this.columnName).currentValue
       // console.log(currentValue)
       if (!currentValue) {
-        console.log("emptyyyyyyyy", this.prevSelection)
         this.currentSelection = Array.from(this.prevSelection)
       }  
       let enComponentType:string = this.dropBoxPropsMapConfig.get('enComponentType').currentValue 

@@ -2,12 +2,12 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ApiService1 } from '../../services/api.services1';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { observableApiMap } from '../fetch.config';
 import { forkJoin, map } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from "../components/navigator/navigator.component";
 import { LoaderComponent } from "../components/loader/loader.component";
 import { NgStyle } from '@angular/common';
+import { observableApiMap } from '../../utils/static-data/observables';
 
 @Component({
   selector: 'app-item-info-template',
@@ -33,22 +33,16 @@ export class ItemInfoTemplateComponent implements OnInit {
     const ruComponentType = query.get("ruComponentType")
     const componentName = query.get("componentName")
     const getObservable = observableApiMap.get(ruComponentType as string)
-    console.log(ruComponentType, componentName, getObservable)
     if (ruComponentType && componentName && getObservable) {
       forkJoin([
         this.api.getAlias(),
         getObservable(this.api, (query as unknown) as Map<string, string>)
       ]).subscribe((res: any[]) => {
-        console.log(res)
         let body = ''
         let header = ''
         const obj = res[1][0]
         const allias = res[0]
         for (const key in obj) {
-          // if (key == 'ruComponentType') {
-          //   header += `<h1>${obj[key]}</h1>`
-          //   continue
-          // }
           if (key == 'componentName' || key == 'manufacturerName') {
             header += `<h3>${allias[key] === undefined ? key : allias[key]}: ${obj[key]}</h1>`
             continue

@@ -1,4 +1,4 @@
-<section class="records"  [ngStyle]="{'border-radius': borderRadius}">
+<section class="records" [ngStyle]="{'border-radius': borderRadius}">
     <!-- <div class="list-wrapper">
         <div class="list">
             <div class="values">
@@ -10,15 +10,20 @@
         </div>
     </div> -->
     <div class="header">
-        <div class="search">
-            <input type="text" placeholder="Производитель" (input)="search($event)">
+        <div class="block">
+            <div class="search">
+                <input type="text" placeholder="Производитель" (input)="search($event)">
+            </div>
+            <app-record-sorting [rows]="rows" [countName]="'Номенклатура'" [valueName]="'Производитель'" class="record-sorting"/>
         </div>
-        <p>Номенклатура</p>
+        <div class="block">
+            <p>Номенклатура</p>
+        </div>
     </div>
     <div class="view">
-        <div class="row layout" [ngStyle]="{background: currentValue === row.value ?  'rgba(211,211,211,0.5)' : 'unset'}"
-         *ngFor="let row of rows"
-         (click)="noRedirect ? getValue(row.value) : openCatalog(row.value)">
+        <div class="row layout"
+            [ngStyle]="{background: currentValue === row.value ?  'rgba(211,211,211,0.5)' : 'unset'}"
+            *ngFor="let row of rows" (click)="noRedirect ? getValue(row.value) : openCatalog(row.value)">
             <div class="col">
                 <p>{{row.value}}</p>
             </div>

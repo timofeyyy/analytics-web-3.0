@@ -1,7 +1,5 @@
 <div class="app-main">
-    <div class="navigator-wrapper">
-        <app-navigator [current]="'/filters'" />
-    </div>
+    <app-navigator class="navigator-wrapper" [current]="'/filters'" />
     <app-filters [all]="all" [allias]="allias" [tableColumns]="tableColumns"
         [dropBoxPropsMapConfig]="dropBoxPropsMapConfig" [ngStyle]="{'display' : filter ? 'block' : 'none'}"
         (onChange)="apply($event)" />
@@ -36,18 +34,22 @@
                         <div class="option-wrapper" [ngStyle]="{display: selectedKeysValues.length ? 'block' : 'none'}">
                             <p class="option-wrapper-header">Выбранные параметры</p>
                             <div class="options-wrapper-body view-panel">
-                                <p class="value" *ngFor="let record of selectedKeysValues">{{allias.get(record[0])}}: {{record[1]}}</p>
-                               
+                                <p class="value" *ngFor="let record of selectedKeysValues">{{allias.get(record[0])}}:
+                                    {{record[1]}}</p>
+
                             </div>
                         </div>
+                        <!-- <div class="option-wrapper" >
+                            <p class="option-wrapper-header">{{resultBuffer.length}} компонентов</p>
+                        </div> -->
                     </div>
                     <div class="option-footer">
-                        <div class="action action-filters" (click)="filter=!filter" [ngStyle]="{width: selectedKeysValues.length ? '48%' : '100%'}">
+                        <div class="action action-filters" (click)="filter=!filter"
+                            [ngStyle]="{width: selectedKeysValues.length ? '48%' : '100%'}">
                             <p>Дополнительные параметры</p>
                         </div>
-                        <div class="action action-reset" 
-                            [ngStyle]="{display: selectedKeysValues.length ? 'flex' : 'none'}"
-                            (click)="
+                        <div class="action action-reset"
+                            [ngStyle]="{display: selectedKeysValues.length ? 'flex' : 'none'}" (click)="
                                 resetKeyAndValues(dropBoxPropsMapConfig.get('ruComponentType').currentValue);
                                 onTypeChanged(dropBoxPropsMapConfig.get('ruComponentType').currentValue)
                                 ">
@@ -58,10 +60,10 @@
                 <main class="catalog">
                     <div class="head">
                         <div class="filter">
-                            <p>Найдено {{resultBuffer.length}}</p>
                             <div class="search">
                                 <input type="text" placeholder="Индетификатор компонента" (input)="search($event)">
                             </div>
+                            <p>{{resultBuffer.length}} компонентов</p>
                         </div>
                     </div>
                     <div class="body">

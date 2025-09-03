@@ -24,8 +24,7 @@
 
         <div class="list-values">
             <p>Существующие значения</p>
-
-            <app-parameter-value-count-table class="list" [all]="parameterStat" [parameter]="columnName" [currentValue]="inputValue" (onValueChanged)="onParameterChnaged($event)" />
+            <app-parameter-value-count-table class="list" [hideLabel]="true" [all]="parameterStat" [alliasName]="allias.get(columnName)!" [parameter]="columnName" [currentValue]="inputValue" (onValueChanged)="onParameterChnaged($event)" [noRedirect]="true" [allowNull]="false" />
         </div>
     </div>
 </div>

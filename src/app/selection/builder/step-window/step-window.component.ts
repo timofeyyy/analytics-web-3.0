@@ -120,7 +120,6 @@ export class StepWindowComponent implements OnInit {
   priorities: [] = []
   prioritiesNoJumps: [] = []
   onPriorityChanged(obj: any): void {
-
     this.activeKeys = new Map()
     this.priorities = []
     this.prioritiesNoJumps = []

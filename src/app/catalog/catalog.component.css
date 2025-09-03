@@ -123,6 +123,7 @@
 }
 
 .filter {
+    height: 2.5vw;
     /* padding: 1.5vw; */
     margin: 0;
     display: flex;
@@ -227,7 +228,7 @@
 
 
 .filter .search {
-    margin-right: 1vw;
+    margin: 0;
     width: 15vw;
 }
 

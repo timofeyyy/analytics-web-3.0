@@ -4,18 +4,17 @@ import { FiltersComponent } from '../components/filters/filters.component';
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
-import { catchError, forkJoin, map, Observable } from 'rxjs';
+import { forkJoin, } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentOptions } from '../../utils/types/app';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoaderComponent } from '../components/loader/loader.component';
 import { ApiService1 } from '../../services/api.services1';
-import { prioritySchemaMap, props } from '../fetch.config';
+import { props } from '../fetch.config';
 import { setCurrentValue, componentStorage, removeCurrentValue, removeRuComponentType } from '../../utils/redux/catalog';
-import existInColumnsMin from '../../utils/fnc1/other/exist_in_columns_min';
-import existInColumnsMax from '../../utils/fnc1/other/exists_in_columns_max';
 import { PageLabelsComponent } from "./page-labels/page-labels.component";
-import { isRejected } from '@reduxjs/toolkit';
+import { existInColumnsMax, existInColumnsMin } from '../../utils/static-data/compared-min-max';
+import { isException } from '../../utils/static-data/filter-exceptions';
 
 @Component({
   selector: 'app-catalog',
@@ -76,7 +75,6 @@ export class CatalogComponent implements OnInit {
   }
 
   selectKeyAndValues(ruComponentType: string): void {
-    console.log(ruComponentType)
     this.selectedKeysValues = []
     const currentValues = componentStorage.getState().currentValues
     for (const _ruComponentType in currentValues) {
@@ -92,7 +90,6 @@ export class CatalogComponent implements OnInit {
     this.selectedKeysValues = []
     componentStorage.dispatch(removeRuComponentType([ruComponentType]))
     const currentValues = componentStorage.getState().currentValues
-    console.log(currentValues, this.selectedKeysValues, ruComponentType)
     localStorage.setItem('savedFilterValues', JSON.stringify(currentValues))
   }
 
@@ -156,6 +153,7 @@ export class CatalogComponent implements OnInit {
       let ruComponentType: string | undefined = payload.get('ruComponentType')
       if (ruComponentType) {
         const tableColumnsObj = Object.fromEntries(this.tableColumns)
+        console.log(tableColumnsObj)
         for (const key in tableColumnsObj) {
           if (payload.has(key)) {
             componentStorage.dispatch(setCurrentValue([ruComponentType, key, payload.get(key) as string]))
@@ -175,8 +173,8 @@ export class CatalogComponent implements OnInit {
         }
       }
       const currentValues = componentStorage.getState().currentValues
-      console.log(currentValues)
       localStorage.setItem('savedFilterValues', JSON.stringify(currentValues))
+      console.log(currentValues)
       this.selectKeyAndValues(ruComponentType)
       this.searchBuffer = []
       this.resultBuffer = []
@@ -237,7 +235,7 @@ export class CatalogComponent implements OnInit {
   selectPage(currentPage: number): void {
     this.records = []
     for (let index = (currentPage) * 20; index < (currentPage + 1) * 20 && index < this.resultBuffer.length; index++) {
-      this.records.push(this.searchBuffer[index])
+      this.records.push(this.resultBuffer[index])
     }
     this.cdr.detectChanges()
   }
@@ -256,8 +254,19 @@ export class CatalogComponent implements OnInit {
       const allias = (res as any[])[1]
       this.allias = new Map<string, string>(Object.entries(allias))
       if (this.storage.size === 5) {
-        this.storage.forEach((set: any) => {
-          (set as []).forEach((item: any) => {
+        const prioritySchemaMap = new Map()
+        const storageObj = Object.fromEntries(this.storage)
+        for (const key in storageObj) {
+          (storageObj[key] as []).forEach((item: any) => {
+            if (!prioritySchemaMap.get(item.ruComponentType)) {
+              const columnBuffer: string[] = []
+              for (const key in item) {
+                if (!isException(key) || key == 'manufacturerName' || key == 'ruComponentKind') {
+                  columnBuffer.push(key)
+                }
+              }
+              prioritySchemaMap.set(item.ruComponentType, columnBuffer)
+            }
             let markup: string = ''
             let satisfyCount: number = 0;
             const actualPayload = payload
@@ -336,7 +345,7 @@ export class CatalogComponent implements OnInit {
               this.allTableColumns.set(item.ruComponentType, new Map(columns.map((value) => [value, this.allias.get(value) as string])))
             }
           })
-        })
+        }
         let ruComponentType = payload.get('ruComponentType')
         if (ruComponentType) {
           this.tableColumns = this.allTableColumns.get(ruComponentType)!
@@ -377,13 +386,10 @@ export class CatalogComponent implements OnInit {
       // .set('manufacturerName', this.dropBoxPropsMapConfig.get('manufacturerName'))
       // .set('ruComponentKind', this.dropBoxPropsMapConfig.get('ruComponentKind'))
     );
-    console.log()
     this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = ruComponentType
     let map = this.getSimpleKeyValueMap()
-    console.log(map)
     this.setQuery(map, 'replace').then((res) => {
       this.apply(res)
-      console.log(this.dropBoxPropsMapConfig)
     })
   }
 
@@ -397,7 +403,6 @@ export class CatalogComponent implements OnInit {
   resultBuffer: ComponentOptions[] = []
   search(event: any): void {
     let value: string = event.target.value
-    this.records = []
     this.resultBuffer = []
     this.searchBuffer.forEach((item: ComponentOptions) => {
       if (this.include(item, value)) {

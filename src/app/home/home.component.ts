@@ -11,10 +11,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgFor, NgStyle } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../utils/redux/component';
+import { ParameterValueCountTableComponent } from "../components/parameter-value-count-table/parameter-value-count-table.component";
 
 @Component({
   selector: 'app-home',
-  imports: [NavigatorComponent, ManufacturerCountTableComponent, HttpClientModule, LoaderComponent, NgStyle, NgFor],
+  imports: [NavigatorComponent, HttpClientModule, LoaderComponent, NgStyle, NgFor, ParameterValueCountTableComponent],
   providers: [ApiService1],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -45,7 +46,6 @@ export class HomeComponent {
       let map: Map<string, ComponentTypeStatistic> = getComponentTypesStat(data, false)
       this.componentTypes = Array.from(map)
       let dataMap: any = new Map(Object.entries(data))
-      console.log(dataMap, data)
       this.all = []
       for (const key in data) {
         this.all = [
@@ -82,7 +82,6 @@ export class HomeComponent {
     const componentTypes: any = componentStorage.getState().componentTypes
     let ruComponentType
     for (const element of componentTypes as [{ ruComponentType: string, enComponentType: string }]) {
-      console.log(element.enComponentType.toLowerCase(), enComponentType.toLowerCase())
       if (element.enComponentType.toLowerCase() === enComponentType.toLowerCase()) {
         ruComponentType = element.ruComponentType
         break

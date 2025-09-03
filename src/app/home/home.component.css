@@ -70,7 +70,7 @@ iframe {
 
 .upper .list .record p,
 .upper .list .record a {
-    font-size: max(1vw, 10px);
+    font-size: max(.8vw, 8px);
 }
 
 .upper .list .record p {

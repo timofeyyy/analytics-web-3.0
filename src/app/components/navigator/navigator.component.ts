@@ -23,17 +23,29 @@ export class NavigatorComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.isOpen = false
+    this.initMenuState()
     this.initSelectionSectionState()
     this.initChartSectionState()
     this.initViewSectionState()
     this.initChartBlockedState()
     this.initTableUrlBlockedState()
   }
+  initMenuState(): void {
+    const state = JSON.parse(window.localStorage.getItem('isMenuOpen') as string)
+    if (state) {
+      this.isOpen = state
+    }
+    else {
+      localStorage.setItem('isMenuOpen', 'false')
+      this.isOpen = false
+    }
+  }
   openClose(): void {
     this.isOpen = !this.isOpen
+    localStorage.setItem('isMenuOpen', `${this.isOpen}`)
   }
   openNewPage(url: string): void {
+    
     this.router.navigateByUrl(url)
       .then(
         () => {
@@ -49,7 +61,7 @@ export class NavigatorComponent implements OnInit {
 
   openLastSaved(): void {
     let obj = JSON.parse(window.localStorage.getItem('selection') as string)
-    if(obj && obj.tableUrl) {
+    if (obj && obj.tableUrl) {
       this.router.navigateByUrl(obj.tableUrl)
     }
   }
