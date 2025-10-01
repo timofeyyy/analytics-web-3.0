@@ -1,30 +1,39 @@
-<p class="step-description">Шаг {{index}}: Заполнение значения параметра {{allias.get(columnName)}}</p>
+<p class="step-description">Шаг {{index}}: Заполнение значения параметра {{alias.get(columnName)}}</p>
 <div class="step-screen">
 
     <div class="step-body">
-        <app-chart *ngIf="queryObj.size" class="chart" [allias]="allias" [headerFontSize]="'max(1vw, 10px)'" [all]="obj"
-            [type_name]="'bar'" [chart_name]="'column'" [query]="queryObj" />
-        <app-manufacturer-count-table class="table" [all]="manufacturersStat" [noRedirect]="true"
-            (onValueChanged)="onManufacturerChanged($event)" />
+        <div class="charts">
+            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias" [headerFontSize]="'max(.8vw, 8px)'"
+                [all]="obj" [type_name]="'line'" [chart_name]="'column-line'" [query]="queryObj" />
+            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias" [headerFontSize]="'max(.8vw, 8px)'"
+                [all]="obj" [type_name]="'bar'" [chart_name]="'column'" [query]="queryObj" />
+        </div>
+        <!-- <app-manufacturer-count-table class="table" [all]="manufacturersStat" [noRedirect]="true"
+             /> -->
+            <app-parameter-value-count-table class="table" 
+                [all]="manufacturersStat" [noRedirect]="true"  
+                (onValueChanged)="onManufacturerChanged($event)"
+                [aliasName]="'Количество'" [parameter]="'manufacturerName'" 
+                [parameterAlias]="alias.get('manufacturerName')!"
+            />
     </div>
     <div class="step-footer">
         <div class="search">
             <p>{{this.currentSelection.length ? 'Найдено ' + this.currentSelection.length : 'Ничего не найдено'}}</p>
-            <app-dropbox-provider class="dropbox" [alliasName]="`${allias.get(columnName)}`" [all]="all"
+            <app-dropbox-provider class="dropbox" [aliasName]="`${alias.get(columnName)}`" [all]="all"
                 [propsMap]="dropBoxPropsMapConfig" [name]="columnName" [currentName]="currentDropBoxName"
-                (onStateChanged)="onCurrentDropBoxNameChnaged($event)"
-                [inputDisabled]="inputDisabled"
-                [inputValue]="inputValue"
-                />
+                (onStateChanged)="onCurrentDropBoxNameChnaged($event)" [inputDisabled]="inputDisabled"
+                [inputValue]="inputValue" />
             <div class="skip">
-                <input type="checkbox" [checked]="inputDisabled" (click)="changeDisabledState()"> 
+                <input type="checkbox" [checked]="inputDisabled" (click)="changeDisabledState()">
                 <p>Не указывать</p>
             </div>
         </div>
-
         <div class="list-values">
             <p>Существующие значения</p>
-            <app-parameter-value-count-table class="list" [hideLabel]="true" [all]="parameterStat" [alliasName]="allias.get(columnName)!" [parameter]="columnName" [currentValue]="inputValue" (onValueChanged)="onParameterChnaged($event)" [noRedirect]="true" [allowNull]="false" />
+            <app-parameter-value-count-table [allowNull]="true" class="list" [hideLabel]="true" [all]="parameterStat"
+                [aliasName]="'Количество'" [parameter]="columnName" [parameterAlias]="alias.get(columnName)!"
+                [currentValue]="inputValue" (onValueChanged)="onParameterChnaged($event)" [noRedirect]="true" />
         </div>
     </div>
 </div>

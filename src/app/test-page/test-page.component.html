@@ -1,11 +1,13 @@
-<app-dropbox-provider [alliasName]="`${allias.get('ruComponentType')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
-    [name]="'ruComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
-<app-dropbox-provider [alliasName]="`${allias.get('ruComponentKind')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
-    [name]="'ruComponentKind'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
-<app-dropbox-provider [alliasName]="`${allias.get('manufacturerName')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
-    [name]="'manufacturerName'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/> 
-<app-dropbox-provider [alliasName]="`${allias.get('bitDepthValue')}`" [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMap"
-    [name]="'bitDepthValue'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/> 
-<app-dropbox-provider [inputValue]="'dsdsdsds'" [inputDisabled]="true" [alliasName]="`${allias.get('frequency')}`" [propsMap]="dropBoxPropsMap" [name]="'frequency'"
-    (onStateChanged)="onCurrentDropBoxNameChnaged($event)"/>
-<app-manufacturer-count-table [all]="values"/>
+<app-dropbox-provider [aliasName]="`${alias.get('ruComponentType')}`" [currentName]="currentDropBoxName" [all]="all"
+    [propsMap]="dropBoxPropsMap" [name]="'ruComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+<app-dropbox-provider [aliasName]="`${alias.get('ruComponentKind')}`" [currentName]="currentDropBoxName" [all]="all"
+    [propsMap]="dropBoxPropsMap" [name]="'ruComponentKind'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+<app-dropbox-provider [aliasName]="`${alias.get('manufacturerName')}`" [currentName]="currentDropBoxName" [all]="all"
+    [propsMap]="dropBoxPropsMap" [name]="'manufacturerName'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+<app-dropbox-provider [aliasName]="`${alias.get('bitDepthValue')}`" [currentName]="currentDropBoxName" [all]="all"
+    [propsMap]="dropBoxPropsMap" [name]="'bitDepthValue'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+<app-dropbox-provider [inputValue]="'dsdsdsds'" [inputDisabled]="true" [aliasName]="`${alias.get('frequency')}`"
+    [propsMap]="dropBoxPropsMap" [name]="'frequency'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
+<app-select-list [values]="outputSet1" />
+<button (click)="outputSet1 = testSet2">Тест</button>
+<app-manufacturer-count-table [all]="values" />

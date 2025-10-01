@@ -1,6 +1,8 @@
 import { NgFor, NgStyle } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FilterDropBox } from '../../../utils/types/app';
+import { ParameterSortingComponent } from "../parameter-sorting/parameter-sorting.component";
+import { SelectListComponent } from "../select-list/select-list.component";
 
 @Component({
   selector: 'app-dropbox',
@@ -10,7 +12,6 @@ import { FilterDropBox } from '../../../utils/types/app';
 })
 export class DropboxComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log(this.values, this.name)
     this.copy = this.values
   }
   @Input()
@@ -18,7 +19,7 @@ export class DropboxComponent implements OnChanges {
   @Input()
   currentName: string | undefined
   @Input()
-  allias: string | undefined
+  alias: string | undefined
   @Input()
   values!: string[]
   copy!: string[]

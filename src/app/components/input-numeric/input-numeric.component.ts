@@ -34,7 +34,6 @@ export class InputNumericComponent {
 
   increment(): void {
     if (!this.disabled) {
-      console.log(this.value)
       if (this.value < this.max || this.max === undefined) {
         this.value++
       }

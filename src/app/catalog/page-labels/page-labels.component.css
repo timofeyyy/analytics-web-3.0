@@ -11,8 +11,8 @@
 }
 
 .footer img {
-    width: max(1.5vw, 15px);
-    height: max(1.5vw, 15px);
+    width: max(.8vw, 8px);
+    height: max(.8vw, 8px);
 }
 
 .footer img,
@@ -22,9 +22,9 @@
 }
 
 .footer p {
-    padding: 0.5vw 1vw;
+    padding: 0.5vw .8vw;
     box-sizing: border-box;
     border: 0.1vw solid lightgray;
     border-radius: 0.5vw;
-    font-size: max(1vw, 10px);
+    font-size: max(.8vw, 8px);
 }

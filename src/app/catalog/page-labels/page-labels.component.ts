@@ -1,7 +1,7 @@
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppEnum } from '../../../utils/enum/app.enum';
-import { ApiService1 } from '../../../services/api.services1';
+import { ApiService } from '../../../services/api.services1';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -14,7 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class PageLabelsComponent implements OnChanges {
 
   constructor(
-    private api: ApiService1,
+    private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer
@@ -22,18 +22,18 @@ export class PageLabelsComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const query: Map<string, string> = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params))
     this.from = 0
-    this.last = Math.ceil(this.records.length / 20) === 0 ? 0 : Math.ceil(this.records.length / 20) - 1
+    this.last = Math.ceil(this.records.length / this.rowsCount) === 0 ? 0 : Math.ceil(this.records.length / this.rowsCount) - 1
     if (query.get('page')) {
       if (!isNaN(parseInt(query.get('page') as string))) {
         const value = parseInt(query.get('page') as string)
-        if (Math.ceil(this.records.length / 20) < value) {
+        if (Math.ceil(this.records.length / this.rowsCount) < value) {
           // this.error = "Ничего не найдено"
           // this.iconName = "not_found"
         }
         else {
-          const rest = value % 10
+          const rest = value % this.step
           this.from = value - rest
-          const n = 10 - rest
+          const n = this.step - rest
           this.to = value + n
           if (this.to >= this.last) {
             this.to = this.last + 1
@@ -47,11 +47,15 @@ export class PageLabelsComponent implements OnChanges {
       // }
     }
     else {
-      this.to = this.records.length / 20 <= 10 ? Math.ceil(this.records.length / 20) : 10
+      this.to = this.records.length / this.rowsCount <= this.step ? Math.ceil(this.records.length / this.rowsCount) : this.step
     }
     this.updatePages()
     this.selectPage()
   }
+  @Input()
+  step: number = 0
+  @Input()
+  rowsCount: number = 0
   @Input()
   records!: any[]
   from: number = 0
@@ -63,12 +67,12 @@ export class PageLabelsComponent implements OnChanges {
   public onPageSelected = new EventEmitter<number>()
   prevSet(): void {
     if (this.from != 0) {
-      this.from -= 10
-      if (this.to % 10 === 0) {
-        this.to -= 10
+      this.from -= this.step
+      if (this.to % this.step === 0) {
+        this.to -= this.step
       }
       else {
-        this.to = this.to - (this.to % 10)
+        this.to = this.to - (this.to % this.step)
       }
       this.changeCurrentPage(this.from)
       this.updatePages()
@@ -78,13 +82,13 @@ export class PageLabelsComponent implements OnChanges {
   prev(): void {
     if (this.currentPage > 0) {
       this.changeCurrentPage(this.currentPage - 1)
-      if (this.currentPage !== 0 && (this.currentPage + 1) % 10 === 0) {
-        this.from -= 10
-        if (this.to % 10 === 0) {
-          this.to -= 10
+      if (this.currentPage !== 0 && (this.currentPage + 1) % this.step === 0) {
+        this.from -= this.step
+        if (this.to % this.step === 0) {
+          this.to -= this.step
         }
         else {
-          this.to = this.to - (this.to % 10)
+          this.to = this.to - (this.to % this.step)
         }
         this.updatePages()
       }
@@ -95,9 +99,9 @@ export class PageLabelsComponent implements OnChanges {
   next(): void {
     if (this.currentPage < this.last) {
       this.changeCurrentPage(this.currentPage + 1)
-      if (this.currentPage % 10 === 0) {
-        this.from += 10
-        this.to = this.to + 10 > this.last ? this.last + 1 : this.to + 10
+      if (this.currentPage % this.step === 0) {
+        this.from += this.step
+        this.to = this.to + this.step > this.last ? this.last + 1 : this.to + this.step
         this.updatePages()
       }
       this.selectPage()
@@ -105,7 +109,7 @@ export class PageLabelsComponent implements OnChanges {
   }
 
   getLatest(): void {
-    this.from = this.last - this.last % 10
+    this.from = this.last - this.last % this.step
     this.to = this.last + 1
     this.changeCurrentPage(this.last)
     this.updatePages()
@@ -114,8 +118,8 @@ export class PageLabelsComponent implements OnChanges {
 
   nextSet(): void {
     if (this.to <= this.last) {
-      this.from += 10
-      this.to = this.to + 10 > this.last ? this.last + 1 : this.to + 10
+      this.from += this.step
+      this.to = this.to + this.step > this.last ? this.last + 1 : this.to + this.step
       this.changeCurrentPage(this.from)
       this.updatePages()
       this.selectPage()

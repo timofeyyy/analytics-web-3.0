@@ -65,7 +65,6 @@ const getColumnPieChartOptions = (data: any, query: Map<string, string>): Partia
     else {
         apexChartData = getManufacturersChartOptionPie1(data)
     }
-    console.log(apexChartData)
     return apexChartData
 }
 

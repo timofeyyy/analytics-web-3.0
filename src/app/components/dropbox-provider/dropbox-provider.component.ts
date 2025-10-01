@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DropboxComponent } from "../dropbox/dropbox.component";
-import { ComponentOptions, FilterDropBox } from '../../../utils/types/app';
+
 import { NgIf, NgStyle } from '@angular/common';
-import componentTypeFilters from '../../../utils/fnc1/filters/componentType';
+import componentTypeFilters from '../../../utils/fnc1/filters/component-type';
 import { InputComponent } from "../input/input.component";
 import { AppEnum } from '../../../utils/enum/app.enum';
+import { SelectListComponent } from "../select-list/select-list.component";
 
 @Component({
   selector: 'app-dropbox-provider',
-  imports: [DropboxComponent, NgStyle, NgIf, InputComponent],
+  imports: [NgStyle, NgIf, InputComponent, SelectListComponent],
   templateUrl: './dropbox-provider.component.html',
   styleUrl: './dropbox-provider.component.css'
 })
@@ -23,7 +24,6 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
   inputDisabled!: boolean
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isTableProp() && !this.isTableInput()) {
-      // console.log(this.propsMap.get(this.name))
       if (this.propsMap.get(this.name).sort) {
         this.values = this.propsMap.get(this.name).sort(this.propsMap, this.all)
       }
@@ -42,13 +42,13 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
     this.propsMap.get(name).currentValue = value
   }
   @Input()
-  all!: Partial<ComponentOptions>[]
+  all!: any[]
   @Input()
   name!: string
   @Input()
   currentName: string | undefined
   @Input()
-  alliasName!: string
+  aliasName!: string
   @Output()
   public onStateChanged = new EventEmitter<{ propsMap: Map<string, any>, currentName: string | undefined }>()
 

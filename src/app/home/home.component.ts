@@ -2,69 +2,71 @@ import { Component } from '@angular/core';
 import { LoaderComponent } from "../components/loader/loader.component";
 import { NavigatorComponent } from "../components/navigator/navigator.component";
 import { ManufacturerCountTableComponent } from "../components/manufacturer-count-table/manufacturer-count-table.component";
-import { ApiService1 } from '../../services/api.services1';
-import getComponentTypesStat, { ManufacturerStatistic, ComponentTypeStatistic } from '../../utils/fnc1/other/componentType_statistic';
-import { catchError, map } from 'rxjs';
+import { ApiService } from '../../services/api.services1';
+import getComponentTypesStat, { ManufacturerStatistic, ComponentTypeStatistic } from '../../utils/fnc1/other/component_type_statistic';
+import { catchError, forkJoin, map } from 'rxjs';
 import { ComponentTypeEnEnum } from '../../utils/enum/app.enum';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgFor, NgStyle } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
-import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../utils/redux/component';
+import { componentStorage, initComponentTypes } from '../../utils/redux/component';
 import { ParameterValueCountTableComponent } from "../components/parameter-value-count-table/parameter-value-count-table.component";
+import { QueryPageSettings } from '../../services/query.settings.service';
+import { ComponentTypes } from '../../utils/types/app';
 
 @Component({
   selector: 'app-home',
   imports: [NavigatorComponent, HttpClientModule, LoaderComponent, NgStyle, NgFor, ParameterValueCountTableComponent],
-  providers: [ApiService1],
+  providers: [ApiService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
   all: any
   loader!: boolean
-  componentTypes!: [string, ComponentTypeStatistic][];
+  componentTypesStat!: [string, ComponentTypeStatistic][];
+  componentTypes: ComponentTypes[] = []
+  navigation!: boolean
 
   constructor(
-    private api: ApiService1,
+    private api: ApiService,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit(): void {
     this.all = []
-    this.componentTypes = []
+    this.componentTypesStat = []
     this.getApi()
-    componentStorage.dispatch(initComponentTypes())
-    if (!Object.entries(componentStorage.getState().componentTypes).length) {
-      componentStorage.dispatch(fetchComponentTypes(this.api));
-    }
+    // this.navigation = this.isFullView()
   }
+
   getApi(): void {
     this.loader = true
-    this.api.getComponentsApiAll()?.pipe(map((data: any) => {
-      let map: Map<string, ComponentTypeStatistic> = getComponentTypesStat(data, false)
-      this.componentTypes = Array.from(map)
-      let dataMap: any = new Map(Object.entries(data))
+    forkJoin([
+      this.api.getComponentsApiAll(),
+      this.api.getComponentNames()
+    ]).subscribe((res: any) => {
+      let map: Map<string, ComponentTypeStatistic> = getComponentTypesStat(res[0], true)
+      this.componentTypesStat = Array.from(map)
+      this.componentTypes = res[1]
+      let dataMap: any = new Map(Object.entries(res[0]))
       this.all = []
-      for (const key in data) {
+      for (const key in res[0]) {
         this.all = [
           ...this.all,
           ...dataMap.get(key),
         ]
       }
       this.loader = false
-    }),
-      catchError((err: any) => {
-        console.log(err.message)
-        this.router.navigate([`/not-found`])
-        return [];
-      })
-    ).subscribe()
+    })
   }
 
-  getSafeUrl(url: string): any {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+  getSafeUrl(ruComponentType: string): any {
+    const componentType: any = this.componentTypes.find((val: any) => val.ruComponentType === ruComponentType)
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`component-analytic/${componentType.enComponentType}`)
   }
 
   displayManufacturers(manufacturers: Map<string, ManufacturerStatistic>): any {

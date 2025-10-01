@@ -1,0 +1,8 @@
+<div class="select-wrapper">
+    <select  (change)="onValueSelected($event)" (focusout)="openList=false" (change)="openList=false" (click)="openList=!openList">
+        <option [value]="val" [selected]="fitstSelectedValue ? currentValue === val : i === currentIndex" *ngFor="let val of values; let i = index">
+            <span class="option-label">{{val}}</span>
+        </option>
+    </select>
+    <input type="text" placeholder="Поиск" [ngStyle]="{display: openList ? 'none' : 'none'}">
+</div>

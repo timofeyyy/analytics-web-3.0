@@ -1,0 +1,24 @@
+.table-names {
+    border: 0.1vw solid lightgray;
+    border-radius: .25vw;
+    width: fit-content;
+    background-color: #eeeeee;
+    display: flex;
+    margin: 0;
+}
+
+.table-names .state-btn {
+    border-radius: .25vw;
+    margin: 0;
+    border: none;
+    background-color: #eeeeee;
+}
+
+.table-names .state-btn {
+    background-color: #eeeeee;
+}
+
+.table-names .state-btn:hover,
+.table-names .state-btn-selected {
+    background-color: rgba(51, 51, 51, 90%);
+}

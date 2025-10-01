@@ -1,14 +1,21 @@
 import { NgClass, NgStyle } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { QueryPageSettings } from '../../../services/query.settings.service';
 
 @Component({
   selector: 'app-navigator',
   imports: [NgStyle, NgClass],
+  providers: [QueryPageSettings],
   templateUrl: './navigator.component.html',
   styleUrl: './navigator.component.css'
 })
 export class NavigatorComponent implements OnInit {
+  openSelectionPage() {
+    this.querySettings.redirectSelectionPage().then(res => {
+      if(!res) this.router.navigate(['/selection-main']) 
+    })
+  }
   isOpen!: boolean
   chartSection!: boolean
   viewSection!: boolean
@@ -20,15 +27,18 @@ export class NavigatorComponent implements OnInit {
   @Input()
   current!: string
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private querySettings: QueryPageSettings
+  ) { }
 
   ngOnInit(): void {
     this.initMenuState()
     this.initSelectionSectionState()
     this.initChartSectionState()
     this.initViewSectionState()
-    this.initChartBlockedState()
-    this.initTableUrlBlockedState()
+    // this.initChartBlockedState()
+    // this.initTableUrlBlockedState()
   }
   initMenuState(): void {
     const state = JSON.parse(window.localStorage.getItem('isMenuOpen') as string)
@@ -45,7 +55,7 @@ export class NavigatorComponent implements OnInit {
     localStorage.setItem('isMenuOpen', `${this.isOpen}`)
   }
   openNewPage(url: string): void {
-    
+
     this.router.navigateByUrl(url)
       .then(
         () => {
@@ -59,12 +69,12 @@ export class NavigatorComponent implements OnInit {
     }
   }
 
-  openLastSaved(): void {
-    let obj = JSON.parse(window.localStorage.getItem('selection') as string)
-    if (obj && obj.tableUrl) {
-      this.router.navigateByUrl(obj.tableUrl)
-    }
-  }
+  // openLastSaved(): void {
+  //   let obj = JSON.parse(window.localStorage.getItem('selection') as string)
+  //   if (obj && obj.tableUrl) {
+  //     this.router.navigateByUrl(obj.tableUrl)
+  //   }
+  // }
 
   initSelectionSectionState(): void {
     let hasPrefixTable = this.current.toLocaleLowerCase().includes("selection")
@@ -98,25 +108,25 @@ export class NavigatorComponent implements OnInit {
     }
   }
 
-  initChartBlockedState(): void {
-    let obj = JSON.parse(window.localStorage.getItem('selection') as string)
-    if (obj && obj.chartPages) {
-      this.chartBlocked = false
-    }
-    else {
-      this.chartBlocked = true
-    }
-  }
+  // initChartBlockedState(): void {
+  //   let obj = JSON.parse(window.localStorage.getItem('selection') as string)
+  //   if (obj && obj.chartPages) {
+  //     this.chartBlocked = false
+  //   }
+  //   else {
+  //     this.chartBlocked = true
+  //   }
+  // }
 
-  initTableUrlBlockedState(): void {
-    let obj = JSON.parse(window.localStorage.getItem('selection') as string)
-    if (obj && obj.tableUrl) {
-      this.lastSavedBlocked = false
-    }
-    else {
-      this.lastSavedBlocked = true
-    }
-  }
+  // initTableUrlBlockedState(): void {
+  //   let obj = JSON.parse(window.localStorage.getItem('selection') as string)
+  //   if (obj && obj.tableUrl) {
+  //     this.lastSavedBlocked = false
+  //   }
+  //   else {
+  //     this.lastSavedBlocked = true
+  //   }
+  // }
 
   openCloseSelectionSection(): void {
     this.selectionSection = !this.selectionSection

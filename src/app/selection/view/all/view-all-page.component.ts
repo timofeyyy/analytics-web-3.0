@@ -1,29 +1,27 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { ApiService1 } from '../../../../services/api.services1';
+import { ApiService } from '../../../../services/api.services1';
 import { AppEnum, ComponentTypeRuEnum } from '../../../../utils/enum/app.enum';
-import { ComponentOptions } from '../../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { propsMap } from '../../../fetch.config';
 import { NavigatorComponent } from '../../../components/navigator/navigator.component';
 import { LoaderComponent } from '../../../components/loader/loader.component';
-import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../../../utils/redux/component';
 import { columnsMax, columnsMin } from '../../../../utils/static-data/compared-min-max';
 import { chartNamesMap } from '../../../../utils/static-data/chart-names';
 
 @Component({
   selector: 'app-table',
   imports: [HttpClientModule, NgFor, NgClass, NavigatorComponent, LoaderComponent, NgStyle, NgIf],
-  providers: [ApiService1],
+  providers: [ApiService],
   templateUrl: './view-all-page.component.html',
   styleUrls: ['./view-all-page.component.css', '../../../components/styles/tabs.css', '../../../components/styles/button.css']
 })
 export class SelectionViewAllPage implements OnInit {
   storage: any;
-  allias!: Map<string, string>;
-  all!: Partial<ComponentOptions>[];
+  alias!: Map<string, string>;
+  all!: any[];
   selectedEnComponentType!: string
   loader!: boolean
   error!: string
@@ -41,11 +39,11 @@ export class SelectionViewAllPage implements OnInit {
   currentPath!: string
   constructor(
     private route: ActivatedRoute,
-    private api: ApiService1,
+    private api: ApiService,
     private location: Location,
-    private router: Router
+    private router: Router,
   ) {
-    this.allias = new Map()
+    this.alias = new Map()
     this.records = []
     this.all = []
     this.columns = []
@@ -55,18 +53,16 @@ export class SelectionViewAllPage implements OnInit {
   }
 
   ngOnInit(): void {
-    componentStorage.dispatch(initComponentTypes())
-    if (!Object.entries(componentStorage.getState().componentTypes).length) {
-      componentStorage.dispatch(fetchComponentTypes(this.api));
-    }
-    const componentTypes: any[] = componentStorage.getState().componentTypes
-    const componentTypesObj: any = {}
-    componentTypes.forEach(val => {
-      const enComponentType = val['enComponentType'].toLowerCase()
-      const ruComponentType = val['ruComponentType'].toLowerCase()
-      componentTypesObj[enComponentType] = ruComponentType
+    this.api.getComponentNames()?.subscribe(res => {
+      const componentTypesObj: any = {};
+      (res as any[]).forEach(val => {
+        const enComponentType = val['enComponentType'].toLowerCase()
+        const ruComponentType = val['ruComponentType'].toLowerCase()
+        componentTypesObj[enComponentType] = ruComponentType
+      })
+      this.prioritySchemaWrapper2Map = new Map(Object.entries(componentTypesObj))
     })
-    this.prioritySchemaWrapper2Map = new Map(Object.entries(componentTypesObj))
+
     this.chartNames = Array.from(chartNamesMap.keys())
     // this.currentPath = `/${this.location.path().split('/')[1]}`
     // this.priorities = this.getPriorityArrayFromQuery()
@@ -95,7 +91,7 @@ export class SelectionViewAllPage implements OnInit {
     return priorities
   }
 
-  getChartAllias(name: string): string {
+  getChartalias(name: string): string {
     return chartNamesMap.get(name) as string
   }
 
@@ -115,12 +111,9 @@ export class SelectionViewAllPage implements OnInit {
       this.api.getAlias()
     ])
       .subscribe(res => {
-        console.log(res)
         this.storage = res[0] as any
-        console.log(this.storage)
-        const allias = (res as any[])[1]
-        this.allias = new Map<string, string>(Object.entries(allias))
-        console.log(this.all)
+        const alias = (res as any[])[1]
+        this.alias = new Map<string, string>(Object.entries(alias))
 
         const value = this.getFirstRuComponentType()
         if (value) {
@@ -129,7 +122,6 @@ export class SelectionViewAllPage implements OnInit {
 
         this.initColumns()
         this.loader = false
-        console.log(this.all)
       });
   }
 
@@ -161,9 +153,9 @@ export class SelectionViewAllPage implements OnInit {
       obj = this.all[0]
     }
     for (const key in obj) {
-      let allias = this.allias.get(key)
-      if (allias) {
-        columns.push(allias)
+      let alias = this.alias.get(key)
+      if (alias) {
+        columns.push(alias)
       }
       else {
         columns.push(key)

@@ -10,13 +10,13 @@
 import { createSlice, configureStore, PayloadAction } from '@reduxjs/toolkit'
 import { ComponentTypes } from '../types/app'
 
-const componentSlice = createSlice({
-  name: 'component',
+const ctalogSlice = createSlice({
+  name: 'catalog',
   initialState: {
     columns: {},
-    currentValues: {},
-    allias: {},
-    componentTypeAllias: []
+    currentValues: JSON.parse(localStorage.getItem('savedFilterValues')!) ?? {},
+    alias: {},
+    componentTypealias: []
   },
   reducers: {
     setColumns: (state: any, action: PayloadAction<[string, string[]]>) => {
@@ -38,19 +38,19 @@ const componentSlice = createSlice({
         delete state.currentValues[action.payload[0]]
       }
     },
-    setAllias: (state: any, action: PayloadAction<any>) => {
-      state.allias = action.payload
+    setalias: (state: any, action: PayloadAction<any>) => {
+      state.alias = action.payload
     },
-    setComponentTypeAllias: (state: any, action: PayloadAction<ComponentTypes[]>) => {
-      state.componentTypeAllias = action.payload
+    setComponentTypealias: (state: any, action: PayloadAction<ComponentTypes[]>) => {
+      state.componentTypealias = action.payload
     },
   }
 })
 
-export const { setColumns, setCurrentValue, setAllias, setComponentTypeAllias, removeCurrentValue, removeRuComponentType } = componentSlice.actions
+export const { setColumns, setCurrentValue, setalias, setComponentTypealias, removeCurrentValue, removeRuComponentType } = ctalogSlice.actions
 
-export const componentStorage = configureStore({
-  reducer: componentSlice.reducer
+export const catalogStorage = configureStore({
+  reducer: ctalogSlice.reducer
 })
 
 

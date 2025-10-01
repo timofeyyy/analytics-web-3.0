@@ -1,0 +1,14 @@
+.select-list-wrapper {
+    padding: .5vw 0;
+
+}
+
+.select-list-wrapper p {
+    font-size: max(1vw, 10px);
+    padding-bottom: .5vw;
+}
+
+.select-list {
+    width: 10vw;
+        margin: 0;
+}

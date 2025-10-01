@@ -1,56 +1,55 @@
-import { ChangeDetectorRef, Component, input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
 import { FiltersComponent } from '../components/filters/filters.component';
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { AppEnum, ComponentTypeRuEnum } from '../../utils/enum/app.enum';
+import { AppEnum } from '../../utils/enum/app.enum';
 import { forkJoin, } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComponentOptions } from '../../utils/types/app';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LoaderComponent } from '../components/loader/loader.component';
-import { ApiService1 } from '../../services/api.services1';
+import { ApiService } from '../../services/api.services1';
 import { props } from '../fetch.config';
-import { setCurrentValue, componentStorage, removeCurrentValue, removeRuComponentType } from '../../utils/redux/catalog';
+import { setCurrentValue, catalogStorage, removeCurrentValue, removeRuComponentType } from '../../utils/redux/catalog';
 import { PageLabelsComponent } from "./page-labels/page-labels.component";
 import { existInColumnsMax, existInColumnsMin } from '../../utils/static-data/compared-min-max';
 import { isException } from '../../utils/static-data/filter-exceptions';
+import { componentStorage, setComponentSchema, initComponentTypes } from '../../utils/redux/component';
+// import { ComponentInitializator } from '../../utils/initializators/componentInitilizator';
 
 @Component({
   selector: 'app-catalog',
   imports: [NavigatorComponent, FiltersComponent, NgStyle, HttpClientModule, NgFor, NgClass, LoaderComponent, NgIf, PageLabelsComponent],
   templateUrl: './catalog.component.html',
-  styleUrls: ['./catalog.component.css', '../components/styles/input.css', '../components/styles/button.css', '../components/styles/tabs.css'],
-  providers: [ApiService1],
+  styleUrls: ['./catalog.component.css', '../components/styles/input.css', '../components/styles/button.css', '../components/styles/categories.css', '../components/styles/tabs.css'],
+  providers: [ApiService],
   encapsulation: ViewEncapsulation.None
 })
 
 
 
 export class CatalogComponent implements OnInit {
-
+  previewColumnCount: number = 4
   filter: boolean = false
-  records: ComponentOptions[] = []
-  searchBuffer: ComponentOptions[] = []
-  all: ComponentOptions[] = []
+  records: any[] = []
+  searchBuffer: any[] = []
+  all: any[] = []
   storage: Map<any, any[]> = new Map()
-  allias: Map<string, string> = new Map()
+  alias: Map<string, string> = new Map()
   loader!: boolean
-  allTableColumns: Map<string, Map<string, string>> = new Map()
-  tableColumns: Map<string, string> = new Map()
+  columns: string[] = []
+  componentTypes: any[] = []
   dropBoxPropsMapConfig: Map<string, any> = new Map()
-  error!: string
-  iconName!: 'invalid_file' | 'not_found'
-  displayedRuComponentTypes: string[] = []
   selectedKeysValues: [string, string][] = []
 
   constructor(
-    private api: ApiService1,
+    private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     const query: Map<string, string> = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params))
@@ -64,19 +63,20 @@ export class CatalogComponent implements OnInit {
     }
     query.forEach((value, key) => {
       if (this.dropBoxPropsMapConfig.has(key) && key !== 'ruComponentType') {
-        componentStorage.dispatch(setCurrentValue([ruComponentType, key, value]))
+        catalogStorage.dispatch(setCurrentValue([ruComponentType, key, value]))
       }
     })
+    this.api.getComponentNames()?.subscribe(res => {
+      this.componentTypes = res
+    })
     this.initComponentStorage()
-      .finally(() => {
-        this.selectKeyAndValues(ruComponentType)
-      })
+    this.selectKeyAndValues(ruComponentType)
     this.getApi(query)
   }
 
   selectKeyAndValues(ruComponentType: string): void {
     this.selectedKeysValues = []
-    const currentValues = componentStorage.getState().currentValues
+    const currentValues = catalogStorage.getState().currentValues
     for (const _ruComponentType in currentValues) {
       if (_ruComponentType.toLowerCase() === ruComponentType.toLowerCase()) {
         for (const key in (currentValues as any)[_ruComponentType]) {
@@ -88,33 +88,21 @@ export class CatalogComponent implements OnInit {
 
   resetKeyAndValues(ruComponentType: string): void {
     this.selectedKeysValues = []
-    componentStorage.dispatch(removeRuComponentType([ruComponentType]))
-    const currentValues = componentStorage.getState().currentValues
+    catalogStorage.dispatch(removeRuComponentType([ruComponentType]))
+    const currentValues = catalogStorage.getState().currentValues
     localStorage.setItem('savedFilterValues', JSON.stringify(currentValues))
   }
 
-  initComponentStorage(): Promise<any> {
-    const savedFilterValues = localStorage.getItem('savedFilterValues')
-    return new Promise<void>((resolve, reject) => {
-      try {
-        savedFilterValues ? resolve(JSON.parse(savedFilterValues)) : reject()
-      } catch (error) {
-        reject()
-      }
-    })
-      .then((data: any) => {
-        if (typeof data === 'object') {
-          for (const ruComponentType in data) {
-            for (const key in data[ruComponentType]) {
-              componentStorage.dispatch(setCurrentValue([ruComponentType, key, data[ruComponentType][key]]))
-            }
-          }
+  initComponentStorage(): void {
+    const savedFilterValues = JSON.parse(localStorage.getItem('savedFilterValues')!)
+    if (typeof savedFilterValues === 'object') {
+      for (const ruComponentType in savedFilterValues) {
+        for (const key in savedFilterValues[ruComponentType]) {
+          catalogStorage.dispatch(setCurrentValue([ruComponentType, key, savedFilterValues[ruComponentType][key]]))
         }
-        return
-      })
+      }
+    }
   }
-
-
 
   initDropBoxMapConfig(exceptions: Map<string, { currentValue: string }> | void): void {
     const dropBoxPropsClone: any = {};
@@ -152,44 +140,40 @@ export class CatalogComponent implements OnInit {
     if (payload) {
       let ruComponentType: string | undefined = payload.get('ruComponentType')
       if (ruComponentType) {
-        const tableColumnsObj = Object.fromEntries(this.tableColumns)
-        console.log(tableColumnsObj)
-        for (const key in tableColumnsObj) {
-          if (payload.has(key)) {
-            componentStorage.dispatch(setCurrentValue([ruComponentType, key, payload.get(key) as string]))
+        const columns = ['manufacturerName', 'ruComponentKind', ...this.columns]
+        for (const col of columns) {
+          if (payload.has(col)) {
+            catalogStorage.dispatch(setCurrentValue([ruComponentType, col, payload.get(col) as string]))
           }
           else {
-            componentStorage.dispatch(removeCurrentValue([ruComponentType, key]))
+            catalogStorage.dispatch(removeCurrentValue([ruComponentType, col]))
           }
         }
       }
       else {
         ruComponentType = AppEnum.ALL
-        componentStorage.dispatch(removeRuComponentType([ruComponentType]))
+        catalogStorage.dispatch(removeRuComponentType([ruComponentType]))
         for (const key in Object.fromEntries(payload)) {
           if (key === 'manufacturerName' || key === 'ruComponentKind') {
-            componentStorage.dispatch(setCurrentValue([ruComponentType, key, payload.get(key) as string]))
+            catalogStorage.dispatch(setCurrentValue([ruComponentType, key, payload.get(key) as string]))
           }
         }
       }
-      const currentValues = componentStorage.getState().currentValues
+      const currentValues = catalogStorage.getState().currentValues
       localStorage.setItem('savedFilterValues', JSON.stringify(currentValues))
-      console.log(currentValues)
       this.selectKeyAndValues(ruComponentType)
       this.searchBuffer = []
       this.resultBuffer = []
-      this.all.forEach((item: Partial<ComponentOptions>, index) => {
+      this.all.forEach((item: any, index) => {
         let countProp: number = payload.size
         let countMatch: number = 0;
         payload.forEach((value, key) => {
-          let val = (item.component as any)[key]
+          let val = (item as any)[key]
           if (val !== undefined) {
             if (
               (val == value || value == AppEnum.ALL) ||
               (val == null && (value == null || value == "null"))
               ||
-              // (val == null && queryObject[key].replace(AppEnum.NOTDEFINED, null) == `${obj[key]}`) ||
-              // (obj[key] == '' && queryObject[key].replace(AppEnum.NOTDEFINED, "") == `${obj[key]}`) ||
               (existInColumnsMin(key) && !isNaN(Number(value)) && val >= Number(value)) ||
               (existInColumnsMax(key) && !isNaN(Number(value)) && val <= value) ||
               (val == value) ||
@@ -200,7 +184,7 @@ export class CatalogComponent implements OnInit {
           }
         })
         if (countProp == countMatch) {
-          this.searchBuffer.push(item as ComponentOptions)
+          this.searchBuffer.push(item)
         }
       })
       this.resultBuffer = Array.from(this.searchBuffer);
@@ -221,9 +205,6 @@ export class CatalogComponent implements OnInit {
           (object[key].input === false && val !== AppEnum.ALL && val) ||
           (object[key].input && val) ||
           key === 'ruComponentType'
-          //  ||
-          // key === 'ruComponentKind' && val !== AppEnum.ALL ||
-          // key === 'manufacturerName' && val !== AppEnum.ALL
         )
       ) {
         map.set(key, val)
@@ -246,28 +227,14 @@ export class CatalogComponent implements OnInit {
       this.api.getComponentsApiAll(),
       this.api.getAlias()
     ]).subscribe(res => {
-      this.storage.set(ComponentTypeRuEnum.DIOD, (res as any[])[0]["diod"])
-      this.storage.set(ComponentTypeRuEnum.TRANSISTOR, (res as any[])[0]["transistor"])
-      this.storage.set(ComponentTypeRuEnum.CAPACITOR, (res as any[])[0]["capacitor"])
-      this.storage.set(ComponentTypeRuEnum.MICROCHIP, (res as any[])[0]["microchip"])
-      this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[0]["resistor"])
-      const allias = (res as any[])[1]
-      this.allias = new Map<string, string>(Object.entries(allias))
+      this.storage = new Map(Object.entries(res[0] as any))
+      componentStorage.dispatch(setComponentSchema(res[0]))
+      const alias = (res as any[])[1]
+      this.alias = new Map<string, string>(Object.entries(alias))
       if (this.storage.size === 5) {
-        const prioritySchemaMap = new Map()
         const storageObj = Object.fromEntries(this.storage)
         for (const key in storageObj) {
           (storageObj[key] as []).forEach((item: any) => {
-            if (!prioritySchemaMap.get(item.ruComponentType)) {
-              const columnBuffer: string[] = []
-              for (const key in item) {
-                if (!isException(key) || key == 'manufacturerName' || key == 'ruComponentKind') {
-                  columnBuffer.push(key)
-                }
-              }
-              prioritySchemaMap.set(item.ruComponentType, columnBuffer)
-            }
-            let markup: string = ''
             let satisfyCount: number = 0;
             const actualPayload = payload
             actualPayload.delete('page')
@@ -289,102 +256,66 @@ export class CatalogComponent implements OnInit {
                 }
               }
             })
-            switch (item.ruComponentType) {
-              case ComponentTypeRuEnum.MICROCHIP:
-                markup = `
-                    <p>${allias['ruTechnologyName']}: ${item.ruTechnologyName}</p>
-                    <p>${allias['bitDepthValue']}: ${item.bitDepthValue}</p>
-                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
-                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
-                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
-                  `
-                break;
-              case ComponentTypeRuEnum.DIOD:
-                markup = `
-                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
-                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
-                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
-                  `
-                break;
-              case ComponentTypeRuEnum.TRANSISTOR:
-                markup = `
-                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
-                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
-                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
-                  `
-                break;
-              case ComponentTypeRuEnum.RESISTOR:
-                markup = `
-                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
-                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
-                    <p>${allias['radiationResistance']}: ${item.radiationResistance}</p>
-                  `
-                break;
-              case ComponentTypeRuEnum.CAPACITOR:
-                markup = `
-                    <p>${allias['minOperatingTemperature']}: ${item.minOperatingTemperature}</p>
-                    <p>${allias['maxOperatingTemperature']}: ${item.maxOperatingTemperature}</p>
-                    <p>${allias['maxCapacity']}: ${item.maxCapacity}</p>                   
-                    <p>${allias['minCapacity']}: ${item.minCapacity}</p>
-                  `
-                break;
-            }
-
             if (actualPayload.size == satisfyCount) {
-              this.searchBuffer.push({
-                component: item,
-                html: this.sanitizer.bypassSecurityTrustHtml(markup),
-              })
+              this.searchBuffer.push(item)
             }
-            this.all.push({
-              component: item,
-              html: this.sanitizer.bypassSecurityTrustHtml(markup),
-            })
-            if (!this.allTableColumns.get(item.ruComponentType)) {
-              let columns = prioritySchemaMap.get(item.ruComponentType)! as string[]
-              this.allTableColumns.set(item.ruComponentType, new Map(columns.map((value) => [value, this.allias.get(value) as string])))
-            }
+            this.all.push(item)
           })
         }
         let ruComponentType = payload.get('ruComponentType')
         if (ruComponentType) {
-          this.tableColumns = this.allTableColumns.get(ruComponentType)!
+          this.columns = this.getTabelColumns(ruComponentType)
         }
-        this.displayedRuComponentTypes = Array.from(this.storage.keys())
         this.resultBuffer = Array.from(this.searchBuffer);
       }
       this.loader = false
     });
   }
 
+  getHtmlPreview(item: any): any {
+    let markup: string = ""
+    let objIterator = 0
+    for (const key in item) {
+      if (objIterator < this.previewColumnCount && !isException(key)) {
+        markup += `<p>${this.alias.get(key)}: ${item[key]}</p>`
+        objIterator++
+      }
+    }
+    return this.sanitizer.bypassSecurityTrustHtml(markup)
+  }
+
+  getTabelColumns(ruComponentType: string): string[] {
+    const schema: Map<string, string[]> = new Map(Object.entries(componentStorage.getState().componentSchema as []))
+    return schema.get(ruComponentType)!
+  }
+
   onTypeChanged(ruComponentType: string): void {
     let exceptions = new Map()
-    let currentValues: any = componentStorage.getState().currentValues
+    let currentValues: any = catalogStorage.getState().currentValues
     this.resultBuffer = [...this.resultBuffer]
-    this.tableColumns = new Map()
-    if (ruComponentType !== AppEnum.ALL) {
-      this.tableColumns = this.allTableColumns.get(ruComponentType)!
+    if (ruComponentType === AppEnum.ALL) {
+      this.columns = []
+      exceptions
+        .set('manufacturerName', { currentValue: currentValues[AppEnum.ALL] && currentValues[AppEnum.ALL].manufacturerName ? currentValues[AppEnum.ALL].manufacturerName : AppEnum.ALL })
+        .set('ruComponentKind', { currentValue: currentValues[AppEnum.ALL] && currentValues[AppEnum.ALL].ruComponentKind ? currentValues[AppEnum.ALL].ruComponentKind : AppEnum.ALL })
+    }
+    else {
+      this.columns = this.getTabelColumns(ruComponentType)
+      const columns = ['manufacturerName', 'ruComponentKind', ...this.columns]
+
       for (const componentType in currentValues) {
         if (ruComponentType.toLocaleLowerCase() === componentType.toLocaleLowerCase()) {
           for (const key in currentValues[componentType]) {
-            if (this.tableColumns.has(key)) {
+            const column = columns.find((val: string) => val == key)
+            if (column) {
               exceptions.set(key, { currentValue: currentValues[componentType][key] })
             }
           }
         }
       }
     }
-    else {
-      const currentValues = (componentStorage.getState().currentValues as any)[AppEnum.ALL]
-      for (const key in currentValues) {
-        exceptions.set(key, { currentValue: currentValues[key] })
-      }
-    }
-
     this.initDropBoxMapConfig(
       exceptions
-      // .set('manufacturerName', this.dropBoxPropsMapConfig.get('manufacturerName'))
-      // .set('ruComponentKind', this.dropBoxPropsMapConfig.get('ruComponentKind'))
     );
     this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = ruComponentType
     let map = this.getSimpleKeyValueMap()
@@ -393,18 +324,19 @@ export class CatalogComponent implements OnInit {
     })
   }
 
-  openComponentInfo(item: ComponentOptions): void {
-    this.router.navigateByUrl(`component?ruComponentType=${item.component.ruComponentType}&&componentName=${item.component.componentName}`)
+  openComponentInfo(item: any): void {
+    this.router.navigateByUrl(`component?ruComponentType=${item.ruComponentType}&&componentName=${item.componentName}`)
   }
 
   getPdfUrl(item: any): string | null {
-    return !item.component.remark1 ? null : `http://localhost:5000/datasheets/${item.component.remark1}.pdf`
+    // ${this.api.getApiAdress()}
+    return !item.remark1 ? null : `/datasheets/${item.remark1}.pdf`
   }
-  resultBuffer: ComponentOptions[] = []
+  resultBuffer: any[] = []
   search(event: any): void {
     let value: string = event.target.value
     this.resultBuffer = []
-    this.searchBuffer.forEach((item: ComponentOptions) => {
+    this.searchBuffer.forEach((item: any) => {
       if (this.include(item, value)) {
         this.resultBuffer.push(item)
       }
@@ -414,8 +346,8 @@ export class CatalogComponent implements OnInit {
     })
   }
 
-  include(item: ComponentOptions, value: string): boolean {
-    let componentName: string = item.component.componentName
+  include(item: any, value: string): boolean {
+    let componentName: string = item.componentName
     let length: number = componentName.length >= value.length ? value.length : componentName.length
     let extractedPart = componentName.slice(0, length).split('')
     for (let i = 0; i < extractedPart.length; i++) {

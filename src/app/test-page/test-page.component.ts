@@ -1,40 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { DropboxProviderComponent } from "../components/dropbox-provider/dropbox-provider.component";
-import { ApiService1 } from '../../services/api.services1';
+import { ApiService } from '../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
-import { ComponentOptions } from '../../utils/types/app';
 import { forkJoin } from 'rxjs';
 import { ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { props } from '../fetch.config';
 import { ManufacturerCountTableComponent } from "../components/manufacturer-count-table/manufacturer-count-table.component";
+import { SelectListComponent } from "../components/select-list/select-list.component";
 
 @Component({
   selector: 'app-test-page',
-  imports: [DropboxProviderComponent, HttpClientModule, ManufacturerCountTableComponent],
-  providers: [ApiService1],
+  imports: [DropboxProviderComponent, HttpClientModule, ManufacturerCountTableComponent, SelectListComponent],
+  providers: [ApiService],
   templateUrl: './test-page.component.html',
   styleUrl: './test-page.component.css'
 })
 export class TestPageComponent implements OnInit {
 
   currentDropBoxName: string | undefined
-  allias!: Map<string, string>
-  all!: Partial<ComponentOptions>[]
+  alias!: Map<string, string>
+  all!: any[]
   values!: any[]
   storage: any
   dropBoxPropsMap!: Map<string, any>
+  testSet1: string[] = ['Технология изготовления', 'Интерфейс', 'Минимальное напряжение, В']
+  testSet2: string[] = ['Вид вывода', 'Минимальное напряжение, В']
+  outputSet1: string[] = []
+
   onCurrentDropBoxNameChnaged(obj: { propsMap: Map<string, any>, currentName: string | undefined }): void {
     this.currentDropBoxName = obj.currentName
     this.dropBoxPropsMap = obj.propsMap
     console.log(this.dropBoxPropsMap)
   }
 
-  constructor(private api: ApiService1) { }
+  constructor(private api: ApiService) { }
 
   ngOnInit(): void {
     this.all = []
     this.values = []
-    this.allias = new Map()
+    this.alias = new Map()
     this.storage = new Map()
     this.getApi()
 
@@ -61,9 +65,10 @@ export class TestPageComponent implements OnInit {
       this.storage.set(ComponentTypeRuEnum.CAPACITOR, (res as any[])[2])
       this.storage.set(ComponentTypeRuEnum.MICROCHIP, (res as any[])[3])
       this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[4])
-      const allias = (res as any[])[5]
-      this.allias = new Map<string, string>(Object.entries(allias))
-      let copy: Partial<ComponentOptions>[] = []
+      const alias = (res as any[])[5]
+      console.log(alias)
+      this.alias = new Map<string, string>(Object.entries(alias))
+      let copy: any[] = []
       this.values = [
         ...(res as any[])[0],
         ...(res as any[])[1],
@@ -83,6 +88,7 @@ export class TestPageComponent implements OnInit {
       }
       console.log(this.values)
       this.all = copy
+      this.outputSet1 = Array.from(this.testSet1)
     });
     // this.api.getComponentsApi()?.pipe(map((options: ComponentLabel[]) => {
     //   console.log(options)

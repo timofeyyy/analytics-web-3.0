@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, catchError } from 'rxjs';
-import { ApiService1 } from '../../../services/api.services1';
+import { ApiService } from '../../../services/api.services1';
 import getBestManufacturer from '../../../utils/fnc1/other/best_manufacturer_prod.fnc';
 import getManufacturersProd from '../../../utils/fnc1/other/paramter-value-count-stat.fnc';
 import { HttpClientModule } from '@angular/common/http';

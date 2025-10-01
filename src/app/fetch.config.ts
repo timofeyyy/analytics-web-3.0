@@ -1,9 +1,8 @@
 import { Observable } from "rxjs";
-import { ApiService1 } from "../services/api.services1";
+import { ApiService } from "../services/api.services1";
 import { AppEnum } from "../utils/enum/app.enum";
-import { ComponentOptions } from "../utils/types/app";
-import manufacturerNameFilters from "../utils/fnc1/filters/manufacturerName";
-import componentKindFilters from "../utils/fnc1/filters/componentKind";
+import manufacturerNameFilters from "../utils/fnc1/filters/manufacturer-name";
+import componentKindFilters from "../utils/fnc1/filters/component-kind";
 
 
 
@@ -20,12 +19,12 @@ export const props = {
   'manufacturerName': {
     currentValue: AppEnum.ALL,
     input: false,
-    sort: (props: any, all: ComponentOptions[]) => manufacturerNameFilters(props, all)
+    sort: (props: any, all: any[]) => manufacturerNameFilters(props, all)
   },
   'ruComponentKind': {
     currentValue: AppEnum.ALL,
     input: false,
-    sort: (props: any, all: ComponentOptions[]) => componentKindFilters(props, all)
+    sort: (props: any, all: any[]) => componentKindFilters(props, all)
   },
   'bitDepthValue': {
     currentValue: AppEnum.ALL,
@@ -173,59 +172,6 @@ export const props = {
 
 
 const prioritySchema = {
-  "microchips": [
-    "consumptionCurrent",
-    "qualication",
-    "manufacturerName",
-    "samplingTime",
-    "minOperatingTemperature",
-    "frequency",
-    "minVoltage"
-  ],
-  "diods": [
-    "minOperatingTemperature",
-    "qualicationЕС",
-    "manufacturerName",
-    "radiationResistance",
-    "maxOperatingTemperature",
-    "maxPermissibleDCCollectorCurrent",
-    "maxPermissibleDCVoltage",
-    "package",
-  ],
-  "transistors": [
-    "maxOperatingTemperature",
-    "radiationResistance",
-    "qualicationЕС",
-    "maxPermissibleDCVoltage",
-    "minOperatingTemperature",
-    "maxiPermissibleDirectCurrent",
-    "ruComponentKind",
-    "manufacturerName",
-    "package"
-  ],
-  "capacitors": [
-    "qualicationSG",
-    "minCapacity",
-    "maxCapacity",
-    "acceptableСapacityReduction",
-    "acceptableCapacityIncrease",
-    "manufacturerName",
-    "outputType",
-    "maxOperatingTemperature",
-    "maxVoltage",
-    "ruComponentKind"
-
-  ],
-  "resistors": [
-    "powerRating",
-    "minRatedResistance",
-    "maxRatedResistance",
-    "manufacturerName",
-    "currentLimit",
-    "resistanceTolerance",
-    "maxOperatingTemperature",
-    "maxVoltage"
-  ],
   "Микросхема": [
     "consumptionCurrent",
     "qualication",
@@ -290,6 +236,7 @@ const prioritySchema = {
 // -60
 // 200
 // 3
+// initComponentSchema
 export const prioritySchemaMap: Map<string, string[]> = new Map(Object.entries(prioritySchema));
 // export const prioritySchemaWrapperMap: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper));
 // export const prioritySchemaWrapper2Map: Map<string, string> = new Map(Object.entries(prioritySchemaWrapper2));

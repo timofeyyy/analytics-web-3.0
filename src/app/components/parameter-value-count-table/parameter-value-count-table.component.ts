@@ -16,7 +16,7 @@ export class ParameterValueCountTableComponent implements OnChanges {
   @Input()
   allowNull!: boolean
   @Input()
-  alliasName!: string
+  aliasName!: string
   @Input()
   hideLabel!: boolean
   rows!: any[]
@@ -26,27 +26,33 @@ export class ParameterValueCountTableComponent implements OnChanges {
   @Input()
   parameter!: string
   @Input()
+  parameterAlias!: string
+  @Input()
   borderRadius: string = '.5vw'
+  @Input()
+  firstSelectedDefault!: boolean
   constructor(
     private router: Router,
     private route: ActivatedRoute
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    this.rows = gteParameterValueCountStat(this.all, this.parameter, this.allowNull) as any[]
+    const rows = gteParameterValueCountStat(this.all, this.parameter, this.allowNull) as any[]
+    this.rows = Array.from(rows)
     this.orig = Array.from(this.rows)
-    this.currentValue = undefined
-    console.log(this.currentValue)
+    if (this.firstSelectedDefault && rows && rows.length) {
+      this.getValue(this.rows[0].value, false)
+    }
+
   }
   @Output()
   public onValueChanged = new EventEmitter<string>()
   @Input()
   currentValue: string | undefined
-  getValue(value: string): void {
-    this.currentValue = (this.currentValue == value ? undefined : value)
-    // console.log(this.currentValue)
+  getValue(value: string, changeState: boolean): void {
+    this.currentValue = (this.currentValue == value && changeState ? undefined : value)
     this.onValueChanged.emit(this.currentValue)
   }
-  
+
   search(event: any): void {
     let value: string = event.target.value
     this.rows = []

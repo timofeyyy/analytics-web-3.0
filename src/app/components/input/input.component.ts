@@ -10,7 +10,7 @@ export class InputComponent {
   @Input()
   name!: string
   @Input()
-  allias: string | undefined
+  alias: string | undefined
   @Input()
   currentValue!: string
   @Input()

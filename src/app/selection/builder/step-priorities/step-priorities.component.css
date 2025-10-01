@@ -1,143 +1,122 @@
-/* .quantity {
-  position: relative;
+.selected {
+  background: rgba(51, 51, 51, 85%);
+}
+
+.selected p {
+  color: white;
+}
+
+.hide {
+  display: none;
+}
+
+.columns {
+  width: 100%;
+}
+
+.column-header-wrapper {
+  height: 12%;
+}
+
+.column-recs {
+  height: 85%;
+  overflow-y: scroll;
+}
+
+.columns .column {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 1.5vw;
+  padding: .2vw;
+  margin: 0;
+  /* border-radius: 0.25vw; */
+}
+
+.columns .column .count-controllers,
+.columns .column .column-wrapper {
   margin: 0;
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button
-{
-  -webkit-appearance: none;
-  margin: 0;
+.columns .column .column-wrapper {
+  display: flex;
+  align-items: center;
 }
 
-input[type=number]
-{
-  -moz-appearance: textfield;
+.priorities-wrapper {
+  height: 77%;
+  display: flex;
+  overflow: hidden;
 }
 
-.quantity input {
-  width: 45px;
-  height: 42px;
-  line-height: 1.65;
-  float: left;
-  display: block;
-  padding: 0;
-  margin: 0;
-  padding-left: 20px;
-  border: 1px solid gray;
+.priority-input-header {
+  display: flex;
+  align-items: center;
 }
 
-.quantity input:focus {
-  outline: 0;
-}
 
-.quantity-nav {
-  float: left;
-  position: relative;
-  height: 42px;
-}
-
-.quantity-button {
-  position: relative;
+.hint p {
+  font-size: max(1vw, 10px);
+  text-decoration: underline;
+  color: #7490f8;
   cursor: pointer;
-  border-left: 1px solid gray;
-  width: 20px;
-  text-align: center;
-  color: #333;
-  font-size: 13px;
-  font-family: "Trebuchet MS", Helvetica, sans-serif !important;
-  line-height: 1.7;
-  -webkit-transform: translateX(-100%);
-  transform: translateX(-100%);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
 }
 
-.quantity-button.quantity-up {
-  position: absolute;
-  height: 50%;
-  top: 0;
-  border-bottom: 1px solid gray;
+.hint {
+  position: relative;
+  margin: 0;
 }
 
-.quantity-button.quantity-down {
-  position: absolute;
-  bottom: -1px;
-  height: 50%;
+.hint .hint-popup {
+  background-color: white;
+  border-radius: 0.5vw;
+  padding: 1vw;
+  box-sizing: border-box;
+  width: 32vw;
+  position: fixed;
+  right: 7vw;
+  z-index: 11;
 }
 
-.column {
-    margin-bottom: 1vw;
-} */
-/* 
-.box {
-    text-align: center;
-    margin: 0;
+.hint .hint-popup .def {
+  margin-top: 1vw;
+  display: flex;
+  justify-self: flex-end;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.hint .hint-popup p {
+  color: black;
+  font-size: max(1vw, 10px);
+  text-decoration: unset;
+  margin-bottom: 1vw;
 }
 
-.quantity {
-    position: relative;
-    color: #7f7f7f;
-    height: 100%;
+.priority-input-header>p,
+.column-header>p {
+  font-size: max(1vw, 10px);
+  margin: 1vw 1vw 1vw 0;
+  margin: 0;
 }
 
-.quantity input[type="number"] {
-    transition: border .3s ease-in-out, color .3s ease-in-out;
-    -webkit-appearance: textfield;
-    -moz-appearance: textfield;
-    appearance: textfield;
-    font-family: Arial, sans-serif;
-    font-size: max(1vw, 10px);
-    line-height: 24px;
-    font-weight: 700;
-    box-shadow: none;
-    outline: none;
-    width: 2vw;
-    height: 2vw;
-    text-align: center;
-    float: right;
-    border: 0.1vw solid #dcdcdc;
-    background-color: #fff;
-    color: #342f2f;
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(97, 175, 254, .1);
+  padding: 0.5vw;
+  border: 0.1vw solid #61affe;
+  border-radius: .5vw;
+  margin: 1vw 0 .5vw;
 }
 
-.quantity-button {
-    width: 2vw;
-    height: 2vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    float: right;
-    position: relative;
-    cursor: pointer;
-    font-size: max(1vw, 10px);
+.columns .t {
+  border-radius: .25vw .25vw 0 0;
 }
-
-.quantity-button::before,
-.quantity-button::after {
-    position: absolute;
-    content: "";
-    width: .75vw;
-    height: .1vw;
-    background-color: currentColor;
-    display: block;
-    font-weight: lighter;
+.columns .b {
+  border-radius: 0 0 .25vw .25vw;
 }
-
-.quantity-remove::after {
-    display: none;
+.columns .tb {
+  border-radius: .25vw;
 }
-
-
-.quantity-add::after {
-    transform: rotate(90deg);
-} */
+.columns .tbn {
+  border-radius: 0;
+}

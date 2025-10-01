@@ -43,7 +43,6 @@ const getManufacturersChartOptionDonut1 = (data: any): Partial<ChartOptions> => 
     // window.localStorage.setItem('mapWithMaxValues', JSON.stringify(Object.fromEntries(res.max)))
     // window.localStorage.setItem('mapWithMinValues', JSON.stringify(Object.fromEntries(res.min)))
     apexChartData.values = apexChartData.labels
-    console.log(apexChartData)
     return apexChartData
 }
 

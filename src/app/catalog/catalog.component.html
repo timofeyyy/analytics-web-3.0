@@ -1,94 +1,96 @@
 <div class="app-main">
     <app-navigator class="navigator-wrapper" [current]="'/filters'" />
-    <app-filters [all]="all" [allias]="allias" [tableColumns]="tableColumns"
-        [dropBoxPropsMapConfig]="dropBoxPropsMapConfig" [ngStyle]="{'display' : filter ? 'block' : 'none'}"
-        (onChange)="apply($event)" />
+    <app-filters [all]="all" [alias]="alias" [columns]="columns" [dropBoxPropsMapConfig]="dropBoxPropsMapConfig"
+        [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="apply($event)" />
     <div class="workspace">
+        <header class="workspace-header">
+            <p class="item item-h">Фильтрация по параметрам</p>
+        </header>
         <div class="workpsace-wrapper" [ngStyle]="{overflow: filter ? 'hidden' : 'unset'}">
-            <div class="warning" *ngIf="error; else templateName">
+            <!-- <div class="warning" *ngIf="error; else templateName">
                 <div class="warning-wrapper">
                     <div class="warning-header">
                         <img [src]="'assets/images/'+iconName+'.svg'" alt="img">
                         <p>{{error}}</p>
                     </div>
                 </div>
-            </div>
-            <ng-template #templateName>
-                <div class="filter-options">
-                    <div class="options-head">
-                        <p>Фильтрация по параметрам</p>
+            </div> -->
+            <!-- <ng-template #templateName> -->
+            <div class="filter-options">
+                <!-- <div class="options-head">
+                    <p>Фильтрация по параметрам</p>
+                </div> -->
+                <div class="options-body">
+                    <div class="option-wrapper">
+                        <p class="option-wrapper-header">Тип компонента</p>
+                        <div class="table-names">
+                            <label class="state-btn" *ngFor="let componentType of componentTypes; let i = index"
+                                [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('ruComponentType').currentValue === componentType.ruComponentType}"
+                                (click)="onTypeChanged(componentType.ruComponentType)">{{componentType.ruComponentType}}</label>
+                            <label class="state-btn"
+                                [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все'}"
+                                (click)="onTypeChanged('Все')">Все</label>
+                        </div>
                     </div>
-                    <div class="options-body">
-                        <div class="option-wrapper">
-                            <p class="option-wrapper-header">Тип компонента</p>
-                            <div class="options-wrapper-body">
-                                <p *ngFor="let ruComponentType of displayedRuComponentTypes"
-                                    [ngClass]="{type: true,  activated: dropBoxPropsMapConfig.get('ruComponentType').currentValue === ruComponentType}"
-                                    (click)="onTypeChanged(ruComponentType)">
-                                    {{ruComponentType}}</p>
-                                <p [ngClass]="{type: true,  activated: dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все'}"
-                                    (click)="onTypeChanged('Все')">
-                                    Все</p>
-                            </div>
-                        </div>
-                        <div class="option-wrapper" [ngStyle]="{display: selectedKeysValues.length ? 'block' : 'none'}">
-                            <p class="option-wrapper-header">Выбранные параметры</p>
-                            <div class="options-wrapper-body view-panel">
-                                <p class="value" *ngFor="let record of selectedKeysValues">{{allias.get(record[0])}}:
-                                    {{record[1]}}</p>
+                    <div class="option-wrapper" [ngStyle]="{display: selectedKeysValues.length ? 'block' : 'none'}">
+                        <p class="option-wrapper-header">Выбранные параметры</p>
+                        <div class="options-wrapper-body view-panel">
+                            <p class="value" *ngFor="let record of selectedKeysValues">{{alias.get(record[0])}}:
+                                {{record[1]}}</p>
 
-                            </div>
                         </div>
-                        <!-- <div class="option-wrapper" >
+                    </div>
+                    <!-- <div class="option-wrapper" >
                             <p class="option-wrapper-header">{{resultBuffer.length}} компонентов</p>
                         </div> -->
+                </div>
+                <div class="option-footer">
+                    <div class="action action-filters" (click)="filter=!filter"
+                        [ngStyle]="{width: selectedKeysValues.length ? '48%' : '100%'}">
+                        <p>Дополнительные параметры</p>
                     </div>
-                    <div class="option-footer">
-                        <div class="action action-filters" (click)="filter=!filter"
-                            [ngStyle]="{width: selectedKeysValues.length ? '48%' : '100%'}">
-                            <p>Дополнительные параметры</p>
-                        </div>
-                        <div class="action action-reset"
-                            [ngStyle]="{display: selectedKeysValues.length ? 'flex' : 'none'}" (click)="
+                    <div class="action action-reset" [ngStyle]="{display: selectedKeysValues.length ? 'flex' : 'none'}"
+                        (click)="
                                 resetKeyAndValues(dropBoxPropsMapConfig.get('ruComponentType').currentValue);
                                 onTypeChanged(dropBoxPropsMapConfig.get('ruComponentType').currentValue)
                                 ">
-                            <p>Отчистить выбранные параметры</p>
+                        <p>Отчистить выбранные параметры</p>
+                    </div>
+                </div>
+            </div>
+            <main class="catalog">
+                <div class="head">
+                    <div class="filter">
+                        <div class="search">
+                            <input type="text" placeholder="Индетификатор компонента" (input)="search($event)">
+                        </div>
+                        <p>{{resultBuffer.length}} компонентов</p>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="item" *ngFor="let item of records">
+                        <div class="info">
+                            <div class="h">
+                                <h1>Тип компонента: {{item.ruComponentType}}</h1>
+                            </div>
+                            <h5>Производитель: {{item.manufacturerName}}</h5>
+                            <h5>Индетификатор компонента: {{item.componentName}}</h5>
+                            <div [innerHTML]="getHtmlPreview(item)">
+                            </div>
+                        </div>
+                        <div class="block">
+                            <p *ngIf="!getPdfUrl(item); else templateName"></p>
+                            <ng-template #templateName>
+                                <a [href]="getPdfUrl(item)" class="spec">Спецификация</a>
+                            </ng-template>
+                            <button (click)="openComponentInfo(item)" class="def">Подробнее</button>
                         </div>
                     </div>
                 </div>
-                <main class="catalog">
-                    <div class="head">
-                        <div class="filter">
-                            <div class="search">
-                                <input type="text" placeholder="Индетификатор компонента" (input)="search($event)">
-                            </div>
-                            <p>{{resultBuffer.length}} компонентов</p>
-                        </div>
-                    </div>
-                    <div class="body">
-                        <div class="item" *ngFor="let item of records">
-                            <div class="info">
-                                <div class="h">
-                                    <h1>Тип компонента: {{item.component.ruComponentType}}</h1>
-                                </div>
-                                <h5>Производитель: {{item.component.manufacturerName}}</h5>
-                                <h5>Индетификатор компонента: {{item.component.componentName}}</h5>
-                                <div [innerHTML]="item.html">
-                                </div>
-                            </div>
-                            <div class="block">
-                                <p *ngIf="!getPdfUrl(item); else templateName"></p>
-                                <ng-template #templateName>
-                                    <a [href]="getPdfUrl(item)" class="spec">Спецификация</a>
-                                </ng-template>
-                                <button (click)="openComponentInfo(item)" class="def">Подробнее</button>
-                            </div>
-                        </div>
-                    </div>
-                    <app-page-labels [records]="this.resultBuffer" (onPageSelected)="selectPage($event)" />
-                </main>
-            </ng-template>
+                <app-page-labels [records]="this.resultBuffer" [step]="10" [rowsCount]="20"
+                    (onPageSelected)="selectPage($event)" />
+            </main>
+            <!-- </ng-template> -->
         </div>
     </div>
     <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />

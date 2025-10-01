@@ -3,25 +3,27 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    box-sizing: border-box;
+    padding: 1vw;
 }
 
 .workspace main {
+    border: .1vw solid lightgray;
     background-color: white;
-    width: 90%;
+    width: 80%;
     border-radius: .5vw;
-    height: 90%;
+    height: 100%;
+    padding: none;
 }
 
 .workspace main section {
     height: 100%;
 }
 
-.view {
+
+
+.block {
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 0 0 1.5vw 0;
 }
 
 .component-selection {
@@ -36,39 +38,8 @@
     width: 70%;
 }
 
-.view {
-    list-style-type: decimal;
-    font-size: max(1vw, 10px);
-    margin-left: 1vw;
-}
-
-.view .menu {
-    margin-left: 1vw;
-}
-
 .menu li a {
     color: black;
-}
-
-.view li {
-    margin: 0 0 0 1vw;
-    font-size: max(1vw, 1px);
-}
-
-.view .disabled a {
-    text-decoration: none;
-    color: black;
-}
-
-.view .disabled {
-    pointer-events: none;
-    opacity: 0.35;
-}
-
-.view a {
-    cursor: pointer;
-    text-decoration: underline;
-    /* margin: 0 1.5vw; */
 }
 
 .menu h1 {
@@ -89,48 +60,12 @@
 .controlles {
     display: flex;
     flex-direction: column;
-    width: 65%;
+    width: 100%;
 }
 
 .step-description {
     font-size: max(1.5vw, 15px);
     font-weight: lighter;
-    margin-bottom: 1vw;
-}
-
-.hint p {
-    font-size: max(1vw, 10px);
-    text-decoration: underline;
-    color: #7490f8;
-    cursor: pointer;
-}
-
-.hint {
-    margin: 0 0 1vw 0;
-    position: relative;
-}
-
-.hint .hint-popup {
-    background-color: white;
-    border-radius: 0.5vw;
-    padding: 1vw;
-    box-sizing: border-box;
-    width: 32vw;
-    position: fixed;
-    right: 7vw;
-    z-index: 11;
-}
-
-.hint .hint-popup .def {
-    margin-top: 1vw;
-    display: flex;
-    justify-self: flex-end;
-}
-
-.hint .hint-popup p {
-    color: black;
-    font-size: max(1vw, 10px);
-    text-decoration: unset;
     margin-bottom: 1vw;
 }
 
@@ -146,7 +81,7 @@
 
 .controlles .steps-panel {
     height: 100%;
-    margin: 1vw;
+    margin: 1vw 1vw 0;
     position: relative;
     overflow: hidden;
 }
@@ -158,60 +93,27 @@
     transition: 0.5s all ease;
     background-color: white;
     left: 0;
-    padding: 0 0.5vw 0.5vw;
+    padding: 0 0.5vw 1.5vw 0;
     box-sizing: border-box;
     overflow: hidden;
 }
 
 .controlles .btns {
     display: flex;
-    justify-content: flex-end;
-    margin: 0 0 .5vw 0;
+    justify-content: space-between;
+    margin: 0 1vw 1vw;
 }
 
 .controlles .btns button {
     margin-right: 1.5vw;
 }
 
-.view .info {
-    margin: 1vw;
-    height: 100%;
-    overflow: scroll;
-}
 
 .info .disabled {
     background: lightgray;
     opacity: 0.5;
 }
 
-.view .info span {
-    font-size: max(1vw, 10px);
-    color: #7490f8;
-    display: block;
-}
-
-.view .info h1 {
-    font-size: max(1.5vw, 15px);
-    font-weight: lighter;
-    margin-bottom: 1.5vw;
-}
-
-.view .info .info-header {
-    font-size: max(1.5vw, 15px);
-}
-
-.view .info p {
-    font-size: max(1.2vw, 12px);
-    font-weight: lighter;
-    padding: 0.5vw 0 0 0;
-    border-top: 0.1vw solid grey;
-    margin-right: 0.5vw;
-    padding: 0.5vw 0;
-}
-
-.view .info .current {
-    background: rgb(211, 211, 211, 0.5);
-}
 
 .type {
     background-color: white;
@@ -270,7 +172,7 @@
 .actions {
     border-top: 0.1vw solid grey;
     padding-top: 1vw;
-    margin: 0;
+    margin-top: 1vw;
 }
 
 .columns {

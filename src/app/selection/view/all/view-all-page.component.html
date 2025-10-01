@@ -19,7 +19,7 @@
                                 <li *ngFor="let column of displayedColumns"
                                     [ngClass]="{tab: true, active: currentPropName === column}"
                                     (click)="onColumnSelected(column); buildChart()">
-                                    <p>{{allias.get(column)}}</p>
+                                    <p>{{alias.get(column)}}</p>
                                 </li>
                                 <div class="line"></div>
                             </ul>

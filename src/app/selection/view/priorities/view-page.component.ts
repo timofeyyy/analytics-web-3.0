@@ -1,30 +1,35 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { ApiService1 } from '../../../../services/api.services1';
+import { ApiService } from '../../../../services/api.services1';
 import { AppEnum, ComponentTypeRuEnum } from '../../../../utils/enum/app.enum';
-import { ComponentOptions } from '../../../../utils/types/app';
 import { HttpClientModule } from '@angular/common/http';
 import { Location, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { propsMap } from '../../../fetch.config';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigatorComponent } from '../../../components/navigator/navigator.component';
 import { LoaderComponent } from '../../../components/loader/loader.component';
-import { componentStorage, fetchComponentTypes, initComponentTypes } from '../../../../utils/redux/component';
-import { chartNamesMap } from '../../../../utils/static-data/chart-names';
 import { columnsMax, columnsMin } from '../../../../utils/static-data/compared-min-max';
+import { chartNamesMap } from '../../../../utils/static-data/chart-names';
+
 
 @Component({
   selector: 'app-table',
   imports: [HttpClientModule, NgFor, NgClass, NavigatorComponent, LoaderComponent, NgStyle, NgIf],
-  providers: [ApiService1],
+  providers: [ApiService],
   templateUrl: './view-page.component.html',
-  styleUrls: ['../all/view-all-page.component.css', '../../../components/styles/tabs.css', '../../../components/styles/button.css']
+  styleUrls: ['./view-page.component.css', '../../../components/styles/tabs.css', '../../../components/styles/button.css']
 })
 export class TablePage implements OnInit {
+  navigateToChartPage(chart: string) {
+    this.chartSection = true
+    this.currentChartName = chart
+    const str = this.onChartUrlChnaged(chart)
+    this.chartUrl = this.ds.bypassSecurityTrustResourceUrl(str)
+  }
   storage: any;
-  allias!: Map<string, string>;
-  all!: Partial<ComponentOptions>[];
+  alias!: Map<string, string>;
+  all!: any[];
   selectedRuComponentType!: string
   loader!: boolean
   error!: string
@@ -39,13 +44,18 @@ export class TablePage implements OnInit {
   activatedColumns!: any[]
   url!: string
   save!: boolean
+  chartSection!: boolean
+  currentChartName!: string
+  chartUrl!: any
+
   constructor(
     private route: ActivatedRoute,
-    private api: ApiService1,
+    private api: ApiService,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private ds: DomSanitizer
   ) {
-    this.allias = new Map()
+    this.alias = new Map()
     this.records = []
     this.all = []
     this.columns = []
@@ -55,18 +65,15 @@ export class TablePage implements OnInit {
   }
 
   ngOnInit(): void {
-    componentStorage.dispatch(initComponentTypes())
-    if (!Object.entries(componentStorage.getState().componentTypes).length) {
-      componentStorage.dispatch(fetchComponentTypes(this.api));
-    }
-    const componentTypes: any[] = componentStorage.getState().componentTypes
-    const componentTypesObj: any = {}
-    componentTypes.forEach(val => {
-      const enComponentType = val['enComponentType'].toLowerCase()
-      const ruComponentType = val['ruComponentType'].toLowerCase()
-      componentTypesObj[enComponentType] = ruComponentType
+    this.api.getComponentNames()?.subscribe((res: any) => {
+      const componentTypesObj: any = {}
+      res.forEach((val: any) => {
+        const enComponentType = val['enComponentType'].toLowerCase()
+        const ruComponentType = val['ruComponentType'].toLowerCase()
+        componentTypesObj[enComponentType] = ruComponentType
+      })
+      this.prioritySchemaWrapper2Map = new Map(Object.entries(componentTypesObj))
     })
-    this.prioritySchemaWrapper2Map = new Map(Object.entries(componentTypesObj))
     this.chartNames = Array.from(chartNamesMap.keys())
     this.priorities = this.getPriorityArrayFromQuery()
     this.priority = this.getSavedPriorityFromStorage() as string
@@ -83,7 +90,7 @@ export class TablePage implements OnInit {
     const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
     this.getApi(query)
   }
-  
+
   getSavedPriorityFromStorage(): string | undefined {
     const selection = JSON.parse(window.localStorage.getItem('selection') as string)
     if (selection && selection.priority) {
@@ -94,13 +101,12 @@ export class TablePage implements OnInit {
 
   changePriorityInStorage(priority: string): void {
     if (!this.isStorageEmpty()) {
-      console.log(window.localStorage.getItem('selection') as string)
       const selection = JSON.parse(window.localStorage.getItem('selection') as string)
       // window.localStorage.setItem('selection', JSON.stringify(selection))
       this.save = (priority !== selection.priority)
     }
     else {
-      this.save = true
+      this.save = true 
     }
 
   }
@@ -121,12 +127,12 @@ export class TablePage implements OnInit {
     return priorities
   }
 
-  getChartAllias(name: string): string {
+  getChartalias(name: string): string {
     return chartNamesMap.get(name) as string
   }
 
   onChartUrlChnaged(type: string): string {
-    let mainUrl = `/chart/components/column/${type}`
+    let mainUrl = `/chart/components/column${type === "line" ? "-line" : ""}/${type}`
     return this.makeQueryStr(mainUrl)
   }
 
@@ -147,7 +153,6 @@ export class TablePage implements OnInit {
     if (this.selectedRuComponentType) {
       url += `ruComponentType=${this.prioritySchemaWrapper2Map.get(this.selectedRuComponentType)}`
     }
-    console.log(url)
     url = url.replace('+', '%2B0')
     return url
   }
@@ -167,21 +172,15 @@ export class TablePage implements OnInit {
       this.api.getAlias()
     ])
       .subscribe(res => {
-        console.log(res)
         this.storage = res[0] as any
-        console.log(this.storage)
-        const allias = (res as any[])[1]
-        this.allias = new Map<string, string>(Object.entries(allias))
-        console.log(this.all)
-
+        const alias = (res as any[])[1]
+        this.alias = new Map<string, string>(Object.entries(alias))
         const value = this.getFirstRuComponentType()
         if (value) {
           this.selectedRuComponentType = value
         }
-
         this.initColumns()
         this.loader = false
-        console.log(this.all)
       });
   }
 
@@ -213,9 +212,9 @@ export class TablePage implements OnInit {
       obj = this.all[0]
     }
     for (const key in obj) {
-      let allias = this.allias.get(key)
-      if (allias) {
-        columns.push(allias)
+      let alias = this.alias.get(key)
+      if (alias) {
+        columns.push(alias)
       }
       else {
         columns.push(key)
@@ -250,7 +249,7 @@ export class TablePage implements OnInit {
 
   saveToStorage(): void {
     let obj: any = {}
-    for (const type of ['mixed', 'bar', 'pie', 'donut', 'line']) {
+    for (const type of this.chartNames) {
       obj[type] = this.onChartUrlChnaged(type)
     }
     window.localStorage.setItem('selection', JSON.stringify({

@@ -1,0 +1,29 @@
+<div class="multiple-select-list-wrapper">
+    <select [id]="id" (click)="openList=!openList">
+        <option class="preview">{{label}}</option>
+    </select>
+    <div class="drop-box" [id]="id+'_inner'" [ngStyle]="{display: openList ? 'block' : 'none'}"
+        class="multiple-select-list" multiple>
+        <div class="option" *ngFor="let val of values; let i = index">
+            <input type="checkbox" [checked]="isChecked(val)" (click)="onValueSelected($event, val)" />
+            <p>{{val}}</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- <select>s
+    <select (change)="onValueSelected($event)" multiple>
+        <option *ngFor="let val of values; let i = index" [selected]="i === 0">
+            <span class="option-label">{{val}}</span>
+        </option>
+    </select>
+</select> -->
+<!-- <mat-form-field appearance="fill">
+    <mat-label>Выберите значения</mat-label>
+    <mat-select [(value)]="values" multiple>
+        <mat-option *ngFor="let val of values" [value]="val">
+            {{ val }}
+        </mat-option>
+    </mat-select>
+</mat-form-field> -->

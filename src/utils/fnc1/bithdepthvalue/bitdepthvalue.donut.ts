@@ -1,6 +1,6 @@
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
-import getManufacturer from "../other/get_manufacturer";
+import getManufacturer from "../other/manufacturer";
 
 
 

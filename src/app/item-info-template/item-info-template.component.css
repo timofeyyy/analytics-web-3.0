@@ -1,0 +1,41 @@
+.app-main .workspace {
+    height: 100vh;
+    padding: 1vw;
+    box-sizing: border-box;
+}
+
+.app-main .workspace main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: white;
+    padding: 2vw;
+    border-radius: 0.5vw;
+    width: unset;
+    height: 100%;
+    border: .1vw solid lightgray;
+}
+
+.wrapper {
+    margin: 0;
+}
+
+
+
+.header h3 {
+    font-size: max(1.2vw, 12px);
+    color: #7490f8;
+    font-weight: lighter;
+}
+
+.header {
+    padding-bottom: 1vw;
+    margin-bottom: 1vw;
+    border-bottom: 0.1vw solid grey;
+}
+
+.body p {
+    font-size: max(1vw, 10px);
+    font-weight: lighter;
+}

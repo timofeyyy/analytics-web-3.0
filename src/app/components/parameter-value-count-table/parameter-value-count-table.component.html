@@ -1,28 +1,17 @@
 <section class="records" [ngStyle]="{'border-radius': borderRadius}">
-    <!-- <div class="header">
-        <p>Значение</p>
-        <p>Количество</p>
-        <div class="block">
-            <p>Значение</p>
-            <app-record-sorting [rows]="rows" class="record-sorting" />
-        </div>
-        <div class="block">
-            <p>Номенклатура</p>
-        </div>
-    </div> -->
      <div class="header">
         <div class="block">
             <div class="search">
-                <input type="text" [placeholder]="alliasName" (input)="search($event)">
+                <input type="text" [placeholder]="parameterAlias" (input)="search($event)">
             </div>
-            <app-record-sorting [rows]="rows" [countName]="'Количество'" [valueName]="'Производитель'" class="record-sorting"/>
+            <app-record-sorting [rows]="rows" [countName]="aliasName" [valueName]="parameterAlias" class="record-sorting"/>
         </div>
-        <div class="block" [ngStyle]="{display: hideLabel ? 'none' : 'flex' }">
-            <p>Кол-во компонентов с этим параметром</p>
+        <div class="block" [ngStyle]="{display: hideLabel ? 'flex' : 'flex' }">
+            <p>Кол-во компонентов</p>
         </div>
     </div>
     <div class="view">
-        <div class="row layout" *ngFor="let row of rows" (click)="noRedirect ? getValue(row.value) : openCatalog(row.value)" [ngClass]="{activated: row.value == currentValue}">
+        <div class="row layout" *ngFor="let row of rows" (click)="noRedirect ? getValue(row.value, true) : openCatalog(row.value)" [ngClass]="{activated: row.value == currentValue }">
             <div class="col">
                 <p>{{row.value}}</p>
             </div>

@@ -110,6 +110,7 @@
     left: 0%;
     background: white;
     position: relative;
+    border-right: 0.1vw solid lightgrey;
 }
 
 .section {

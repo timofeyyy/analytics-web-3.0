@@ -1,0 +1,75 @@
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator [current]="'/home'" />
+    </div>
+    <div class="workspace">
+        <main>
+
+            <div class="chart-wrapper">
+                <aside class="aside-panel">
+                    <div class="panel-name">
+                        <p>Параметры</p>
+                    </div>
+                    <div class="tabs">
+                        <ul class="parent">
+                            <li class="tab parent-tab" (click)="openClose(enComponentType)">
+                                <p>{{getRuComponentTypeByEn(enComponentType)}}</p>
+                            </li>
+                            <ul class="children"
+                                [ngStyle]="{display: componentTypesMap.get(enComponentType) && componentTypesMap.get(enComponentType)?.state ? 'block' : 'none'}">
+                                <li *ngFor="let column of displayedColumns"
+                                    [ngClass]="{tab: true, active: currentPropName === column}"
+                                    (click)="onColumnSelected(column); buildChart()">
+                                    <p>{{alias.get(column)}}</p>
+                                </li>
+                                <div class="line"></div>
+                            </ul>
+                        </ul>
+                    </div>
+                    <div class="panel-footer">
+                        <button (click)="getBack()" class="def">Назад</button>
+                    </div>
+                </aside>
+                <div class="chart-wrapper-main">
+                    <header>
+                        <div class="tabs">
+                            <div *ngFor="let chart of chartNames"
+                                [ngClass]="{tab: true, horizontal: true, active: type===chart}"
+                                (click)="type = chart; buildChart()">
+                                <p>{{getChartalias(chart)}}</p>
+                            </div>
+                        </div>
+                    </header>
+                    <as-split direction="vertical" class="wrapper-body" (dragEnd)="onDragEnd($event)">
+                        <as-split-area [size]="80" [minSize]="60">
+                            <section class="chart-window">
+                                <iframe [src]="chartUrl" frameborder="0" [ngStyle]="{width: chartWidth+'%'}"></iframe>
+                            </section>
+                        </as-split-area>
+
+                        <as-split-area [size]="20" [maxSize]="40">
+                            <footer class="bottom-section">
+                                <app-parameter-value-count-table class="list" [allowNull]="false" [noRedirect]="true" [all]="storage.get(enComponentType) ?? []"
+                                    [borderRadius]="'0'" [currentValue]="currentTableValue" [parameter]="currentPropName" [hideLabel]="false" [aliasName]="alias.get(currentPropName)!" (onValueChanged)="onTableRowSelected($event)" />
+                            </footer>
+                            <!-- <div class="bottom-wrapper">
+                                <as-split direction="horizontal" class="bottom-section">
+                                    <as-split-area [size]="30" class="wrapper">
+                                        <app-parameter-value-count-table [all]="storage.get(enComponentType) ?? []" [borderRadius]="'0'"
+                                            [parameter]="currentPropName"
+                                            (onValueChanged)="onParameterChnaged($event)" />
+                                    </as-split-area>
+
+                                    <as-split-area [size]="30" class="wrapper">
+                                        <app-manufacturer-count-table [all]="storage.get(enComponentType) ?? []"  [borderRadius]="'0'" />
+                                    </as-split-area>
+                                </as-split>
+                            </div> -->
+                        </as-split-area>
+                    </as-split>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>

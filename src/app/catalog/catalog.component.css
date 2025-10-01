@@ -1,17 +1,11 @@
 .workspace .catalog {
     background-color: white;
-    /* height: 80vh; */
     border-radius: 0.5vw;
-    /* margin: 0 !important; */
     box-sizing: border-box;
     padding: 1.5vw;
     width: unset;
     margin: 1vw;
-}
-
-.workpsace-wrapper {
-    height: 100vh;
-
+    border: .1vw solid lightgray;
 }
 
 .catalog .body {
@@ -21,38 +15,6 @@
     border: 0.1vw solid lightgrey;
     overflow-x: scroll;
 }
-
-/* 
-.catalog .footer {
-    display: flex;
-    align-items: center;
-    height: 4%;
-}
-
-.catalog .footer .active {
-    background-color: #7490f8;
-    color: white;
-}
-
-.catalog .footer img {
-    width: max(1.5vw, 15px);
-    height: max(1.5vw, 15px);
-}
-
-.catalog .footer img,
-.catalog .footer p {
-    margin: 0 0.2vw;
-    cursor: pointer;
-}
-
-.catalog .footer p {
-    padding: 0.5vw 1vw;
-    box-sizing: border-box;
-    border: 0.1vw solid lightgray;
-    border-radius: 0.5vw;
-    font-size: max(1vw, 10px);
-} */
-
 
 .options-header {
     margin: 1.5vw 0;
@@ -76,13 +38,6 @@
     font-size: max(1vw, 10px);
 }
 
-/* .option-wrapper .type:hover {
-    box-shadow: 0px 0px .5vw 0.2vw lightgrey;
-    background-color: lightgray;
-    color: white;
-
-} */
-
 .option-wrapper .activated {
     background: rgba(51, 51, 51, 90%);
     color: white;
@@ -100,7 +55,7 @@
 }
 
 .filter-options .options-body {
-    padding: 1.5vw 0;
+    padding: 0 0 1.5vw 0;
 }
 
 .filter-options {
@@ -110,25 +65,24 @@
     border-radius: 0.5vw;
     font-weight: lighter;
     font-size: max(1.5vw, 15px);
+    border: .1vw solid lightgray;
 }
 
 
 .spec {
-    font-size: max(1vw, 10px);
+    font-size: max(.8vw, 8px);
 }
 
 .filter p {
     margin: 0;
-    font-size: max(1vw, 12px);
+    font-size: max(1vw, 10px);
 }
 
 .filter {
     height: 2.5vw;
-    /* padding: 1.5vw; */
     margin: 0;
     display: flex;
     align-items: center;
-    /* border-bottom: 0.1vw solid gray; */
     cursor: pointer;
     justify-content: space-between;
 }
@@ -165,10 +119,10 @@
 
 .view-panel .value {
     color: white;
-} 
+}
 
 .action p {
-    font-size: max(1vw, 10px);
+    font-size: max(.9vw, 9px);
 }
 
 .action-filters,
@@ -253,8 +207,7 @@
 }
 
 .item .h h1 {
-    /* font-size: max(1.5vw, 15px); */
-    font-size: max(1.25vw, 12.5px);
+    font-size: max(1vw, 10px);
     font-weight: lighter;
     display: inline-block;
     margin: 0;
@@ -263,14 +216,13 @@
 .item h5 {
 
     font-weight: 200;
-    font-size: max(1vw, 10px);
+    font-size: max(.9vw, 9px);
     color: #3D83A9;
-    /* text-decoration: underline; */
 }
 
 .item p {
-    font-size: max(1vw, 10px);
     font-weight: 100;
+    font-size: max(.9vw, 9px);
 }
 
 .item .info,
@@ -285,7 +237,7 @@
     align-items: center;
 }
 
-.item .block p,
+/* .item .block p,
 .item .block button {
     margin: 0;
 }
@@ -297,9 +249,10 @@
     border: 0.1vw solid lightgray;
     font-weight: lighter;
     cursor: pointer;
-    /* background-color: #3D83A9; */
-    /* color: white; */
+} */
 
+.item .block button {
+    font-size: max(.8vw, 8px);
 }
 
 .item .block p {

@@ -44,7 +44,7 @@ const getColumnValueLineChartOptions = (data: any, query: Map<string, string>): 
         values: []
     };
     const map = new Map();
-    const paramAlias = query.get('allias')
+    const paramAlias = query.get('alias')
     const param = query.get('param')
     const ruComponentType = query.get('ruComponentType')
     const paramValue = query.get('paramValue')
@@ -86,7 +86,6 @@ const getColumnValueLineChartOptions = (data: any, query: Map<string, string>): 
             series.data.push(map.get(category))
         }
         apexChartData.values = apexChartData.xaxis?.categories;
-        console.log(apexChartData)
     }
     // else {
     //     apexChartData = getManufacturersChartOptionLine1(data)

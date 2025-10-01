@@ -1,11 +1,10 @@
 import { Component, EventEmitter, input, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
-import manufacturerNameFilters from '../../../utils/fnc1/filters/manufacturerName';
-import componentKindFilters from '../../../utils/fnc1/filters/componentKind';
-import componentTypeFilters from '../../../utils/fnc1/filters/componentType';
+import manufacturerNameFilters from '../../../utils/fnc1/filters/manufacturer-name';
+import componentKindFilters from '../../../utils/fnc1/filters/component-kind';
+import componentTypeFilters from '../../../utils/fnc1/filters/component-type';
 import { NgFor, NgIf } from '@angular/common';
-import { ComponentOptions, FilterDropBox } from '../../../utils/types/app';
-import { ApiService1 } from '../../../services/api.services1';
+import { ApiService } from '../../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
 import { DropboxProviderComponent } from "../dropbox-provider/dropbox-provider.component";
 import { Router } from '@angular/router';
@@ -15,18 +14,20 @@ import { Router } from '@angular/router';
   imports: [HttpClientModule, DropboxProviderComponent, NgFor],
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.css', '../styles/button.css'],
-  providers: [ApiService1]
+  providers: [ApiService]
 })
 export class FiltersComponent implements OnChanges {
   @Input()
-  all!: Partial<ComponentOptions>[]
+  all!: any[]
   @Input()
-  allias!: Map<string, string>
+  alias!: Map<string, string>
   @Input()
   tableColumns!: Map<string, string>
+  @Input()
+  columns: string[] = []
 
   constructor(
-    private api: ApiService1,
+    private api: ApiService,
     private router: Router
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
@@ -102,16 +103,17 @@ export class FiltersComponent implements OnChanges {
   }
 
   onRuComponentTypeChanged(): void {
-    if (this.tableColumns.size) {
-      let keys: any = this.tableColumns!.keys()
-      let columns: string[] = Array.from(keys)
-      this.selectedColumns = columns
-        .filter(function (value) {
-          if (value === 'ruComponentType' || value === 'ruComponentKind' || value === 'manufacturerName') {
-            return false
-          }
-          return true
-        })
+    if (this.columns.length) {
+      // let keys: any = this.tableColumns!.keys()
+      // let columns: string[] = Array.from(keys)
+      // this.selectedColumns = this.columns
+      //   .filter(function (value) {
+      //     if (value === 'ruComponentType' || value === 'ruComponentKind' || value === 'manufacturerName') {
+      //       return false
+      //     }
+      //     return true
+      //   })
+      this.selectedColumns = Array.from(this.columns)
     }
     else {
       this.selectedColumns = []

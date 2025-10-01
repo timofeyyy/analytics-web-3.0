@@ -1,0 +1,311 @@
+.workspace {
+    height: 100vh;
+    width: 100%;
+    /* overflow-x: hidden; */
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+.workspace .workspace-header .item-list {
+    width: 8vw;
+}
+
+.btn-wapper {
+    width: 100%;
+}
+
+.btn-wapper button {
+    display: flex;
+    justify-self: flex-end;
+}
+
+.workspace .content {
+    display: flex;
+    box-sizing: border-box;
+    height: 87%;
+}
+
+main {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 1vw;
+    width: 80%;
+}
+
+aside {
+    background-color: white;
+    width: 20%;
+    border-left: .1vw solid lightgray;
+}
+
+.action-vertical label {
+    margin-bottom: .5vw;
+}
+
+.page-menu {
+    background-color: white;
+    display: flex;
+    padding: .5vw .75vw;
+    border-bottom: 0.1vw solid lightgrey;
+    height: 2%;
+}
+
+.m-section {
+    padding: 1vw;
+    box-sizing: border-box;
+}
+
+.page-menu .item {
+    margin: 0 1vw 0 0;
+    font-size: max(0.8vw, 8px);
+    cursor: pointer;
+}
+
+.page-menu .selected .line {
+    width: 100%;
+    background-color: #7490f8;
+}
+
+.def {
+    font-size: max(.8vw, 8px);
+}
+
+.page-menu .line {
+    display: block;
+    margin-top: .15vw;
+    background-color: lightgray;
+    height: .15vw;
+    border-radius: .5vw;
+    width: 0;
+    transition: all ease 0.5s;
+}
+
+.page-menu .item:hover>.line {
+    width: 100%;
+}
+
+.params {
+    background-color: white;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 1vw;
+    /* margin-bottom: 1vw; */
+}
+
+.table-block {
+    width: 100%;
+    background-color: white;
+    padding: 0;
+    height: -webkit-fill-available;
+    overflow-y: scroll;
+}
+
+.table-block .panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 12%;
+    margin: 0;
+    padding: 0 1vw;
+}
+
+
+
+.table-block .panel .panel-h,
+.table-block .panel {
+    margin: 0;
+}
+
+.table-block .panel .panel-h {
+    width: 20%;
+}
+
+.panel .actions {
+    width: 45%;
+    display: flex;
+    margin: 0;
+}
+
+.panel .actions .action:last-child {
+    margin: 0;
+}
+
+.panel .actions .action {
+    margin-right: 1vw;
+}
+
+.panel .actions .pages {
+    width: 55%;
+}
+
+.m-section {
+    border-radius: .5vw;
+    border: 0.1vw solid lightgray;
+}
+
+
+
+.params .actions {
+    display: flex;
+    justify-content: space-between;
+    margin: 1vw 0 0 0;
+}
+
+.params .actions .action {
+    width: 32%;
+    margin: 0;
+}
+
+
+label {
+    font-size: max(.8vw, 8px);
+    display: block;
+}
+
+.search-select {
+    width: 100%;
+}
+
+.params .actions .action .search {
+    border-radius: .25vw;
+    padding: .5vw;
+    background-color: #eeeeee;
+}
+
+.panel .actions .action-inline label {
+    margin: 0 1vw 0 0;
+}
+
+.panel .actions .action-inline {
+    display: flex;
+    align-items: center;
+}
+
+thead tr {
+    background-color: rgb(211, 227, 253);
+    border-top: .1vw solid lightgray;
+    border-bottom: .1vw solid lightgray;
+}
+
+td,
+th {
+    font-size: max(.8vw, 8px);
+    text-align: start;
+    padding: .5vw;
+    border-right: 0.1vw solid lightgray;
+    color: #1f1f1f;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+
+.table-frame {
+    width: 100%;
+    overflow: hidden;
+}
+
+.table-frame .table-frame-wrapper {
+    overflow: scroll;
+}
+
+table {
+    margin: 0;
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+tbody tr {
+    border-bottom: 0.1vw solid lightgray;
+}
+
+aside .priorities {
+    list-style-type: none;
+    font-size: max(.8vw, 8px);
+}
+
+aside .priorities li {
+    padding: .25vw .5vw .25vw 2vw;
+    font-size: max(.7vw, 7px);
+    cursor: pointer;
+}
+
+aside .priorities li:hover {
+    /* background-color: gray;
+    background-color: rgba(51, 51, 51, 90%);
+    background: rgb(173, 173, 173); */
+    background: rgba(51, 51, 51, 90%);
+    color: white;
+}
+
+aside .priorities .selected,
+aside .priorities .selected:hover {
+    /* background-color: rgba(51, 51, 51, 90%); */
+    background: rgba(51, 51, 51, 90%);
+
+    /* background: gray; */
+    color: white;
+}
+
+
+aside .recs {
+    margin: 0;
+}
+
+aside .recs .warning {
+    padding: .5vw;
+}
+
+aside .recs .warning-p {
+    font-size: max(.9vw, 9px);
+    color: gray;
+}
+
+aside .recs .warning-h {
+    font-weight: bold;
+    font-size: max(1.2vw, 12px);
+}
+
+
+aside .recs .rec p {
+    font-size: max(1vw, 10px);
+}
+
+aside .recs .rec .date {
+    font-size: max(.6vw, 6px);
+    color: gray;
+    margin: .25vw 0;
+}
+
+aside .recs .rec .extens .ext-h {
+    font-size: max(.8vw, 8px);
+}
+
+aside .recs .rec .preview {
+    padding: .5vw 1vw;
+}
+
+aside .recs .rec .extens {
+    border-top: .1vw solid lightgray;
+    border-bottom: .1vw solid lightgray;
+    /* background: lightgray; */
+    /* background-color: rgb(211, 227, 253);
+    ; */
+}
+
+aside .recs .rec .extens .ext-h {
+    padding: .5vw 0 .5vw 1.5vw;
+    border-bottom: .1vw solid rgb(233, 233, 233);
+    /* background-color: rgba(116, 144, 248, 0.3); */
+    /* background: rgba(51, 51, 51, 90%); */
+    /* background: gray; */
+    color: black;
+    /* color: white; */
+}

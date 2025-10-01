@@ -1,49 +1,63 @@
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AppEnum } from '../../../../utils/enum/app.enum';
-import { RuComponentTypeFormatPipe } from '../../../pipes/ruComponentTypesFormat.pipe';
-import { ComponentTypes } from '../../../../utils/types/app';
-import { ApiService1 } from '../../../../services/api.services1';
+import { ComponentTypes, ErrorStepHandling } from '../../../../utils/types/app';
+import { ApiService } from '../../../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
-import { componentStorage, setComponentTypeAllias } from '../../../../utils/redux/storage';
+import { resetWarning, selectionStorage, setWarning } from '../../../../utils/redux/selection';
+// import { componentStorage, setComponentTypealias } from '../../../../utils/redux/storage';
+
 
 
 
 @Component({
   selector: 'app-step-tablename',
   imports: [NgClass, NgFor, HttpClientModule],
-  providers: [ApiService1],
+  providers: [ApiService],
   templateUrl: './step-tablename.component.html',
   styleUrls: ['./step-tablename.component.css', '../step-window/step-window.component.css']
 })
 
-export class StepTablenameComponent implements OnInit {
-  constructor(private api: ApiService1) { }
+export class StepTablenameComponent implements OnInit, ErrorStepHandling {
+  constructor(private api: ApiService) { }
+  findError(): void {
+    if (this.current) {
+      selectionStorage.dispatch(resetWarning(this.index))
+    }
+    else {
+      selectionStorage.dispatch(setWarning([this.index, "Прежде чем перейти на следующий шаг, выберите таблицу компонента"]))
+    }
+  }
 
   ngOnInit(): void {
     this.api.getComponentNames()?.subscribe(res => {
-      componentStorage.dispatch(setComponentTypeAllias(res))
+      // componentStorage.dispatch(setComponentTypealias(res))
       this.componentTypes = res
     })
+    this.findError()
   }
 
   @Input()
   index!: number
+  // @Output()
+  // public typeChanged = new EventEmitter<string>()
   @Output()
-  public typeChanged = new EventEmitter<string>()
-  @Output()
-  public sourceChanged = new EventEmitter<[string, any[]]>()
-  @Output()
-  public valueChanged = new EventEmitter<ComponentTypes>()
+  public typeChanged = new EventEmitter<[string, string, any[]]>()
   current!: string
   @Input()
   storage!: Map<string, any>
+  @Input()
+  alias!: Map<string, any>
+  @Input()
+  columns: any[] = []
+  @Input()
+  dropBoxPropsMapConfig!: Map<string, any>
   componentTypes: ComponentTypes[] = [];
 
   onValueSelected(value: ComponentTypes): void {
-    this.typeChanged.emit(value.ruComponentType)
     this.current = (this.current === value.ruComponentType ? "" : value.ruComponentType)
-    this.sourceChanged.emit([value.enComponentType, this.storage.get(value.enComponentType.toLocaleLowerCase())])
+    this.findError()
+    this.typeChanged.emit([value.ruComponentType, value.enComponentType, this.storage.get(value.enComponentType.toLocaleLowerCase())])
   }
 
   // onTypeSelected(event: any): void {

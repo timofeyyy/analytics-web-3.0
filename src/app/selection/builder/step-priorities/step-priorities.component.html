@@ -1,4 +1,4 @@
-<p class="step-description">Шаг {{index}}: Назначение приоритетов</p>
+<p class="step-description">Шаг {{index}}: Выбор параметров и назначение их приоритетов</p>
 <div class="hint">
     <p (click)="popupHint=true">Что такое приоритет?</p>
     <div class="hint-popup" [ngStyle]="{display: popupHint ? 'block' : 'none'}">
@@ -13,10 +13,27 @@
         <button class="def" (click)="popupHint=false">Закрыть</button>
     </div>
 </div>
-<div class="columns">
-    <app-input-numeric class="column" [disabled]="obj[column].disabled" [disabled]="obj[column].warning" [step]="1"
-        [min]="1" [max]="columns.length" [value]="obj[column].priority" *ngFor="let column of columns; let i = index"
-        [column]="column" [label]="allias.get(column)!" (onChanged)="onPriorityChanged($event)" />
+<div class="priorities-wrapper">
+    <div class="columns">
+        <div class="column-header-wrapper">
+            <div class="column-header">
+                <p>Выбор параметров</p>
+                <p>Назначение приоритетов</p>
+            </div>
+        </div>
+        <div class="column-recs">
+            <div class="column" *ngFor="let column of stateColumns; let i = index;"
+                [ngClass]="{selected: column.selected}" [ngStyle]="{borderRadius: stylize(i)}">
+                <div class="column-wrapper">
+                    <input type="checkbox" [checked]="column.selected" (click)="selectColumn(column, i)" />
+                    <p>{{alias.get(column.name)}}</p>
+                </div>
+                <app-input-numeric [ngClass]="{hide: !column.selected }" class="count-controllers"
+                    [disabled]="column.disabled" [disabled]="column.warning" [step]="1" [min]="0" [max]="max"
+                    [value]="column.priority" [column]="column.name" (onChanged)="onPriorityChanged($event, i)" />
+            </div>
+        </div>
+    </div>
 </div>
 <div class="actions">
     <div class="column">

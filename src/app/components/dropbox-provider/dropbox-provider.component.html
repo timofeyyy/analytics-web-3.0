@@ -1,14 +1,20 @@
 <p *ngIf="input; else templateName">
-    <app-input [currentValue]="inputValue" [inputDisabled]="inputDisabled" [allias]="alliasName" [name]="name" (onChanged)="openClose($event)"/>
+    <app-input [currentValue]="inputValue" [inputDisabled]="inputDisabled" [alias]="aliasName" [name]="name"
+        (onChanged)="openClose($event)" />
 </p>
 <ng-template #templateName>
-    <app-dropbox
+    <!-- <app-dropbox
         [ngStyle]="{'display': err? 'none' : 'block'}"
         [name]="name"
         [currentName]="currentName"
-        [allias]="alliasName"
+        [alias]="aliasName"
         [values]="values"
         [currentValue]="currentValue"
         (onChanged)="openClose($event)"
-    /> 
+    />  --> 
+    <div class="select-list-wrapper">
+        <p>{{aliasName}}</p>
+        <app-select-list class="select-list" [fitstSelectedValue]="true" [currentValue]="currentValue" [ngStyle]="{'display': err? 'none' : 'block'}"  [values]="values"
+            (onValueChanged)="openClose({currentName: currentName, currentValue: $event})" />
+    </div>
 </ng-template>

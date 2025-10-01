@@ -2,7 +2,11 @@ export enum AppEnum {
     EXAMPLE = "example",
     ALL = "Все",
     NONE = " - ",
-    NOTDEFINED = "Не указано"
+    NOTDEFINED = "Не указано",
+    LASTSAVED = "Последняя",
+    ASC = "По порядку",
+    DESC = "По убыванию",
+    SOME = "Некоторые"
 };
 
 export enum ComponentTypeRuEnum {
@@ -11,7 +15,6 @@ export enum ComponentTypeRuEnum {
     RESISTOR = "Резистор",
     CAPACITOR = "Конденсатор",
     DIOD = "Диод",
-
 }
 
 export enum ComponentTypeEnEnum {
@@ -20,7 +23,6 @@ export enum ComponentTypeEnEnum {
     RESISTOR = "resistor",
     CAPACITOR = "capacitor",
     DIOD = "diod",
-
 }
 
 export enum ChartActions {

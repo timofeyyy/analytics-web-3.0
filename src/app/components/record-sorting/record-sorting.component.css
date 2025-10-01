@@ -29,7 +29,7 @@ img {
 } */
 
 .box {
-    display: flex;
+    /* display: flex; */
     height: 100%;
 }
 
@@ -44,6 +44,8 @@ img {
     border: .1vw solid lightgray;
     background-color: white;
     position: absolute;
+    left: -4vw;
+    top: .5vw;
 }
 
 li {
@@ -106,7 +108,7 @@ li:hover {
 
 
 .icon img {
-    padding: .5vw 1vw;
+    padding: .5vw;
 }
 
 .icon {
@@ -116,4 +118,5 @@ li:hover {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    height: 100%;
 }

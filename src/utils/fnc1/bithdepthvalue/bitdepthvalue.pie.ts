@@ -1,8 +1,8 @@
 import { ChartOptions } from "../../types/chart";
 import { BitDepthValue } from "../../types/microchip";
-import getManufacturer from "../other/get_manufacturer";
+import getManufacturer from "../other/manufacturer";
 
-
+ 
 
 const getBitDepthValueStatPie = (data: any): Partial<ChartOptions> => {
     let manufacturerName = getManufacturer(data)
@@ -53,5 +53,7 @@ const getBitDepthValueStatPie = (data: any): Partial<ChartOptions> => {
     apexChartData.propName = "bitDepthValue"
     return apexChartData
 }
+
+
 
 export default getBitDepthValueStatPie

@@ -3,7 +3,8 @@ import getManufacturersChartOptionLine1 from "../manufacturers/manufacturers.lin
 
 
 const getColumnLineChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
-    const values:any = [];
+    const values: any = [];
+    const map = new Map();
     const apexChartData: Partial<ChartOptions> = {
         series: [],
         dataLabels: {
@@ -20,7 +21,7 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
             categories: [],
             labels: {
                 style: {
-                    fontSize: '0.75vw'
+                    fontSize: '0px'
                 }
             }
         },
@@ -28,7 +29,7 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
             x: {
                 formatter: function (val: number, opts: any) {
                     const index = opts.dataPointIndex;
-                    return `${values[index]} ${val}`;
+                    return `Значение параметра: ${values[index]}; Дата: ${apexChartData!.values![index]};`;
                 },
             },
         },
@@ -45,8 +46,7 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
         },
         values: []
     };
-    const map = new Map();
-    const paramAlias = query.get('allias')
+    const paramAlias = query.get('alias')
     const param = query.get('param')
     const manufacturerName = query.get('manufacturerName')
     const ruComponentType = query.get('ruComponentType')
@@ -87,7 +87,6 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
                 }
             }
         }
-        console.log(map);
         const categories = ((apexChartData as ChartOptions).xaxis.categories as Array<string>)
         const series = apexChartData.series![0]
         for (const category of categories) {
@@ -96,18 +95,16 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
             if (!entries.length) {
                 continue
             }
-            const first= entries[0]
+            const first = entries[0]
             // for (const element of entries) {
             //     if (element == firstValue) {
 
             //     }
             // }
-            console.log((first as any)[1])
             series.data.push((first as any)[1])
             values.push((first as any)[0])
         }
         apexChartData.values = apexChartData.xaxis?.categories;
-        console.log(apexChartData)
         // .forEach((category: string) => {
 
 

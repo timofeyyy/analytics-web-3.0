@@ -5,13 +5,13 @@
         </div>
         <div class="body">
             <div class="base">
-                <!-- <app-dropbox-provider [alliasName]="`${allias.get('ruComponentType')}`"
+                <!-- <app-dropbox-provider [aliasName]="`${alias.get('ruComponentType')}`"
                     [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig"
                     [name]="'ruComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"
                     (onStateChanged)="onRuComponentTypeChanged($event)" /> -->
                 <app-dropbox-provider 
                     [inputValue]="dropBoxPropsMapConfig.get('manufacturerName').currentValue"
-                    [alliasName]="`${allias.get('manufacturerName')}`" 
+                    [aliasName]="`${alias.get('manufacturerName')}`" 
                     [currentName]="currentDropBoxName" 
                     [all]="all"
                     [propsMap]="dropBoxPropsMapConfig" 
@@ -19,7 +19,7 @@
                     (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
                 <app-dropbox-provider 
                     [inputValue]="dropBoxPropsMapConfig.get('ruComponentKind').currentValue"
-                    [alliasName]="`${allias.get('ruComponentKind')}`" 
+                    [aliasName]="`${alias.get('ruComponentKind')}`" 
                     [currentName]="currentDropBoxName" 
                     [all]="all"
                     [propsMap]="dropBoxPropsMapConfig" 
@@ -29,7 +29,7 @@
             <div class="additional">
                 <app-dropbox-provider *ngFor="let column of selectedColumns"
                     [inputValue]="dropBoxPropsMapConfig.get(column).currentValue"
-                    [alliasName]="`${allias.get(column)}`"
+                    [aliasName]="`${alias.get(column)}`"
                     [currentName]="currentDropBoxName" 
                     [all]="all" 
                     [propsMap]="dropBoxPropsMapConfig" 

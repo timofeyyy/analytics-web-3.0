@@ -99,7 +99,6 @@ const getColumnMixedChartOptions = (data: any, query: Map<string, string>): Part
             sum += (value * 100 / length);
             (apexChartData as ChartOptions).series[1].data.push(sum.toFixed(1) as any);
         });
-        console.log(apexChartData)
     }
     else {
         apexChartData = getManufacturersChartOptionBarMixed1(data)

@@ -12,13 +12,13 @@ export interface Config {
 
 export interface ChartConfig {
     name: string,
-    allias: string,
+    alias: string,
     routes: ChartRoute[]
 }
 
 
 export interface ChartRoute {
-    allias: string,
+    alias: string,
     route: string
 }
 

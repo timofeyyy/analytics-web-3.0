@@ -1,0 +1,93 @@
+.workspace {
+    height: unset;
+}
+.workspace main {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-wrapper .chart-wrapper-h {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1vw;
+    display: flex;
+    height: max-content;
+    border-bottom: .1vw solid lightgray;
+}
+
+.chart-view {
+    height: 100%;
+}
+
+.chart-wrapper iframe {
+    height: 100%;
+}
+
+.chart-wrapper-h .action {
+    display: flex;
+    font-size: max(.8vw, 8px);
+    margin: 0 .5vw 0 0;
+    height: max-content;
+}
+
+.chart-wrapper-h .action p,
+.chart-wrapper-h .action .select-list {
+    margin: 0;
+}
+
+.select-list-wrapper {
+    margin: 0;
+    position: relative;
+    width: 8vw;
+}
+
+.action .select-list-wrapper {
+    width: 8vw;
+    left: -.3vw;
+}
+
+.chart-wrapper-h .action p {
+    padding: 0 0 .5vw .5vw;
+    border: .1vw solid lightgray;
+    padding: .55vw 1vw .55vw .55vw;
+    border-radius: .25vw 0 0 .25vw;
+    margin-right: 0;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 60%;
+    background-color: white;
+    border-radius: .1vw;
+    border: .1vw solid lightgray;
+    height: 100%;
+}
+
+.panel-wrapper {
+    width: 38%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.panel-wrapper .panel-chart,
+.panel-wrapper .panel-list {
+    height: 49%;
+    width: 100%;
+}
+
+.chart-wrapper,
+.panel-wrapper .panel-chart,
+.panel-wrapper .panel-list {
+    background-color: white;
+    border-radius: .5vw;
+    border: .1vw solid lightgray;
+}
+
+.panel-wrapper .panel-list {
+    overflow-y: scroll;
+}

@@ -1,0 +1,120 @@
+<div class="app-main">
+    <div class="navigator-wrapper">
+        <app-navigator [current]="'/selection-main'" />
+    </div>
+    <div class="workspace">
+        <header class="workspace-header">
+            <p class="item item-h">Выборка</p>
+            <app-select-list class="item item-list" [currentIndex]="selectionViewTypeOptionsIndex"
+                [values]="selectionViewTypeOptions" (onValueChanged)="onSelectionViewTypeChanged($event)" />
+            <div class="btn-wapper"><button class="def" (click)="openBuilderPage()">Создать</button></div>
+        </header>
+        <div class="page-menu">
+            <label class="item" [ngClass]="{selected: !chartView}" (click)="chartView=false">Таблица <span
+                    class="line"></span></label>
+            <label class="item" [ngClass]="{selected: chartView}" (click)="chartView=true">Графики <span
+                    class="line"></span></label>
+        </div>
+        <div class="content" [ngStyle]="{display: chartView ? 'none' : 'flex'}">
+            <main [ngStyle]="{width: openSidePanel ? '80%' : '100%'}">
+                <section class="params m-section">
+                    <div class="table-names">
+                        <label class="state-btn" *ngFor="let type of componentTypes; let i = index"
+                            [ngStyle]="{display: componentTypesActive[i] ? 'block' : 'none'}"
+                            [ngClass]="{'state-btn-selected': selectedEnComponentType.ruComponentType == type.ruComponentType}"
+                            (click)="onRuComponentTypeSelected(type); initColumns()">{{type.ruComponentType}}</label>
+
+                    </div>
+                    <div class="actions">
+                        <div class="action action-vertical">
+                            <label>Поиск</label>
+                            <input class="search" type="text" class="search" [placeholder]="'По выбранному параметру'"
+                                (input)="search($event)">
+                        </div>
+                        <div class="action action-vertical">
+                            <label>Параметр</label>
+                            <app-select-list class="search-select" [values]="activeColumns.currentSpaces"
+                                (onValueChanged)="onColumnSelected($event)" />
+                        </div>
+                        <div class="action action-vertical">
+                            <label>Сортировка по выбранному параметру</label>
+                            <app-parameter-sorting [all]="resultBuffer" [parameter]="sortParam"
+                                (onChange)="onSortValueSelected()" />
+                        </div>
+                    </div>
+                </section>
+                <section class="table-block m-section">
+                    <div class="panel">
+                        <div class="panel-h">
+                            <label>
+                                Компонентов {{resultBuffer.length}}
+                            </label>
+                        </div>
+                        <div class="actions">
+                            <div class="action action-inline">
+                                <label></label>
+                                <app-select-list-checkbox class="search-select" [values]="activeColumns.orig"
+                                    [selected]="activeColumns.currentSpaces" [label]="'Показывать столбцы'"
+                                    [id]="'column_mult'" (onValueChanged)="onColumnsSelected($event)" />
+                            </div>
+                            <div class="action action-inline pages">
+                                <app-page-labels [records]="resultBuffer" [step]="3"
+                                    (onPageSelected)="selectPage($event)" [rowsCount]="40" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-frame">
+                        <div class="table-frame-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td *ngFor="let column of activeColumns.current; let i = index"
+                                            [ngStyle]="{background: i == 0 ? '#7490f8' : 'unset', color: i == 0 ? 'white' : 'black'}">
+                                            {{column}}</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let record of records">
+                                        <td *ngFor="let entry of record">{{entry[1]??'null'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <aside [ngStyle]="{display: openSidePanel ? 'block' : 'none'}">
+                <div class="recs">
+                    <div class="rec" *ngIf="mainAction != 'Все'; else template">
+                        <!-- <div class="preview">
+                            <p class="table">Микрочипы</p>
+                            <p class="date">20-09-2025</p>
+                        </div> -->
+
+                        <div class="extens">
+                            <p class="ext-h">Приоритеты</p>
+                            <ul class="priorities">
+                                <li *ngFor="let p of priorities; let i = index"
+                                    [ngClass]="{tab: true, selected: priority === p[0]}"
+                                    (click)="onPrioritySelected(p[0]); initColumns()">{{i + 1}}
+                                    {{alias ? alias.get(p[0]) : undefined}}:
+                                    {{p[1]}}</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <ng-template #template>
+                        <div class="warning">
+                            <p class="warning-h">Нет приоритетов</p>
+                            <p class="warning-p">Последня выборка пустая или несуществует</p>
+                        </div>
+                    </ng-template>
+                </div>
+            </aside>
+        </div>
+        <div class="content" *ngIf="loader == false" [ngStyle]="{display: chartView ? 'block' : 'none'}">
+            <app-component-analytics  [hideNavigation]="true" [enComponentType]="selectedEnComponentType ? selectedEnComponentType.enComponentType : undefined" [storage]="storage" [alias]="alias" [componentTypes]="componentTypes" />
+        </div>
+    </div>
+    <app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />
+</div>

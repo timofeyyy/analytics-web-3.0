@@ -1,35 +1,40 @@
 <div class="app-main">
-    <div class="navigator-wrapper">
+    <div class="navigator-wrapper" [ngStyle]="{display: !navigation ? 'block' : 'none'}">
         <app-navigator [current]="'/home'" />
     </div>
     <div class="workspace">
+        <header class="workspace-header">
+            <p class="item item-h">Аналитика</p>
+        </header>
         <main>
             <div class="main-view">
                 <div class="upper">
-                    <div class="list">
+                    <div class="list block">
                         <div class="list-h">
                             <p class="type">Тип Компонента</p>
                             <p class="manufacturer">Лидер в количественном производстве</p>
                         </div>
                         <div class="records">
-                            <div class="record" *ngFor="let component of componentTypes">
-                                <span class="type"> <a  [href]="getSafeUrl(`componentType/${component[0]}`)">{{getRuComponentTypeByEn(component[0])}}</a> ({{component[1].countAll}})</span>
-                               
-                                <p class="manufacturer" [innerHTML]="displayManufacturers(component[1].manufacturers)"></p>
+                            <div class="record" *ngFor="let component of componentTypesStat">
+                                <span class="type"> <a [href]="getSafeUrl(component[0])">{{component[0]}}</a>
+                                    ({{component[1].countAll}})</span>
+
+                                <p class="manufacturer" [innerHTML]="displayManufacturers(component[1].manufacturers)">
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="chart">
+                    <div class="chart block">
                         <iframe src="chart/components/ruComponentType-next-chart/bar" frameborder="0"></iframe>
                     </div>
                 </div>
                 <div class="bottom">
-                    <div class="chart">
+                    <div class="chart block">
                         <iframe src="chart/components/statistic-filters/donut" frameborder="0"></iframe>
                     </div>
-                    <div class="list">
-                        <app-parameter-value-count-table class="records-wrapper" [all]="all" [alliasName]="'Производитель'" [parameter]="'manufacturerName'" [allowNull]="false" />
-                        <!-- <app-manufacturer-count-table [all]="all" class="records-wrapper" /> -->
+                    <div class="list block">
+                        <app-parameter-value-count-table class="records-wrapper" [all]="all" [aliasName]="'Количество'"
+                            [parameter]="'manufacturerName'" [parameterAlias]="'Производитель'" [allowNull]="false" />
                     </div>
                 </div>
             </div>

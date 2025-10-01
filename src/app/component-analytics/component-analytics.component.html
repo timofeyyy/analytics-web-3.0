@@ -1,0 +1,42 @@
+<div class="app-main">
+    <app-navigator class="navigator-wrapper" [ngStyle]="{display: hideNavigation! ? 'none' : 'block'}" [current]="'/filters'" />
+    <div class="workspace">
+        <header class="workspace-header" [ngStyle]="{display: hideNavigation! ? 'none' : 'flex'}">
+            <p class="item item-h">Аналитика компонентов типа {{ruComponentType}}</p>
+        </header>
+        <main [ngStyle]="{height: hideNavigation! ? '100%' : '92%'}">
+            <section class="chart-wrapper">
+                <div class="chart-wrapper-h">
+                    <div class="action">
+                        <p>Параметр</p>
+                        <div class="select-list-wrapper">
+                            <app-select-list class="select-list" [values]="columnAlias"
+                                (onValueChanged)="onColumnSelected($event); buildMainChart(); buildPanelChart()" />
+                        </div>
+                    </div>
+                    <div class="action">
+                        <p>График</p>
+                        <div class="select-list-wrapper">
+                            <app-select-list class="select-list" [values]="chartNamesAlias"
+                                (onValueChanged)="onChartNameSelected($event); buildMainChart();" />
+                        </div>
+                    </div>
+                </div>
+                <app-chart class="chart-view" [chart_name]="'column'" [req_name]="'components'" [type_name]="currentChartName ?? 'bar'"
+                    [all]="storage" [alias]="alias" [query]="mainChartQuery" />
+            </section>
+            <aside class="panel-wrapper">
+                <div class="panel-chart" >
+                    <app-chart  class="chart-view" [chart_name]="'column-value'" [req_name]="'components'" [type_name]="'line'"
+                        [all]="storage" [alias]="alias" [query]="panelChartQuery" />
+                </div>
+                <div class="panel-list">
+                    <app-parameter-value-count-table   class="records-wrapper" [all]="all" [aliasName]="'Количество'"
+                        [parameter]="currentPropName" [parameterAlias]="alias ? alias.get(currentPropName)! : ''" [allowNull]="false"
+                        [noRedirect]="true" [firstSelectedDefault]="true" (onValueChanged)="onColumnValueChanged($event); buildPanelChart(); " />
+                </div>
+            </aside>
+        </main>
+    </div>
+    <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />
+</div>

@@ -9,7 +9,11 @@
                 <img src="assets/images/catalog.svg" alt="img">
                 <a>Фильтры</a>
             </li>
-            <div class="section"></div>
+             <li [ngClass]="{current: current === '/selection-main'}" (click)="openSelectionPage()">
+                <img src="assets/images/list.svg" alt="img">
+                <a>Выборка</a>
+            </li>
+            <!-- <div class="section"></div>
             <li (click)="openCloseSelectionSection()">
                 <img src="assets/images/list.svg" alt="img">
                 <p>Выборка</p>
@@ -63,7 +67,7 @@
                         <a>Тенденция</a>
                     </li>
                 </div>
-            </div>
+            </div> -->
             <!-- <li [ngClass]="{current: current === '/table-builder'}" class="section-item">
                 <img src="assets/images/table.svg" alt="img">
                 <a (click)="openNewPage('/table-builder')">Построение таблицы</a>
@@ -91,8 +95,8 @@
             </div> -->
         </ul>
     </nav>
-    <img src="assets/images/menu.svg" class="menu-icon" alt="img" (click)="openClose()">
+    <!-- <img src="assets/images/menu.svg" class="menu-icon" alt="img" (click)="openClose()">
     <div class="floated-menu-btn" [ngStyle]="{display: isOpen ? 'flex' : 'none' }" (click)="openClose()">
         <img src="assets/images/menu.svg" class="menu-icon" alt="img" >
-    </div>
+    </div> -->
 </div>
