@@ -7,6 +7,15 @@ img {
     height: max(1.2vw, 12px);
 }
 
+.select-list {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    height: inherit;
+    border-radius: .5vw;
+    width: 2.5vw;
+}
+
 /* 
 .asc,
 .desc {
@@ -31,6 +40,7 @@ img {
 .box {
     /* display: flex; */
     height: 100%;
+    position: relative;
 }
 
 .popup-parent {

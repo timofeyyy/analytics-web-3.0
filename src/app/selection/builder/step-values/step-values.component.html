@@ -3,19 +3,15 @@
 
     <div class="step-body">
         <div class="charts">
-            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias" [headerFontSize]="'max(.8vw, 8px)'"
+            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias"
                 [all]="obj" [type_name]="'line'" [chart_name]="'column-line'" [query]="queryObj" />
-            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias" [headerFontSize]="'max(.8vw, 8px)'"
+            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias" 
                 [all]="obj" [type_name]="'bar'" [chart_name]="'column'" [query]="queryObj" />
         </div>
-        <!-- <app-manufacturer-count-table class="table" [all]="manufacturersStat" [noRedirect]="true"
-             /> -->
-            <app-parameter-value-count-table class="table" 
-                [all]="manufacturersStat" [noRedirect]="true"  
-                (onValueChanged)="onManufacturerChanged($event)"
-                [aliasName]="'Количество'" [parameter]="'manufacturerName'" 
-                [parameterAlias]="alias.get('manufacturerName')!"
-            />
+
+        <app-parameter-value-count-table class="table" [all]="manufacturersStat" [noRedirect]="true"
+            (onValueChanged)="onManufacturerChanged($event)" [aliasName]="'Количество'" [parameter]="'manufacturerName'"
+            [parameterAlias]="alias.get('manufacturerName')!" />
     </div>
     <div class="step-footer">
         <div class="search">

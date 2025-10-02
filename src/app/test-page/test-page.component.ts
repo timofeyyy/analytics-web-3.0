@@ -5,12 +5,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { ComponentTypeRuEnum } from '../../utils/enum/app.enum';
 import { props } from '../fetch.config';
-import { ManufacturerCountTableComponent } from "../components/manufacturer-count-table/manufacturer-count-table.component";
 import { SelectListComponent } from "../components/select-list/select-list.component";
 
 @Component({
   selector: 'app-test-page',
-  imports: [DropboxProviderComponent, HttpClientModule, ManufacturerCountTableComponent, SelectListComponent],
+  imports: [DropboxProviderComponent, HttpClientModule, SelectListComponent],
   providers: [ApiService],
   templateUrl: './test-page.component.html',
   styleUrl: './test-page.component.css'

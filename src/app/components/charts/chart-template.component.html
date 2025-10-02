@@ -1,6 +1,7 @@
 <div class="chart-wrapper" *ngIf="chartOptions">
-    <p *ngIf="!noHeader" [ngStyle]="{'font-size': headerFontSize}" >{{chartName}}</p>
+    <p *ngIf="!noHeader" >{{chartName}}</p>
     <apx-chart 
+    #apexChart
     [series]="chartOptions.series!" 
     [chart]="chartOptions.chart!" 
     [dataLabels]="chartOptions.dataLabels!"

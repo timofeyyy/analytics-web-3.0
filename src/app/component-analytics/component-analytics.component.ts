@@ -12,10 +12,10 @@ import { isException } from '../../utils/static-data/filter-exceptions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectListComponent } from "../components/select-list/select-list.component";
 import { DomSanitizer } from '@angular/platform-browser';
-import { ChartTemplateComponent } from "../components/charts/chart_template.component";
+import { ChartTemplateComponent } from "../components/charts/chart-template.component";
 import { chartNamesMap } from '../../utils/static-data/chart-names';
 
-@Component({
+@Component({ 
   selector: 'app-component-analytics',
   imports: [HttpClientModule, NavigatorComponent, LoaderComponent, NgStyle, ParameterValueCountTableComponent, SelectListComponent, ChartTemplateComponent],
   providers: [ApiService],
@@ -63,6 +63,7 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("ASASAS")
     const filteredObs = this.initObs()
     if (filteredObs.length) {
       this.getApi(filteredObs)

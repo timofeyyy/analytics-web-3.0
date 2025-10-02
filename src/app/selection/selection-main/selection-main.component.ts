@@ -1,29 +1,29 @@
 import { ChangeDetectorRef, Component, OnInit, output } from '@angular/core';
-import { NavigatorComponent } from "../components/navigator/navigator.component";
-import { LoaderComponent } from "../components/loader/loader.component";
+import { NavigatorComponent } from "../../components/navigator/navigator.component";
+import { LoaderComponent } from "../../components/loader/loader.component";
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
-import { SelectListComponent } from "../components/select-list/select-list.component";
-import { ApiService } from '../../services/api.services1';
+import { SelectListComponent } from "../../components/select-list/select-list.component";
+import { ApiService } from '../../../services/api.services1';
 import { forkJoin } from 'rxjs';
-import { AppEnum } from '../../utils/enum/app.enum';
+import { AppEnum } from '../../../utils/enum/app.enum';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { isException } from '../../utils/static-data/filter-exceptions';
-import { SelectListCheckboxComponent } from "../components/select-list-checkbox/select-list-checkbox.component";
-import { ParameterSortingComponent } from "../components/parameter-sorting/parameter-sorting.component";
-import { ComponentTypes } from '../../utils/types/app';
-import { PageLabelsComponent } from "../catalog/page-labels/page-labels.component";
-import { propsMap } from '../fetch.config';
-import { QueryPageSettings } from '../../services/query.settings.service';
+import { isException } from '../../../utils/static-data/filter-exceptions';
+import { SelectListCheckboxComponent } from "../../components/select-list-checkbox/select-list-checkbox.component";
+import { ParameterSortingComponent } from "../../components/parameter-sorting/parameter-sorting.component";
+import { ComponentTypes } from '../../../utils/types/app';
+import { PageLabelsComponent } from "../../catalog/page-labels/page-labels.component";
+import { propsMap } from '../../fetch.config';
+import { QueryPageSettings } from '../../../services/query.settings.service';
 import { CdkNoDataRow } from "@angular/cdk/table";
-import { ComponentAnalyticsComponent } from "../component-analytics/component-analytics.component";
+import { ComponentAnalyticsComponent } from "../../component-analytics/component-analytics.component";
 
 @Component({
   selector: 'app-selection-main',
   imports: [HttpClientModule, NavigatorComponent, LoaderComponent, NgStyle, SelectListComponent, NgFor, NgClass, SelectListCheckboxComponent, ParameterSortingComponent, PageLabelsComponent, NgIf, ComponentAnalyticsComponent],
   providers: [ApiService, QueryPageSettings],
   templateUrl: './selection-main.component.html',
-  styleUrls: ['./selection-main.component.css', '../components/styles/button.css', '../components/styles/categories.css', '../components/styles/input.css']
+  styleUrls: ['./selection-main.component.css', '../../components/styles/button.css', '../../components/styles/categories.css', '../../components/styles/input.css']
 })
 export class SelectionMainComponent implements OnInit {
   openBuilderPage() {

@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { LoaderComponent } from "../components/loader/loader.component";
 import { NavigatorComponent } from "../components/navigator/navigator.component";
-import { ManufacturerCountTableComponent } from "../components/manufacturer-count-table/manufacturer-count-table.component";
 import { ApiService } from '../../services/api.services1';
 import getComponentTypesStat, { ManufacturerStatistic, ComponentTypeStatistic } from '../../utils/fnc1/other/component_type_statistic';
 import { catchError, forkJoin, map } from 'rxjs';
-import { ComponentTypeEnEnum } from '../../utils/enum/app.enum';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgFor, NgStyle } from '@angular/common';

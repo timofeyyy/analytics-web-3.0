@@ -1,6 +1,3 @@
-.workspace {
-    height: unset;
-}
 .workspace main {
     display: flex;
     justify-content: space-between;
