@@ -63,7 +63,6 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("ASASAS")
     const filteredObs = this.initObs()
     if (filteredObs.length) {
       this.getApi(filteredObs)
@@ -103,7 +102,7 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
       this.columns = []
       this.columnAlias = []
       for (const key in sample) {
-        if (!isException(key)) {
+        if (!isException(key) || key==='manufacturerName') {
           this.columns.push(key)
           this.columnAlias.push(this.alias.get(key)!)
         }

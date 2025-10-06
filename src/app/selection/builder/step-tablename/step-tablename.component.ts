@@ -5,17 +5,12 @@ import { ComponentTypes, ErrorStepHandling } from '../../../../utils/types/app';
 import { ApiService } from '../../../../services/api.services1';
 import { HttpClientModule } from '@angular/common/http';
 import { resetWarning, selectionStorage, setWarning } from '../../../../utils/redux/selection';
-// import { componentStorage, setComponentTypealias } from '../../../../utils/redux/storage';
-
-
-
-
 @Component({
   selector: 'app-step-tablename',
   imports: [NgClass, NgFor, HttpClientModule],
   providers: [ApiService],
   templateUrl: './step-tablename.component.html',
-  styleUrls: ['./step-tablename.component.css', '../step-window/step-window.component.css']
+  styleUrls: ['./step-tablename.component.css', '../step-window/step-window.component.css', '../../../components/styles/categories.css',]
 })
 
 export class StepTablenameComponent implements OnInit, ErrorStepHandling {
@@ -31,7 +26,6 @@ export class StepTablenameComponent implements OnInit, ErrorStepHandling {
 
   ngOnInit(): void {
     this.api.getComponentNames()?.subscribe(res => {
-      // componentStorage.dispatch(setComponentTypealias(res))
       this.componentTypes = res
     })
     this.findError()
@@ -39,8 +33,6 @@ export class StepTablenameComponent implements OnInit, ErrorStepHandling {
 
   @Input()
   index!: number
-  // @Output()
-  // public typeChanged = new EventEmitter<string>()
   @Output()
   public typeChanged = new EventEmitter<[string, string, any[]]>()
   current!: string
@@ -59,13 +51,4 @@ export class StepTablenameComponent implements OnInit, ErrorStepHandling {
     this.findError()
     this.typeChanged.emit([value.ruComponentType, value.enComponentType, this.storage.get(value.enComponentType.toLocaleLowerCase())])
   }
-
-  // onTypeSelected(event: any): void {
-  //   this.typeChanged.emit(event.target.innerText)
-  // }
-  // changeState(enComponentType: string): void {
-  //   this.current = (this.current === enComponentType ? "" : enComponentType)
-  //   this.sourceChanged.emit([enComponentType, this.storage.get(enComponentType)])
-  // }
-
 }

@@ -14,11 +14,12 @@
 }
 
 .view {
-    width: 40%;
+    width: 30%;
 }
 
 .table-names {
     width: 100%;
+    height: fit-content;
 }
 
 .view {
@@ -92,4 +93,7 @@
 
 .view .info .current {
     background: rgb(211, 211, 211, 0.5);
+}
+.table-names-wrapper {
+    margin: 0;
 }

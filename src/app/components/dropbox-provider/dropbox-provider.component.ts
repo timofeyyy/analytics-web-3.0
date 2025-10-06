@@ -64,14 +64,6 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
       if (this.name === 'manufacturerName') {
         this.changeCurrentValueByName('ruComponentKind', AppEnum.ALL)
       }
-      // if (this.isCompoenntProp()) {
-      //   let componentProps: Map<string, any> = propsMap.get('ruComponentType').componentProps
-      //   for (const value of componentProps.values()) {
-      //     if (value[`${this.name}`]) {
-      //       value[`${this.name}`].currentValue = obj.currentValue
-      //     }
-      //   }
-      // }
     }
     this.onStateChanged.emit({ propsMap: this.propsMap, currentName: obj.currentName })
   }
@@ -88,48 +80,16 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
         this.input = isInput
       }
     }
-
-    // console.log(this.name)
-    // console.log(this.input)
   }
 
   isTableProp(): boolean {
     return this.propsMap.get(this.name) !== undefined
   }
-  // isCompoenntProp(): boolean {
-  //   let isComponentProp: boolean = false
-  //   let componentProps: Map<string, any> = propsMap.get('ruComponentType').componentProps
-  //   for (const value of componentProps.values()) {
-  //     if (value[`${this.name}`]) {
-  //       isComponentProp = true
-  //     }
-  //   }
-  //   return isComponentProp
-  // }
-  // isCompoenntPropInput(): boolean | undefined {
-  //   let componentProps: Map<string, any> = propsMap.get('ruComponentType').componentProps
-  //   for (const value of componentProps.values()) {
-  //     if (value[`${this.name}`]) {
-  //       return value[`${this.name}`].input
-  //     }
-  //   }
-  //   return undefined
-  // }
+
   isTableInput(): boolean | undefined {
-    // console.log(propsMap.get(this.name))
     if (this.propsMap.get(this.name)) {
       return this.propsMap.get(this.name).input
     }
     return undefined
   }
-  // getCompoenntPropCurrentValue(): string | undefined {
-  //   let res: string | undefined;
-  //   let componentProps: Map<string, any> = propsMap.get('ruComponentType').componentProps
-  //   for (const value of componentProps.values()) {
-  //     if (value[`${this.name}`]) {
-  //       res = value[`${this.name}`].currentValue
-  //     }
-  //   }
-  //   return res
-  // }
 }

@@ -38,11 +38,14 @@
     font-weight: 500;
 }
 
-
 .records .view .row .col :nth-child(1) {
-    margin: 0 1vw;
+    margin: 0;
     font-size: max(.8vw, 8px);
     word-break: break-all;
+}
+
+.records .layout .col:nth-child(2) {
+    margin-left: 1vw;
 }
 
 .records .cols-wrapper {
@@ -97,6 +100,7 @@
 
 .header .block p {
     font-size: max(.8vw, 8px);
+    text-align: end;
 }
 
 .record-sorting {

@@ -52,7 +52,6 @@ export class StepWindowComponent implements OnInit {
   ngOnInit(): void {
     this.selectionStorage = selectionStorage
     this.dropBoxPropsMapConfig = this.initDropBoxMapConfig()
-    this.api.getComponentNames()?.subscribe()
     this.move()
     this.getApi()
   }
@@ -106,6 +105,8 @@ export class StepWindowComponent implements OnInit {
   }
   openSelectionView(): void {
     this.router.navigateByUrl("/selection-main")
+    selectionStorage.dispatch(resetStepLength())
+    selectionStorage.dispatch(resetStep())
   }
   priorities: string[] = []
   prioritiesNoJumps: PriorityColumn[] = []
@@ -131,39 +132,7 @@ export class StepWindowComponent implements OnInit {
   }
 
   resetChangedSelection(currentColumns: PriorityColumn[]): void {
-    // let resetNext = false
-    // let exceptions: any = []
-    // for (let index = 0, val = 1; index < this.columns.length; index++, val++) {
-    //   let column = this.columns[index]
-    //   let currentCol: {
-    //     index: number,
-    //     payload: PriorityColumn | undefined
-    //   } = { index: 0, payload: undefined }
-    //   let oldCol: {
-    //     index: number,
-    //     payload: PriorityColumn | undefined
-    //   } = { index: 0, payload: undefined }
 
-    //   for (const current of currentColumns) {
-    //     currentCol.index += 1
-    //     if (current.name === column) {
-    //       currentCol.payload = current
-    //       break
-    //     }
-    //   }
-    //   if (currentCol.payload) {
-    //     for (const old of this.prioritiesNoJumps) {
-    //       oldCol.index += 1
-    //       if (old.name === column) {
-    //         oldCol.payload = old
-    //         break
-    //       }
-    //     }
-    //     if (currentCol.index == oldCol.index && currentCol.payload.priority == oldCol.payload?.priority) {
-    //       exceptions.push(currentCol)
-    //     }
-    //   }
-    // }
     for (const key of this.columns) {
       this.selections.delete(key)
     }
@@ -194,11 +163,9 @@ export class StepWindowComponent implements OnInit {
   onTypeSelected(entries: [string, string, any[]]): void {
     this.activeKeys = new Map()
     let ruComponentType: string = AppEnum.ALL
-    // this.stepper.get('step1')!.isReady = false
     this.columns = []
     if (this.dropBoxPropsMapConfig.get('ruComponentType').currentValue !== entries[0]) {
       ruComponentType = entries[0]
-      // this.stepper.get('step1')!.isReady = true
       const componentSchemaMap: Map<string, string[]> = new Map(Object.entries(componentStorage.getState().componentSchema as []))
       this.columns = componentSchemaMap.get(ruComponentType) as []
     }
@@ -222,25 +189,12 @@ export class StepWindowComponent implements OnInit {
   st!: boolean
   activeKeys: Map<string, string> = new Map()
   onDropBoxValueChnaged(obj: [string, string]): void {
-    // const step = selectionStorage.getState().step
-    // const stepper = selectionStorage.getState().stepper
-    // stepper.get(`step${step}`)!.key = obj[0]
-    // selectionStorage.dispatch(resetWarning(step + 1))
-    // stepper.get(`step${step + 1}`)!.isReady = false
-    // if (obj[1] !== AppEnum.ALL && obj[1]) {
-    //   this.stepper.get(`step${this.step + 1}`)!.isReady = true
-    // }
     let copy = Object.fromEntries(this.activeKeys)
     this.activeKeys = new Map()
     for (const key in copy) {
       this.activeKeys.set(key, copy[key])
     }
     this.activeKeys.set(obj[0], obj[1])
-    // let nextKey = this.priorities[this.step - 3][0]
-
-    // if (nextKey) {
-    //   this.activeKeys.set(nextKey, { value: "", selection: obj[1].selection })
-    // }
   }
 
   selections: Map<string, { prev: any[], current: any[] }> = new Map()

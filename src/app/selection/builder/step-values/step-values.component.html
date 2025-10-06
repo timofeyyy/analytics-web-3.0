@@ -18,12 +18,8 @@
             <p>{{this.currentSelection.length ? 'Найдено ' + this.currentSelection.length : 'Ничего не найдено'}}</p>
             <app-dropbox-provider class="dropbox" [aliasName]="`${alias.get(columnName)}`" [all]="all"
                 [propsMap]="dropBoxPropsMapConfig" [name]="columnName" [currentName]="currentDropBoxName"
-                (onStateChanged)="onCurrentDropBoxNameChnaged($event)" [inputDisabled]="inputDisabled"
+                (onStateChanged)="onCurrentDropBoxNameChnaged($event)" [inputDisabled]="false"
                 [inputValue]="inputValue" />
-            <div class="skip">
-                <input type="checkbox" [checked]="inputDisabled" (click)="changeDisabledState()">
-                <p>Не указывать</p>
-            </div>
         </div>
         <div class="list-values">
             <p>Существующие значения</p>

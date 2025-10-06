@@ -1,6 +1,6 @@
 <div class="app-main">
-    <app-navigator class="navigator-wrapper" [ngStyle]="{display: hideNavigation! ? 'none' : 'block'}" [current]="'/filters'" />
-    <div class="workspace">
+    <app-navigator class="navigator-wrapper" [ngStyle]="{display: hideNavigation! ? 'none' : 'block'}" [current]="'/home'" />
+    <div class="workspace" [ngStyle]="{height: hideNavigation ? '100%' : '100vh'}">
         <header class="workspace-header" [ngStyle]="{display: hideNavigation! ? 'none' : 'flex'}">
             <p class="item item-h">Аналитика компонентов типа {{ruComponentType}}</p>
         </header>
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-                <app-chart class="chart-view" [chart_name]="'column'" [req_name]="'components'" [type_name]="currentChartName ?? 'bar'"
+                <app-chart class="chart-view" [chart_name]="currentChartName === 'line' ? 'column-line' : 'column'" [req_name]="'components'" [type_name]="currentChartName ?? 'bar'"
                     [all]="storage" [alias]="alias" [query]="mainChartQuery" />
             </section>
             <aside class="panel-wrapper">

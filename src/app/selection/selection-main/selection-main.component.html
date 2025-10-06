@@ -85,12 +85,11 @@
             </main>
             <aside [ngStyle]="{display: openSidePanel ? 'block' : 'none'}">
                 <div class="recs">
-                    <div class="rec" *ngIf="mainAction != 'Все'; else template">
+                    <div class="rec" *ngIf="mainAction != 'Все' && priorities && priorities.length; else template">
                         <!-- <div class="preview">
                             <p class="table">Микрочипы</p>
                             <p class="date">20-09-2025</p>
                         </div> -->
-
                         <div class="extens">
                             <p class="ext-h">Приоритеты</p>
                             <ul class="priorities">
@@ -99,7 +98,6 @@
                                     (click)="onPrioritySelected(p[0]); initColumns()">{{i + 1}}
                                     {{alias ? alias.get(p[0]) : undefined}}:
                                     {{p[1]}}</li>
-
                             </ul>
                         </div>
                     </div>

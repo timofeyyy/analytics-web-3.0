@@ -21,4 +21,5 @@
 .table-names .state-btn:hover,
 .table-names .state-btn-selected {
     background-color: rgba(51, 51, 51, 90%);
+    color: white;
 }

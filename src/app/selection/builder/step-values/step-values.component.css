@@ -87,9 +87,9 @@
 }
 
 .step-footer .list-values {
-    height: 65%;
+    height: 77%;
+    height: -webkit-fill-available;
     width: 100%;
-    /* overflow-y: scroll; */
     border-radius: 0.5vw;
 }
 

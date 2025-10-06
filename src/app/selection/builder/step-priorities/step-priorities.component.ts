@@ -18,14 +18,11 @@ export class StepPrioritiesComponent implements OnChanges, ErrorStepHandling {
     let noJumps: boolean = true
     const prCol: any = Array.from(this.stateColumns).filter((val) => val.selected).sort((a: any, b: any): any => a.priority - b.priority)
     for (let index = 0, val = 1; index < prCol.length; index++, val++) {
-      // console.log(prCol[index], val)
       if (prCol[index].priority != val) {
         noJumps = false
         break
       }
     }
-    // console.log(noJumps)
-    // console.log(noJumps)
     if (noJumps && prCol.length) {
       selectionStorage.dispatch(resetWarning(this.index))
     }

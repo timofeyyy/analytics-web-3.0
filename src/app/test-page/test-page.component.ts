@@ -29,7 +29,6 @@ export class TestPageComponent implements OnInit {
   onCurrentDropBoxNameChnaged(obj: { propsMap: Map<string, any>, currentName: string | undefined }): void {
     this.currentDropBoxName = obj.currentName
     this.dropBoxPropsMap = obj.propsMap
-    console.log(this.dropBoxPropsMap)
   }
 
   constructor(private api: ApiService) { }
@@ -65,7 +64,6 @@ export class TestPageComponent implements OnInit {
       this.storage.set(ComponentTypeRuEnum.MICROCHIP, (res as any[])[3])
       this.storage.set(ComponentTypeRuEnum.RESISTOR, (res as any[])[4])
       const alias = (res as any[])[5]
-      console.log(alias)
       this.alias = new Map<string, string>(Object.entries(alias))
       let copy: any[] = []
       this.values = [
@@ -85,41 +83,8 @@ export class TestPageComponent implements OnInit {
           })
         })
       }
-      console.log(this.values)
       this.all = copy
       this.outputSet1 = Array.from(this.testSet1)
     });
-    // this.api.getComponentsApi()?.pipe(map((options: ComponentLabel[]) => {
-    //   console.log(options)
-    //   let componetns: ImageName[] = this.api.getComponentsFromConfig()
-    //   options.forEach((row: ComponentLabel) => {
-    //     if (this.getComponentTypeIndexByValue(row.ruComponentType) === -1) {
-    //       let cItemIndex = componetns.findIndex(
-    //         (cItem: ImageName) => cItem.nameRu === row.ruComponentType
-    //       )
-    //       if (cItemIndex !== -1) {
-    //         let record: ComponentTypesCheckBoxes = {
-    //           checked: false,
-    //           manufacturer: getBestManufacturer(options, row.ruComponentType),
-    //           image: {
-    //             image: componetns[cItemIndex].image,
-    //             nameRu: row.ruComponentType
-    //           }
-    //         }
-    //         this.componentTypes.push(record)
-    //       }
-    //     }
-    //   })
-    //   this.rows = getManufacturersProd(options) as Manufacturer[]
-    //   console.log(this.rows)
-    //   this.orig = this.rows
-    //   this.loader = false
-    // }),
-    //   catchError((err: any) => {
-    //     console.log(err.message)
-    //     this.router.navigate([`/not-found`])
-    //     return [];
-    //   })
-    // ).subscribe()
   }
 }

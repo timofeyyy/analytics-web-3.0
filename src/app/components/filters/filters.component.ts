@@ -104,37 +104,10 @@ export class FiltersComponent implements OnChanges {
 
   onRuComponentTypeChanged(): void {
     if (this.columns.length) {
-      // let keys: any = this.tableColumns!.keys()
-      // let columns: string[] = Array.from(keys)
-      // this.selectedColumns = this.columns
-      //   .filter(function (value) {
-      //     if (value === 'ruComponentType' || value === 'ruComponentKind' || value === 'manufacturerName') {
-      //       return false
-      //     }
-      //     return true
-      //   })
       this.selectedColumns = Array.from(this.columns)
     }
     else {
       this.selectedColumns = []
     }
   }
-  // onRuComponentTypeChanged(obj: { propsMap: Map<string, any>, currentName: string | undefined }): void {
-  // const ruComponentType = obj.propsMap.get('ruComponentType').currentValue
-  // if (ruComponentType !== AppEnum.ALL) {
-  //   let keys: any = this.tableColumns.get(ruComponentType)!.keys()
-  //   let columns: string[] = Array.from(keys)
-  //   console.log(columns)
-  //   this.selectedColumns = columns
-  //     .filter(function (value) {
-  //       if (value === 'ruComponentType' || value === 'ruComponentKind' || value === 'manufacturerName') {
-  //         return false
-  //       }
-  //       return true
-  //     })
-  // }
-  // else {
-  //   this.selectedColumns = []
-  // }
-  // }
 }
