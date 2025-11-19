@@ -1,0 +1,26 @@
+.multiple-select-list {
+    position: relative;
+    /* height: 10vw; */
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: .25vw 0;
+}
+
+h2 {
+    font-size: max(.9vw, 9px);
+    font-weight: normal;
+    margin-bottom: .5vw;
+}
+
+.drop-box {
+    border: .1vw solid lightgray;
+    background-color: #eeeeee;
+}
+
+
+.option {
+    padding: .25vw 0;
+    margin: 0;
+}

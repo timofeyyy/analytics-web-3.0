@@ -5,7 +5,7 @@ import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output
   selector: 'app-select-list-checkbox',
   imports: [NgFor, NgStyle],
   templateUrl: './select-list-checkbox.component.html',
-  styleUrl: './select-list-checkbox.component.css'
+  styleUrls: ['./select-list-checkbox.component.css', '../styles/select-list.css']
 })
 export class SelectListCheckboxComponent {
   isChecked(val: string): boolean {

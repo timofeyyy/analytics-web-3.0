@@ -1,3 +1,5 @@
+import { ComponentTypes } from "../../types/app"
+
 export interface ComponentTypeStatistic {
     procentAll: number,
     manufacturers: Map<string, ManufacturerStatistic>,
@@ -9,21 +11,20 @@ export interface ManufacturerStatistic {
     procentComparedToComponentTypes: number
 }
 
-const getComponentTypesStat = (data: any, ru: boolean): Map<string, ComponentTypeStatistic> => {
+const getComponentTypesStat = (data: any, ru: boolean, componentTypes: ComponentTypes[]): Map<string, ComponentTypeStatistic> => {
     let map: Map<string, ComponentTypeStatistic> = new Map()
     let summary = 0
-    const componentType = ru ? 'ruComponentType' : 'enComponentType'
+    // const componentType = ru ? 'ruComponentType' : 'enComponentType'
     for (const key in data) {
         summary += data[key].length
+        const componentType = componentTypes.find(c => c.enComponentType.toLowerCase() == key.toLowerCase())
+        map.set(componentType?.ruComponentType!, {
+            procentAll: 0,
+            countAll: data[key].length,
+            manufacturers: new Map()
+        })
         for (const obj of data[key]) {
-            if (!map.get(obj[componentType])) {
-                map.set(obj[componentType], {
-                    procentAll: 0,
-                    countAll: data[key].length,
-                    manufacturers: new Map()
-                })
-            }
-            let manufacturers = map.get(obj[componentType])?.manufacturers
+            let manufacturers = map.get(componentType?.ruComponentType!)?.manufacturers
             if (!manufacturers?.get(obj.manufacturerName)) {
                 manufacturers?.set(obj.manufacturerName, {
                     procentComapredToAll: 0,
@@ -52,10 +53,8 @@ const getComponentTypesStat = (data: any, ru: boolean): Map<string, ComponentTyp
             countAll: object[key].countAll,
             manufacturers: getTopManufacturers(new Map(Object.entries(manufacturers)))
         }
-        
         map.set(key, obj)
     }
-
     return map;
 }
 

@@ -3,8 +3,10 @@ import getManufacturersChartOptionLine1 from "../manufacturers/manufacturers.lin
 
 
 const getColumnLineChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
+    const barXlabels = query.get('bar-x-labels')
     const values: any = [];
     const map = new Map();
+    const paramAlias = query.get('alias')
     const apexChartData: Partial<ChartOptions> = {
         series: [],
         dataLabels: {
@@ -15,23 +17,74 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
             stacked: true,
             zoom: {
                 enabled: true
+            },
+              events: {
+                mounted: function (chartCtx) {
+                    const clips = chartCtx.el.querySelectorAll("clipPath");
+                    clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
+                    const chartEl = chartCtx.el;
+                    const toolbarMenu = chartEl.querySelector(".apexcharts-menu");
+                    if (!toolbarMenu) return;
+                    document.addEventListener("click", (e) => {
+                        const target = e.target as HTMLElement;
+                        if (
+                            !toolbarMenu.contains(target) &&
+                            !target.closest(".apexcharts-toolbar")
+                        ) {
+                            toolbarMenu.classList.remove("apexcharts-menu-open");
+                        }
+                    });
+                },
             }
         },
         xaxis: {
             categories: [],
+            tickAmount: 10,
             labels: {
+                rotate: -90,
+                trim: false,
+                hideOverlappingLabels: true,
+                showDuplicates: false,
+                rotateAlways: true,
+                formatter: (val: string) => {
+                    return `${val}`
+                    if (!val) return '';
+                    return val.length > 10 ? val.substring(0, 10) + '…' : val;
+                },
+
                 style: {
-                    fontSize: '0px'
-                }
+                    fontSize: barXlabels === "1" ? 'max(.8vw, 8px)' : '0px',
+                },
             }
         },
         tooltip: {
-            x: {
-                formatter: function (val: number, opts: any) {
-                    const index = opts.dataPointIndex;
-                    return `Значение параметра: ${values[index]}; Дата: ${apexChartData!.values![index]};`;
-                },
-            },
+            shared: true,
+            custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                // const val = series[seriesIndex][dataPointIndex];
+                // const index = opts.dataPointIndex;
+                // const xVal = w.globals.labels[dataPointIndex];
+                const param = paramAlias;
+                const value = values[dataPointIndex];
+
+                return `
+                <div style="box-sizing:border-box;padding:.5vw;">
+                    <p style="font-size:.8vw;">Параметр: ${param}</p>
+                    <p style="font-size:.8vw;">Значение: ${value}</p>
+                    <p style="font-size:.8vw;">Количество: ${apexChartData.series![0].data[dataPointIndex]} шт</p>
+                    <p style="font-size:.8vw;">Дата: ${apexChartData!.values![dataPointIndex]}</p>
+                </div>
+                `;
+            }
+            // x: {
+            //     formatter: function (val: number, opts: any) {
+            //         const index = opts.dataPointIndex;
+            //         return ` Параметр: ${paramAlias}\n Значение: ${values[index]}\n Дата: ${apexChartData!.values![index]};`;
+            //     },
+            // },
+            //  style: {
+            //     fontSize: barXlabels === "1" ? 'max(.8vw, 8px)' : '0px',
+            //     whiteSpace: 'pre-line',
+            // },
         },
         yaxis: {
             opposite: false,
@@ -46,45 +99,40 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
         },
         values: []
     };
-    const paramAlias = query.get('alias')
     const param = query.get('param')
     const manufacturerName = query.get('manufacturerName')
-    const ruComponentType = query.get('ruComponentType')
+    const enComponentType = query.get('enComponentType')
     const all = query.get('all')
 
-    if (param && ruComponentType) {
+    if (param && enComponentType) {
         apexChartData.series = [{
-            name: paramAlias,
+            name: "Количество",
             data: []
         }]
-        for (const key in data) {
-            for (const obj of data[key]) {
-                if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
-                    break;
+        const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+        for (const obj of sortedData as any) {
+            if (manufacturerName ? (obj[param] && obj.manufacturerName == manufacturerName) : obj[param] && obj[param]) {
+                if (!obj[param] && all === "0") {
+                    continue;
                 }
-                if (manufacturerName ? (obj[param] && obj.manufacturerName == manufacturerName) : obj[param] && obj[param]) {
-                    if (!obj[param] && all === "1") {
-                        continue;
-                    }
-                    const date = new Date(obj.date)
-                    const dateStr = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-                    let categorieItemIndex: number = (apexChartData.xaxis?.categories as Array<string>).findIndex(
-                        (category: string) => category == dateStr
-                    )
+                const date = new Date(obj.date)
+                const dateStr = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+                let categorieItemIndex: number = (apexChartData.xaxis?.categories as Array<string>).findIndex(
+                    (category: string) => category == dateStr
+                )
 
 
-                    if (categorieItemIndex === -1) {
-                        (apexChartData as ChartOptions).xaxis.categories.push(dateStr)
-                    }
-
-                    if (map.get(dateStr) === undefined) {
-                        map.set(dateStr, {})
-                    }
-                    if (map.get(dateStr)[`${obj[param]}`] === undefined) {
-                        map.get(dateStr)[`${obj[param]}`] = 0
-                    }
-                    map.get(dateStr)[`${obj[param]}`] += 1
+                if (categorieItemIndex === -1) {
+                    (apexChartData as ChartOptions).xaxis.categories.push(dateStr)
                 }
+
+                if (map.get(dateStr) === undefined) {
+                    map.set(dateStr, {})
+                }
+                if (map.get(dateStr)[`${obj[param]}`] === undefined) {
+                    map.get(dateStr)[`${obj[param]}`] = 0
+                }
+                map.get(dateStr)[`${obj[param]}`] += 1
             }
         }
         const categories = ((apexChartData as ChartOptions).xaxis.categories as Array<string>)
@@ -96,6 +144,7 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
                 continue
             }
             const first = entries[0]
+            // console.log(first)
             // for (const element of entries) {
             //     if (element == firstValue) {
 

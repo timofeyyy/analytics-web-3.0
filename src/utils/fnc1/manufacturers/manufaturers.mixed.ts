@@ -18,6 +18,24 @@ const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> 
             type: "line",
             zoom: {
                 enabled: true
+            },
+              events: {
+                mounted: function (chartCtx) {
+                    const clips = chartCtx.el.querySelectorAll("clipPath");
+                    clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
+                    const chartEl = chartCtx.el;
+                    const toolbarMenu = chartEl.querySelector(".apexcharts-menu");
+                    if (!toolbarMenu) return;
+                    document.addEventListener("click", (e) => {
+                        const target = e.target as HTMLElement;
+                        if (
+                            !toolbarMenu.contains(target) &&
+                            !target.closest(".apexcharts-toolbar")
+                        ) {
+                            toolbarMenu.classList.remove("apexcharts-menu-open");
+                        }
+                    });
+                },
             }
         },
         xaxis: {

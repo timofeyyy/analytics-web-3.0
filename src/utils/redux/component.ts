@@ -1,7 +1,8 @@
 import { createSlice, configureStore, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { ApiService } from '../../services/api.services1'
+import { ApiService } from '../../services/api.services'
 import { Observable } from 'rxjs'
 import { isException } from '../static-data/filter-exceptions';
+import { ComponentTypes } from '../types/app';
 
 // export const fetchComponentTypes = createAsyncThunk(
 //   'component/fetchComponentTypes',
@@ -14,22 +15,22 @@ import { isException } from '../static-data/filter-exceptions';
 const componentSlice = createSlice({
   name: 'component',
   initialState: {
-    componentTypes: [],
+    // componentTypes: [],
     columns: {},
     currentValues: {},
     alias: {},
     componentSchema: {}
   },
   reducers: {
-    initComponentTypes(state: any, action: PayloadAction<any[]>) {
-      // const componentTypeAlias = JSON.parse(localStorage.getItem('componentTypeAlias')!)
-      // if (componentTypeAlias) {
-      //   if (typeof componentTypeAlias === 'object') {
-      //     state.componentTypes = componentTypeAlias
-      //   }
-      // }
-      state.componentTypes = action.payload
-    },
+    // initComponentTypes(state: any, action: PayloadAction<any[]>) {
+    //   // const componentTypeAlias = JSON.parse(localStorage.getItem('componentTypeAlias')!)
+    //   // if (componentTypeAlias) {
+    //   //   if (typeof componentTypeAlias === 'object') {
+    //   //     state.componentTypes = componentTypeAlias
+    //   //   }
+    //   // }
+    //   state.componentTypes = action.payload
+    // },
     setColumns: (state: any, action: PayloadAction<[string, string[]]>) => {
       state.columns[action.payload[0]] = action.payload[1]
     },
@@ -42,15 +43,23 @@ const componentSlice = createSlice({
     setComponentSchema: (state: any, action: PayloadAction<any>) => {
       const schema: any = {}
       const obj = action.payload
+      // console.log(obj)
+      // const componentTypes = action.payload[1]
       for (const type in obj) {
         const example: any = obj[type][0]
-        schema[example.ruComponentType] = []
+        // schema[example.ruComponentType] = []
+        schema[type] = []
         for (const key in example) {
+          if(type == "diod") {
+          // console.log(key)
+          }
           if (!isException(key)) {
-            (schema[example.ruComponentType] as string[]).push(key)
+            (schema[type] as string[]).push(key)
+            // (schema[example.ruComponentType] as string[]).push(key)
           }
         }
       }
+      // console.log(schema)
       state.componentSchema = schema
     }
   },
@@ -62,7 +71,7 @@ const componentSlice = createSlice({
   // }
 })
 
-export const { setColumns, setCurrentValue, setAlias, setComponentSchema, initComponentTypes } = componentSlice.actions
+export const { setColumns, setCurrentValue, setAlias, setComponentSchema } = componentSlice.actions
 
 export const componentStorage = configureStore({
   reducer: componentSlice.reducer

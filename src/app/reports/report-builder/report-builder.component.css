@@ -1,0 +1,139 @@
+h1 {
+    font-size: max(1.2vw, 12px);
+    font-weight: normal;
+}
+
+section {
+    height: 100%;
+}
+
+/* section .body {
+    height: 90%;
+    overflow-y: scroll;
+} */
+
+section .head {
+    /* height: 5%; */
+    border-bottom: .1vw solid lightgray;
+    padding-bottom: 1vw;
+}
+
+.popup-window {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 11;
+    left: 0;
+}
+
+.popup-window main {
+    height: 90%;
+    width: max(40%, 500px);
+    border-radius: .5vw;
+    background-color: white;
+    padding: 1vw;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-window main .step {
+    height: 92%;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+
+.popup-window main .footer {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    height: 8%;
+    margin-right: 0;
+    border-top: .1vw solid lightgray;
+}
+
+.popup-window main .footer button {
+    margin-left: 1vw;
+    cursor: pointer;
+}
+
+.body .block {
+    margin: .5vw 0 1vw 0;
+    list-style-type: none;
+}
+
+.body .block label {
+    font-size: max(1vw, 10px);
+    font-weight: normal;
+}
+
+.body .block li {
+    list-style-type: none;
+    font-size: max(1vw, 10px);
+}
+
+.body .block .block-item {
+    /* margin-top: .5vw; */
+    display: block;
+    /* width: 97%; */
+}
+
+.body .block .block-item .records li:first-child {
+    margin: 0 0 .5vw 0;
+}
+
+.body .block .block-item .records:first-child li:first-child {
+    margin-top: 0;
+}
+.body .block .block-item .records {
+    margin-bottom: 1.2vw;
+}
+.body .block .block-item .records:last-child {
+    margin: 0;
+}
+
+.body .block>label {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(97, 175, 254, .1);
+    padding: 0.5vw;
+    border: 0.1vw solid #61affe;
+    border-radius: .5vw;
+    margin: 1vw 0;
+}
+
+.body .block .block-item li {
+    font-size: max(.8vw, 8px);
+    margin-left: .5vw;
+    /* color: rgb(137, 137, 137); */
+}
+
+.body .block:nth-child(2) .block-item li span {
+    font-weight: bold;
+}
+
+.body {
+    margin-top: .5vw;
+    height: 88%;
+    overflow-y: scroll;
+}
+
+.phantom {
+    position: absolute;
+    width: 50vw;
+    /* height: 60vh; */
+    top: 0;
+    left: 0;
+    z-index: -100;
+}
+
+app-loader {
+    position: fixed;
+    z-index: 12;
+}

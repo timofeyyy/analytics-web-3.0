@@ -4,10 +4,15 @@
     </div>
     <div class="workspace">
         <header class="workspace-header">
-            <p class="item item-h">Выборка</p>
+            <!-- <p class="item item-h">Выборка</p> -->
             <app-select-list class="item item-list" [currentIndex]="selectionViewTypeOptionsIndex"
-                [values]="selectionViewTypeOptions" (onValueChanged)="onSelectionViewTypeChanged($event)" />
-            <div class="btn-wapper"><button class="def" (click)="openBuilderPage()">Создать</button></div>
+                [values]="selectionViewTypeOptions"
+                (onValueChanged)="onSelectionViewTypeChanged($event); resetPagesExecute()" />
+            <div class="btn-wapper">
+                <button class="def" *ngIf="openSidePanel && priorities.length" (click)="reportWindow = true">Генерация
+                    протокола</button>
+                <button class="def" (click)="openBuilderPage()">Создать новую выборку</button>
+            </div>
         </header>
         <div class="page-menu">
             <label class="item" [ngClass]="{selected: !chartView}" (click)="chartView=false">Таблица <span
@@ -15,15 +20,14 @@
             <label class="item" [ngClass]="{selected: chartView}" (click)="chartView=true">Графики <span
                     class="line"></span></label>
         </div>
-        <div class="content" [ngStyle]="{display: chartView ? 'none' : 'flex'}">
-            <main [ngStyle]="{width: openSidePanel ? '80%' : '100%'}">
+        <div class="content">
+            <main *ngIf="!chartView" [ngStyle]="{width: openSidePanel ? '85%' : '100%'}">
                 <section class="params m-section">
                     <div class="table-names">
-                        <label class="state-btn" *ngFor="let type of componentTypes; let i = index"
+                        <label class="state-btn" *ngFor="let type of getComponentTypes(); let i = index"
                             [ngStyle]="{display: componentTypesActive[i] ? 'block' : 'none'}"
-                            [ngClass]="{'state-btn-selected': selectedEnComponentType.ruComponentType == type.ruComponentType}"
-                            (click)="onRuComponentTypeSelected(type); initColumns()">{{type.ruComponentType}}</label>
-
+                            [ngClass]="{'state-btn-selected': getCurrentComponentType().ruComponentType == type.ruComponentType}"
+                            (click)="onComponentTypeChanged(type);resetPagesExecute()">{{type.ruComponentType}}</label>
                     </div>
                     <div class="actions">
                         <div class="action action-vertical">
@@ -75,7 +79,13 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let record of records">
-                                        <td *ngFor="let entry of record">{{entry[1]??'null'}}</td>
+                                        <td *ngFor="let entry of record">
+                                            <a *ngIf="entry[0] === 'specificationDoc' && entry[1] else template"
+                                                [href]="`${this.specificationRepoPath}${entry[1]}.pdf`"> Спецификация</a>
+                                            <ng-template #template>
+                                                {{ entry[1] | emptyValue }}
+                                            </ng-template>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -83,13 +93,27 @@
                     </div>
                 </section>
             </main>
-            <aside [ngStyle]="{display: openSidePanel ? 'block' : 'none'}">
+            <div class="phantom" *ngIf="priorityInit; else template" [style]="{'display': 'none'}">
+                <div class="phantom-chart" *ngFor="let p of this.prioritiesBuffers; let i = index;">
+                    <app-component-analytics *ngIf="loader == false" [hideNavigation]="true" [alias]="alias"
+                        [storage]="p[1]" [componentType]="getCurrentComponentType()"
+                        (onChartChange)="onChartChangeDefault($event)" />
+                </div> 
+                 <!-- data['mainChartQuery']
+      .set('x-labels-size', '1vw')
+      .set('y-labels-size', '1vw'); -->
+            </div>
+            <ng-template #template>
+                <app-component-analytics class="analytics" [ngStyle]="{width: openSidePanel ? '85%' : '100%'}"
+                    *ngIf="loader == false && chartView" [hideNavigation]="true" [alias]="alias" [storage]="storage"
+                    [removeOnChange]="false" [componentType]="getCurrentComponentType()"
+                    [chartSectionName]="mainAction == 'Все записи' ? 'column' : 'column-final'"
+                    (onChartChange)="onChartChangeCurrent($event)" />
+            </ng-template>
+            <aside *ngIf="openSidePanel">
                 <div class="recs">
-                    <div class="rec" *ngIf="mainAction != 'Все' && priorities && priorities.length; else template">
-                        <!-- <div class="preview">
-                            <p class="table">Микрочипы</p>
-                            <p class="date">20-09-2025</p>
-                        </div> -->
+                    <div class="rec"
+                        *ngIf="mainAction != 'Все записи' && priorities && priorities.length; else template">
                         <div class="extens">
                             <p class="ext-h">Приоритеты</p>
                             <ul class="priorities">
@@ -110,9 +134,9 @@
                 </div>
             </aside>
         </div>
-        <div class="content" *ngIf="loader == false" [ngStyle]="{display: chartView ? 'block' : 'none'}">
-            <app-component-analytics  [hideNavigation]="true" [enComponentType]="selectedEnComponentType ? selectedEnComponentType.enComponentType : undefined" [storage]="storage" [alias]="alias" [componentTypes]="componentTypes" />
-        </div>
     </div>
-    <app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />
+    <app-loader *ngIf="loader" />
+    <app-report-builder *ngIf="reportWindow" (onClose)="reportWindow = false" [autoGeneratedSchema]="isAutoGenerated"
+        [currentComponentType]="getCurrentComponentType()" [prioritiesChartsEntries]="prioritiesChartsEntries"
+        [alias]="alias" />
 </div>

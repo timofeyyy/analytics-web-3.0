@@ -7,7 +7,7 @@
     justify-content: space-between;
 }
 
-.charts  .chart {
+.charts .chart {
     width: 40%;
     border-radius: 0.5vw;
     border: 0.1vw solid lightgray;
@@ -17,7 +17,8 @@
 .charts {
     display: flex;
     justify-content: space-between;
-    height: 46%;
+    height: 70%;
+    width: 100%;
 }
 
 
@@ -46,13 +47,26 @@
     border: 0.1vw solid lightgray;
     border-radius: 0.5vw;
     overflow-y: scroll;
-    height: 50%;
+    height: 25%;
 }
-
 
 .step-body .chart {
     height: 100%;
-    width: 48%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 1vw;
+
+}
+
+.step-body .chart p {
+    font-size: max(.8vw, 8px);
+    text-align: center;
+}
+
+.step-body .chart app-chart {
+    width: 100%;
 }
 
 .step-screen {
@@ -88,7 +102,7 @@
 
 .step-footer .list-values {
     height: 77%;
-    height: -webkit-fill-available;
+    /* height: -webkit-fill-available; */
     width: 100%;
     border-radius: 0.5vw;
 }
@@ -123,6 +137,8 @@
 .search .skip input {
     margin: 0 .5vw 0 0;
     display: block;
-    width: max(1vw, 10px);;
-    height: max(1vw, 10px);;
+    width: max(1vw, 10px);
+    ;
+    height: max(1vw, 10px);
+    ;
 }

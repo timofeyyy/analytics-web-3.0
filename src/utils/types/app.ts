@@ -27,6 +27,12 @@ export interface ComponentTypes {
     enComponentType: string
 }
 
+export interface Columns {
+    ruVal: string,
+    enVal: string
+}
+
+
 export interface PriorityColumn {
     name: string,
     disabled: boolean,
@@ -43,11 +49,19 @@ export interface IStepper {
 }
 
 export interface ErrorStepHandling {
-  findError(payload: any): void
+    findError(payload: any): void
 }
 
 
 export interface IObsHandlers {
     process: ((res: any) => void),
     observable: Observable<any>
+}
+
+export interface ChartBodyRequest {
+    ChartLabel: string,
+    ParameterName: string,
+    ParameterValue: string,
+    Image: string,
+    TypeName: string
 }

@@ -72,10 +72,10 @@
     display: block;
 }
 
-.view .info h1 {
+.view h1 {
     font-size: max(1.5vw, 15px);
     font-weight: lighter;
-    margin-bottom: 1.5vw;
+    margin: 0 0 1.5vw 0;
 }
 
 .view .info .info-header {
@@ -94,6 +94,7 @@
 .view .info .current {
     background: rgb(211, 211, 211, 0.5);
 }
+
 .table-names-wrapper {
     margin: 0;
 }

@@ -1,10 +1,11 @@
 <div class="wrapper-table-names" >
         <div class="view" >
-                <div class="info">
-                        <h1>Таблица:
-                                {{dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все' ? 'Не указано' :
-                                `${dropBoxPropsMapConfig.get('ruComponentType').currentValue}`}}
+                <h1>Перечень параметров: 
                         </h1>
+                <div class="info">
+                        
+                        <!-- {{dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все' ? ' всех типов ' : ` типа компонента ${
+                                `${dropBoxPropsMapConfig.get('ruComponentType').currentValue}`}`}}  -->
                         <p *ngFor="let column of columns; let i = index;">
                         {{alias.get(column)}}
                 </p>
@@ -12,7 +13,7 @@
         </div>
         <div class="table-names-srapper">
                 <p class="step-description">Шаг {{index}}: Выбор таблицы компонента</p>
-                <div class="table-names">
+                <div class="table-names" *ngIf="componentTypes">
                         <p class="state-btn" *ngFor="let value of componentTypes"
                                 [ngClass]="{type: true, 'state-btn-selected': current === value.ruComponentType}"
                         (click)="onValueSelected(value)">{{value.ruComponentType}}</p>

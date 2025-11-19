@@ -3,7 +3,7 @@
         <option class="preview">{{label}}</option>
     </select>
     <div class="drop-box" [id]="id+'_inner'" [ngStyle]="{display: openList ? 'block' : 'none'}"
-        class="multiple-select-list" multiple>
+        class="multiple-select-list">
         <div class="option" *ngFor="let val of values; let i = index">
             <input type="checkbox" [checked]="isChecked(val)" (click)="onValueSelected($event, val)" />
             <p>{{val}}</p>

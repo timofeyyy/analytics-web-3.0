@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ApiService } from '../../services/api.services1';
+import { ApiService } from '../../services/api.services';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { forkJoin, map } from 'rxjs';
@@ -30,32 +30,31 @@ export class ItemInfoTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.loader = true
     const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
-    const ruComponentType = query.get("ruComponentType")
-    const componentName = query.get("componentName")
-    const getObservable = observableApiMap.get(ruComponentType as string)
-    if (ruComponentType && componentName && getObservable) {
-      forkJoin([
-        this.api.getAlias(),
-        getObservable(this.api, (query as unknown) as Map<string, string>)
-      ]).subscribe((res: any[]) => {
-        let body = ''
-        let header = ''
-        const obj = res[1][0]
-        const alias = res[0]
-        for (const key in obj) {
-          if (key == 'componentName' || key == 'manufacturerName') {
-            header += `<h3>${alias[key] === undefined ? key : alias[key]}: ${obj[key]}</h1>`
-            continue
-          }
-          body += `<p>${alias[key] === undefined ? key : alias[key]}: ${obj[key]}</p>`
+    const enComponentType = query.get("enComponentType")
+    const id = parseInt(query.get("id") as string)
+    // console.log(enComponentType, id)
+    forkJoin([
+      this.api.getAlias(),
+      this.api.getComponent(enComponentType as string, id)
+    ]).subscribe((res: any[]) => {
+      let body = ''
+      let header = ''
+      const obj = res[1]
+      const alias = res[0]
+      for (const key in obj) {
+        if (key == 'componentName' || key == 'manufacturerName') {
+          header += `<h3>${alias[key] === undefined ? key : alias[key]}: ${obj[key]}</h1>`
+          continue
         }
-        this.header = this.santizer.bypassSecurityTrustHtml(`${header}`)
-        this.body = this.santizer.bypassSecurityTrustHtml(`${body}`)
-      })
+        body += `<p>${alias[key] === undefined ? key : alias[key]}: ${obj[key]}</p>`
+      }
+      this.header = this.santizer.bypassSecurityTrustHtml(`${header}`)
+      this.body = this.santizer.bypassSecurityTrustHtml(`${body}`)
       this.loader = false
-    }
+    })
+
   }
   getBack(): void {
-     window.history.back()
+    window.history.back()
   }
 }

@@ -1,13 +1,13 @@
-import { NgClass, NgFor, NgStyle } from '@angular/common';
+import { NgClass, NgFor, NgStyle, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AppEnum } from '../../../../utils/enum/app.enum';
 import { ComponentTypes, ErrorStepHandling } from '../../../../utils/types/app';
-import { ApiService } from '../../../../services/api.services1';
+import { ApiService } from '../../../../services/api.services';
 import { HttpClientModule } from '@angular/common/http';
 import { resetWarning, selectionStorage, setWarning } from '../../../../utils/redux/selection';
 @Component({
   selector: 'app-step-tablename',
-  imports: [NgClass, NgFor, HttpClientModule],
+  imports: [NgClass, NgFor, HttpClientModule, NgIf],
   providers: [ApiService],
   templateUrl: './step-tablename.component.html',
   styleUrls: ['./step-tablename.component.css', '../step-window/step-window.component.css', '../../../components/styles/categories.css',]
@@ -25,9 +25,9 @@ export class StepTablenameComponent implements OnInit, ErrorStepHandling {
   }
 
   ngOnInit(): void {
-    this.api.getComponentNames()?.subscribe(res => {
-      this.componentTypes = res
-    })
+    // this.api.getComponentNames()?.subscribe(res => {
+    //   this.componentTypes = res
+    // })
     this.findError()
   }
 
@@ -44,7 +44,8 @@ export class StepTablenameComponent implements OnInit, ErrorStepHandling {
   columns: any[] = []
   @Input()
   dropBoxPropsMapConfig!: Map<string, any>
-  componentTypes: ComponentTypes[] = [];
+  @Input()
+  componentTypes!: ComponentTypes[]
 
   onValueSelected(value: ComponentTypes): void {
     this.current = (this.current === value.ruComponentType ? "" : value.ruComponentType)

@@ -1,12 +1,12 @@
 import { NgClass, NgStyle } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { QueryPageSettings } from '../../../services/query.settings.service';
+import { QuerySettingsService } from '../../../services/query-settings.service';
 
 @Component({
   selector: 'app-navigator',
   imports: [NgStyle, NgClass],
-  providers: [QueryPageSettings],
+  providers: [QuerySettingsService],
   templateUrl: './navigator.component.html',
   styleUrl: './navigator.component.css'
 })
@@ -29,7 +29,7 @@ export class NavigatorComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private querySettings: QueryPageSettings
+    private querySettings: QuerySettingsService
   ) { }
 
   ngOnInit(): void {

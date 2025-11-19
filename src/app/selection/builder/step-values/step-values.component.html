@@ -1,31 +1,36 @@
-<p class="step-description">Шаг {{index}}: Заполнение значения параметра {{alias.get(columnName)}}</p>
+<p class="step-description">Шаг {{index}}: Заполнение значения параметра «{{alias.get(columnName)}}»</p>
 <div class="step-screen">
 
     <div class="step-body">
-        <div class="charts">
-            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias"
+        <div class="charts" [style]="{'height': '75'}">
+            <!-- <div class="chart">
+                <p>Изменение наиболее используемого значения параметра {{alias.get(columnName)}} со временем</p>
+                <app-chart *ngIf="queryObj.size"  [innerWidthPrecent]="90"  [alias]="alias"
                 [all]="obj" [type_name]="'line'" [chart_name]="'column-line'" [query]="queryObj" />
-            <app-chart *ngIf="queryObj.size" class="chart" [alias]="alias" 
-                [all]="obj" [type_name]="'bar'" [chart_name]="'column'" [query]="queryObj" />
+            </div> -->
+            <div class="chart">
+                <!-- <p>Количественная статистика параметра {{alias.get(columnName)}} из числа компонентов {{this.currentSelection.length}}</p> -->
+                <app-chart *ngIf="queryObj.size" [innerWidthPrecent]="70" [alias]="alias" 
+                [all]="obj" [typeName]="'bar'" [chartName]="'column'" [query]="queryObj"  />
+            </div>
         </div>
-
-        <app-parameter-value-count-table class="table" [all]="manufacturersStat" [noRedirect]="true"
+        <app-parameter-value-count-table  [style]="{'height': '20'}" *ngIf="manufacturersStat.length" class="table" [all]="manufacturersStat" [noRedirect]="true"
             (onValueChanged)="onManufacturerChanged($event)" [aliasName]="'Количество'" [parameter]="'manufacturerName'"
             [parameterAlias]="alias.get('manufacturerName')!" />
     </div>
     <div class="step-footer">
         <div class="search">
             <p>{{this.currentSelection.length ? 'Найдено ' + this.currentSelection.length : 'Ничего не найдено'}}</p>
-            <app-dropbox-provider class="dropbox" [aliasName]="`${alias.get(columnName)}`" [all]="all"
+            <app-dropbox-provider class="dropbox" [aliasName]="`Требование к параметру «${alias.get(columnName)}»`" [all]="all"
                 [propsMap]="dropBoxPropsMapConfig" [name]="columnName" [currentName]="currentDropBoxName"
                 (onStateChanged)="onCurrentDropBoxNameChnaged($event)" [inputDisabled]="false"
                 [inputValue]="inputValue" />
         </div>
         <div class="list-values">
             <p>Существующие значения</p>
-            <app-parameter-value-count-table [allowNull]="true" class="list" [hideLabel]="true" [all]="parameterStat"
+            <app-parameter-value-count-table *ngIf="parameterStat.length" [allowNull]="true" class="list" [hideLabel]="true" [all]="parameterStat"
                 [aliasName]="'Количество'" [parameter]="columnName" [parameterAlias]="alias.get(columnName)!"
-                [currentValue]="inputValue" (onValueChanged)="onParameterChnaged($event)" [noRedirect]="true" />
+                [currentValue]="inputValue" (onValueChanged)="onParameterChnaged($event)" [noRedirect]="true" (onSortDirectionChanged)="onSortDirectionChanged($event)" />
         </div>
     </div>
 </div>

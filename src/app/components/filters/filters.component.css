@@ -16,7 +16,7 @@
     height: 90%;
     width: max(40%, 500px);
     background-color: white;
-    border-radius: 1vw;
+    border-radius: .5vw;
 }
 
 .popup-window .filters .head {
@@ -51,7 +51,6 @@ h1 {
 .popup-window .filters .footer button {
     margin: 0 1vw;
     cursor: pointer;
-
 }
 
 /* .popup-window .filters .footer .cancel {

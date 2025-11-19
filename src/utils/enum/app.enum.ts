@@ -3,10 +3,13 @@ export enum AppEnum {
     ALL = "Все",
     NONE = " - ",
     NOTDEFINED = "Не указано",
-    LASTSAVED = "Последняя",
+    LASTSAVED = "Последняя выборка",
     ASC = "По порядку",
     DESC = "По убыванию",
-    SOME = "Некоторые"
+    SOME = "Некоторые",
+    ALLREC = "Все записи",
+    PARAMETER = "Параметер",
+    AMOUNT = "Количество"
 };
 
 export enum ComponentTypeRuEnum {

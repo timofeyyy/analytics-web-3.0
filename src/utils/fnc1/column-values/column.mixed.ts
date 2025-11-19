@@ -2,17 +2,21 @@ import { ChartOptions } from "../../types/chart";
 import getManufacturersChartOptionBarMixed1 from "../manufacturers/manufaturers.mixed";
 
 const getColumnMixedChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
+    const barXlabels = query.get('bar-x-labels')
     let apexChartData: Partial<ChartOptions> = {
         series: [{
-            name: "количество",
+            name: "",
             type: "column",
             data: []
         },
         {
-            name: "проценты",
+            name: "",
             type: "line",
             data: []
         }],
+        legend: {
+            show: false
+        },
         dataLabels: {
             enabled: false
         },
@@ -20,19 +24,44 @@ const getColumnMixedChartOptions = (data: any, query: Map<string, string>): Part
             type: "line",
             zoom: {
                 enabled: true
+            },
+              events: {
+                mounted: function (chartCtx) {
+                    const clips = chartCtx.el.querySelectorAll("clipPath");
+                    clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
+                    const chartEl = chartCtx.el;
+                    const toolbarMenu = chartEl.querySelector(".apexcharts-menu");
+                    if (!toolbarMenu) return;
+                    document.addEventListener("click", (e) => {
+                        const target = e.target as HTMLElement;
+                        if (
+                            !toolbarMenu.contains(target) &&
+                            !target.closest(".apexcharts-toolbar")
+                        ) {
+                            toolbarMenu.classList.remove("apexcharts-menu-open");
+                        }
+                    });
+                },
             }
         },
         xaxis: {
             categories: [],
             tickPlacement: 'on',
+            tickAmount: 12,
             type: 'category',
             labels: {
-                formatter: (val) => {
-                    return `${val}`;
+                rotate: -90,
+                trim: false,
+                hideOverlappingLabels: true,
+                showDuplicates: false,
+                rotateAlways: true,
+                formatter: (val: string) => {
+                    return `${val}`
+                    if (!val) return '';
+                    return val.length > 10 ? val.substring(0, 10) + '…' : val;
                 },
                 style: {
-                    fontSize: '0px',
-
+                    fontSize: barXlabels === "1" ? 'max(.8vw, 8px)' : '0px',
                 },
             }
         },
@@ -43,16 +72,19 @@ const getColumnMixedChartOptions = (data: any, query: Map<string, string>): Part
                     text: ""
                 },
                 labels: {
+                    formatter: (val: number) => `${val} шт`
+
                 }
             },
             {
-            opposite: true,
-            title: {
-                text: ""
-            },
-            labels: {
+                opposite: true,
+                title: {
+                    text: ""
+                },
+                labels: {
+                    formatter: (val: number) => `${val}%`
+                }
             }
-        }
         ],
         plotOptions: {
             bar: {
@@ -66,31 +98,28 @@ const getColumnMixedChartOptions = (data: any, query: Map<string, string>): Part
     let length = 0
     const param = query.get('param')
     const manufacturerName = query.get('manufacturerName')
-    const ruComponentType = query.get('ruComponentType')
+    const enComponentType = query.get('enComponentType')
     const all = query.get('all')
-    if (param && ruComponentType) {
-        for (const key in data) {
-            length += data[key].length
-            for (const obj of data[key]) {
-                if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
-                    break;
+    if (param && enComponentType) {
+        length = data[enComponentType.toLowerCase()].length
+        const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+        for (const obj of sortedData as any) {
+            if (!obj[param] && all === "0") {
+                continue;
+            }
+            const value = obj[param] ? obj[param] : 'Не указано'
+            if (
+                manufacturerName ?
+                    (value && obj.manufacturerName == manufacturerName) :
+                    value
+            ) {
+                if (!map.has(value)) {
+                    map.set(value, 0);
                 }
-                if (!obj[param] && all === "1") {
-                    continue;
-                }
-                const value = obj[param] ? obj[param] : 'Не указано'
-                if (
-                    manufacturerName ?
-                        (value && obj.manufacturerName == manufacturerName) :
-                        value
-                ) {
-                    if (!map.has(value)) {
-                        map.set(value, 0);
-                    }
-                    map.set(value, map.get(value) + 1)
-                }
+                map.set(value, map.get(value) + 1)
             }
         }
+
         const sortedMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
         let sum = 0
         sortedMap.forEach((value, key) => {

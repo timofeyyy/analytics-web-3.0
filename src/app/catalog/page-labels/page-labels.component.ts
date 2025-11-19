@@ -1,12 +1,14 @@
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppEnum } from '../../../utils/enum/app.enum';
-import { ApiService } from '../../../services/api.services1';
+import { ApiService } from '../../../services/api.services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { QuerySettingsService } from '../../../services/query-settings.service';
 
 @Component({
   selector: 'app-page-labels',
+  providers: [QuerySettingsService],
   imports: [NgStyle, NgClass, NgFor],
   templateUrl: './page-labels.component.html',
   styleUrl: './page-labels.component.css'
@@ -17,13 +19,15 @@ export class PageLabelsComponent implements OnChanges {
     private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private querySettings: QuerySettingsService,
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
     const query: Map<string, string> = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params))
     this.from = 0
     this.last = Math.ceil(this.records.length / this.rowsCount) === 0 ? 0 : Math.ceil(this.records.length / this.rowsCount) - 1
     if (query.get('page')) {
+      // console.log(query.get('page'))
       if (!isNaN(parseInt(query.get('page') as string))) {
         const value = parseInt(query.get('page') as string)
         if (Math.ceil(this.records.length / this.rowsCount) < value) {
@@ -132,7 +136,7 @@ export class PageLabelsComponent implements OnChanges {
 
   changeCurrentPage(value: number): void {
     this.currentPage = value
-    this.setQuery(new Map().set('page', value), 'merge')
+    this.querySettings.setQuery(new Map().set('page', value), 'merge')
   }
 
   updatePages(): void {
@@ -142,21 +146,21 @@ export class PageLabelsComponent implements OnChanges {
     }
   }
  
-  setQuery(query: Map<string, string>, queryParamsHandlingState: 'replace' | 'merge'): Promise<Map<string, string>> {
-    const querysearchBuffer: Map<string, string | null> = query
-    if (querysearchBuffer.get('ruComponentType') === AppEnum.ALL) {
-      querysearchBuffer.set('ruComponentType', null)
-    }
-    return this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: Object.fromEntries(querysearchBuffer),
-      queryParamsHandling: queryParamsHandlingState,
-      skipLocationChange: false,
-    }).then(() => {
-      if (querysearchBuffer.get('ruComponentType') === null) {
-        querysearchBuffer.delete('ruComponentType')
-      }
-      return querysearchBuffer as Map<string, string>
-    });
-  }
+  // setQuery(query: Map<string, string>, queryParamsHandlingState: 'replace' | 'merge'): Promise<Map<string, string>> {
+  //   const querysearchBuffer: Map<string, string | null> = query
+  //   if (querysearchBuffer.get('ruComponentType') === AppEnum.ALL) {
+  //     querysearchBuffer.set('ruComponentType', null)
+  //   }
+  //   return this.router.navigate([], {
+  //     relativeTo: this.route,
+  //     queryParams: Object.fromEntries(querysearchBuffer),
+  //     queryParamsHandling: queryParamsHandlingState,
+  //     skipLocationChange: false,
+  //   }).then(() => {
+  //     if (querysearchBuffer.get('ruComponentType') === null) {
+  //       querysearchBuffer.delete('ruComponentType')
+  //     }
+  //     return querysearchBuffer as Map<string, string>
+  //   });
+  // }
 }

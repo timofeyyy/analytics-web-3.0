@@ -1,70 +1,192 @@
+import { AppEnum } from "../../enum/app.enum";
 import { ChartOptions } from "../../types/chart";
 import getManufacturersChartOptionDonut1 from "../manufacturers/manufacturers.donut";
 
 
 
+// const getColumnDonutChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
+//     let apexChartData: Partial<ChartOptions> = {
+//         series: [],
+//         chart: {
+//             type: "donut",
+//             zoom: {
+//                 enabled: true
+//             }
+//         },
+//         labels: [],
+//         tooltip: {
+//             enabled: true,
+//             y: {
+//                 formatter: function (val: number, opts: any) {
+//                     return `${val} шт`;
+//                 }
+//             },
+//         },
+//         legend: {
+//             show: false,
+//             position: 'bottom',
+//             horizontalAlign: 'center',
+//             formatter: (val: string) => {
+//                 return `${val} шт`
+//             },
+//         },
+//         values: []
+//     };
+
+//     const map = new Map()
+//     const param = query.get('param')
+//     const manufacturerName = query.get('manufacturerName')
+//     const enComponentType = query.get('enComponentType')
+//     const all = query.get('all')
+//     if (param && enComponentType) {
+//         const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+//         for (const obj of sortedData as any) {
+//             const value = obj[param] ? `${obj[param]}` : 'Не указано'
+//             if (!obj[param] && all === "0") {
+//                 continue;
+//             }
+//             if (
+//                 manufacturerName ?
+//                     (value && obj.manufacturerName == manufacturerName) :
+//                     value
+//             ) {
+
+//                 let labelsItemIndex: number = (apexChartData as ChartOptions).labels.findIndex(
+//                     (category: string) => category === value
+//                 )
+//                 if (labelsItemIndex === -1) {
+//                     (apexChartData as ChartOptions).labels.push(value)
+//                 }
+//                 if (map.get(value) === undefined) {
+//                     map.set(value, 0)
+//                 }
+//                 map.set(value, map.get(value) + 1)
+//             }
+//         }
+//         (apexChartData as ChartOptions).labels.forEach((label: string) => {
+//             (apexChartData as ChartOptions).series.push(map.get(label));
+//         })
+
+//         apexChartData.values = apexChartData.labels
+//     }
+//     else {
+//         apexChartData = getManufacturersChartOptionDonut1(data)
+//     }
+//     return apexChartData
+// }
+
 const getColumnDonutChartOptions = (data: any, query: Map<string, string>): Partial<ChartOptions> => {
-    let apexChartData: Partial<ChartOptions> = {
-        series: [],
-        chart: {
-            type: "donut",
-            zoom: {
-                enabled: true
-            }
-        },
-        labels: [],
-        legend: {
-            show: false,
-            position: 'bottom',
-            horizontalAlign: 'center'
-        },
-        values: []
-    };
+  const sortParam = query.get("sortParam");
+  const sortDirection = query.get("sortDirectopn");
 
-    const map = new Map()
-    const param = query.get('param')
-    const manufacturerName = query.get('manufacturerName')
-    const ruComponentType = query.get('ruComponentType')
-    const all = query.get('all')
-    if (param && ruComponentType) {
-        for (const key in data) {
-            for (const obj of data[key]) {
-                if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
-                    break;
-                }
-                const value = obj[param] ? `${obj[param]}` : 'Не указано'
-                if (!obj[param] && all === "1") {
-                    continue;
-                }
-                if (
-                    manufacturerName ?
-                        (value && obj.manufacturerName == manufacturerName) :
-                        value
-                ) {
-
-                    let labelsItemIndex: number = (apexChartData as ChartOptions).labels.findIndex(
-                        (category: string) => category === value
-                    )
-                    if (labelsItemIndex === -1) {
-                        (apexChartData as ChartOptions).labels.push(value)
-                    }
-                    if (map.get(value) === undefined) {
-                        map.set(value, 0)
-                    }
-                    map.set(value, map.get(value) + 1)
-                }
+  let apexChartData: Partial<ChartOptions> = {
+    series: [],
+    chart: {
+      type: "donut",
+      zoom: {
+        enabled: true,
+      },
+      toolbar: { show: true },
+      events: {
+        mounted: function (chartCtx) {
+          const clips = chartCtx.el.querySelectorAll("clipPath");
+          clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
+          const chartEl = chartCtx.el;
+          const toolbarMenu = chartEl.querySelector(".apexcharts-menu");
+          if (!toolbarMenu) return;
+          document.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            if (
+              !toolbarMenu.contains(target) &&
+              !target.closest(".apexcharts-toolbar")
+            ) {
+              toolbarMenu.classList.remove("apexcharts-menu-open");
             }
+          });
+        },
+      }
+    },
+    labels: [],
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter: function (val: number) {
+          return `${val} шт`;
+        },
+      },
+    },
+    legend: {
+      show: false,
+      position: "bottom",
+      horizontalAlign: "center",
+      formatter: (val: string) => {
+        return `${val} шт`;
+      },
+    },
+    values: [],
+  };
+
+  const map = new Map();
+  const param = query.get("param");
+  const manufacturerName = query.get("manufacturerName");
+  const enComponentType = query.get("enComponentType");
+  const all = query.get("all");
+
+  if (param && enComponentType) {
+    let sortedData = [...(data[enComponentType.toLowerCase()] as any[])];
+
+    if (sortParam === "param") {
+      sortedData.sort((a, b) => {
+        const diff = (a[param] ?? 0) - (b[param] ?? 0);
+        return sortDirection === AppEnum.ASC ? diff : -diff;
+      });
+    }
+
+    for (const obj of sortedData as any) {
+      const value = obj[param] ? `${obj[param]}` : "Не указано";
+      if (!obj[param] && all === "0") continue;
+
+      if (
+        manufacturerName
+          ? value && (obj.manufacturerName === manufacturerName || manufacturerName === AppEnum.ALL)
+          : value
+      ) {
+        if (!apexChartData.labels!.includes(value)) {
+          (apexChartData as ChartOptions).labels.push(value);
         }
-        (apexChartData as ChartOptions).labels.forEach((label: string) => {
-            (apexChartData as ChartOptions).series.push(map.get(label));
-        })
 
-        apexChartData.values = apexChartData.labels
+        if (map.get(value) === undefined) {
+          map.set(value, 0);
+        }
+        map.set(value, map.get(value) + 1);
+      }
     }
-    else {
-        apexChartData = getManufacturersChartOptionDonut1(data)
+
+    (apexChartData as ChartOptions).labels.forEach((label: string) => {
+      (apexChartData as ChartOptions).series.push(map.get(label));
+    });
+
+    if (sortParam === AppEnum.AMOUNT) {
+      const combined = (apexChartData as ChartOptions).labels.map((label: string, idx: number) => ({
+        label,
+        value: (apexChartData as ChartOptions).series[idx],
+      }));
+
+      combined.sort((a: any, b: any) => {
+        const diff = a.value - b.value;
+        return sortDirection === AppEnum.ASC ? diff : -diff;
+      });
+
+      (apexChartData as ChartOptions).labels = combined.map((c: any) => c.label);
+      (apexChartData as ChartOptions).series = combined.map((c: any) => c.value);
     }
-    return apexChartData
-}
+
+    apexChartData.values = apexChartData.labels;
+  } else {
+    apexChartData = getManufacturersChartOptionDonut1(data);
+  }
+
+  return apexChartData;
+};
 
 export default getColumnDonutChartOptions

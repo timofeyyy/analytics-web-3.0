@@ -8,7 +8,8 @@ const exceptions = [
     'componentName',
     'remark1',
     'remark2',
-    'date'
+    'date',
+    'id'
 ]
 
 const isException = (column: string): boolean => {

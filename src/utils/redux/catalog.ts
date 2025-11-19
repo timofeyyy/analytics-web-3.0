@@ -16,7 +16,7 @@ const ctalogSlice = createSlice({
     columns: {},
     currentValues: JSON.parse(localStorage.getItem('savedFilterValues')!) ?? {},
     alias: {},
-    componentTypealias: []
+    // componentTypealias: []
   },
   reducers: {
     setColumns: (state: any, action: PayloadAction<[string, string[]]>) => {
@@ -41,13 +41,13 @@ const ctalogSlice = createSlice({
     setalias: (state: any, action: PayloadAction<any>) => {
       state.alias = action.payload
     },
-    setComponentTypealias: (state: any, action: PayloadAction<ComponentTypes[]>) => {
-      state.componentTypealias = action.payload
-    },
+    // setComponentTypealias: (state: any, action: PayloadAction<ComponentTypes[]>) => {
+    //   state.componentTypealias = action.payload
+    // },
   }
 })
 
-export const { setColumns, setCurrentValue, setalias, setComponentTypealias, removeCurrentValue, removeRuComponentType } = ctalogSlice.actions
+export const { setColumns, setCurrentValue, setalias, removeCurrentValue, removeRuComponentType } = ctalogSlice.actions
 
 export const catalogStorage = configureStore({
   reducer: ctalogSlice.reducer

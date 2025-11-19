@@ -2,6 +2,7 @@ import { NgClass, NgForOf, NgStyle } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { SelectListComponent } from "../select-list/select-list.component";
 import { componentStorage } from '../../../utils/redux/component';
+import { AppEnum } from '../../../utils/enum/app.enum';
 
 @Component({
   selector: 'app-record-sorting',
@@ -19,18 +20,20 @@ export class RecordSortingComponent implements OnChanges {
         [this.countName + ' (убыв)', false, false],
       ]
     }
-    this.sort(this.current ? this.current[0] : this.labels[0][0])
+    this.sort(this.current ? this.current[0] : this.labels[2][0])
   }
   onLabelSelected(event: any): void {
-    const label = event.target.value
-    this.sort(label)
+    this.sort(event.target.value)
+    const label = this.labels.find((l) => l[0] == event.target.value)
+    this.onSortDirectionChanged.emit([label![1] ? AppEnum.PARAMETER : AppEnum.AMOUNT, label![2] ? AppEnum.ASC : AppEnum.DESC])
   }
-
+  @Output()
+  onSortDirectionChanged = new EventEmitter<[string, string]>()
   isOpen!: boolean
   @Input()
-  valueName: string = 'Значение'
+  valueName: string = AppEnum.PARAMETER
   @Input()
-  countName: string = 'Количество'
+  countName: string = AppEnum.AMOUNT
   labels!: [string, boolean, boolean][]
   @Input()
   rows: { value: string, prodSummary: number }[] = []

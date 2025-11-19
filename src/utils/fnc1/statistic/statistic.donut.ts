@@ -1,55 +1,38 @@
+import { ComponentTypes } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
 
-// const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions> => {
-//     let apexChartData: Partial<ChartOptions> = {
-//         series: [],
-//         chart: {
-//             type: "donut",
-//             zoom: {
-//                 enabled: true
-//               }
-//         },
-//         labels: []
-//     };
-
-//     let tmp: any = {}
-
-//     if (Array.isArray(data)) {
-//         data.forEach((obj: ComponentLabel) => {
-//             let labelsItemIndex: number = (apexChartData as ChartOptions).labels.findIndex(
-//                 (category: string) => category === obj.ruComponentType
-//             )
-//             if(labelsItemIndex === -1) {
-//                 (apexChartData as ChartOptions).labels.push(obj.ruComponentType)
-//             }
-//             if (tmp[obj.ruComponentType] === undefined) {
-//                 tmp[obj.ruComponentType] = 0
-//             }
-//             tmp[obj.ruComponentType] += 1
-//         });
-
-//         (apexChartData as ChartOptions).labels.forEach((label: string) => {
-//             (apexChartData as ChartOptions).series.push(tmp[label]);
-//         })
-//     }
-
-//     console.log(tmp)
-
-//     return apexChartData;
-// }
-
-const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions> => {
+const getComponentTypesStatChartOptionsDonut = (data: any, query: Map<string, any>): Partial<ChartOptions> => {
     let apexChartData: Partial<ChartOptions> = {
         series: [],
         chart: {
             type: "donut",
             zoom: {
                 enabled: true
+            },
+            toolbar: { show: false },
+             events: {
+                mounted: function (chartCtx) {
+                    console.log("asadsad")
+                    const clips = chartCtx.el.querySelectorAll("clipPath");
+                    clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
+                    const chartEl = chartCtx.el;
+                    const toolbarMenu = chartEl.querySelector(".apexcharts-menu");
+                    if (!toolbarMenu) return;
+                    document.addEventListener("click", (e) => {
+                        const target = e.target as HTMLElement;
+                        if (
+                            !toolbarMenu.contains(target) &&
+                            !target.closest(".apexcharts-toolbar")
+                        ) {
+                            toolbarMenu.classList.remove("apexcharts-menu-open");
+                        }
+                    });
+                },
             }
         },
         legend: {
             show: true,
-            position: 'bottom',
+            position: 'right',
             horizontalAlign: 'center'
         },
         labels: [],
@@ -65,19 +48,22 @@ const getComponentTypesStatChartOptionsDonut = (data: any): Partial<ChartOptions
             }
         ],
     };
+    const componentTypes = query.get("componentTypes") as ComponentTypes[]
     let tmp: any = {}
     for (const key in data) {
+        const ruComponentType = componentTypes!.find(c => c.enComponentType.toLowerCase() == key.toLowerCase())!.ruComponentType;
+        (apexChartData as ChartOptions).labels.push(ruComponentType)
         for (const obj of data[key]) {
-            let labelsItemIndex: number = (apexChartData as ChartOptions).labels.findIndex(
-                (category: string) => category === obj.ruComponentType
-            )
-            if (labelsItemIndex === -1) {
-                (apexChartData as ChartOptions).labels.push(obj.ruComponentType)
+            // let labelsItemIndex: number = (apexChartData as ChartOptions).labels.findIndex(
+            //     (category: string) => category === obj.ruComponentType
+            // )
+            // if (labelsItemIndex === -1) {
+
+            // }
+            if (tmp[ruComponentType] === undefined) {
+                tmp[ruComponentType] = 0
             }
-            if (tmp[obj.ruComponentType] === undefined) {
-                tmp[obj.ruComponentType] = 0
-            }
-            tmp[obj.ruComponentType] += 1
+            tmp[ruComponentType] += 1
         }
     }
     (apexChartData as ChartOptions).labels.forEach((label: string) => {

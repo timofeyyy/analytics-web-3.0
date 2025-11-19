@@ -1,0 +1,105 @@
+select,
+::picker(select),
+.option {
+    font-size: max(.8vw, 8px);
+}
+
+label {
+    width: fit-content;
+    align-self: center;
+    padding: 0;
+    margin: 0;
+    font-size: max(1vw, 10px);
+    padding-right: 1vw;
+}
+
+select,
+.drop-box {
+    padding: .5vw;
+    background: #eeeeee;
+    transition: 0.4s;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: .25vw;
+    margin: 0;
+    width: 100%;
+    border: .1vw solid lightgray;
+    text-overflow: ellipsis;
+}
+
+.drop-box:hover,
+.drop-box:focus,
+select:hover,
+select:focus {
+    background: #dddddd;
+}
+
+select:focus {
+    outline: none;
+}
+
+.drop-box:focus {
+    outline: none;
+}
+
+option,
+.option {
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    background: #eeeeee;
+    transition: 0.4s;
+}
+
+option:first-of-type {
+    border-radius: .1vw .1vw 0 0;
+}
+
+option:last-of-type {
+    border-radius: 0 0 .1vw .1vw;
+}
+
+option:not(option:last-of-type) {
+    border-bottom: none;
+}
+
+option:nth-of-type(odd) {
+    background: white;
+}
+
+.selected {
+    text-decoration: line-through;
+}
+
+.preview {
+    display: none;
+}
+
+
+.multiple-select-list-wrapper {
+    position: relative;
+}
+
+.multiple-select-list-wrapper label {
+    font-size: max(.8vw, 8px);
+    pointer-events: none;
+}
+
+.multiple-select-list {
+    background-color: #eeeeee;
+    border: .1vw solid lightgray;
+}
+
+.multiple-select-list option {
+    padding: .5vw;
+}
+
+.option p {
+    font-size: max(.8vw, 8px);
+    margin: 0;
+}
+
+.option input {
+    margin: 0 .25vw 0 .5vw;
+}

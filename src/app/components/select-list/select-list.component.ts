@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
   selector: 'app-select-list',
   imports: [NgFor, NgStyle],
   templateUrl: './select-list.component.html',
-  styleUrls: ['./select-list.component.css', '../styles/input.css']
+  styleUrls: ['./select-list.component.css', '../styles/input.css', '../styles/select-list.css']
 })
 export class SelectListComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {

@@ -1,39 +1,110 @@
 <div class="app-main">
-    <app-navigator class="navigator-wrapper" [ngStyle]="{display: hideNavigation! ? 'none' : 'block'}" [current]="'/home'" />
+    <app-navigator class="navigator-wrapper" [ngStyle]="{display: hideNavigation! ? 'none' : 'block'}"
+        [current]="'/home'" />
     <div class="workspace" [ngStyle]="{height: hideNavigation ? '100%' : '100vh'}">
         <header class="workspace-header" [ngStyle]="{display: hideNavigation! ? 'none' : 'flex'}">
-            <p class="item item-h">Аналитика компонентов типа {{ruComponentType}}</p>
+            <p class="item item-h" *ngIf="componentType">Аналитика компонентов типа {{componentType.ruComponentType}}
+            </p>
         </header>
-        <main [ngStyle]="{height: hideNavigation! ? '100%' : '92%'}">
+        <main [ngStyle]="{height: hideNavigation! ? '100%' : '92%'}" *ngIf="mainChartQuery && alias">
             <section class="chart-wrapper">
+                <!-- <div class="chart-wrapper-h">
+                    <div class="actions">
+                        <div class="action">
+                            <div class="label-wrapper">
+                                <p>Производитель</p>
+                            </div>
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [values]="manufacturers"
+                                    (onValueChanged)="onManufacturerSelected($event); buildMainChart();" />
+                            </div>
+                        </div>
+                        <div class="action">
+                            <div class="label-wrapper">
+                                <p>Параметр</p>
+                            </div>
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [values]="columnAlias"
+                                    (onValueChanged)="onColumnSelected($event); buildMainChart();" />
+                            </div>
+                        </div>
+                        <div class="action">
+                            <div class="label-wrapper">
+                                <p>График</p>
+                            </div>
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [values]="chartNamesAlias"
+                                    (onValueChanged)="onChartNameSelected($event); buildMainChart();" />
+                            </div>
+                        </div>
+                    </div>
+                    <p class="chart-name">
+                        {{currentChartName == 'line' ?
+                        `Изменение наиболее используемого значения параметра
+                        ${alias.get(mainChartQuery.get('param')!)}
+                        со временем` :
+                        `Количественная статистика параметра ${alias.get(this.currentPropName)} из числа
+                        компонентов (${mainChartQuery.get("amount")} шт)`
+                        }}
+                    </p>
+                </div> -->
                 <div class="chart-wrapper-h">
-                    <div class="action">
-                        <p>Параметр</p>
-                        <div class="select-list-wrapper">
-                            <app-select-list class="select-list" [values]="columnAlias"
-                                (onValueChanged)="onColumnSelected($event); buildMainChart(); buildPanelChart()" />
+                    <div class="actions">
+                        <div class="action">
+                            
+                            <!-- <div class="label-wrapper"> -->
+                                <p>Производитель</p>
+                            <!-- </div> -->
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [values]="manufacturers"
+                                    (onValueChanged)="onManufacturerSelected($event); buildMainChart();" />
+                            </div>
+                        </div>
+                        <div class="action">
+                            <!-- <div class="label-wrapper"> -->
+                                <p>Параметр</p>
+                            <!-- </div> -->
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [values]="columnAlias"
+                                    (onValueChanged)="onColumnSelected($event); buildMainChart();" />
+                            </div>
+                        </div>
+                        <div class="action">
+                            <!-- <div class="label-wrapper"> -->
+                                <p>График</p>
+                            <!-- </div> -->
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [values]="chartNamesAlias"
+                                    (onValueChanged)="onChartNameSelected($event); buildMainChart();" />
+                            </div>
                         </div>
                     </div>
-                    <div class="action">
-                        <p>График</p>
-                        <div class="select-list-wrapper">
-                            <app-select-list class="select-list" [values]="chartNamesAlias"
-                                (onValueChanged)="onChartNameSelected($event); buildMainChart();" />
-                        </div>
-                    </div>
+                    <!-- <p class="chart-name">
+                        {{currentChartName == 'line' ?
+                        `Изменение наиболее используемого значения параметра
+                        ${alias.get(mainChartQuery.get('param')!)}
+                        со временем` :
+                        `Количественная статистика параметра ${alias.get(this.currentPropName)} из числа
+                        компонентов (${mainChartQuery.get("amount")} шт)`
+                        }}
+                    </p> -->
                 </div>
-                <app-chart class="chart-view" [chart_name]="currentChartName === 'line' ? 'column-line' : 'column'" [req_name]="'components'" [type_name]="currentChartName ?? 'bar'"
-                    [all]="storage" [alias]="alias" [query]="mainChartQuery" />
+                <!-- <section class="chart-view"> -->
+                <app-chart class="chart-view" [innerWidthPrecent]="70" [chartName]="chartSectionName" [reqName]="'components'"
+                    [typeName]="currentChartName!" [all]="storage" [alias]="alias" [query]="mainChartQuery"/>
+                <!-- </section> -->
+
             </section>
             <aside class="panel-wrapper">
-                <div class="panel-chart" >
+                <!-- <div class="panel-chart" >
                     <app-chart  class="chart-view" [chart_name]="'column-value'" [req_name]="'components'" [type_name]="'line'"
                         [all]="storage" [alias]="alias" [query]="panelChartQuery" />
-                </div>
+                </div> -->
                 <div class="panel-list">
-                    <app-parameter-value-count-table   class="records-wrapper" [all]="all" [aliasName]="'Количество'"
-                        [parameter]="currentPropName" [parameterAlias]="alias ? alias.get(currentPropName)! : ''" [allowNull]="false"
-                        [noRedirect]="true" [firstSelectedDefault]="true" (onValueChanged)="onColumnValueChanged($event); buildPanelChart(); " />
+                    <app-parameter-value-count-table class="records-wrapper" [all]="all" [aliasName]="'Количество'"
+                        [parameter]="currentPropName" [parameterAlias]="alias ? alias.get(currentPropName)! : ''"
+                        [allowNull]="true" [noRedirect]="true" [firstSelectedDefault]="true"
+                        (onValueChanged)="onColumnValueChanged($event);" (onSortDirectionChanged)="onSortDirectionChanged($event);buildMainChart()" />
                 </div>
             </aside>
         </main>

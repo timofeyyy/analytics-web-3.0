@@ -1,6 +1,6 @@
-<div class="app-main">
+<div class="app-main" *ngIf="dropBoxPropsMapConfig.size">
     <app-navigator class="navigator-wrapper" [current]="'/filters'" />
-    <app-filters [all]="all" [alias]="alias" [columns]="columns" [dropBoxPropsMapConfig]="dropBoxPropsMapConfig"
+    <app-filters *ngIf="all.length" [all]="resultBuffer" [alias]="alias" [columns]="columns" [dropBoxPropsMapConfig]="dropBoxPropsMapConfig"
         [ngStyle]="{'display' : filter ? 'block' : 'none'}" (onChange)="apply($event)" />
     <div class="workspace">
         <header class="workspace-header">
@@ -12,7 +12,7 @@
                     <div class="warning-header">
                         <img [src]="'assets/images/'+iconName+'.svg'" alt="img">
                         <p>{{error}}</p>
-                    </div>
+                    </div> 
                 </div>
             </div> -->
             <!-- <ng-template #templateName> -->
@@ -23,13 +23,13 @@
                 <div class="options-body">
                     <div class="option-wrapper">
                         <p class="option-wrapper-header">Тип компонента</p>
-                        <div class="table-names">
-                            <label class="state-btn" *ngFor="let componentType of componentTypes; let i = index"
+                        <div class="table-names" >
+                            <label class="state-btn" *ngFor="let componentType of getComponentTypes(); let i = index"
                                 [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('ruComponentType').currentValue === componentType.ruComponentType}"
-                                (click)="onTypeChanged(componentType.ruComponentType)">{{componentType.ruComponentType}}</label>
+                                (click)="onTypeChanged(componentType)">{{componentType.ruComponentType}}</label>
                             <label class="state-btn"
                                 [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все'}"
-                                (click)="onTypeChanged('Все')">Все</label>
+                                (click)="onTypeChanged( {ruComponentType: 'Все', enComponentType: 'Все'} )">Все</label>
                         </div>
                     </div>
                     <div class="option-wrapper" [ngStyle]="{display: selectedKeysValues.length ? 'block' : 'none'}">
@@ -37,7 +37,6 @@
                         <div class="options-wrapper-body view-panel">
                             <p class="value" *ngFor="let record of selectedKeysValues">{{alias.get(record[0])}}:
                                 {{record[1]}}</p>
-
                         </div>
                     </div>
                     <!-- <div class="option-wrapper" >
@@ -52,7 +51,7 @@
                     <div class="action action-reset" [ngStyle]="{display: selectedKeysValues.length ? 'flex' : 'none'}"
                         (click)="
                                 resetKeyAndValues(dropBoxPropsMapConfig.get('ruComponentType').currentValue);
-                                onTypeChanged(dropBoxPropsMapConfig.get('ruComponentType').currentValue)
+                                onTypeChangedUpdate(dropBoxPropsMapConfig.get('ruComponentType').currentValue)
                                 ">
                         <p>Отчистить выбранные параметры</p>
                     </div>

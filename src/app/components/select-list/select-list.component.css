@@ -1,23 +1,5 @@
-select,
-::picker(select) {
-    font-size: max(.8vw, 8px);
-}
-
-* {
-    box-sizing: border-box;
-}
-
 p {
     display: flex;
-}
-
-label {
-    width: fit-content;
-    align-self: center;
-    padding: 0;
-    margin: 0;
-    font-size: max(1vw, 10px);
-    padding-right: 1vw;
 }
 
 .select-wrapper {
@@ -30,56 +12,10 @@ label {
     display: block;
 }
 
-select {
-    padding: .5vw;
-    background: #eeeeee;
-    transition: 0.4s;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    border-radius: .25vw;
-    margin: 0;
-    width: 100%;
-    border: .1vw solid lightgray;
-    text-overflow: ellipsis;
-}
-
-select:hover,
-select:focus {
-    background: #dddddd;
-}
-
-option {
-    display: flex;
-    justify-content: flex-start;
-    box-sizing: border-box;
-    background: #eeeeee;
-    transition: 0.4s;
-}
-
-option:first-of-type {
-    border-radius: .1vw .1vw 0 0;
-}
-
-option:last-of-type {
-    border-radius: 0 0 .1vw .1vw;
-}
-
-option:not(option:last-of-type) {
-    border-bottom: none;
-}
-
-option:nth-of-type(odd) {
-    background: white;
-}
-
 option:checked {
     font-weight: bold;
 }
 
-
-select:focus {
-    outline: none;
+.option p {
+    padding: .5vw;
 }
-
-input {margin-left: 0vw;}

@@ -1,6 +1,8 @@
 <div class="chart-wrapper" *ngIf="chartOptions">
-    <p *ngIf="!noHeader" >{{chartName}}</p>
+    <p *ngIf="!noHeader" [ngStyle]="{'font-size': paragraphSize ?? 'max(1vw, 10px)'}" >{{paragraphValue}}</p>
     <apx-chart 
+    [ngStyle]="{ width: innerWidthPrecent ? innerWidthPrecent + '%' : '60%' }"
+    class="apexcharts-bar-area"
     #apexChart
     [series]="chartOptions.series!" 
     [chart]="chartOptions.chart!" 
@@ -16,6 +18,5 @@
     [legend]="chartOptions.legend!"
     [tooltip]="chartOptions.tooltip!"
   ></apx-chart>
-  <!-- <button *ngIf="chartOptions && chartOptions.back" (click)="getBack()"  [disabled]="disabled" class="def">Назад</button> -->
 </div>
 

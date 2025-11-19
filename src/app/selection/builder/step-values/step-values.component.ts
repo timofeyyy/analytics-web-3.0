@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { DropboxProviderComponent } from "../../../components/dropbox-provider/dropbox-provider.component";
 import { ChartTemplateComponent } from "../../../components/charts/chart-template.component";
 import { NgIf } from '@angular/common';
@@ -8,7 +8,7 @@ import { existInColumnsMax, existInColumnsMin } from '../../../../utils/static-d
 import { ErrorStepHandling } from '../../../../utils/types/app';
 import { resetWarning, selectionStorage, setWarning } from '../../../../utils/redux/selection';
 
-@Component({ 
+@Component({
   selector: 'app-step-values',
   imports: [DropboxProviderComponent, ChartTemplateComponent, NgIf, ParameterValueCountTableComponent],
   templateUrl: './step-values.component.html',
@@ -16,17 +16,44 @@ import { resetWarning, selectionStorage, setWarning } from '../../../../utils/re
 
 })
 export class StepValuesComponent implements OnChanges, ErrorStepHandling {
+
+  @ViewChildren(ParameterValueCountTableComponent)
+  stepValues!: QueryList<ParameterValueCountTableComponent>;
+
+  // triggerRefreshAll(): void {
+  //   // this.initSelections()
+  //   console.log(this.manufacturersStat.length, this.parameterStat.length)
+  //   // this.stepValues.get(0)?.initOriginalRecords(this.manufacturersStat)
+  //   // this.stepValues.get(1)?.initOriginalRecords(this.parameterStat)
+  // }
+
   findError(): void {
     const val = this.dropBoxPropsMapConfig.get(this.columnName).currentValue
-     if (val !== AppEnum.ALL && val) {
+    if (val !== AppEnum.ALL && val) {
       selectionStorage.dispatch(resetWarning(this.index))
     }
     else {
       selectionStorage.dispatch(setWarning([this.index, `Прежде чем перейти запроните значение параметра ${this.alias.get(this.columnName)}`]))
     }
   }
+  onSortDirectionChanged(entry: [string, string]) {
+    this.buildMainChart(entry[0], entry[1])
+
+  }
+  resetInput(): void {
+    this.queryObj.clear()
+    console.log(this.queryObj.size)
+    console.log(this.currentIndex)
+    console.log(this.columnName)
+
+    this.onParameterChnaged("")
+    this.obj = {}
+    this.stepValues.get(0)?.resetSearchedValue()
+    this.stepValues.get(1)?.resetSearchedValue()
+  }
   ngOnChanges(changes: SimpleChanges | void): void {
     if (this.currentIndex == this.index) {
+      console.log(this.currentIndex)
       // const queryObj = new Map()
       let currentValue = this.dropBoxPropsMapConfig.get(this.columnName).currentValue
       this.inputValue = currentValue
@@ -34,37 +61,57 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
         this.currentSelection = Array.from(this.prevSelection)
         this.findError()
       }
-      let enComponentType: string = this.dropBoxPropsMapConfig.get('enComponentType').currentValue
-      let storageCopy = Object.fromEntries(this.storage)
-      if (!Object.entries(this.obj).length) {
-        for (const key in storageCopy) {
-          if (!this.obj[key])
-            this.obj[key] = []
-          if (enComponentType.toLowerCase() === key.toLowerCase()) {
-            let prevSelection = this.prevSelection
-            if (this.obj[key].length !== prevSelection.length) {
-              this.obj[key] = this.prevSelection
-            }
-          }
-        }
-      }
-      for (const key in storageCopy) {
-        if (enComponentType.toLowerCase() === key.toLowerCase()) {
-          this.parameterStat = this.prevSelection
-          this.manufacturersStat = this.currentSelection
-        }
-      }
+      this.initSelections()
+      // console.log(this.parameterStat, this.manufacturersStat)
+      console.log(this.queryObj.size, this.manufacturerName, this.manufacturerName !== this.prevManufacturerName)
       if (!this.queryObj.size || this.manufacturerName !== this.prevManufacturerName) {
-        this.queryObj
-          .set('ruComponentType', this.dropBoxPropsMapConfig.get('ruComponentType').currentValue)
-          .set('param', this.columnName)
-          .set('alias', this.alias.get(this.columnName)!)
-        if (this.manufacturerName) {
-          this.queryObj.set('manufacturerName', this.manufacturerName)
-        }
+        this.buildMainChart()
         this.prevManufacturerName = this.manufacturerName
       }
     }
+  }
+
+  initSelections(): void {
+    let enComponentType: string = this.dropBoxPropsMapConfig.get('enComponentType').currentValue
+    let storageCopy = Object.fromEntries(this.storage)
+    if (!Object.entries(this.obj).length) {
+      for (const key in storageCopy) {
+        if (!this.obj[key])
+          this.obj[key] = []
+        if (enComponentType.toLowerCase() === key.toLowerCase()) {
+          let prevSelection = this.prevSelection
+          if (this.obj[key].length !== prevSelection.length) {
+            this.obj[key] = this.prevSelection
+          }
+        }
+      }
+    }
+    for (const key in storageCopy) {
+      if (enComponentType.toLowerCase() === key.toLowerCase()) {
+        this.parameterStat = this.prevSelection
+        this.manufacturersStat = this.currentSelection
+        this.stepValues.get(0)?.initOriginalRecords(this.manufacturersStat)
+        this.stepValues.get(1)?.initOriginalRecords(this.parameterStat)
+        break
+      }
+    }
+  }
+
+  buildMainChart(sortParam: string = AppEnum.AMOUNT, sortDirectopn: string = AppEnum.ASC): void {
+    this.queryObj = new Map()
+      .set('ruComponentType', this.dropBoxPropsMapConfig.get('ruComponentType').currentValue)
+      .set('enComponentType', this.dropBoxPropsMapConfig.get('enComponentType').currentValue)
+      .set('param', this.columnName)
+      .set('all', '1')
+      .set('bar-x-labels', '1')
+      .set('alias', this.alias.get(this.columnName)!)
+      .set('x-labels-size', 'max(0.8vw, 8px)')
+      .set('y-labels-size', '0.75vw')
+      .set("sortParam", sortParam).set("sortDirectopn", sortDirectopn)
+    if (this.manufacturerName) {
+      this.queryObj.set('manufacturerName', this.manufacturerName)
+    }
+    console.log(this.queryObj)
   }
 
   @Input()
@@ -111,12 +158,15 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
       for (const element of this.prevSelection) {
         let obj = element
         if (
-          (obj[`${this.columnName}`] === '' && currentValue.replace(AppEnum.NOTDEFINED, '') == `${obj[`${this.columnName}`]}`) ||
-          (obj[`${this.columnName}`] === null && currentValue.replace(AppEnum.NOTDEFINED, null) == `${obj[`${this.columnName}`]}`) ||
-          ((existInColumnsMin(this.columnName) && !isNaN(Number(currentValue)) && obj[`${this.columnName}`] >= currentValue) &&
-          (existInColumnsMax(this.columnName) && !isNaN(Number(currentValue)) && obj[`${this.columnName}`] <= currentValue)) ||
-          (`${obj[`${this.columnName}`]}`.replaceAll(' ', '').replaceAll('\n', '') == `${currentValue}`.replaceAll(' ', '').replaceAll('\n', '')) ||
-          (obj[`${this.columnName}`] == Number(currentValue))
+          (obj[`${this.columnName}`]) &&
+          (
+            (obj[`${this.columnName}`] === '' && currentValue.replace(AppEnum.NOTDEFINED, '') == `${obj[`${this.columnName}`]}`) ||
+            (obj[`${this.columnName}`] === null && currentValue.replace(AppEnum.NOTDEFINED, null) == `${obj[`${this.columnName}`]}`) ||
+            ((existInColumnsMin(this.columnName) && !isNaN(Number(currentValue)) && obj[`${this.columnName}`] >= currentValue) &&
+              (existInColumnsMax(this.columnName) && !isNaN(Number(currentValue)) && obj[`${this.columnName}`] <= currentValue)) ||
+            (`${obj[`${this.columnName}`]}`.replaceAll(' ', '').replaceAll('\n', '') == `${currentValue}`.replaceAll(' ', '').replaceAll('\n', '')) ||
+            (obj[`${this.columnName}`] == Number(currentValue))
+          )
         ) {
           this.currentSelection.push(element)
         }
@@ -137,13 +187,14 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
   inputDisabled!: boolean
   inputValue!: string
   onParameterChnaged(value: string): void {
-    if(value)
+    if (value)
       value = value.toString()
     this.inputDisabled = (value === AppEnum.NOTDEFINED && this.inputValue != value)
     // this.inputValue = (value === this.inputValue ? "" : value)
     this.inputValue = value
     this.dropBoxPropsMapConfig.get(this.columnName).currentValue = this.inputValue
     this.onCurrentDropBoxNameChnaged({ propsMap: this.dropBoxPropsMapConfig, currentName: undefined })
+    // this.triggerRefreshAll()
   }
 
   changeDisabledState(): void {

@@ -4,7 +4,7 @@ import manufacturerNameFilters from '../../../utils/fnc1/filters/manufacturer-na
 import componentKindFilters from '../../../utils/fnc1/filters/component-kind';
 import componentTypeFilters from '../../../utils/fnc1/filters/component-type';
 import { NgFor, NgIf } from '@angular/common';
-import { ApiService } from '../../../services/api.services1';
+import { ApiService } from '../../../services/api.services';
 import { HttpClientModule } from '@angular/common/http';
 import { DropboxProviderComponent } from "../dropbox-provider/dropbox-provider.component";
 import { Router } from '@angular/router';

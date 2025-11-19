@@ -7,22 +7,28 @@
 }
 
 .workspace .workspace-header .item-list {
-    width: 8vw;
+    width: 12vw;
 }
 
 .btn-wapper {
     width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .btn-wapper button {
-    display: flex;
-    justify-self: flex-end;
+    margin-left: 1vw;
 }
 
 .workspace .content {
-    display: flex;
     box-sizing: border-box;
     height: 87%;
+    display: flex;
+    width: 100%;
+}
+
+.workspace .content .analytics {
+    width: 100%;
 }
 
 main {
@@ -34,12 +40,12 @@ main {
     box-sizing: border-box;
     height: 100%;
     padding: 1vw;
-    width: 80%;
+    width: 85%;
 }
 
 aside {
     background-color: white;
-    width: 20%;
+    width: 15%;
     border-left: .1vw solid lightgray;
 }
 

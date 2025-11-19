@@ -1,0 +1,7 @@
+<h2>{{label}}</h2>
+<div class="drop-box" class="multiple-select-list">
+    <div class="option" *ngFor="let val of values; let i = index" >
+        <input type="checkbox" [checked]="isChecked(val)" (click)="onValueSelected($event, val)" />
+        <p>{{val}}</p>
+    </div>
+</div>

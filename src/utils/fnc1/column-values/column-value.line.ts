@@ -13,6 +13,24 @@ const getColumnValueLineChartOptions = (data: any, query: Map<string, string>): 
             stacked: true,
             zoom: {
                 enabled: true
+            },
+              events: {
+                mounted: function (chartCtx) {
+                    const clips = chartCtx.el.querySelectorAll("clipPath");
+                    clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
+                    const chartEl = chartCtx.el;
+                    const toolbarMenu = chartEl.querySelector(".apexcharts-menu");
+                    if (!toolbarMenu) return;
+                    document.addEventListener("click", (e) => {
+                        const target = e.target as HTMLElement;
+                        if (
+                            !toolbarMenu.contains(target) &&
+                            !target.closest(".apexcharts-toolbar")
+                        ) {
+                            toolbarMenu.classList.remove("apexcharts-menu-open");
+                        }
+                    });
+                },
             }
         },
         xaxis: {
@@ -46,19 +64,15 @@ const getColumnValueLineChartOptions = (data: any, query: Map<string, string>): 
     const map = new Map();
     const paramAlias = query.get('alias')
     const param = query.get('param')
-    const ruComponentType = query.get('ruComponentType')
+    const enComponentType = query.get('enComponentType')
     const paramValue = query.get('paramValue')
 
-    if (param && paramValue && ruComponentType) {
+    if (param && paramValue && enComponentType) {
         apexChartData.series = [{
             name: paramAlias,
             data: []
         }]
-        for (const key in data) {
-            for (const obj of data[key]) {
-                if (obj.ruComponentType.toLowerCase() != ruComponentType.toLowerCase()) {
-                    break;
-                }
+         for (const obj of data[enComponentType.toLowerCase()]) {
                 if (obj[param] && `${obj[param]}` === paramValue) {
                
                     const date = new Date(obj.date)
@@ -79,7 +93,6 @@ const getColumnValueLineChartOptions = (data: any, query: Map<string, string>): 
                     map.set(dateStr, quantity)
                 }
             }
-        }
         const categories = ((apexChartData as ChartOptions).xaxis.categories as Array<string>)
         const series = apexChartData.series![0]
         for (const category of categories) {
