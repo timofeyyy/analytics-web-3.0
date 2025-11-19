@@ -151,7 +151,7 @@ export class SelectionMainComponent implements OnInit {
         })
       )
       .subscribe((res: any) => {
-        // console.log(res[1])
+        // // console.log(res[1])
         this.sroragePriorities = res[1] ?? {}
         this.storageAll = res[0]
         this.storageFiltered = res[1]
@@ -164,7 +164,7 @@ export class SelectionMainComponent implements OnInit {
           this.prioritiesBuffers.push([pr[0], storage])
         }
         // for (const p of this.prioritiesBuffers) {
-        //   console.log(p[1])
+        //   // console.log(p[1])
         // }
         const isMain = !this.querySettings.isPriorityWindow()
         if (!isMain) {
@@ -246,7 +246,7 @@ export class SelectionMainComponent implements OnInit {
       this.activeColumns.currentSpaces = Array.from(columns)
       this.activeColumns.orig = Array.from(columns)
     }
-    // console.log(this.storageFiltered, this.prioritiesChartsEntries)
+    // // console.log(this.storageFiltered, this.prioritiesChartsEntries)
     this.setSortingParam()
     this.columns = Array.from(columns)
     this.preparedRows = Array.from(this.all.map((val) => this.getObjEntry(val)))
@@ -287,18 +287,18 @@ export class SelectionMainComponent implements OnInit {
     this.prioritiesCharts[actualParam] = data
     // let repordData = Object.assign({}, data)
     const builderPrioritiesCharts: any = {}
-    // console.log(this.prioritiesCharts)
+    // // console.log(this.prioritiesCharts)
     for (const key in this.prioritiesCharts) {
       builderPrioritiesCharts[key] = Object.assign({}, this.prioritiesCharts[key])
       builderPrioritiesCharts[key]['mainChartQuery'] = new Map(this.prioritiesCharts[key]['mainChartQuery']).set('param', lastColumnParam)
       builderPrioritiesCharts[key]['mainChartQuery'].set('x-labels-size', '2vw')
         .set('y-labels-size', '2vw')
     }
-    console.log(this.prioritiesCharts)
-    // console.log(repordData)
+    // console.log(this.prioritiesCharts)
+    // // console.log(repordData)
     this.prioritiesChartsEntries = Object.entries(builderPrioritiesCharts)
-    // console.log(builderPrioritiesCharts)
-    // console.log(this.prioritiesChartsEntries, data)
+    // // console.log(builderPrioritiesCharts)
+    // // console.log(this.prioritiesChartsEntries, data)
   }
 
   setSortingParam(): void {

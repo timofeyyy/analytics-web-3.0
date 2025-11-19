@@ -27,7 +27,7 @@ export class PageLabelsComponent implements OnChanges {
     this.from = 0
     this.last = Math.ceil(this.records.length / this.rowsCount) === 0 ? 0 : Math.ceil(this.records.length / this.rowsCount) - 1
     if (query.get('page')) {
-      // console.log(query.get('page'))
+      // // console.log(query.get('page'))
       if (!isNaN(parseInt(query.get('page') as string))) {
         const value = parseInt(query.get('page') as string)
         if (Math.ceil(this.records.length / this.rowsCount) < value) {

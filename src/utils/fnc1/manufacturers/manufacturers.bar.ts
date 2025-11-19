@@ -14,7 +14,7 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
             zoom: { enabled: true },
             events: {
                 mounted: function (chartCtx) {
-                    console.log("sdsdsdsdsdsdsdsd")
+                    // console.log("sdsdsdsdsdsdsdsd")
                     const clips = chartCtx.el.querySelectorAll("clipPath");
                     clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
                     const chartEl = chartCtx.el;
@@ -158,7 +158,7 @@ export default getManufacturersChartOptionBar1;
 
 
 // const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Partial<ChartOptions> => {
-//     // console.log(data)
+//     // // console.log(data)
 //     let apexChartData: Partial<ChartOptions> = {
 //         series: [],
 //         dataLabels: {
@@ -242,7 +242,7 @@ export default getManufacturersChartOptionBar1;
 //             map.get(ruComponentType)[obj.manufacturerName] += 1
 //         }
 //     }
-//     console.log(map);
+//     // console.log(map);
 //     (apexChartData as ChartOptions).series.forEach((seriesItem: any) => {
 //         let sum: number = 0;
 //         for (const key in map.get(seriesItem.name)) {
@@ -256,7 +256,7 @@ export default getManufacturersChartOptionBar1;
 //         })
 //     })
 //     apexChartData.values = apexChartData.xaxis?.categories;
-//     console.log(apexChartData)
+//     // console.log(apexChartData)
 //     return apexChartData;
 // }
 

@@ -84,7 +84,7 @@ export class HomeComponent {
   }
 
   buildChartQueryManufacturers(sortParam: string = AppEnum.AMOUNT, sortDirectopn: string = AppEnum.ASC): void {
-    console.log(sortParam, sortDirectopn)
+    // console.log(sortParam, sortDirectopn)
     this.chartQueryManufacturers = new Map().set("componentTypes", this.cts.getComponentTypes()).set("sortParam", sortParam).set("sortDirectopn", sortDirectopn)
   }
   buildChartQueryStat(): void {
@@ -92,10 +92,10 @@ export class HomeComponent {
   }
 
   getSafeUrl(ruComponentType: string): any {
-    // console.log(ruComponentType)
+    // // console.log(ruComponentType)
     const componentType: any = this.cts.getComponentTypeByRu(ruComponentType)
 
-    // console.log(componentType)
+    // // console.log(componentType)
     // const componentType: any = this.cts.getComponentTypes().find((val: any) => val.ruComponentType === ruComponentType)
     return this.sanitizer.bypassSecurityTrustResourceUrl(`component-analytic/${componentType.enComponentType}`)
   }

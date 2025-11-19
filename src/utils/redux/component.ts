@@ -43,7 +43,7 @@ const componentSlice = createSlice({
     setComponentSchema: (state: any, action: PayloadAction<any>) => {
       const schema: any = {}
       const obj = action.payload
-      // console.log(obj)
+      // // console.log(obj)
       // const componentTypes = action.payload[1]
       for (const type in obj) {
         const example: any = obj[type][0]
@@ -51,7 +51,7 @@ const componentSlice = createSlice({
         schema[type] = []
         for (const key in example) {
           if(type == "diod") {
-          // console.log(key)
+          // // console.log(key)
           }
           if (!isException(key)) {
             (schema[type] as string[]).push(key)
@@ -59,7 +59,7 @@ const componentSlice = createSlice({
           }
         }
       }
-      // console.log(schema)
+      // // console.log(schema)
       state.componentSchema = schema
     }
   },

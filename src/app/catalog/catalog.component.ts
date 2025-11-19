@@ -100,7 +100,7 @@ export class CatalogComponent implements OnInit {
   selectKeyAndValues(ruComponentType: string): void {
     this.selectedKeysValues = []
     const currentValues = catalogStorage.getState().currentValues
-    // console.log(ruComponentType, currentValues)
+    // // console.log(ruComponentType, currentValues)
     for (const _ruComponentType in currentValues) {
       if (_ruComponentType.toLowerCase() === ruComponentType.toLowerCase()) {
         for (const key in (currentValues as any)[_ruComponentType]) {
@@ -169,7 +169,7 @@ export class CatalogComponent implements OnInit {
       if (ruComponentType) {
         const columns = ['manufacturerName', 'ruComponentKind', ...this.columns]
         for (const col of columns) {
-          // console.log(payload.has(col), columns, payload)
+          // // console.log(payload.has(col), columns, payload)
           if (payload.has(col)) {
             catalogStorage.dispatch(setCurrentValue([ruComponentType, col, payload.get(col) as string]))
           }
@@ -329,14 +329,14 @@ export class CatalogComponent implements OnInit {
   }
 
   getTabelColumns(ruComponentType: string): string[] {
-    // console.log(ruComponentType)
+    // // console.log(ruComponentType)
     const componentType = this.cts.getComponentTypeByRu(ruComponentType)
     const schema: Map<string, string[]> = new Map(Object.entries(componentStorage.getState().componentSchema as []))
     return schema.get(componentType!.enComponentType.toLowerCase())!
   }
   onTypeChangedUpdate(ruComponentType: string): void {
     const componentType = this.cts.getComponentTypeByRu(ruComponentType)
-    // console.log(ruComponentType, componentType)
+    // // console.log(ruComponentType, componentType)
     if (componentType) {
       this.onTypeChanged(componentType!)
     }
@@ -345,7 +345,7 @@ export class CatalogComponent implements OnInit {
     }
   }
   onTypeChanged(componentType: ComponentTypes): void {
-    // console.log(componentType)
+    // // console.log(componentType)
     let exceptions = new Map()
     let currentValues: any = catalogStorage.getState().currentValues
     this.resultBuffer = [...this.resultBuffer]
@@ -375,9 +375,9 @@ export class CatalogComponent implements OnInit {
     );
     this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = componentType.ruComponentType
     let map = this.getSimpleKeyValueMap()
-    // console.log(map)
+    // // console.log(map)
     this.setQuery(map, 'replace').then((res) => {
-      // console.log(res)
+      // // console.log(res)
       this.apply(res)
     })
   }

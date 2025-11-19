@@ -103,7 +103,7 @@
                 <div class="panel-list">
                     <app-parameter-value-count-table class="records-wrapper" [all]="all" [aliasName]="'Количество'"
                         [parameter]="currentPropName" [parameterAlias]="alias ? alias.get(currentPropName)! : ''"
-                        [allowNull]="true" [noRedirect]="true" [firstSelectedDefault]="true"
+                        [allowNull]="false" [noRedirect]="true" [firstSelectedDefault]="true"
                         (onValueChanged)="onColumnValueChanged($event);" (onSortDirectionChanged)="onSortDirectionChanged($event);buildMainChart()" />
                 </div>
             </aside>

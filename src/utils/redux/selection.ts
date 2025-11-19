@@ -11,7 +11,7 @@ const selectionSlice = createSlice({
     },
     reducers: {
         move: (state: any) => {
-            // console.log(state.step, state.stepLength)
+            // // console.log(state.step, state.stepLength)
             for (let index = -state.step, i = 1; index < -state.step + state.stepLength + 1; index++, i++) {
                 let isReady: boolean = state.stepper[`step${i}`]?.isReady as boolean;
                 let warningMessage: string = state.stepper[`step${i}`]?.warningMessage as string;

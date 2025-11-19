@@ -82,16 +82,16 @@ export class ApiService {
 
     getQueryByPriorities(entype: string, columns: { ruVal: string, enVal: string }[], query: Map<string, any>): Observable<any> | null {
         let str = ''
-        // console.log(columns, query.keys)
+        // // console.log(columns, query.keys)
         for (const key of query.keys()) {
             var pair = columns.find(c => c.enVal.toLowerCase() == key.toLowerCase())
             if (pair) {
-                // console.log(query.get(key), AppEnum.NOTDEFINED, AppEnum.NOTDEFINED === query.get(key))
+                // // console.log(query.get(key), AppEnum.NOTDEFINED, AppEnum.NOTDEFINED === query.get(key))
                 str += `${key}=${query.get(key) === AppEnum.NOTDEFINED ? 'null' : query.get(key)}&`
             }
         }
         let url: string = `api/components/${entype.toLowerCase()}/priorities?${str}`
-        // console.log(url)
+        // // console.log(url)
 
         let obs: Observable<any> = this.sendGetReq(url);
         if (obs != null) {
@@ -107,7 +107,7 @@ export class ApiService {
             alias = query.get("alias")
         }
         let url: string = "api/components/all?"
-        console.log(url)
+        // console.log(url)
         let obs: Observable<any> = this.sendGetReq(url);
         if (obs != null) {
             return obs.pipe(map((res: any) => {

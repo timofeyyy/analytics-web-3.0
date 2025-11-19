@@ -98,9 +98,9 @@ export const chartOptionsData: ChartOptionsStorage = {
                   }
 
                   if (Array.isArray(parsedValue)) {
-                    // console.log(`${key} — это массив`);
+                    // // console.log(`${key} — это массив`);
                   } else if (typeof parsedValue === "object" && parsedValue !== null) {
-                    // console.log(`${key} — это объект`);
+                    // // console.log(`${key} — это объект`);
                   } else {
                     queryStr += `${key}=${value}&`;
                   }

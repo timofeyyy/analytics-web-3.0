@@ -12,7 +12,7 @@ const getComponentTypesStatChartOptionsDonut = (data: any, query: Map<string, an
             toolbar: { show: false },
              events: {
                 mounted: function (chartCtx) {
-                    console.log("asadsad")
+                    // console.log("asadsad")
                     const clips = chartCtx.el.querySelectorAll("clipPath");
                     clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
                     const chartEl = chartCtx.el;

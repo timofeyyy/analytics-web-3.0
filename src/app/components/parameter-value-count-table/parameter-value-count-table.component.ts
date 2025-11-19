@@ -43,10 +43,9 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
   ) { }
   ngOnInit(): void {
     this.initOriginalRecords(this.all)
-    console.log("init")
   }
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log(this.parameter, this.parameterCopy)
+    // // console.log(this.parameter, this.parameterCopy)
     // if (!this.parameter || this.parameterCopy != this.parameter) {
     // const clonedAll = JSON.parse(JSON.stringify(this.all))
     // const rows = gteParameterValueCountStat(clonedAll, this.parameter, this.allowNull) as any[]

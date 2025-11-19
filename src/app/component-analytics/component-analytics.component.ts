@@ -27,6 +27,8 @@ import { AppEnum } from '../../utils/enum/app.enum';
 })
 
 export class ComponentAnalyticsComponent implements OnInit, OnChanges {
+  allowNull:boolean = false
+  
   onSortDirectionChanged(entry: [string, string]) {
     this.sortParam =entry[0]
     this.sortDirectopn =entry[1]
@@ -34,7 +36,7 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   manufacturerName!: string
   onManufacturerSelected($event: string) {
     this.all = this.storage[this.componentType.enComponentType.toLowerCase()].filter((item: any) => item['manufacturerName'] == $event || $event == AppEnum.ALL)
-    console.log(this.all.length)
+    // console.log(this.all.length)
     if (this.pvct) {
       this.pvct.initOriginalRecords(this.all)
     }
@@ -83,7 +85,7 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.removeOnChange) {
       this.chain()
-      console.log(this.chartSectionName, this.removeOnChange)
+      // console.log(this.chartSectionName, this.removeOnChange)
     }
   }
 
@@ -96,7 +98,7 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
     this.loader = true
     of(null).pipe(
       concatMap(() => {
-        // console.log(this.storage['microchip'].length)
+        // // console.log(this.storage['microchip'].length)
         if (this.componentType) {
           return of(this.componentType)
         }
@@ -126,7 +128,7 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
         return this.api.getComponentsApiAll()
       }),
       concatMap((res: any) => {
-        // console.log(res, "-------------------------------")
+        // // console.log(res, "-------------------------------")
         if (!this.storage) {
           this.storage = res
         }
@@ -198,10 +200,10 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   sortDirectopn: string = AppEnum.ASC
   buildMainChart(): void {
     // .set('bar-x-labels', '1')
-    // console.log(this.storage, this.componentType.enComponentType.toLowerCase())
+    // // console.log(this.storage, this.componentType.enComponentType.toLowerCase())
     const amount = this.storage[this.componentType.enComponentType.toLowerCase()].length
     this.mainChartQuery = new Map()
-      .set("all", "1")
+      .set("all", this.allowNull ? "1" : "0")
       .set('x-labels-size', this.xLabelsSize)
       .set('y-labels-size', this.yLabelsSize)
       .set("param", this.currentPropName)
@@ -210,7 +212,8 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
       .set("manufacturerName", this.manufacturerName)
       .set("amount", amount)
       .set("sortParam", this.sortParam).set("sortDirectopn", this.sortDirectopn)
-    // console.log(this.storage)
+    // // console.log(this.storage)
+    // console.log(this,this.mainChartQuery)
     this.onChartChange.emit({
       mainChartQuery: this.mainChartQuery,
       chartName: this.chartSectionName,

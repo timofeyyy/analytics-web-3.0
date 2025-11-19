@@ -32,7 +32,7 @@ export class ItemInfoTemplateComponent implements OnInit {
     const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
     const enComponentType = query.get("enComponentType")
     const id = parseInt(query.get("id") as string)
-    // console.log(enComponentType, id)
+    // // console.log(enComponentType, id)
     forkJoin([
       this.api.getAlias(),
       this.api.getComponent(enComponentType as string, id)

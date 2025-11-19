@@ -47,7 +47,7 @@ const getComponentTypesStat = (data: any, ru: boolean, componentTypes: Component
                 procentComparedToComponentTypes: Number((manufacturers[name].procentComparedToComponentTypes * 100 / object[key].countAll).toFixed(1))
             }
         }
-        // console.log(new Map(Object.entries(manufacturers)))
+        // // console.log(new Map(Object.entries(manufacturers)))
         let obj: ComponentTypeStatistic = {
             procentAll: Number(((object[key].countAll * 100) / summary).toFixed(1)),
             countAll: object[key].countAll,

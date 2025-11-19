@@ -8,7 +8,7 @@ import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar"
 //   const xLabelSize = query.get('x-labels-size')
 //   const sortParam = query.get("sortParam")
 //   const sortDirection = query.get("sortDirectopn")
-//   console.log(query)
+//   // console.log(query)
 //   let apexChartData: Partial<ChartOptions> = {
 //     series: [],
 //     dataLabels: {
@@ -77,7 +77,7 @@ import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar"
 //   const manufacturerName = query.get('manufacturerName')
 //   const enComponentType = query.get('enComponentType')
 //   const all = query.get('all')
-//   // console.log(enComponentType)
+//   // // console.log(enComponentType)
 //   if (param && enComponentType) {
 //     const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
 //     for (const obj of sortedData as any) {
