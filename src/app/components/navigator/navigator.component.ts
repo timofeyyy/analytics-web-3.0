@@ -13,7 +13,7 @@ import { QuerySettingsService } from '../../../services/query-settings.service';
 export class NavigatorComponent implements OnInit {
   openSelectionPage() {
     this.querySettings.redirectSelectionPage().then(res => {
-      if(!res) this.router.navigate(['/selection-main']) 
+      if(!res) this.router.navigate(['/selection-priorities']) 
     })
   }
   isOpen!: boolean

@@ -22,7 +22,7 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
 
   // triggerRefreshAll(): void {
   //   // this.initSelections()
-  //   // console.log(this.manufacturersStat.length, this.parameterStat.length)
+  //   // // console.log(this.manufacturersStat.length, this.parameterStat.length)
   //   // this.stepValues.get(0)?.initOriginalRecords(this.manufacturersStat)
   //   // this.stepValues.get(1)?.initOriginalRecords(this.parameterStat)
   // }
@@ -42,9 +42,9 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
   }
   resetInput(): void {
     this.queryObj.clear()
-    // console.log(this.queryObj.size)
-    // console.log(this.currentIndex)
-    // console.log(this.columnName)
+    // // console.log(this.queryObj.size)
+    // // console.log(this.currentIndex)
+    // // console.log(this.columnName)
 
     this.onParameterChnaged("")
     this.obj = {}
@@ -53,7 +53,7 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
   }
   ngOnChanges(changes: SimpleChanges | void): void {
     if (this.currentIndex == this.index) {
-      // console.log(this.currentIndex)
+      // // console.log(this.currentIndex)
       // const queryObj = new Map()
       let currentValue = this.dropBoxPropsMapConfig.get(this.columnName).currentValue
       this.inputValue = currentValue
@@ -62,8 +62,8 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
         this.findError()
       }
       this.initSelections()
-      // // console.log(this.parameterStat, this.manufacturersStat)
-      // console.log(this.queryObj.size, this.manufacturerName, this.manufacturerName !== this.prevManufacturerName)
+      // // // console.log(this.parameterStat, this.manufacturersStat)
+      // // console.log(this.queryObj.size, this.manufacturerName, this.manufacturerName !== this.prevManufacturerName)
       if (!this.queryObj.size || this.manufacturerName !== this.prevManufacturerName) {
         this.buildMainChart()
         this.prevManufacturerName = this.manufacturerName
@@ -111,7 +111,7 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
     if (this.manufacturerName) {
       this.queryObj.set('manufacturerName', this.manufacturerName)
     }
-    // console.log(this.queryObj)
+    // // console.log(this.queryObj)
   }
 
   @Input()

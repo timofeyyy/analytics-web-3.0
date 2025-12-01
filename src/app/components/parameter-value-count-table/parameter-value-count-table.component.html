@@ -1,18 +1,21 @@
 <section class="records" [ngStyle]="{'border-radius': borderRadius}">
-     <div class="header">
+    <div class="header">
         <div class="block">
-            <div class="search">
+            <app-select-list *ngIf="componentTypeLabels && componentTypeLabels.length" class="block-item" [values]="componentTypeLabels"
+                (onValueChanged)="onComponentTypeSelected($event)" />
+            <div class="search block-item">
                 <input type="text" [value]="searchValue" [placeholder]="parameterAlias" (input)="search($event)">
             </div>
-            <app-record-sorting [rows]="rows" (onSortDirectionChanged)="sortDirectionChanged($event)" class="record-sorting"/>
+            <app-record-sorting [rows]="rows" (onSortDirectionChanged)="sortDirectionChanged($event)"
+                class="record-sorting block-item" />
         </div>
         <div class="block" [style]="{'display':'flex'}">
             <p>Кол-во компонентов</p>
         </div>
     </div>
     <div class="view">
-        <div class="row layout" *ngFor="let row of rows" (click)="noRedirect ? getValue(row.value, true) : openCatalog(row.value)" >
-            <!-- [ngClass]="{activated: row.value == currentValue }" -->
+        <div class="row layout" *ngFor="let row of rows"
+            (click)="noRedirect ? getValue(row.value, true) : openCatalog(row.value)">
             <div class="col">
                 <p>{{row.value}}</p>
             </div>

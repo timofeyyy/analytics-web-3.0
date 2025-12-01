@@ -9,6 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 })
 export class SelectListComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
+    // console.log("values", this.values)
     this.values = this.values.filter(val => val != undefined)
   }
   onValueSelected($event: any) {

@@ -8,7 +8,7 @@ import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar"
 //   const xLabelSize = query.get('x-labels-size')
 //   const sortParam = query.get("sortParam")
 //   const sortDirection = query.get("sortDirectopn")
-//   // console.log(query)
+//   // // console.log(query)
 //   let apexChartData: Partial<ChartOptions> = {
 //     series: [],
 //     dataLabels: {
@@ -77,7 +77,7 @@ import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar"
 //   const manufacturerName = query.get('manufacturerName')
 //   const enComponentType = query.get('enComponentType')
 //   const all = query.get('all')
-//   // // console.log(enComponentType)
+//   // // // console.log(enComponentType)
 //   if (param && enComponentType) {
 //     const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
 //     for (const obj of sortedData as any) {
@@ -134,7 +134,7 @@ const getColumnBarChartOptions = (data: any, query: Map<string, string>): Partia
   const xLabelSize = query.get('x-labels-size');
   const sortParam = query.get("sortParam");
   const sortDirection = query.get("sortDirectopn");
-
+  // // console.log(sortParam, sortDirection)
   let apexChartData: Partial<ChartOptions> = {
     series: [],
     dataLabels: { enabled: false },
@@ -207,7 +207,7 @@ const getColumnBarChartOptions = (data: any, query: Map<string, string>): Partia
 
   if (param && enComponentType) {
     let sortedData = [...(data[enComponentType.toLowerCase()] as any[])];
-    if (sortParam === "param") {
+    if (sortParam === AppEnum.PARAMETER) {
       sortedData.sort((a, b) => {
         const diff = (a[param] ?? 0) - (b[param] ?? 0);
         return sortDirection === AppEnum.ASC ? diff : -diff;

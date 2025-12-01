@@ -102,6 +102,7 @@
                 </div> -->
                 <div class="panel-list">
                     <app-parameter-value-count-table class="records-wrapper" [all]="all" [aliasName]="'Количество'"
+                        [componentTypes]="[componentType]"
                         [parameter]="currentPropName" [parameterAlias]="alias ? alias.get(currentPropName)! : ''"
                         [allowNull]="false" [noRedirect]="true" [firstSelectedDefault]="true"
                         (onValueChanged)="onColumnValueChanged($event);" (onSortDirectionChanged)="onSortDirectionChanged($event);buildMainChart()" />

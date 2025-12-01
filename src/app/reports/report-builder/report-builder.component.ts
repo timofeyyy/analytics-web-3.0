@@ -27,6 +27,8 @@ export class ReportBuilderComponent implements OnInit {
       this.prioritiesChartsEntries[index][1]['mainChartQuery'].set('image', chart[0])
     }
     this.loader = false
+    // console.log("loaded")
+    this.generate()
   }
 
   constructor(
@@ -48,12 +50,12 @@ export class ReportBuilderComponent implements OnInit {
     const reports: ChartBodyRequest[] = [];
     const formData = new FormData();
     const promises: Promise<any>[] = []
-    // // console.log(this.prioritiesChartsEntries)
+    // // // console.log(this.prioritiesChartsEntries)
     this.loader = true;
     this.prioritiesChartsEntries.forEach((priority, index) => {
       const base64 = priority[1]['mainChartQuery'].get('image');
 
-      // console.log(priority)
+      // // console.log(priority)
       const promise = this.base64ToBlob(base64).then((blob: any) => {
         formData.append('files', blob, `chart_${index}.png`);
       });

@@ -1,16 +1,24 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgClass, NgFor, NgStyle } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import gteParameterValueCountStat from '../../../utils/fnc1/other/paramter-value-count-stat.fnc';
 import { RecordSortingComponent } from "../record-sorting/record-sorting.component";
+import { ComponentTypes } from '../../../utils/types/app';
+import { SelectListComponent } from "../select-list/select-list.component";
+import { AppEnum } from '../../../utils/enum/app.enum';
 
 @Component({
   selector: 'app-parameter-value-count-table',
-  imports: [NgFor, NgStyle, RecordSortingComponent],
+  imports: [NgFor, NgIf, NgStyle, RecordSortingComponent, SelectListComponent],
   templateUrl: './parameter-value-count-table.component.html',
   styleUrls: ['./parameter-value-count-table.component.css', '../styles/input.css']
 })
 export class ParameterValueCountTableComponent implements OnChanges, OnInit {
+  onComponentTypeSelected(ruComponentType: string) {
+    this.currentComponentType = this.componentTypes.find(item => item.ruComponentType === ruComponentType)!
+    this.initOriginalRecords(this.all)
+    this.onComponentTypeChanged.emit(this.currentComponentType)
+  }
   sortDirectionChanged($event: [string, string]) {
     this.onSortDirectionChanged.emit($event)
   }
@@ -36,7 +44,12 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
   firstSelectedDefault!: boolean
   @Output()
   onSortDirectionChanged = new EventEmitter<[string, string]>()
-
+  @Output()
+  onComponentTypeChanged = new EventEmitter<ComponentTypes>()
+  @Input()
+  componentTypes!: ComponentTypes[]
+  componentTypeLabels!: string[]
+  currentComponentType!: ComponentTypes
   constructor(
     private router: Router,
     private route: ActivatedRoute
@@ -45,7 +58,11 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
     this.initOriginalRecords(this.all)
   }
   ngOnChanges(changes: SimpleChanges): void {
-    // // console.log(this.parameter, this.parameterCopy)
+    // if (this.componentTypes && this.componentTypes.length) {
+    //   this.componentTypeLabels = this.componentTypes.map(item => item.ruComponentType)
+    // }
+    // // console.log(this.componentTypeLabels)
+    // // // console.log(this.parameter, this.parameterCopy)
     // if (!this.parameter || this.parameterCopy != this.parameter) {
     // const clonedAll = JSON.parse(JSON.stringify(this.all))
     // const rows = gteParameterValueCountStat(clonedAll, this.parameter, this.allowNull) as any[]
@@ -58,7 +75,11 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
     // this.parameter = this.parameterCopy
   }
   initOriginalRecords(all: any): void {
-    const clonedAll = JSON.parse(JSON.stringify(all))
+     if (this.componentTypes && this.componentTypes.length) {
+      this.componentTypeLabels = []
+      this.componentTypeLabels = this.componentTypes.map(item => item.ruComponentType)
+    }
+    let clonedAll = JSON.parse(JSON.stringify(this.currentComponentType && this.currentComponentType.enComponentType != AppEnum.ALL ? (all as any[]).filter(item => item.ruComponentType === this.currentComponentType.ruComponentType) : all))
     const rows = gteParameterValueCountStat(clonedAll, this.parameter, this.allowNull) as any[]
     this.rows = [...rows]
     this.orig = [...rows]

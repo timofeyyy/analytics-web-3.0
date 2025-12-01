@@ -144,7 +144,7 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
                 continue
             }
             const first = entries[0]
-            // // console.log(first)
+            // // // console.log(first)
             // for (const element of entries) {
             //     if (element == firstValue) {
 

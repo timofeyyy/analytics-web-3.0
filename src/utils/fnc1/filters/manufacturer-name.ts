@@ -2,7 +2,7 @@ import { AppEnum } from "../../enum/app.enum"
 
 const manufacturerNameFilters = (props: any, all: any[]): string[] => {
     let ruComponentType: string | undefined = props.get('ruComponentType')?.currentValue ?? AppEnum.ALL
-    // console.log(ruComponentType)
+    // // console.log(ruComponentType)
     // let ruComponentKind: string | undefined = props.get('ruComponentKind')?.currentValue ?? AppEnum.ALL
     let values: string[] = [AppEnum.ALL]
     all.forEach((item: any) => {
@@ -16,7 +16,7 @@ const manufacturerNameFilters = (props: any, all: any[]): string[] => {
                 values.push(value)
         // }
     })
-    // console.log(values)
+    // // console.log(values)
     return values
 }
 

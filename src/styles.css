@@ -86,6 +86,14 @@ app-chart {
 
 .workspace-header .item-h {
     font-size: max(1vw, 10px);
+    /* width: 12vw; */
+    display: flex;
+    align-items: center;
+}
+
+.workspace-header .item-h img {
+    width: 1vw;
+    height: 1vw;
 }
 
 .workspace::-webkit-scrollbar {

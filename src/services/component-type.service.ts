@@ -15,7 +15,7 @@ export class ComponentTypeService {
     }
     getComponentTypeByRu(rutype: string): ComponentTypes | undefined {
         // const ruComponentType = query.get('ruComponentType')
-        // // console.log(ruComponentType, query.get('ruComponentType'))
+        // // // console.log(ruComponentType, query.get('ruComponentType'))
 
         return this._componentTypes.find(ct => ct.ruComponentType.toLowerCase() == `${rutype}`.toLowerCase())
     }

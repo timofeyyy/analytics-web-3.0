@@ -103,8 +103,10 @@
     text-align: end;
 }
 
-.record-sorting {
+/* .record-sorting {
     margin-left: 0.2vw;
+} */
+
+.block-item {
+    margin-right: 0.3vw;
 }
-
-

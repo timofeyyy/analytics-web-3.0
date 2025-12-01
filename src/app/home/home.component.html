@@ -5,6 +5,8 @@
     <div class="workspace">
         <header class="workspace-header">
             <p class="item item-h">Аналитика</p>
+            <app-select-list class="date-select" [values]="['За все время']"
+                (onValueChanged)="onDateSelected($event)" />
         </header>
         <main>
             <div class="main-view">
@@ -14,7 +16,7 @@
                             <p class="type">Тип Компонента</p>
                             <p class="manufacturer">Лидер в количественном производстве</p>
                         </div>
-                        <div class="records">
+                        <!-- <div class="records">
                             <div class="record" *ngFor="let component of componentTypesStat">
                                 <span class="type"> <a [href]="getSafeUrl(component[0])">{{component[0]}}</a>
                                     ({{component[1].countAll}})</span>
@@ -22,26 +24,30 @@
                                 <p class="manufacturer" [innerHTML]="displayManufacturers(component)">
                                 </p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="chart block">
                         <!-- <p>Количественная статистика номенклатуры производителей по типам компонентов</p> -->
-                        <app-chart *ngIf="chartQueryManufacturers" [all]="storage" [innerWidthPrecent]="70" [chartName]="'ruComponentType'"
-                            [reqName]="'components'" [typeName]="'bar'" [query]="chartQueryManufacturers" />
+                        <app-chart *ngIf="chartQueryManufacturers" [all]="storage" [innerWidthPrecent]="70"
+                            [chartName]="'ruComponentType'" [reqName]="'components'" [typeName]="'bar'"
+                            [query]="chartQueryManufacturers" />
                         <!-- <iframe src="chart/components/ruComponentType-next-chart/bar" frameborder="0"></iframe> -->
-                    </div> 
+                    </div>
                 </div>
                 <div class="bottom">
                     <div class="chart block">
                         <!-- <p>Соотношение типов компонентов к общему количеству ({{all.length}} шт)</p> -->
-                        <app-chart *ngIf="chartQueryStat"  [all]="storage" [innerWidthPrecent]="'unset'" [chartName]="'statistic-filters'"
-                            [reqName]="'components'" [typeName]="'donut'" [query]="chartQueryStat" />
+                        <app-chart *ngIf="chartQueryStat" [all]="storage" [innerWidthPrecent]="'unset'"
+                            [chartName]="'statistic-filters'" [reqName]="'components'" [typeName]="'donut'"
+                            [query]="chartQueryStat" />
 
                         <!-- <iframe src="chart/components/statistic-filters/donut" frameborder="0"></iframe> -->
                     </div>
                     <div class="list block">
-                        <app-parameter-value-count-table *ngIf="all.length" class="records-wrapper" [all]="all" [aliasName]="'Количество'"
-                            [parameter]="'manufacturerName'" [parameterAlias]="'Производитель'" [allowNull]="false" (onSortDirectionChanged)="onSortDirectionChanged($event)" />
+                        <app-parameter-value-count-table *ngIf="all.length" class="records-wrapper" [all]="all"
+                            [aliasName]="'Количество'" [parameter]="'manufacturerName'"
+                            [parameterAlias]="'Производитель'" [allowNull]="false"
+                            (onSortDirectionChanged)="onSortDirectionChanged($event)" />
                     </div>
                 </div>
             </div>

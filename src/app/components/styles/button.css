@@ -24,6 +24,13 @@ button {
     border: 0.1vw solid #7490f8;
 }
 
+.res {
+    background-color: white;
+    color: white;
+    border: 0.1vw solid #ff7e7e;
+    background: #ff7e7e;
+}
+
 
 .state-btn {
     background-color: white;
@@ -42,4 +49,10 @@ button {
 .state-btn:hover {
     background: rgba(51, 51, 51, 90%);
     color: white;
+}
+
+.i {
+    display: flex;
+    align-items: center;
+    
 }

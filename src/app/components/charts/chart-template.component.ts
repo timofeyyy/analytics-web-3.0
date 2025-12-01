@@ -57,7 +57,7 @@ export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit 
   onLabelChange: EventEmitter<string> = new EventEmitter()
 
   ngOnChanges(changes: SimpleChanges): void {
-    // // console.log(this.all, this.query, this.chart_name, this.type_name, this.req_name, this.alias)
+    // // // console.log(this.all, this.query, this.chart_name, this.type_name, this.req_name, this.alias)
     if (this.all) {
       this.getChartData(this.all, this.query, this.chartName, this.typeName)
     }
@@ -110,6 +110,7 @@ export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit 
         zoom: { enabled: true, autoScaleYaxis: false },
       }
     }
+    // // console.log(chartOptions)
 
     setTimeout(() => {
       this.paragraphValue = chartName

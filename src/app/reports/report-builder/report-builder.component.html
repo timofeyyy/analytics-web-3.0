@@ -1,20 +1,20 @@
 <div class="popup-window">
-    <main>
-        <section class="step">
-            <div class="head">
+    <!-- <main> -->
+        <!-- <section class="step"> -->
+            <!-- <div class="head">
                 <h1>Параметры протокола</h1>
             </div>
             <div class="body">
                 <div class="block ">
-                    <label>Параметры выбора компонентов:</label>
-                    <ul class="block-item view-panel">
+                    <label>Все параметры выбора компонентов:</label>
+                    <ul class="block-item">
                         <li class="value" *ngFor="let p of prioritiesChartsEntries; let i = index"><span>{{i + 1}}
                                 {{alias.get(p[0])}}</span>: {{p[1]['mainChartQuery'].get('priority')[1]}}</li>
                     </ul>
                 </div>
                 <div class="block ">
                     <label>Последние просмотренные графики:</label>
-                    <ol class="block-item view-panel">
+                    <ol class="block-item">
                         <ul class="records" *ngFor="let p of prioritiesChartsEntries; let i = index">
                             <li class="value">График к выборке {{i + 1}}:</li>
                             <li class="value">Тип графика: <span>{{getChartNameAlias(p[1]['typeName'])}}</span> </li>
@@ -22,19 +22,18 @@
                         </ul>
                     </ol>
                 </div>
-                <!-- <li class="block"></li> -->
-            </div>
+            </div> -->
             <div class="phantom" [style]="{'opacity': '0'}">
                 <app-chart *ngFor="let priorities of prioritiesChartsEntries; let i = index" [style]="{'height': '60vh'}" [innerWidthPrecent]="70"
                     [chartName]="priorities[1]['chartName']" [typeName]="priorities[1]['typeName']" [alias]="alias"
                     [query]="priorities[1]['mainChartQuery']" [all]="priorities[1]['resultBuffer']"
                     (onBlobLoaded)="onBlobLoaded($event)" />
             </div>
-        </section>
-        <div class="footer">
+        <!-- </section> -->
+        <!-- <div class="footer">
             <button class="rev" (click)="close()">Отмена</button>
             <button class="def" (click)="generate()">Сгенерировать</button>
-        </div>
-    </main>
+        </div> -->
+    <!-- </main> -->
 </div>
 <app-loader *ngIf="loader" />

@@ -13,6 +13,15 @@ import getComponentTypesStatChartOptionsDonut from "../fnc1/statistic/statistic.
 import { componentStorage } from "../redux/component"
 import { ChartOptions } from "../types/chart"
 
+
+export const colorTypes = [
+    { enComponentType: "microchip", color :"#008FFB"},
+    { enComponentType: "capacitor", color :"#00E396"},
+    { enComponentType: "diod", color :"#775DD0"},
+    { enComponentType: "resistor", color :"#FEB019"},
+    { enComponentType: "transistor", color :"#FF4560"},
+]
+
 interface ChartOptionsStorage {
   [endpoint: string]: {
     chartData: {
@@ -98,9 +107,9 @@ export const chartOptionsData: ChartOptionsStorage = {
                   }
 
                   if (Array.isArray(parsedValue)) {
-                    // // console.log(`${key} — это массив`);
+                    // // // console.log(`${key} — это массив`);
                   } else if (typeof parsedValue === "object" && parsedValue !== null) {
-                    // // console.log(`${key} — это объект`);
+                    // // // console.log(`${key} — это объект`);
                   } else {
                     queryStr += `${key}=${value}&`;
                   }

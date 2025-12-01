@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { LoaderComponent } from "../components/loader/loader.component";
 import { NavigatorComponent } from "../components/navigator/navigator.component";
 import { ApiService } from '../../services/api.services';
-import getComponentTypesStat, { ManufacturerStatistic, ComponentTypeStatistic } from '../../utils/fnc1/other/component-type-statistic';
+import getComponentTypesStat, { ManufacturerStatistic, ComponentTypeStatistic, ComponentTypePopup } from '../../utils/fnc1/other/component-type-statistic';
 import { catchError, concatMap, forkJoin, map } from 'rxjs';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,15 +14,19 @@ import { ComponentTypes } from '../../utils/types/app';
 import { ComponentTypeService } from '../../services/component-type.service';
 import { ChartTemplateComponent } from "../components/charts/chart-template.component";
 import { AppEnum } from '../../utils/enum/app.enum';
+import { SelectListComponent } from "../components/select-list/select-list.component";
 
 @Component({
   selector: 'app-home',
-  imports: [NavigatorComponent, HttpClientModule, LoaderComponent, NgStyle, NgIf, NgFor, ParameterValueCountTableComponent, ChartTemplateComponent],
+  imports: [NavigatorComponent, HttpClientModule, LoaderComponent, NgStyle, NgIf, ParameterValueCountTableComponent, ChartTemplateComponent, SelectListComponent],
   providers: [ApiService, ComponentTypeService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+onDateSelected($event: string) {
+throw new Error('Method not implemented.');
+}
   onSortDirectionChanged(entry: [string, string]) {
     this.buildChartQueryManufacturers(entry[0], entry[1])
   }
@@ -33,7 +37,7 @@ export class HomeComponent {
   all: any = []
   storage: any
   loader!: boolean
-  componentTypesStat!: [string, ComponentTypeStatistic][];
+  componentTypesStat!: [string, ComponentTypePopup][];
   navigation!: boolean
   chartQueryManufacturers!: Map<string, string>
   chartQueryStat!: Map<string, string>
@@ -48,6 +52,7 @@ export class HomeComponent {
   ngOnInit(): void {
     this.componentTypesStat = []
     this.getApi()
+    
     // this.navigation = this.isFullView()
   }
 
@@ -65,7 +70,7 @@ export class HomeComponent {
         })
       )
       .subscribe((res: any) => {
-        let map: Map<string, ComponentTypeStatistic> = getComponentTypesStat(res[0], true, res[1])
+        let map: Map<string, ComponentTypePopup> = getComponentTypesStat(res[0], true, res[1])
         this.storage = res[0]
         this.componentTypesStat = Array.from(map)
         this.cts.setComponentTypes(res[1])
@@ -84,7 +89,7 @@ export class HomeComponent {
   }
 
   buildChartQueryManufacturers(sortParam: string = AppEnum.AMOUNT, sortDirectopn: string = AppEnum.ASC): void {
-    // console.log(sortParam, sortDirectopn)
+    // // console.log(sortParam, sortDirectopn)
     this.chartQueryManufacturers = new Map().set("componentTypes", this.cts.getComponentTypes()).set("sortParam", sortParam).set("sortDirectopn", sortDirectopn)
   }
   buildChartQueryStat(): void {
@@ -92,10 +97,10 @@ export class HomeComponent {
   }
 
   getSafeUrl(ruComponentType: string): any {
-    // // console.log(ruComponentType)
+    // // // console.log(ruComponentType)
     const componentType: any = this.cts.getComponentTypeByRu(ruComponentType)
 
-    // // console.log(componentType)
+    // // // console.log(componentType)
     // const componentType: any = this.cts.getComponentTypes().find((val: any) => val.ruComponentType === ruComponentType)
     return this.sanitizer.bypassSecurityTrustResourceUrl(`component-analytic/${componentType.enComponentType}`)
   }

@@ -1,12 +1,16 @@
 import { AppEnum } from "../../enum/app.enum";
+import { colorTypes } from "../../static-data/chart-options";
 import { ComponentTypes } from "../../types/app";
 import { ChartOptions } from "../../types/chart";
+
 
 const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Partial<ChartOptions> => {
     const sortParam = query.get("sortParam")
     const sortDirection = query.get("sortDirectopn")
+    const enComponentType = query.get("enComponentType")
     let apexChartData: Partial<ChartOptions> = {
         series: [],
+        colors: [],
         dataLabels: { enabled: false },
         chart: {
             type: "bar",
@@ -14,7 +18,6 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
             zoom: { enabled: true },
             events: {
                 mounted: function (chartCtx) {
-                    // console.log("sdsdsdsdsdsdsdsd")
                     const clips = chartCtx.el.querySelectorAll("clipPath");
                     clips.forEach((clip: any) => clip.parentNode?.removeChild(clip));
                     const chartEl = chartCtx.el;
@@ -78,8 +81,15 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
 
     const map = new Map<string, Record<string, number>>();
     const componentTypes = query.get("componentTypes") as ComponentTypes[];
-
+    const colorObj: any = {}
     for (const key in data) {
+        if(enComponentType && enComponentType != AppEnum.ALL && key.toLowerCase() != enComponentType.toLowerCase()) {
+            continue
+        }
+        if(!colorObj[key]) {
+            colorObj[key] = colorTypes.find((colorType) => colorType.enComponentType == key)?.color
+        }
+
         const ruComponentType = componentTypes!.find(
             c => c.enComponentType.toLowerCase() == key.toLowerCase()
         )!.ruComponentType;
@@ -147,7 +157,7 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
         });
         seriesItem.data = newData;
     });
-
+    apexChartData.colors = Object.entries(colorObj).map(colorObj => colorObj[1]) as string[];
     (apexChartData as ChartOptions).xaxis!.categories = sortedManufacturers;
     apexChartData.values = sortedManufacturers;
 
@@ -158,7 +168,7 @@ export default getManufacturersChartOptionBar1;
 
 
 // const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Partial<ChartOptions> => {
-//     // // console.log(data)
+//     // // // console.log(data)
 //     let apexChartData: Partial<ChartOptions> = {
 //         series: [],
 //         dataLabels: {
@@ -242,7 +252,7 @@ export default getManufacturersChartOptionBar1;
 //             map.get(ruComponentType)[obj.manufacturerName] += 1
 //         }
 //     }
-//     // console.log(map);
+//     // // console.log(map);
 //     (apexChartData as ChartOptions).series.forEach((seriesItem: any) => {
 //         let sum: number = 0;
 //         for (const key in map.get(seriesItem.name)) {
@@ -256,7 +266,7 @@ export default getManufacturersChartOptionBar1;
 //         })
 //     })
 //     apexChartData.values = apexChartData.xaxis?.categories;
-//     // console.log(apexChartData)
+//     // // console.log(apexChartData)
 //     return apexChartData;
 // }
 

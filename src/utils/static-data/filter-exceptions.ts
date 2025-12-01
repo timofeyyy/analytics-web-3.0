@@ -8,7 +8,7 @@ const exceptions = [
     'componentName',
     'remark1',
     'remark2',
-    'date',
+    'insertion',
     'id'
 ]
 
