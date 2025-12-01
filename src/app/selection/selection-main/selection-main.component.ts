@@ -115,7 +115,7 @@ export class SelectionMainComponent implements OnInit {
             componentTypeRes = typeNames[0]
           }
           this.cts.setCurrentComponentType(componentTypeRes!)
-          return this.api.getColumns()
+          return this.api.getColumns(componentTypeRes?.enComponentType.toLowerCase())
         }),
         concatMap((allColumns: { [type: string]: Columns[] }) => {
           this.cts.setColumnsAll(allColumns)

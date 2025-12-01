@@ -54,6 +54,7 @@ export class ApiService {
     }
 
     getColumns(enType: string | void): Observable<any> {
+        console.log(enType)
         let url: string = `api/components${enType ? "/" + enType!.toLowerCase() : ''}/columns/all`
         let obs: Observable<any> = this.sendGetReq(url);
         if (obs != null) {

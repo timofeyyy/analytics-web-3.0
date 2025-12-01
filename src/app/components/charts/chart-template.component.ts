@@ -129,9 +129,13 @@ export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit 
   private onBlobLoaded: EventEmitter<any> = new EventEmitter()
   getChartBlob(): void {
     if (this.apexChart && this.query.get('priority')) {
-      this.apexChart.dataURI().then(({ imgURI }: any) => {
-        this.onBlobLoaded.emit([imgURI, this.query.get('priority')![0]])
-      });
+      const dataUri = this.apexChart.dataURI()
+      if (dataUri) {
+        dataUri.then(({ imgURI }: any) => {
+          this.onBlobLoaded.emit([imgURI, this.query.get('priority')![0]])
+        });
+      }
+
     }
   }
 }

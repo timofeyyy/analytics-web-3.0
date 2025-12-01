@@ -199,7 +199,7 @@
 .controllers .inputs input {
     margin-right: .5vw;
     width: 6vw;
-
+    font-size: max(.8vw, 8px);
 }
 
 .controllers .inputs label {
