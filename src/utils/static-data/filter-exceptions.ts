@@ -1,15 +1,18 @@
 const exceptions = [
-    'ruComponentType',
-    'enComponentType',
-    'ruComponentKind',
-    'enComponentKind',
-    'enTechnologyName',
-    'manufacturerName',
-    'componentName',
-    'remark1',
-    'remark2',
-    'insertion',
-    'id'
+    'RuComponentType',
+    'EnComponentType',
+    'RuComponentKind',
+    'EnComponentKind',
+    'EnTechnologyName',
+    'ManufacturerName',
+    'ComponentName',
+    'Remark1',
+    'Remark2',
+    'InsertionDate',
+    'ID',
+    'Kind',
+    'Technology',
+    'SpecificationDoc', 
 ]
 
 const isException = (column: string): boolean => {

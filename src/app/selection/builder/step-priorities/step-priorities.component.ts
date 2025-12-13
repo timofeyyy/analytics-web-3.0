@@ -37,7 +37,7 @@ export class StepPrioritiesComponent implements OnChanges, ErrorStepHandling {
   @Input()
   alias!: Map<string, string>
   @Input()
-  ruComponentType!: string
+  RuComponentType!: string
   @Input()
   columns!: string[]
   stateColumns: any[] = []
@@ -92,7 +92,7 @@ export class StepPrioritiesComponent implements OnChanges, ErrorStepHandling {
         }
       })
       this.stateColumns = []
-      const columns: string[] = prioritySchemaMap.get(this.ruComponentType)!
+      const columns: string[] = prioritySchemaMap.get(this.RuComponentType)!
       for (let i = 0; i < this.columns.length; i++) {
         let exist = false
         let priority = 0
@@ -101,7 +101,7 @@ export class StepPrioritiesComponent implements OnChanges, ErrorStepHandling {
           if (this.columns[i] === columns[j]) {
             exist = true
             break
-          }  
+          }
         }
         if (exist) {
           priority = columns.findIndex(c => c === this.columns[i])! + 1

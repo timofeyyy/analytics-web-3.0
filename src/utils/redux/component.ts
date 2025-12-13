@@ -47,15 +47,12 @@ const componentSlice = createSlice({
       // const componentTypes = action.payload[1]
       for (const type in obj) {
         const example: any = obj[type][0]
-        // schema[example.ruComponentType] = []
+        // schema[example.RuComponentType] = []
         schema[type] = []
         for (const key in example) {
-          if(type == "diod") {
-          // // // console.log(key)
-          }
           if (!isException(key)) {
             (schema[type] as string[]).push(key)
-            // (schema[example.ruComponentType] as string[]).push(key)
+            // (schema[example.RuComponentType] as string[]).push(key)
           }
         }
       }

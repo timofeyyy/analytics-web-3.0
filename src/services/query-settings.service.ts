@@ -40,8 +40,8 @@ export class QuerySettingsService {
 
     setQuery(query: Map<string, string>, queryParamsHandlingState: 'replace' | 'merge'): Promise<Map<string, string>> {
         const querysearchBuffer: Map<string, string | null> = query
-        if (querysearchBuffer.get('ruComponentType') === AppEnum.ALL) {
-          querysearchBuffer.set('ruComponentType', null)
+        if (querysearchBuffer.get('RuComponentType') === AppEnum.ALL) {
+          querysearchBuffer.set('RuComponentType', null)
         }
         return this.router.navigate([], {
           relativeTo: this.route,
@@ -49,8 +49,8 @@ export class QuerySettingsService {
           queryParamsHandling: queryParamsHandlingState,
           skipLocationChange: false,
         }).then(() => {
-          if (querysearchBuffer.get('ruComponentType') === null) {
-            querysearchBuffer.delete('ruComponentType')
+          if (querysearchBuffer.get('RuComponentType') === null) {
+            querysearchBuffer.delete('RuComponentType')
           }
           return querysearchBuffer as Map<string, string>
         });

@@ -29,19 +29,20 @@ import { AppEnum } from '../../utils/enum/app.enum';
 export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   @Input()
   allowNull:boolean = false
-  
+  @Input()
+  loadChartBlobs: boolean = false
   onSortDirectionChanged(entry: [string, string]) {
     this.sortParam =entry[0]
     this.sortDirectopn =entry[1]
   }
-  manufacturerName!: string
+  ManufacturerName!: string
   onManufacturerSelected($event: string) {
-    this.all = this.storage[this.componentType.enComponentType.toLowerCase()].filter((item: any) => item['manufacturerName'] == $event || $event == AppEnum.ALL)
+    this.all = this.storage[this.componentType.EnComponentType].filter((item: any) => item['ManufacturerName'] == $event || $event == AppEnum.ALL)
     // // console.log(this.all.length)
     if (this.pvct) {
       this.pvct.initOriginalRecords(this.all)
     }
-    this.manufacturerName = $event
+    this.ManufacturerName = $event
   }
 
   onChartNameSelected(alias: string) {
@@ -52,6 +53,8 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   onColumnValueChanged(value: string) {
     this.currentPropNameValue = `${value}`
   }
+  @Input()
+  destroy: boolean = false
 
   loader!: boolean
   columns: string[] = []
@@ -109,8 +112,8 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
           }),
           concatMap((params: any) => {
             let componentType
-            if (params.get('enComponentType')) {
-              componentType = this.cts.getComponentTypeByEn(params.get('enComponentType'));
+            if (params.get('EnComponentType')) {
+              componentType = this.cts.getComponentTypeByEn(params.get('EnComponentType'));
               this.cts.setCurrentComponentType(componentType!)
             }
 
@@ -125,7 +128,7 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
         if (this.storage) {
           return of(this.storage)
         }
-        return this.api.getComponentsApiAll()
+        return this.api.getComponentsAll()
       }),
       concatMap((res: any) => {
         if (!this.storage) {
@@ -162,14 +165,14 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   initData(): void {
 
     if (this.componentType && this.storage) {
-      this.all = this.storage[this.componentType.enComponentType.toLowerCase()]
+      this.all = this.storage[this.componentType.EnComponentType]
 
       this.manufacturers = []
       this.manufacturers.push(AppEnum.ALL)
       for (const item of this.all) {
-        const manufacturerName = item['manufacturerName']
-        if (!this.manufacturers.includes(manufacturerName)) {
-          this.manufacturers.push(manufacturerName)
+        const ManufacturerName = item['ManufacturerName']
+        if (!this.manufacturers.includes(ManufacturerName)) {
+          this.manufacturers.push(ManufacturerName)
         }
       }
       const sample = this.all[0]
@@ -200,16 +203,16 @@ export class ComponentAnalyticsComponent implements OnInit, OnChanges {
   buildMainChart(): void {
     // .set('bar-x-labels', '1')
     // console.log(this.allowNull)
-    // // // console.log(this.storage, this.componentType.enComponentType.toLowerCase())
-    const amount = this.storage[this.componentType.enComponentType.toLowerCase()].length
+    // // // console.log(this.storage, this.componentType.EnComponentType)
+    const amount = this.storage[this.componentType.EnComponentType].length
     this.mainChartQuery = new Map()
       .set("all", this.allowNull ? "1" : "0")
       .set('x-labels-size', this.xLabelsSize)
       .set('y-labels-size', this.yLabelsSize)
       .set("param", this.currentPropName)
-      .set("enComponentType", this.componentType.enComponentType!)
+      .set("EnComponentType", this.componentType.EnComponentType!)
       .set("alias", this.alias.get(this.currentPropName)!)
-      .set("manufacturerName", this.manufacturerName)
+      .set("ManufacturerName", this.ManufacturerName)
       .set("amount", amount)
       .set("sortParam", this.sortParam).set("sortDirectopn", this.sortDirectopn)
     // // // console.log(this.storage)

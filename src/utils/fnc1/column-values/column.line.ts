@@ -100,18 +100,18 @@ const getColumnLineChartOptions = (data: any, query: Map<string, string>): Parti
         values: []
     };
     const param = query.get('param')
-    const manufacturerName = query.get('manufacturerName')
-    const enComponentType = query.get('enComponentType')
+    const ManufacturerName = query.get('ManufacturerName')
+    const EnComponentType = query.get('EnComponentType')
     const all = query.get('all')
 
-    if (param && enComponentType) {
+    if (param && EnComponentType) {
         apexChartData.series = [{
             name: "Количество",
             data: []
         }]
-        const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+        const sortedData = (data[EnComponentType] as []).sort((a: any, b: any) => a[param] - b[param])
         for (const obj of sortedData as any) {
-            if (manufacturerName ? (obj[param] && obj.manufacturerName == manufacturerName) : obj[param] && obj[param]) {
+            if (ManufacturerName ? (obj[param] && obj.ManufacturerName == ManufacturerName) : obj[param] && obj[param]) {
                 if (!obj[param] && all === "0") {
                     continue;
                 }

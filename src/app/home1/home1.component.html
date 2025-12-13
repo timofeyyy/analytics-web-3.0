@@ -6,18 +6,23 @@
         <header class="workspace-header">
             <p class="item item-h">Аналитика</p>
         </header>
+        <div class="page-menu">
+            <label class="item" [ngClass]="{selected: windowState == 'main'}" (click)="windowState = 'main'">Общая <span
+                    class="line"></span></label>
+            <label class="item" [ngClass]="{selected: windowState == 'dates-compare'}" (click)="windowState = 'dates-compare'">Сравнение по датам<span class="line"></span></label>
+        </div>
         <main>
-            <div class="main-view">
+            <div [ngStyle]="{display: windowState == 'main' ? 'block' : 'none'}" class="main-view">
                 <div class="upper">
                     <div class="navigation">
                         <div class="date-section block">
-                            <p>Смотреть по дате добавления:</p>
+                            <p>Смотреть по дате добавления (интервал):</p>
                             <div class="controllers">
                                 <div class="inputs" *ngIf="firstDate && lastDate">
-                                    <label>от</label>
+                                    <label>с</label>
                                     <input type="date" [value]="firstDate" [min]="minDate" [max]="maxDate"
                                         (change)="changeFirstDate($event)" (input)="validateDate($event)" />
-                                    <label>до</label>
+                                    <label>по</label>
                                     <input type="date" [value]="lastDate" [min]="minDate" [max]="maxDate"
                                         (change)="changeLastDate($event)" (input)="validateDate($event)" />
                                 </div>
@@ -31,15 +36,24 @@
                             </div>
                             <div class="records">
                                 <div class="record" *ngFor="let component of componentTypesStat">
-                                    <span class="type"> <a [href]="getSafeUrl(component[0])" (mouseover)="component[1].enterLink = true" (mouseout)="component[1].enterLink = false">{{component[0]}} </a>
-                                        <div class="kind-popup" *ngIf="component[1].enterLink || component[1].enterPopupWindow" (mouseover)="component[1].enterPopupWindow = true" (mouseout)="component[1].enterPopupWindow = false">
+                                    <span class="type"> <a [href]="getSafeUrl(component[0])"
+                                            (mouseover)="component[1].enterLink = true"
+                                            (mouseout)="component[1].enterLink = false">{{component[0]}} </a>
+                                        <div class="kind-popup"
+                                            *ngIf="component[1].enterLink || component[1].enterPopupWindow"
+                                            (mouseover)="component[1].enterPopupWindow = true"
+                                            (mouseout)="component[1].enterPopupWindow = false">
                                             <ul class="kind-list">
-                                                <li *ngFor="let kind of component[1].kinds"><a [href]="getSafeUrl(component[0], kind.enComponentKind)">{{kind.ruComponentKind}}</a>({{kind.countAll}})</li>
+                                                <li *ngFor="let kind of component[1].kinds"><a
+                                                        [href]="getSafeUrl(component[0], kind.EnComponentKind)">{{kind.RuComponentKind}}</a>({{kind.countAll}})
+                                                </li>
                                             </ul>
                                         </div>
                                         ({{component[1].statistic.countAll}})
                                     </span>
-                                    <p class="manufacturer">{{component[1].statistic.manufacturer?.name}} - {{component[1].statistic.manufacturer?.statistic?.procentComparedToComponentTypes}}%</p>
+                                    <p class="manufacturer">{{component[1].statistic.manufacturer?.name}} -
+                                        {{component[1].statistic.manufacturer?.statistic?.procentComparedToComponentTypes}}%
+                                    </p>
                                     <!-- <p class="manufacturer" [innerHTML]="displayManufacturers(component)"> -->
                                     <!-- </p> -->
                                 </div>
@@ -49,30 +63,40 @@
                     <div class="chart block">
                         <!-- <p>Количественная статистика номенклатуры производителей по типам компонентов</p> -->
                         <app-chart *ngIf="chartQueryManufacturers" [all]="resultStorage" [innerWidthPrecent]="70"
-                            [chartName]="'ruComponentType'" [reqName]="'components'" [typeName]="'bar'" 
+                            [chartName]="'RuComponentType'" [reqName]="'components'" [typeName]="'bar'"
                             [query]="chartQueryManufacturers" />
-                        <!-- <iframe src="chart/components/ruComponentType-next-chart/bar" frameborder="0"></iframe> -->
+                        <!-- <iframe src="chart/components/RuComponentType-next-chart/bar" frameborder="0"></iframe> -->
                     </div>
                 </div>
                 <div class="bottom">
                     <div class="chart block">
                         <!-- <p>Соотношение типов компонентов к общему количеству ({{all.length}} шт)</p> -->
-                        <app-chart *ngIf="chartQueryStat" [all]="resultStorage" [innerWidthPrecent]="'unset'"
-                            [chartName]="'statistic-filters'" [reqName]="'components'" [typeName]="'donut'"
-                            [query]="chartQueryStat" />
+                        <app-chart *ngIf="chartQueryStat" [all]="resultStorage" [innerWidthPrecent]="60"
+                            [chartName]="'statistic-filters'" [typeName]="'donut'" [query]="chartQueryStat" />
 
                         <!-- <iframe src="chart/components/statistic-filters/donut" frameborder="0"></iframe> -->
                     </div>
                     <div class="list block">
                         <app-parameter-value-count-table *ngIf="all.length && componentTypes.length"
-                            class="records-wrapper" [componentTypes]="componentTypes" [all]="all"
-                            [aliasName]="'Количество'" [parameter]="'manufacturerName'"
+                            class="records-wrapper" [componentTypes]="componentTypes" [all]="all" 
+                            [aliasName]="'Количество'" [parameter]="'ManufacturerName'"
                             [parameterAlias]="'Производитель'" [allowNull]="false"
                             (onSortDirectionChanged)="onSortDirectionChanged($event)"
                             (onComponentTypeChanged)="onComponentTypeChanged($event);buildChartQueryManufacturers()" />
                     </div>
                 </div>
             </div>
+            <app-component-analytics-date-compare [ngStyle]="{display: windowState == 'dates-compare' ? 'inline' : 'none'}" class="analytics"
+                [ngStyle]="{width: '100%'}" [hideNavigation]="true" [allowNull]="true" [storage]="componentDates" [alias]="alias"
+                [removeOnChange]="false" />
+            <!-- <ng-template #countriesProd> -->
+                <!-- <div class="main-view prod-compared"> -->
+
+
+                <!-- <app-chart *ngIf="all.length && componentTypes.length" [chartName]="'date-compare'"
+                        [typeName]="'bar'" [all]="storage" [innerWidthPrecent]="80" [query]="chartQueryStat" /> -->
+                <!-- </div> -->
+            <!-- </ng-template> -->
         </main>
     </div>
     <app-loader [ngStyle]="{display: loader ? 'block' : 'none'}" />

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, input, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppEnum, ComponentTypeRuEnum } from '../../../utils/enum/app.enum';
-import manufacturerNameFilters from '../../../utils/fnc1/filters/manufacturer-name';
+import ManufacturerNameFilters from '../../../utils/fnc1/filters/manufacturer-name';
 import componentKindFilters from '../../../utils/fnc1/filters/component-kind';
 import componentTypeFilters from '../../../utils/fnc1/filters/component-type';
 import { NgFor, NgIf } from '@angular/common';
@@ -49,13 +49,13 @@ export class FiltersComponent implements OnChanges {
         str += `${key}=${val}&`
       }
 
-      if (key === 'ruComponentType' && val !== AppEnum.ALL && val) {
+      if (key === 'RuComponentType' && val !== AppEnum.ALL && val) {
         str += `${key}=${val}&`
       }
-      if (key === 'ruComponentKind' && val !== AppEnum.ALL && val) {
+      if (key === 'RuComponentKind' && val !== AppEnum.ALL && val) {
         str += `${key}=${val}&`
       }
-      if (key === 'manufacturerName' && val !== AppEnum.ALL && val) {
+      if (key === 'ManufacturerName' && val !== AppEnum.ALL && val) {
         str += `${key}=${val}&`
       }
     }
@@ -69,13 +69,13 @@ export class FiltersComponent implements OnChanges {
       if ((!this.selectedColumnsContains(key) && val !== AppEnum.ALL && val)) {
         map.set(key, val)
       }
-      if (key === 'ruComponentType' && val !== AppEnum.ALL && val) {
+      if (key === 'RuComponentType' && val !== AppEnum.ALL && val) {
         map.set(key, val)
       }
-      if (key === 'ruComponentKind' && val !== AppEnum.ALL && val) {
+      if (key === 'RuComponentKind' && val !== AppEnum.ALL && val) {
         map.set(key, val)
       }
-      if (key === 'manufacturerName' && val !== AppEnum.ALL && val) {
+      if (key === 'ManufacturerName' && val !== AppEnum.ALL && val) {
         map.set(key, val)
       }
     }

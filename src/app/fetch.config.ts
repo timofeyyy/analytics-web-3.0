@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { ApiService } from "../services/api.services";
 import { AppEnum } from "../utils/enum/app.enum";
-import manufacturerNameFilters from "../utils/fnc1/filters/manufacturer-name";
+import ManufacturerNameFilters from "../utils/fnc1/filters/manufacturer-name";
 import componentKindFilters from "../utils/fnc1/filters/component-kind";
 
 
@@ -9,221 +9,65 @@ import componentKindFilters from "../utils/fnc1/filters/component-kind";
 
 
 const sortObj = {
-  'manufacturerName': (props: any, all: any[]) => manufacturerNameFilters(props, all),
-  'ruComponentKind': (props: any, all: any[]) => componentKindFilters(props, all)
+  'ManufacturerName': (props: any, all: any[]) => ManufacturerNameFilters(props, all),
+  'RuComponentKind': (props: any, all: any[]) => componentKindFilters(props, all)
 }
 
 export const sortObjMap: Map<string, any> = new Map(Object.entries(sortObj));
 
-// export const props = {
-//   'manufacturerName': {
-//     currentValue: AppEnum.ALL,
-//     input: false,
-//     // sort: (props: any, all: any[]) => manufacturerNameFilters(props, all)
-//   },
-//   'ruComponentKind': {
-//     currentValue: AppEnum.ALL,
-//     input: false,
-//     // sort: (props: any, all: any[]) => componentKindFilters(props, all)
-//   },
-//   'bitDepthValue': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'ruTechnologyName': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'frequency': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'minOperatingTemperature': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'maxOperatingTemperature': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'radiationResistance': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'radiationResistanceI': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'samplingTime': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'minVoltage': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'maxVoltage': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'outputType': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'ruComponentType': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'enComponentType': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'maxPermissibleAverageDirectCurrent': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'maxiPermissibleDirectCurrent': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'package': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'maxPermissibleDCVoltage': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'maxPermissibleDCCollectorCurrent': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'qualication': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'interfaces': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'remark2': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'remark1': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'qualicationЕС': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'qualicationSG': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'minCapacity': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'memoryFormat': {
-//     currentValue: AppEnum.ALL,
-//     input: false
-//   },
-//   'maxCapacity': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'consumptionCurrent': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'acceptableСapacityReduction': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'acceptableCapacityIncrease': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'powerRating': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'currentLimit': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'maxRatedResistance': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'minRatedResistance': {
-//     currentValue: "",
-//     input: true
-//   },
-//   'resistanceTolerance': {
-//     currentValue: "",
-//     input: true
-//   }
-// }
-
-
-
-
 const prioritySchema = {
   "Микросхема": [
-    "consumptionCurrent",
-    "qualication",
-    // "manufacturerName",
-    "samplingTime",
-    "minOperatingTemperature",
-    "frequency",
-    "minVoltage"
+    "ConsumptionCurrent",
+    "Qualication",
+    // "ManufacturerName",
+    "SamplingTime",
+    "MinOperatingTemperature",
+    "Frequency",
+    "MinVoltage"
   ],
   "Диод": [
-    "minOperatingTemperature",
-    "qualicationЕС",
-    // "manufacturerName",
-    "radiationResistance",
-    "maxOperatingTemperature",
+    "MinOperatingTemperature",
+    "QualicationЕС",
+    // "ManufacturerName",
+    "RadiationResistance",
+    "MaxOperatingTemperature",
     // "maxPermissibleDCCollectorCurrent",
-    "maxPermissibleDCVoltage",
-    "package",
+    "MaxPermissibleDCVoltage",
+    "Package",
   ],
   "Транзистор": [
-    "maxOperatingTemperature",
-    "radiationResistance",
-    "qualicationЕС",
-    "maxPermissibleDCVoltage",
-    "minOperatingTemperature",
+    "MaxOperatingTemperature",
+    "RadiationResistance",
+    "QualicationЕС",
+    "MaxPermissibleDCVoltage",
+    "MinOperatingTemperature",
     // "maxiPermissibleDirectCurrent",
-    // "ruComponentKind",
-    // "manufacturerName",
-    "package"
+    // "RuComponentKind",
+    // "ManufacturerName",
+    "Package"
   ],
   "Конденсатор": [
-    "qualicationSG",
-    "minCapacity",
-    "maxCapacity",
-    "acceptableСapacityReduction",
-    "acceptableCapacityIncrease",
-    // "manufacturerName",
-    "outputType",
-    "maxOperatingTemperature",
-    "maxVoltage",
-    // "ruComponentKind"
+    "QualicationSG",
+    "MinCapacity",
+    "MaxCapacity",
+    "AcceptableСapacityReduction",
+    "AcceptableCapacityIncrease",
+    // "ManufacturerName",
+    "OutputType",
+    "MaxOperatingTemperature",
+    "MaxVoltage",
+    // "RuComponentKind"
 
   ],
   "Резистор": [
-    "powerRating",
-    "minRatedResistance",
-    "maxRatedResistance",
-    // "manufacturerName",
-    "currentLimit",
-    "resistanceTolerance",
-    "maxOperatingTemperature",
-    "maxVoltage"
+    "PowerRating",
+    "MinRatedResistance",
+    "MaxRatedResistance",
+    // "ManufacturerName",
+    "CurrentLimit",
+    "ResistanceTolerance",
+    "MaxOperatingTemperature",
+    "MaxVoltage"
   ]
 }
 

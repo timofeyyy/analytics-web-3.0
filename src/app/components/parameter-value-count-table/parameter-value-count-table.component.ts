@@ -14,8 +14,8 @@ import { AppEnum } from '../../../utils/enum/app.enum';
   styleUrls: ['./parameter-value-count-table.component.css', '../styles/input.css']
 })
 export class ParameterValueCountTableComponent implements OnChanges, OnInit {
-  onComponentTypeSelected(ruComponentType: string) {
-    this.currentComponentType = this.componentTypes.find(item => item.ruComponentType === ruComponentType)!
+  onComponentTypeSelected(RuComponentType: string) {
+    this.currentComponentType = this.componentTypes.find(item => item.RuComponentType === RuComponentType)!
     this.initOriginalRecords(this.all)
     this.onComponentTypeChanged.emit(this.currentComponentType)
   }
@@ -59,10 +59,8 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
   }
   ngOnChanges(changes: SimpleChanges): void {
     // if (this.componentTypes && this.componentTypes.length) {
-    //   this.componentTypeLabels = this.componentTypes.map(item => item.ruComponentType)
+    //   this.componentTypeLabels = this.componentTypes.map(item => item.RuComponentType)
     // }
-    // // console.log(this.componentTypeLabels)
-    // // // console.log(this.parameter, this.parameterCopy)
     // if (!this.parameter || this.parameterCopy != this.parameter) {
     // const clonedAll = JSON.parse(JSON.stringify(this.all))
     // const rows = gteParameterValueCountStat(clonedAll, this.parameter, this.allowNull) as any[]
@@ -77,9 +75,9 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
   initOriginalRecords(all: any): void {
      if (this.componentTypes && this.componentTypes.length) {
       this.componentTypeLabels = []
-      this.componentTypeLabels = this.componentTypes.map(item => item.ruComponentType)
+      this.componentTypeLabels = this.componentTypes.map(item => item.RuComponentType)
     }
-    let clonedAll = JSON.parse(JSON.stringify(this.currentComponentType && this.currentComponentType.enComponentType != AppEnum.ALL ? (all as any[]).filter(item => item.ruComponentType === this.currentComponentType.ruComponentType) : all))
+    let clonedAll = JSON.parse(JSON.stringify(this.currentComponentType && this.currentComponentType.EnComponentType != AppEnum.ALL ? (all as any[]).filter(item => item.RuComponentType === this.currentComponentType.RuComponentType) : all))
     const rows = gteParameterValueCountStat(clonedAll, this.parameter, this.allowNull) as any[]
     this.rows = [...rows]
     this.orig = [...rows]
@@ -122,9 +120,9 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
   ];
 
   include(manufacturer: any): boolean {
-    let manufacturerName: string = `${manufacturer.value}`
-    let length: number = manufacturerName.length >= this.searchValue.length ? this.searchValue.length : manufacturerName.length
-    let extractedPart = manufacturerName.slice(0, length).split('')
+    let ManufacturerName: string = `${manufacturer.value}`
+    let length: number = ManufacturerName.length >= this.searchValue.length ? this.searchValue.length : ManufacturerName.length
+    let extractedPart = ManufacturerName.slice(0, length).split('')
     for (let i = 0; i < extractedPart.length; i++) {
       if (this.searchValue[i].toLocaleLowerCase() !== extractedPart[i].toLocaleLowerCase()) {
         let recognizedRu = this.homoglyphsArray.find(char => char.ru == this.searchValue[i].toLowerCase() && char.en == extractedPart[i].toLowerCase())
@@ -143,7 +141,7 @@ export class ParameterValueCountTableComponent implements OnChanges, OnInit {
 
   openCatalog(manufacturer: string): any {
     let url = "/filters?"
-    url += `manufacturerName=${manufacturer}`
+    url += `ManufacturerName=${manufacturer}`
     localStorage.removeItem('savedFilterValues')
     this.router.navigateByUrl(url)
   }

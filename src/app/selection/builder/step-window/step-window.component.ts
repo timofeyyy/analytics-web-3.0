@@ -111,10 +111,11 @@ export class StepWindowComponent implements OnInit {
         concatMap((alias: { [type: string]: string }) => {
           this.alias = new Map(Object.entries(alias))
           this.dropBoxPropsMapConfig = this.initDropBoxMapConfig()
-          return this.api.getComponentsApiAll()
+          return this.api.getComponentsAll()
         }
         ))
       .subscribe((res: any) => {
+        console.log(res)
         this.storage = new Map(Object.entries(res))
         componentStorage.dispatch(setComponentSchema(res))
         this.loader = false
@@ -176,8 +177,8 @@ export class StepWindowComponent implements OnInit {
     }
     this.dropBoxPropsMapConfig = this.initDropBoxMapConfig(
       new Map()
-        .set('ruComponentType', this.dropBoxPropsMapConfig.get('ruComponentType'))
-        .set('enComponentType', this.dropBoxPropsMapConfig.get('enComponentType'))
+        .set('RuComponentType', this.dropBoxPropsMapConfig.get('RuComponentType'))
+        .set('EnComponentType', this.dropBoxPropsMapConfig.get('EnComponentType'))
     )
     this.cdr.detectChanges();
   }
@@ -211,25 +212,25 @@ export class StepWindowComponent implements OnInit {
   }
 
   onTypeSelected(entries: [string, string, any[]]): void {
-    // // // console.log(entries)
+    console.log(entries)
     this.activeKeys = new Map()
-    let ruComponentType: string = AppEnum.ALL
+    let RuComponentType: string = AppEnum.ALL
     this.columns = []
-    if (this.dropBoxPropsMapConfig.get('ruComponentType').currentValue !== entries[0]) {
-      ruComponentType = entries[0]
+    if (this.dropBoxPropsMapConfig.get('RuComponentType').currentValue !== entries[0]) {
+      RuComponentType = entries[0]
       const componentSchemaMap: Map<string, string[]> = new Map(Object.entries(componentStorage.getState().componentSchema as []))
       // // // console.log(componentSchemaMap)
-      this.columns = componentSchemaMap.get(entries[1].toLowerCase()) as []
-      // // // console.log(this.columns)
+      this.columns = componentSchemaMap.get(entries[1]) as []
+      console.log(this.columns)
     }
     this.priorities = this.columns
-    this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = ruComponentType
+    this.dropBoxPropsMapConfig.get('RuComponentType').currentValue = RuComponentType
     this.all = entries[2]
-    let enComponentType: string = AppEnum.ALL
-    if (this.dropBoxPropsMapConfig.get('enComponentType').currentValue !== entries[1]) {
-      enComponentType = entries[1]
+    let EnComponentType: string = AppEnum.ALL
+    if (this.dropBoxPropsMapConfig.get('EnComponentType').currentValue !== entries[1]) {
+      EnComponentType = entries[1]
     }
-    this.dropBoxPropsMapConfig.get('enComponentType').currentValue = enComponentType
+    this.dropBoxPropsMapConfig.get('EnComponentType').currentValue = EnComponentType
   }
   getPositionX(index: number): number {
     const stepper: any = selectionStorage.getState().stepper
@@ -275,10 +276,10 @@ export class StepWindowComponent implements OnInit {
   }
 
   makeQueryStr(): void {
-    // // // console.log(this.dropBoxPropsMapConfig.get('enComponentType'))
+    // // // console.log(this.dropBoxPropsMapConfig.get('EnComponentType'))
     const queryParams: any = {
       params: 'priorityWindow',
-      enComponentType: this.dropBoxPropsMapConfig.get('enComponentType').currentValue
+      EnComponentType: this.dropBoxPropsMapConfig.get('EnComponentType').currentValue
     }
     let obj = Object.fromEntries(this.activeKeys)
     for (const key in obj) {

@@ -1,22 +1,22 @@
-<div class="chart-wrapper" *ngIf="chartOptions">
+<div class="chart-wrapper">
     <p *ngIf="!noHeader" [ngStyle]="{'font-size': paragraphSize ?? 'max(1vw, 10px)'}" >{{paragraphValue}}</p>
     <apx-chart 
     [ngStyle]="{ width: innerWidthPrecent ? innerWidthPrecent + '%' : '60%' }"
     class="apexcharts-bar-area"
     #apexChart
-    [series]="chartOptions.series!" 
-    [chart]="chartOptions.chart!" 
-    [dataLabels]="chartOptions.dataLabels!"
-    [plotOptions]="chartOptions.plotOptions!" 
-    [yaxis]="chartOptions.yaxis!" 
-    [xaxis]="chartOptions.xaxis!"
-    [colors]="chartOptions.colors!"
-    [labels]="chartOptions.labels!"
-    [title]="chartOptions.title!"
-    [responsive]="chartOptions.responsive!"
-    [colors]="chartOptions.colors!"
-    [legend]="chartOptions.legend!"
-    [tooltip]="chartOptions.tooltip!"
+    [series]="series" 
+    [chart]="chart" 
+    [dataLabels]="dataLabels"
+    [plotOptions]="plotOptions" 
+    [yaxis]="yaxis" 
+    [xaxis]="xaxis"
+    [colors]="colors"
+    [labels]="labels"
+    [title]="title"
+    [responsive]="responsive"
+    [colors]="colors"
+    [legend]="legend"
+    [tooltip]="tooltip"
   ></apx-chart>
 </div>
 

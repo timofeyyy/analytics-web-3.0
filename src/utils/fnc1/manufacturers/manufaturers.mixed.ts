@@ -90,10 +90,10 @@ const getManufacturersChartOptionBarMixed1 = (data: any): Partial<ChartOptions> 
     for (const key in data) {
         length += data[key].length
         for (const obj of data[key]) {
-            if (!map.has(obj.manufacturerName)) {
-                map.set(obj.manufacturerName, 0);
+            if (!map.has(obj.ManufacturerName)) {
+                map.set(obj.ManufacturerName, 0);
             }
-            map.set(obj.manufacturerName, map.get(obj.manufacturerName) + 1)
+            map.set(obj.ManufacturerName, map.get(obj.ManufacturerName) + 1)
         }
     }
     const sortedMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));

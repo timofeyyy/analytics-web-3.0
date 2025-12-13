@@ -2,13 +2,13 @@ export interface Microchip {
     id: number,
     docID: number,
     componentName: string,
-    ruComponentKind: string,
-    enComponentKind: string,
-    ruComponentType: string,
-    enComponentType: string,
+    RuComponentKind: string,
+    EnComponentKind: string,
+    RuComponentType: string,
+    EnComponentType: string,
     enTechnologyName: string,
     ruTechnologyName: string,
-    manufacturerName: string,
+    ManufacturerName: string,
     interfaces: string,
     minVoltage: number,
     maxVoltage: number,
@@ -27,8 +27,8 @@ export interface Microchip {
 
 
 export interface BitDepthValue {
-    manufacturerName: string,
+    ManufacturerName: string,
     bitDepthValue: string,
     componentName: string,
-    ruComponentKind: string,
+    RuComponentKind: string,
 }

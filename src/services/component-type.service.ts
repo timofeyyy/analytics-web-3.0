@@ -10,14 +10,14 @@ export class ComponentTypeService {
     private _columnsAll!: { [type:string]: Columns[] }
     private _alias!: { [type:string]: string }
     getComponentTypeByEn(entype: string): ComponentTypes | undefined {
-        // const enComponentType = query.get('enComponentType')
-        return this._componentTypes.find(ct => ct.enComponentType.toLowerCase() == `${entype}`.toLowerCase())
+        // const EnComponentType = query.get('EnComponentType')
+        return this._componentTypes.find(ct => ct.EnComponentType.toLowerCase() == `${entype}`.toLowerCase())
     }
     getComponentTypeByRu(rutype: string): ComponentTypes | undefined {
-        // const ruComponentType = query.get('ruComponentType')
-        // // // console.log(ruComponentType, query.get('ruComponentType'))
+        // const RuComponentType = query.get('RuComponentType')
+        // // // console.log(RuComponentType, query.get('RuComponentType'))
 
-        return this._componentTypes.find(ct => ct.ruComponentType.toLowerCase() == `${rutype}`.toLowerCase())
+        return this._componentTypes.find(ct => ct.RuComponentType.toLowerCase() == `${rutype}`.toLowerCase())
     }
     setComponentTypes(componentTypes: ComponentTypes[]) {
         this._componentTypes = componentTypes

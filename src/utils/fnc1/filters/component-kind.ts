@@ -2,17 +2,17 @@ import { AppEnum } from "../../enum/app.enum"
 
 const componentKindFilters = (props: any, all: any[]): string[] => {
 
-    let ruComponentType: string | undefined = props.get('ruComponentType')?.currentValue ?? AppEnum.ALL
-    let manufacturerName: string | undefined = props.get('manufacturerName')?.currentValue ?? AppEnum.ALL
+    let RuComponentType: string | undefined = props.get('RuComponentType')?.currentValue ?? AppEnum.ALL
+    let ManufacturerName: string | undefined = props.get('ManufacturerName')?.currentValue ?? AppEnum.ALL
 
     let values: string[] = [AppEnum.ALL]
     all.forEach((item: any) => {
         if (
             item &&
-            ruComponentType === item.ruComponentType || ruComponentType === AppEnum.ALL
-            && (manufacturerName === item!.manufacturerName || manufacturerName == AppEnum.ALL)
+            RuComponentType === item.RuComponentType || RuComponentType === AppEnum.ALL
+            && (ManufacturerName === item!.ManufacturerName || ManufacturerName == AppEnum.ALL)
         ) {
-            let value: string = item!.ruComponentKind
+            let value: string = item!.RuComponentKind
             let index = values.findIndex((item: string) => item === value)
             if (index === -1 && value !== undefined)
                 values.push(value)

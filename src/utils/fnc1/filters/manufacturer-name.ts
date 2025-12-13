@@ -1,16 +1,16 @@
 import { AppEnum } from "../../enum/app.enum"
 
-const manufacturerNameFilters = (props: any, all: any[]): string[] => {
-    let ruComponentType: string | undefined = props.get('ruComponentType')?.currentValue ?? AppEnum.ALL
-    // // console.log(ruComponentType)
-    // let ruComponentKind: string | undefined = props.get('ruComponentKind')?.currentValue ?? AppEnum.ALL
+const ManufacturerNameFilters = (props: any, all: any[]): string[] => {
+    let RuComponentType: string | undefined = props.get('RuComponentType')?.currentValue ?? AppEnum.ALL
+    // // console.log(RuComponentType)
+    // let RuComponentKind: string | undefined = props.get('RuComponentKind')?.currentValue ?? AppEnum.ALL
     let values: string[] = [AppEnum.ALL]
     all.forEach((item: any) => {
         // if (
-        //     ruComponentType || ruComponentType === AppEnum.ALL
-        //     // && (ruComponentKind === item!.ruComponentKind || ruComponentKind == AppEnum.ALL)
+        //     RuComponentType || RuComponentType === AppEnum.ALL
+        //     // && (RuComponentKind === item!.RuComponentKind || RuComponentKind == AppEnum.ALL)
         // ) {
-            let value: string = item!.manufacturerName
+            let value: string = item!.ManufacturerName
             let index = values.findIndex((item: string) => item === value)
             if (index === -1 && value !== undefined)
                 values.push(value)
@@ -20,4 +20,4 @@ const manufacturerNameFilters = (props: any, all: any[]): string[] => {
     return values
 }
 
-export default manufacturerNameFilters
+export default ManufacturerNameFilters

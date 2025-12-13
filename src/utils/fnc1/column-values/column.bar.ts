@@ -74,27 +74,27 @@ import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar"
 //   };
 //   const map = new Map();
 //   const param = query.get('param')
-//   const manufacturerName = query.get('manufacturerName')
-//   const enComponentType = query.get('enComponentType')
+//   const ManufacturerName = query.get('ManufacturerName')
+//   const EnComponentType = query.get('EnComponentType')
 //   const all = query.get('all')
-//   // // // console.log(enComponentType)
-//   if (param && enComponentType) {
-//     const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+//   // // // console.log(EnComponentType)
+//   if (param && EnComponentType) {
+//     const sortedData = (data[EnComponentType] as []).sort((a: any, b: any) => a[param] - b[param])
 //     for (const obj of sortedData as any) {
 //       const value = obj[param] ? `${obj[param]}` : 'Не указано'
 //       if (!obj[param] && all === "0") {
 //         continue;
 //       }
 //       if (
-//         manufacturerName ?
-//           (value && obj.manufacturerName == manufacturerName || manufacturerName == AppEnum.ALL) :
+//         ManufacturerName ?
+//           (value && obj.ManufacturerName == ManufacturerName || ManufacturerName == AppEnum.ALL) :
 //           value
 //       ) {
 //         let categorieItemIndex: number = (apexChartData.xaxis?.categories as Array<string>).findIndex(
 //           (category: string) => category === value
 //         )
 //         let seriesItemIndex: number = (apexChartData as ChartOptions).series.findIndex(
-//           (item: any) => item.name.toLowerCase() === enComponentType.toLowerCase()
+//           (item: any) => item.name.toLowerCase() === EnComponentType
 //         )
 
 //         if (categorieItemIndex === -1) {
@@ -102,17 +102,17 @@ import getManufacturersChartOptionBar1 from "../manufacturers/manufacturers.bar"
 //         }
 //         if (seriesItemIndex === -1 && apexChartData.series) {
 //           apexChartData.series.push({
-//             name: enComponentType,
+//             name: EnComponentType,
 //             data: []
 //           })
 //         }
-//         if (map.get(enComponentType) === undefined) {
-//           map.set(enComponentType, {})
+//         if (map.get(EnComponentType) === undefined) {
+//           map.set(EnComponentType, {})
 //         }
-//         if (map.get(enComponentType)[value] === undefined) {
-//           map.get(enComponentType)[value] = 0
+//         if (map.get(EnComponentType)[value] === undefined) {
+//           map.get(EnComponentType)[value] = 0
 //         }
-//         map.get(enComponentType)[value] += 1
+//         map.get(EnComponentType)[value] += 1
 //       }
 //     }
 //     (apexChartData as ChartOptions).series.forEach((seriesItem: any) => {
@@ -201,12 +201,12 @@ const getColumnBarChartOptions = (data: any, query: Map<string, string>): Partia
 
   const map = new Map();
   const param = query.get("param");
-  const manufacturerName = query.get("manufacturerName");
-  const enComponentType = query.get("enComponentType");
+  const ManufacturerName = query.get("ManufacturerName");
+  const EnComponentType = query.get("EnComponentType");
   const all = query.get("all");
 
-  if (param && enComponentType) {
-    let sortedData = [...(data[enComponentType.toLowerCase()] as any[])];
+  if (param && EnComponentType) {
+    let sortedData = [...(data[EnComponentType] as any[])];
     if (sortParam === AppEnum.PARAMETER) {
       sortedData.sort((a, b) => {
         const diff = (a[param] ?? 0) - (b[param] ?? 0);
@@ -219,12 +219,12 @@ const getColumnBarChartOptions = (data: any, query: Map<string, string>): Partia
       if (!obj[param] && all === "0") continue;
 
       if (
-        manufacturerName
-          ? value && (obj.manufacturerName === manufacturerName || manufacturerName === AppEnum.ALL)
+        ManufacturerName
+          ? value && (obj.ManufacturerName === ManufacturerName || ManufacturerName === AppEnum.ALL)
           : value
       ) {
-        if (!map.has(enComponentType)) map.set(enComponentType, {});
-        map.get(enComponentType)[value] = (map.get(enComponentType)[value] || 0) + 1;
+        if (!map.has(EnComponentType)) map.set(EnComponentType, {});
+        map.get(EnComponentType)[value] = (map.get(EnComponentType)[value] || 0) + 1;
 
         if (!apexChartData.xaxis?.categories?.includes(value))
           apexChartData.xaxis?.categories?.push(value);
@@ -232,9 +232,9 @@ const getColumnBarChartOptions = (data: any, query: Map<string, string>): Partia
     }
 
     apexChartData.series!.push({
-      name: enComponentType,
+      name: EnComponentType,
       data: apexChartData.xaxis!.categories!.map(
-        (category: string) => map.get(enComponentType)?.[category] || 0
+        (category: string) => map.get(EnComponentType)?.[category] || 0
       ),
     });
 

@@ -11,6 +11,7 @@ import { Resistor } from "../utils/types/resistors";
 // import { propsMap } from "../app/fetch.config";
 import { existInColumnsMax, existInColumnsMin } from "../utils/static-data/compared-min-max";
 import { Columns } from "../utils/types/app";
+import { isException } from "../utils/static-data/filter-exceptions";
 // import { propsMap } from "../app/fetch.config";
 
 @Injectable()
@@ -53,8 +54,16 @@ export class ApiService {
         );
     }
 
+    getChartColumns(enType: string | void): Observable<any> {
+        let url: string = `api/components${enType ? "/" + enType!.toLowerCase() : ''}/columns/chart`
+        let obs: Observable<any> = this.sendGetReq(url);
+        if (obs != null) {
+            return obs.pipe()
+        }
+        return obs;
+    }
+
     getColumns(enType: string | void): Observable<any> {
-        console.log(enType)
         let url: string = `api/components${enType ? "/" + enType!.toLowerCase() : ''}/columns/all`
         let obs: Observable<any> = this.sendGetReq(url);
         if (obs != null) {
@@ -83,16 +92,13 @@ export class ApiService {
 
     getQueryByPriorities(entype: string, columns: { ruVal: string, enVal: string }[], query: Map<string, any>): Observable<any> | null {
         let str = ''
-        // // // console.log(columns, query.keys)
         for (const key of query.keys()) {
             var pair = columns.find(c => c.enVal.toLowerCase() == key.toLowerCase())
-            if (pair) {
-                // // // console.log(query.get(key), AppEnum.NOTDEFINED, AppEnum.NOTDEFINED === query.get(key))
+            if (pair && !isException(pair.enVal)) {
                 str += `${key}=${query.get(key) === AppEnum.NOTDEFINED ? 'null' : query.get(key)}&`
             }
         }
         let url: string = `api/components/${entype.toLowerCase()}/priorities?${str}`
-        // // // console.log(url)
 
         let obs: Observable<any> = this.sendGetReq(url);
         if (obs != null) {
@@ -100,57 +106,39 @@ export class ApiService {
         }
         return obs;
     }
+    getComponentsAllDates(query: Map<string, any> | void): Observable<any> {
+        // let alias: { [column: string]: string }
+        let url: string = "api/components/dates"
+        // let EnComponentKind: string | undefined
+        // let EnComponentType: string | undefined
+        // if (query) {
+        //     alias = query.get("alias")
+        //     EnComponentKind = query.get("EnComponentKind")
+        //     EnComponentType = query.get("EnComponentType")
+        // }
+        // if (EnComponentKind) {
+        //     url += `EnComponentType=${EnComponentType}&`
+        //     url += `EnComponentKind=${EnComponentKind}`
+        // }
+        let obs: Observable<any> = this.sendGetReq(url);
+        return obs;
+    }
 
-
-    getComponentsApiAll(query: Map<string, any> | void): Observable<any> {
+    getComponentsAll(query: Map<string, any> | void): Observable<any> {
         let alias: { [column: string]: string }
         let url: string = "api/components/all?"
-        let enComponentKind: string | undefined
-        let enComponentType: string | undefined
+        let EnComponentKind: string | undefined
+        let EnComponentType: string | undefined
         if (query) {
             alias = query.get("alias")
-            enComponentKind = query.get("enComponentKind")
-            enComponentType = query.get("enComponentType")
+            EnComponentKind = query.get("EnComponentKind")
+            EnComponentType = query.get("EnComponentType")
         }
-        if(enComponentKind) {
-            url += `enComponentType=${enComponentType}&`
-            url += `enComponentKind=${enComponentKind}&`
+        if (EnComponentKind) {
+            url += `EnComponentType=${EnComponentType}&`
+            url += `EnComponentKind=${EnComponentKind}`
         }
-        // console.log(url)
         let obs: Observable<any> = this.sendGetReq(url);
-        // if (obs != null) {
-        //     return obs.pipe(map((res: any) => {
-        //         // console.log(res)
-        //         if (query && res) {
-        //             const queryObject = Object.fromEntries(query)
-        //             let length = this.getActualQqueryLength(alias, queryObject)
-        //             for (const type in res) {
-        //                 let values = []
-        //                 for (const obj of res[type]) {
-        //                     let satisfyCount = 0;
-        //                     for (const key in queryObject) {
-        //                         if (
-        //                             (obj[key] == null && queryObject[key].replace(AppEnum.NOTDEFINED, null) == `${obj[key]}`) ||
-        //                             (obj[key] == '' && queryObject[key].replace(AppEnum.NOTDEFINED, "") == `${obj[key]}`) ||
-        //                             (existInColumnsMin(key) && !isNaN(Number(queryObject[key])) && obj[key] >= Number(queryObject[key])) ||
-        //                             (existInColumnsMax(key) && !isNaN(Number(queryObject[key])) && obj[key] <= queryObject[key]) ||
-        //                             (obj[key] && obj[key].toString().toLowerCase() == queryObject[key].toLowerCase()) ||
-        //                             (obj[key] == Number(queryObject[key]))
-
-        //                         ) {
-        //                             satisfyCount++
-        //                         }
-        //                     }
-        //                     if (length == satisfyCount) {
-        //                         values.push(obj)
-        //                     }
-        //                 }
-        //                 res[type] = values
-        //             }
-        //         }
-        //         return res
-        //     }))
-        // }
         return obs;
     }
 

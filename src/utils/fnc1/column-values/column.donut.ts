@@ -35,19 +35,19 @@ import getManufacturersChartOptionDonut1 from "../manufacturers/manufacturers.do
 
 //     const map = new Map()
 //     const param = query.get('param')
-//     const manufacturerName = query.get('manufacturerName')
-//     const enComponentType = query.get('enComponentType')
+//     const ManufacturerName = query.get('ManufacturerName')
+//     const EnComponentType = query.get('EnComponentType')
 //     const all = query.get('all')
-//     if (param && enComponentType) {
-//         const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+//     if (param && EnComponentType) {
+//         const sortedData = (data[EnComponentType] as []).sort((a: any, b: any) => a[param] - b[param])
 //         for (const obj of sortedData as any) {
 //             const value = obj[param] ? `${obj[param]}` : 'Не указано'
 //             if (!obj[param] && all === "0") {
 //                 continue;
 //             }
 //             if (
-//                 manufacturerName ?
-//                     (value && obj.manufacturerName == manufacturerName) :
+//                 ManufacturerName ?
+//                     (value && obj.ManufacturerName == ManufacturerName) :
 //                     value
 //             ) {
 
@@ -128,12 +128,12 @@ const getColumnDonutChartOptions = (data: any, query: Map<string, string>): Part
 
   const map = new Map();
   const param = query.get("param");
-  const manufacturerName = query.get("manufacturerName");
-  const enComponentType = query.get("enComponentType");
+  const ManufacturerName = query.get("ManufacturerName");
+  const EnComponentType = query.get("EnComponentType");
   const all = query.get("all");
 
-  if (param && enComponentType) {
-    let sortedData = [...(data[enComponentType.toLowerCase()] as any[])];
+  if (param && EnComponentType) {
+    let sortedData = [...(data[EnComponentType] as any[])];
 
     if (sortParam === "param") {
       sortedData.sort((a, b) => {
@@ -147,8 +147,8 @@ const getColumnDonutChartOptions = (data: any, query: Map<string, string>): Part
       if (!obj[param] && all === "0") continue;
 
       if (
-        manufacturerName
-          ? value && (obj.manufacturerName === manufacturerName || manufacturerName === AppEnum.ALL)
+        ManufacturerName
+          ? value && (obj.ManufacturerName === ManufacturerName || ManufacturerName === AppEnum.ALL)
           : value
       ) {
         if (!apexChartData.labels!.includes(value)) {

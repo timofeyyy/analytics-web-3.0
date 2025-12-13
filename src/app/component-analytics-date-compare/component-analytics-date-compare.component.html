@@ -1,0 +1,82 @@
+<div class="app-main">
+    <app-navigator class="navigator-wrapper" [ngStyle]="{display: hideNavigation! ? 'none' : 'block'}"
+        [current]="'/home'" />
+    <div class="workspace" [ngStyle]="{height: hideNavigation ? '100%' : '100vh'}">
+        <!-- <header class="workspace-header" [ngStyle]="{display: hideNavigation! ? 'none' : 'flex'}">
+            <p class="item item-h" *ngIf="componentType">Аналитика компонентов типа {{componentType.RuComponentType}}
+            </p>
+        </header> -->
+        <main [ngStyle]="{height: hideNavigation! ? '100%' : '92%'}">
+            <section class="chart-wrapper">
+                <div class="chart-wrapper-h">
+                    <div class="actions">
+                        <div class="action">
+                            <p>Графики</p>
+                            <div class="select-list-wrapper">
+                                <app-select-list *ngIf="componentTypeLabels && componentTypeLabels.length"
+                                    class="block-item" [values]="chartStates"
+                                    (onValueChanged)="onChartChanged($event)" />
+                            </div>
+                        </div>
+                        <div class="action">
+                            <p>Тип компонента</p>
+                            <div class="select-list-wrapper">
+                                <app-select-list *ngIf="componentTypeLabels && componentTypeLabels.length"
+                                    class="block-item" [values]="componentTypeLabels"
+                                    (onValueChanged)="onComponentTypeSelected($event)" />
+                            </div>
+                        </div>
+                        <div class="action" *ngIf="columnAlias.length">
+                            <p>Параметр</p>
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [values]="columnAlias"
+                                    (onValueChanged)="onColumnSelected($event); buildMainChart();" />
+                            </div>
+                        </div>
+                        <div class="action" *ngIf="dates1.length">
+                            <p>Дата1: <span class="team team-left"></span></p>
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [currentIndex]="dates1.indexOf(currentDate1)"
+                                    [values]="dates1"
+                                    (onValueChanged)="currentDate1 = $event; changeDates('update'); buildMainChart();" />
+                            </div>
+                        </div>
+                        <div class="action" *ngIf="dates2.length">
+                            <p>Дата2: <span class="team team-right"></span></p>
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [currentIndex]="dates2.indexOf(currentDate2)"
+                                    [values]="dates2"
+                                    (onValueChanged)="currentDate2 = $event; changeDates('update'); buildMainChart();" />
+                            </div>
+                        </div>
+                        <div class="action" *ngIf="dates2.length">
+                            <!-- <p>Дата2: <span class="team team-right"></span></p>
+                            <div class="select-list-wrapper">
+                                <app-select-list class="select-list" [currentIndex]="dates2.indexOf(currentDate2)"  [values]="dates2"
+                                    (onValueChanged)="currentDate2 = $event; changeDates('update'); buildMainChart();" />
+                            </div> -->
+                            <div class="data-type">
+                                <input type="radio" [checked]="dataTypeState == 'date-compare'" name="a"
+                                    (click)="dataTypeState = 'date-compare'">
+                                <label>По конкретным датам</label>
+
+                            </div>
+                            <div class="data-type">
+
+                                <input type="radio" [checked]="dataTypeState == 'date-compare-all'" name="a"
+                                    (click)="dataTypeState = 'date-compare-all'">
+                                <label>До конкретных дат</label>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <app-chart class="chart-view" *ngIf="loader == false" [chartName]="dataTypeState"
+                    [typeName]="currentChart" [all]="storage" [query]="mainChartQuery" [innerWidthPrecent]="80"
+                    [loadChartBlob]="false" />
+
+            </section>
+        </main>
+    </div>
+    <app-loader [ngStyle]="{'display' : loader ? 'block' : 'none'}" />
+</div>

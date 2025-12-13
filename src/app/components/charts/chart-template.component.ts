@@ -16,7 +16,7 @@ import { observableApiMap } from '../../../utils/static-data/observables';
   templateUrl: './chart-template.component.html',
   styleUrls: ['./chart-template.component.css', '../styles/button.css']
 })
-export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit {
+export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input()
   innerWidthPrecent!: number | 'unset'
   @Input()
@@ -53,11 +53,11 @@ export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit 
     private cdr: ChangeDetectorRef
   ) { }
 
+
   @Output()
   onLabelChange: EventEmitter<string> = new EventEmitter()
 
   ngOnChanges(changes: SimpleChanges): void {
-    // // // console.log(this.all, this.query, this.chart_name, this.type_name, this.req_name, this.alias)
     if (this.all) {
       this.getChartData(this.all, this.query, this.chartName, this.typeName)
     }
@@ -92,16 +92,29 @@ export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit 
     return res;
   }
 
+  series: any = {}
+  chart: any = {}
+  dataLabels: any = {}
+  plotOptions: any = {}
+  yaxis: any = {}
+  xaxis: any = {}
+  colors: any = {}
+  labels: any = {}
+  title: any = {}
+  responsive: any = {}
+  legend: any = {}
+  tooltip: any = {}
   getChartData(all: any, query: Map<string, any>, chart_name: string, type_name: string): void {
-    this.chartOptions = undefined
-    const newQuery = new Map(query);
-    if (newQuery.get('param')) {
-      newQuery.set('alias', this.alias.get(newQuery.get('param')));
-    } else if (newQuery.get('ruComponentType')) {
-      newQuery.set('alias', this.alias.get('ruComponentType'));
-    }
-    let data = chartOptionsData[chart_name].chartData[type_name](all, newQuery) as ChartOptions;
-    const chartName = chartOptionsData[chart_name].chartName(all, newQuery);
+    // this.chartOptions = undefined
+    // const newQuery = new Map(query);
+    // if (newQuery.get('param')) {
+    //   newQuery.set('alias', this.alias.get(newQuery.get('param')));
+    // } else if (newQuery.get('RuComponentType')) {
+    //   newQuery.set('alias', this.alias.get('RuComponentType'));
+    // }
+    console.log("sdsd")
+    let data = chartOptionsData[chart_name].chartData[type_name](all, query) as ChartOptions;
+    const chartName = chartOptionsData[chart_name].chartName(all, query);
     const chartOptions = {
       ...data,
       chart: {
@@ -110,14 +123,35 @@ export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit 
         zoom: { enabled: true, autoScaleYaxis: false },
       }
     }
-    // // console.log(chartOptions)
+    this.series = chartOptions.series
+    this.chart = chartOptions.chart
+    this.dataLabels = chartOptions.dataLabels
+    this.plotOptions = chartOptions.plotOptions
+    this.yaxis = chartOptions.yaxis
+    this.xaxis = chartOptions.xaxis
+    this.colors = chartOptions.colors
+    this.labels = chartOptions.labels
+    this.title = chartOptions.title
+    this.responsive = chartOptions.responsive
+    this.legend = chartOptions.legend
+    this.tooltip = chartOptions.tooltip
 
-    setTimeout(() => {
-      this.paragraphValue = chartName
-      this.chartOptions = chartOptions;
-      this.onLabelChange.emit()
-      this.getChartBlob()
-    });
+
+
+    // setTimeout(() => {
+    this.paragraphValue = chartName
+    this.chartOptions = chartOptions;
+    this.onLabelChange.emit()
+    this.getChartBlob()
+    // });
+  }
+
+  ngOnDestroy(): void {
+    this.loadChartBlob = false;
+    try {
+      this.apexChart?.destroy();
+    } catch { }
+    this.apexChart = undefined!;
   }
 
   ngAfterViewInit(): void {
@@ -125,11 +159,16 @@ export class ChartTemplateComponent implements OnInit, OnChanges, AfterViewInit 
       this.getChartBlob()
     }, 1000);
   }
+  @Input()
+  loadChartBlob: boolean = false
   @Output()
   private onBlobLoaded: EventEmitter<any> = new EventEmitter()
   getChartBlob(): void {
-    if (this.apexChart && this.query.get('priority')) {
+    console.log(this.loadChartBlob)
+    console.log("getChartBlob")
+    if (this.loadChartBlob && this.apexChart && this.query.get('priority')) {
       const dataUri = this.apexChart.dataURI()
+      console.log(dataUri)
       if (dataUri) {
         dataUri.then(({ imgURI }: any) => {
           this.onBlobLoaded.emit([imgURI, this.query.get('priority')![0]])

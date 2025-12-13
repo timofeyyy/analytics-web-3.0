@@ -27,7 +27,7 @@
                 <app-chart *ngFor="let priorities of prioritiesChartsEntries; let i = index" [style]="{'height': '60vh'}" [innerWidthPrecent]="70"
                     [chartName]="priorities[1]['chartName']" [typeName]="priorities[1]['typeName']" [alias]="alias"
                     [query]="priorities[1]['mainChartQuery']" [all]="priorities[1]['resultBuffer']"
-                    (onBlobLoaded)="onBlobLoaded($event)" />
+                    (onBlobLoaded)="onBlobLoaded($event)" [loadChartBlob]="true" />
             </div>
         <!-- </section> -->
         <!-- <div class="footer">

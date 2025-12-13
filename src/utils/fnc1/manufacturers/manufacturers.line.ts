@@ -68,32 +68,32 @@ const getManufacturersChartOptionLine1 = (data: any): Partial<ChartOptions> => {
     for (const key in data) {
         for (const obj of data[key]) {
             let categorieItemIndex: number = (apexChartData.xaxis?.categories as Array<string>).findIndex(
-                (category: string) => category === obj.manufacturerName
+                (category: string) => category === obj.ManufacturerName
             )
             let seriesItemIndex: number = (apexChartData as ChartOptions).series.findIndex(
-                (item: any) => item.name === obj.ruComponentType
+                (item: any) => item.name === obj.RuComponentType
             )
             if (categorieItemIndex === -1) {
-                (apexChartData as ChartOptions).xaxis.categories.push(obj.manufacturerName)
+                (apexChartData as ChartOptions).xaxis.categories.push(obj.ManufacturerName)
             }
             if (seriesItemIndex === -1 && apexChartData.series) {
                 apexChartData.series.push({
-                    name: obj.ruComponentType,
+                    name: obj.RuComponentType,
                     data: []
                 })
             }
-            if (manufacturersMap.get(obj.manufacturerName) === undefined) {
-                manufacturersMap.set(obj.manufacturerName, 0)
+            if (manufacturersMap.get(obj.ManufacturerName) === undefined) {
+                manufacturersMap.set(obj.ManufacturerName, 0)
             }
-            manufacturersMap.set(obj.manufacturerName, manufacturersMap.get(obj.manufacturerName) + 1)
+            manufacturersMap.set(obj.ManufacturerName, manufacturersMap.get(obj.ManufacturerName) + 1)
 
-            if (map.get(obj.ruComponentType) === undefined) {
-                map.set(obj.ruComponentType, {})
+            if (map.get(obj.RuComponentType) === undefined) {
+                map.set(obj.RuComponentType, {})
             }
-            if (map.get(obj.ruComponentType)[obj.manufacturerName] === undefined) {
-                map.get(obj.ruComponentType)[obj.manufacturerName] = 0
+            if (map.get(obj.RuComponentType)[obj.ManufacturerName] === undefined) {
+                map.get(obj.RuComponentType)[obj.ManufacturerName] = 0
             }
-            map.get(obj.ruComponentType)[obj.manufacturerName] += 1
+            map.get(obj.RuComponentType)[obj.ManufacturerName] += 1
         }
     }
 

@@ -4,7 +4,7 @@ export interface ComponentTypePopup {
     statistic: ComponentTypeStatistic,
     enterLink: boolean,
     enterPopupWindow: boolean,
-    kinds: { ruComponentKind: string, enComponentKind: string, countAll: number }[]
+    kinds: { RuComponentKind: string, EnComponentKind: string, countAll: number }[]
 }
 
 export interface ComponentTypeStatistic {
@@ -22,12 +22,11 @@ export interface ManufacturerStatistic {
 const getComponentTypesStat = (data: any, ru: boolean, componentTypes: ComponentTypes[]): Map<string, ComponentTypePopup> => {
     let map: Map<string, ComponentTypePopup> = new Map()
     let summary = 0
-    // const componentType = ru ? 'ruComponentType' : 'enComponentType'
-    // console.log(data, componentTypes)
+    // const componentType = ru ? 'RuComponentType' : 'EnComponentType'
     for (const key in data) {
         summary += data[key].length
-        const componentType = componentTypes.find(c => c.enComponentType.toLowerCase() == key.toLowerCase())
-        map.set(componentType?.ruComponentType!, {
+        const componentType = componentTypes.find(c => c.EnComponentType == key)
+        map.set(componentType?.RuComponentType!, {
             statistic: {
                 procentAll: 0,
                 countAll: data[key].length,
@@ -38,30 +37,29 @@ const getComponentTypesStat = (data: any, ru: boolean, componentTypes: Component
             enterPopupWindow: false,
             kinds: []
         })
-        const kinds: { ruComponentKind: string, enComponentKind: string, countAll: number }[] = []
+        const kinds: { RuComponentKind: string, EnComponentKind: string, countAll: number }[] = []
         for (const obj of data[key]) {
-            let manufacturers = map.get(componentType?.ruComponentType!)?.statistic.manufacturers
-            if (!manufacturers?.get(obj.manufacturerName)) {
-                manufacturers?.set(obj.manufacturerName, {
+            let manufacturers = map.get(componentType?.RuComponentType!)?.statistic.manufacturers
+            if (!manufacturers?.get(obj.ManufacturerName)) {
+                manufacturers?.set(obj.ManufacturerName, {
                     procentComapredToAll: 0,
                     procentComparedToComponentTypes: 0
                 })
             }
-            manufacturers!.set(obj.manufacturerName, {
-                procentComapredToAll: manufacturers!.get(obj.manufacturerName)?.procentComapredToAll! + 1,
-                procentComparedToComponentTypes: manufacturers!.get(obj.manufacturerName)?.procentComparedToComponentTypes! + 1,
+            manufacturers!.set(obj.ManufacturerName, {
+                procentComapredToAll: manufacturers!.get(obj.ManufacturerName)?.procentComapredToAll! + 1,
+                procentComparedToComponentTypes: manufacturers!.get(obj.ManufacturerName)?.procentComparedToComponentTypes! + 1,
             })
-            const existKind = kinds.findIndex(kind => kind.ruComponentKind == obj.ruComponentKind)
+            const existKind = kinds.findIndex(kind => kind.RuComponentKind == obj.RuComponentKind)
             if (existKind == -1) {
-                kinds.push({ ruComponentKind: obj.ruComponentKind, enComponentKind: obj.enComponentKind, countAll: 1 })
+                kinds.push({ RuComponentKind: obj.RuComponentKind, EnComponentKind: obj.EnComponentKind, countAll: 1 })
             }
             else {
                 kinds[existKind].countAll += 1
             }
         }
-        map.get(componentType?.ruComponentType!)!.kinds = kinds
+        map.get(componentType?.RuComponentType!)!.kinds = kinds
     }
-    // console.log(map)
 
     const object = Object.fromEntries(map)
     for (const key in object) {
@@ -72,7 +70,6 @@ const getComponentTypesStat = (data: any, ru: boolean, componentTypes: Component
                 procentComparedToComponentTypes: Number((manufacturers[name].procentComparedToComponentTypes * 100 / object[key].statistic.countAll).toFixed(1))
             }
         }
-        // // // console.log(new Map(Object.entries(manufacturers)))
         const bestManufacturer = getBestManufacturer(new Map(Object.entries(manufacturers)))
         const obj: ComponentTypeStatistic = {
             procentAll: Number(((object[key].statistic.countAll * 100) / summary).toFixed(1)),

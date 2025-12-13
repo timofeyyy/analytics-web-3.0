@@ -25,11 +25,11 @@
                         <p class="option-wrapper-header">Тип компонента</p>
                         <div class="table-names" >
                             <label class="state-btn" *ngFor="let componentType of getComponentTypes(); let i = index"
-                                [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('ruComponentType').currentValue === componentType.ruComponentType}"
-                                (click)="onTypeChanged(componentType)">{{componentType.ruComponentType}}</label>
+                                [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('RuComponentType').currentValue === componentType.RuComponentType}"
+                                (click)="onTypeChanged(componentType)">{{componentType.RuComponentType}}</label>
                             <label class="state-btn"
-                                [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('ruComponentType').currentValue === 'Все'}"
-                                (click)="onTypeChanged( {ruComponentType: 'Все', enComponentType: 'Все'} )">Все</label>
+                                [ngClass]="{'state-btn-selected': dropBoxPropsMapConfig.get('RuComponentType').currentValue === 'Все'}"
+                                (click)="onTypeChanged( {RuComponentType: 'Все', EnComponentType: 'Все'} )">Все</label>
                         </div>
                     </div>
                     <div class="option-wrapper" [ngStyle]="{display: selectedKeysValues.length ? 'block' : 'none'}">
@@ -50,8 +50,8 @@
                     </div>
                     <div class="action action-reset" [ngStyle]="{display: selectedKeysValues.length ? 'flex' : 'none'}"
                         (click)="
-                                resetKeyAndValues(dropBoxPropsMapConfig.get('ruComponentType').currentValue);
-                                onTypeChangedUpdate(dropBoxPropsMapConfig.get('ruComponentType').currentValue)
+                                resetKeyAndValues(dropBoxPropsMapConfig.get('RuComponentType').currentValue);
+                                onTypeChangedUpdate(dropBoxPropsMapConfig.get('RuComponentType').currentValue)
                                 ">
                         <p>Отчистить выбранные параметры</p>
                     </div>
@@ -70,9 +70,9 @@
                     <div class="item" *ngFor="let item of records">
                         <div class="info">
                             <div class="h">
-                                <h1>Тип компонента: {{item.ruComponentType}}</h1>
+                                <h1>Тип компонента: {{item.RuComponentType}}</h1>
                             </div>
-                            <h5>Производитель: {{item.manufacturerName}}</h5>
+                            <h5>Производитель: {{item.ManufacturerName}}</h5>
                             <h5>Индетификатор компонента: {{item.componentName}}</h5>
                             <div [innerHTML]="getHtmlPreview(item)">
                             </div>

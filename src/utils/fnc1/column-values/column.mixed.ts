@@ -97,20 +97,20 @@ const getColumnMixedChartOptions = (data: any, query: Map<string, string>): Part
     const map = new Map();
     let length = 0
     const param = query.get('param')
-    const manufacturerName = query.get('manufacturerName')
-    const enComponentType = query.get('enComponentType')
+    const ManufacturerName = query.get('ManufacturerName')
+    const EnComponentType = query.get('EnComponentType')
     const all = query.get('all')
-    if (param && enComponentType) {
-        length = data[enComponentType.toLowerCase()].length
-        const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+    if (param && EnComponentType) {
+        length = data[EnComponentType].length
+        const sortedData = (data[EnComponentType] as []).sort((a: any, b: any) => a[param] - b[param])
         for (const obj of sortedData as any) {
             if (!obj[param] && all === "0") {
                 continue;
             }
             const value = obj[param] ? obj[param] : 'Не указано'
             if (
-                manufacturerName ?
-                    (value && obj.manufacturerName == manufacturerName) :
+                ManufacturerName ?
+                    (value && obj.ManufacturerName == ManufacturerName) :
                     value
             ) {
                 if (!map.has(value)) {

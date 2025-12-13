@@ -57,12 +57,12 @@ export class DropboxProviderComponent implements OnInit, OnChanges {
       if (this.isTableProp()) {
         this.changeCurrentValueByName(this.name, obj.currentValue)
       }
-      if (this.name === 'ruComponentType') {
-        this.changeCurrentValueByName('ruComponentKind', AppEnum.ALL)
-        this.changeCurrentValueByName('manufacturerName', AppEnum.ALL)
+      if (this.name === 'RuComponentType') {
+        this.changeCurrentValueByName('RuComponentKind', AppEnum.ALL)
+        this.changeCurrentValueByName('ManufacturerName', AppEnum.ALL)
       }
-      if (this.name === 'manufacturerName') {
-        this.changeCurrentValueByName('ruComponentKind', AppEnum.ALL)
+      if (this.name === 'ManufacturerName') {
+        this.changeCurrentValueByName('RuComponentKind', AppEnum.ALL)
       }
     }
     this.onStateChanged.emit({ propsMap: this.propsMap, currentName: obj.currentName })

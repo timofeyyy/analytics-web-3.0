@@ -15,8 +15,8 @@
             </div>
         </div>
         <app-parameter-value-count-table  [style]="{'height': '20'}" *ngIf="manufacturersStat.length" class="table" [all]="manufacturersStat" [noRedirect]="true"
-            (onValueChanged)="onManufacturerChanged($event)" [aliasName]="'Количество'" [parameter]="'manufacturerName'"
-            [parameterAlias]="alias.get('manufacturerName')!" />
+            (onValueChanged)="onManufacturerChanged($event)" [aliasName]="'Количество'" [parameter]="'ManufacturerName'"
+            [parameterAlias]="alias.get('ManufacturerName')!" />
     </div>
     <div class="step-footer">
         <div class="search">

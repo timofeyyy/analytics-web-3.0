@@ -5,25 +5,25 @@
         </div>
         <div class="body">
             <div class="base">
-                <!-- <app-dropbox-provider [aliasName]="`${alias.get('ruComponentType')}`"
+                <!-- <app-dropbox-provider [aliasName]="`${alias.get('RuComponentType')}`"
                     [currentName]="currentDropBoxName" [all]="all" [propsMap]="dropBoxPropsMapConfig"
-                    [name]="'ruComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"
+                    [name]="'RuComponentType'" (onStateChanged)="onCurrentDropBoxNameChnaged($event)"
                     (onStateChanged)="onRuComponentTypeChanged($event)" /> -->
                 <app-dropbox-provider 
-                    [inputValue]="dropBoxPropsMapConfig.get('manufacturerName').currentValue"
-                    [aliasName]="`${alias.get('manufacturerName')}`" 
+                    [inputValue]="dropBoxPropsMapConfig.get('ManufacturerName').currentValue"
+                    [aliasName]="`${alias.get('ManufacturerName')}`" 
                     [currentName]="currentDropBoxName" 
                     [all]="all"
                     [propsMap]="dropBoxPropsMapConfig" 
-                    [name]="'manufacturerName'"
+                    [name]="'ManufacturerName'"
                     (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
                 <app-dropbox-provider 
-                    [inputValue]="dropBoxPropsMapConfig.get('ruComponentKind').currentValue"
-                    [aliasName]="`${alias.get('ruComponentKind')}`" 
+                    [inputValue]="dropBoxPropsMapConfig.get('RuComponentKind').currentValue"
+                    [aliasName]="`${alias.get('RuComponentKind')}`" 
                     [currentName]="currentDropBoxName" 
                     [all]="all"
                     [propsMap]="dropBoxPropsMapConfig" 
-                    [name]="'ruComponentKind'"
+                    [name]="'RuComponentKind'"
                     (onStateChanged)="onCurrentDropBoxNameChnaged($event)" />
             </div>
             <div class="additional">

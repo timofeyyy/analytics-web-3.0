@@ -7,7 +7,8 @@ import { ChartOptions } from "../../types/chart";
 const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Partial<ChartOptions> => {
     const sortParam = query.get("sortParam")
     const sortDirection = query.get("sortDirectopn")
-    const enComponentType = query.get("enComponentType")
+    const EnComponentType = query.get("EnComponentType")
+    console.log(query)
     let apexChartData: Partial<ChartOptions> = {
         series: [],
         colors: [],
@@ -53,8 +54,6 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
             opposite: false,
             title: { text: "" },
             labels: {
-
-
                 formatter: (val) => val + ' шт'
             }
         },
@@ -62,11 +61,6 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
             shared: true,
             intersect: false,
             enabled: true,
-            // y: {
-            //     formatter: function (val: number, opts: any) {
-            //         return `${val} шт`;
-            //     }
-            // },
             y: {
                 formatter: function (val: number, opts: any) {
                     if (val === 0 || val === null || val === undefined) return undefined;
@@ -83,32 +77,32 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
     const componentTypes = query.get("componentTypes") as ComponentTypes[];
     const colorObj: any = {}
     for (const key in data) {
-        if(enComponentType && enComponentType != AppEnum.ALL && key.toLowerCase() != enComponentType.toLowerCase()) {
+        if(EnComponentType && EnComponentType != AppEnum.ALL && key.toLowerCase() != EnComponentType.toLowerCase()) {
             continue
         }
         if(!colorObj[key]) {
-            colorObj[key] = colorTypes.find((colorType) => colorType.enComponentType == key)?.color
+            colorObj[key] = colorTypes.find((colorType) => colorType.EnComponentType == key)?.color
         }
 
-        const ruComponentType = componentTypes!.find(
-            c => c.enComponentType.toLowerCase() == key.toLowerCase()
-        )!.ruComponentType;
+        const RuComponentType = componentTypes!.find(
+            c => c.EnComponentType.toLowerCase() == key.toLowerCase()
+        )!.RuComponentType;
 
-        (apexChartData as ChartOptions).series.push({ name: ruComponentType, data: [] });
+        (apexChartData as ChartOptions).series.push({ name: RuComponentType, data: [] });
 
         for (const obj of data[key]) {
-            if (!map.has(ruComponentType)) map.set(ruComponentType, {});
-            if (!map.get(ruComponentType)![obj.manufacturerName])
-                map.get(ruComponentType)![obj.manufacturerName] = 0;
-            map.get(ruComponentType)![obj.manufacturerName] += 1;
+            if (!map.has(RuComponentType)) map.set(RuComponentType, {});
+            if (!map.get(RuComponentType)![obj.ManufacturerName])
+                map.get(RuComponentType)![obj.ManufacturerName] = 0;
+            map.get(RuComponentType)![obj.ManufacturerName] += 1;
         }
     }
 
     const globalSumMap = new Map<string, number>();
     for (const [, manufacturerCounts] of map.entries()) {
-        for (const manufacturerName in manufacturerCounts) {
-            const current = globalSumMap.get(manufacturerName) || 0;
-            globalSumMap.set(manufacturerName, current + manufacturerCounts[manufacturerName]);
+        for (const ManufacturerName in manufacturerCounts) {
+            const current = globalSumMap.get(ManufacturerName) || 0;
+            globalSumMap.set(ManufacturerName, current + manufacturerCounts[ManufacturerName]);
         }
     }
 
@@ -118,8 +112,8 @@ const getManufacturersChartOptionBar1 = (data: any, query: Map<string, any>): Pa
     (apexChartData as ChartOptions).series.forEach((seriesItem: any) => {
         const typeData = map.get(seriesItem.name)!;
         const sum = Object.values(typeData).reduce((acc, val) => acc + val, 0);
-        manufacturers.forEach((manufacturerName: string) => {
-            const value = typeData[manufacturerName] ?? 0;
+        manufacturers.forEach((ManufacturerName: string) => {
+            const value = typeData[ManufacturerName] ?? 0;
             //   seriesItem.data.push(parseFloat(((value * 100) / sum).toFixed(1)));
             seriesItem.data.push(parseFloat((value).toFixed(1)));
         });
@@ -217,39 +211,39 @@ export default getManufacturersChartOptionBar1;
 //     var manufacturersMap = new Map()
 //     const componentTypes = query.get("componentTypes") as ComponentTypes[]
 //     for (const key in data) {
-//         const ruComponentType = componentTypes!.find(c => c.enComponentType.toLowerCase() == key.toLowerCase())!.ruComponentType;
+//         const RuComponentType = componentTypes!.find(c => c.EnComponentType == key.toLowerCase())!.RuComponentType;
 //         (apexChartData as ChartOptions).series.push({
-//             name: ruComponentType,
+//             name: RuComponentType,
 //             data: []
 //         })
 //         for (const obj of data[key]) {
 //             let categorieItemIndex: number = (apexChartData.xaxis?.categories as Array<string>).findIndex(
-//                 (category: string) => category === obj.manufacturerName
+//                 (category: string) => category === obj.ManufacturerName
 //             )
 //             // let seriesItemIndex: number = (apexChartData as ChartOptions).series.findIndex(
-//             //     (item: any) => item.name === obj.ruComponentType
+//             //     (item: any) => item.name === obj.RuComponentType
 //             // )
 //             if (categorieItemIndex === -1) {
-//                 (apexChartData as ChartOptions).xaxis.categories.push(obj.manufacturerName)
+//                 (apexChartData as ChartOptions).xaxis.categories.push(obj.ManufacturerName)
 //             }
 //             // if (seriesItemIndex === -1 && apexChartData.series) {
 //             //     apexChartData.series.push({
-//             //         name: obj.ruComponentType,
+//             //         name: obj.RuComponentType,
 //             //         data: []
 //             //     })
 //             // }
-//             if (manufacturersMap.get(obj.manufacturerName) === undefined) {
-//                 manufacturersMap.set(obj.manufacturerName, 0)
+//             if (manufacturersMap.get(obj.ManufacturerName) === undefined) {
+//                 manufacturersMap.set(obj.ManufacturerName, 0)
 //             }
-//             manufacturersMap.set(obj.manufacturerName, manufacturersMap.get(obj.manufacturerName) + 1)
+//             manufacturersMap.set(obj.ManufacturerName, manufacturersMap.get(obj.ManufacturerName) + 1)
 
-//             if (map.get(ruComponentType) === undefined) {
-//                 map.set(ruComponentType, {})
+//             if (map.get(RuComponentType) === undefined) {
+//                 map.set(RuComponentType, {})
 //             }
-//             if (map.get(ruComponentType)[obj.manufacturerName] === undefined) {
-//                 map.get(ruComponentType)[obj.manufacturerName] = 0
+//             if (map.get(RuComponentType)[obj.ManufacturerName] === undefined) {
+//                 map.get(RuComponentType)[obj.ManufacturerName] = 0
 //             }
-//             map.get(ruComponentType)[obj.manufacturerName] += 1
+//             map.get(RuComponentType)[obj.ManufacturerName] += 1
 //         }
 //     }
 //     // // console.log(map);

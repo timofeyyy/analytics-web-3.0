@@ -54,18 +54,18 @@ const getComponentKindStatChartOptions1 = (data: any): Partial<ChartOptions> => 
         for (const obj of data[key]) {
 
             let categorieItemIndex: number = (apexChartData as ChartOptions).xaxis.categories.findIndex(
-                (category: string) => category === obj.ruComponentKind
+                (category: string) => category === obj.RuComponentKind
             )
 
             if (categorieItemIndex === -1) {
-                (apexChartData as ChartOptions).xaxis.categories.push(obj.ruComponentKind)
-                tmp[obj.ruComponentKind] = {
+                (apexChartData as ChartOptions).xaxis.categories.push(obj.RuComponentKind)
+                tmp[obj.RuComponentKind] = {
                     count: 0
                 }
 
             }
 
-            tmp[obj.ruComponentKind].count += 1
+            tmp[obj.RuComponentKind].count += 1
 
         }
     }
@@ -76,7 +76,7 @@ const getComponentKindStatChartOptions1 = (data: any): Partial<ChartOptions> => 
         }
     })
 
-    apexChartData.propName = "ruComponentKind"
+    apexChartData.propName = "RuComponentKind"
     apexChartData.values = (apexChartData as ChartOptions).xaxis.categories;    
     return apexChartData;
 }

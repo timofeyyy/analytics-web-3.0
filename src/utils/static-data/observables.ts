@@ -7,7 +7,7 @@ interface ObservableStorage {
 
 const observableApi: ObservableStorage = {
   // "components1": (injector: ApiService, data: Map<string, any>) => injector.getComponentsApiPreview(data),
-  "components": (injector: ApiService, data: Map<string, any>) => injector.getComponentsApiAll(data),
+  "components": (injector: ApiService, data: Map<string, any>) => injector.getComponentsAll(data),
   // "bitDepthValue": (injector: ApiService, data: Map<string, any>) => injector.getBitDepthValue(data),
   // "Микросхема": (injector: ApiService, data: Map<string, any>) => injector.getMicrochips(data),
   // "Транзистор": (injector: ApiService, data: Map<string, any>) => injector.getTransistors(data),

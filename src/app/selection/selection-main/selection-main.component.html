@@ -6,8 +6,11 @@
         <header class="workspace-header">
             <!-- <span><img src="../../../assets/images/left.svg" alt=""></span> -->
             <p class="item item-h" *ngIf="getCurrentComponentType()">
-                
-                 Компоненты: <span class="select-params"> {{` ${getCurrentComponentType().ruComponentType.toLowerCase()}`}}{{ruComponentKindStr ? ` > ${ruComponentKindStr}` : ''}}{{fromDateStr && lastDateStr ? ` > c ${fromDateStr} по ${lastDateStr}` : ''}}</span></p>
+
+                Компоненты: <span class="select-params"> {{`
+                    ${getCurrentComponentType().RuComponentType}`}}{{RuComponentKindStr ? ` >
+                    ${RuComponentKindStr}` : ''}}{{fromDateStr && lastDateStr ? ` > c ${fromDateStr} по ${lastDateStr}`
+                    : ''}}</span></p>
             <!-- <app-select-list class="item item-list" [currentIndex]="selectionViewTypeOptionsIndex"
                 [values]="selectionViewTypeOptions"
                 (onValueChanged)="onSelectionViewTypeChanged($event); resetPagesExecute()" /> -->
@@ -21,7 +24,7 @@
         <div class="page-menu">
             <label class="item" [ngClass]="{selected: !chartView}" (click)="chartView=false">Таблица <span
                     class="line"></span></label>
-            <label class="item" [ngClass]="{selected: chartView}" (click)="chartView=true">Графики <span
+            <label class="item" [ngClass]="{selected: chartView}" (click)="chartView=true">Анализ параметров<span
                     class="line"></span></label>
         </div>
         <div class="content">
@@ -30,8 +33,8 @@
                     <!-- <div class="table-names">
                         <label class="state-btn" *ngFor="let type of getComponentTypes(); let i = index"
                             [ngStyle]="{display: componentTypesActive[i] ? 'block' : 'none'}"
-                            [ngClass]="{'state-btn-selected': getCurrentComponentType().ruComponentType == type.ruComponentType}"
-                            (click)="onComponentTypeChanged(type);resetPagesExecute()">{{type.ruComponentType}}</label>
+                            [ngClass]="{'state-btn-selected': getCurrentComponentType().RuComponentType == type.RuComponentType}"
+                            (click)="onComponentTypeChanged(type);resetPagesExecute()">{{type.RuComponentType}}</label>
                     </div> -->
                     <div class="actions">
                         <div class="action action-vertical">

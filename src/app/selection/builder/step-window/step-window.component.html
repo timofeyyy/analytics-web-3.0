@@ -11,7 +11,7 @@
                             [alias]="alias" />
                         <app-step-priorities [alias]="alias" [columns]="columns" [index]="2" class="step step2"
                             [ngStyle]="{'left': selectionStorage.getState().stepper['step2']?.positionX + '%'}"
-                            (onChanged)="onPriorityChanged($event)" [ruComponentType]="dropBoxPropsMapConfig.get('ruComponentType').currentValue" />
+                            (onChanged)="onPriorityChanged($event)" [RuComponentType]="dropBoxPropsMapConfig.get('RuComponentType').currentValue" />
                         <app-step-values  class="step" [alias]="alias" [dropBoxPropsMapConfig]="dropBoxPropsMapConfig"
                             [all]="all" *ngFor="let column of prioritiesNoJumps; let i = index" [columnName]="column.name"
                             [index]="i+3" [ngStyle]="{'left': getPositionX(i+3) + '%'}"

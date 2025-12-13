@@ -6,7 +6,7 @@ import getComponentTypesStat, { ManufacturerStatistic, ComponentTypeStatistic, C
 import { catchError, concatMap, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { DatePipe, NgFor, NgIf, NgStyle } from '@angular/common';
+import { DatePipe, NgFor, NgIf, NgStyle, NgClass } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { componentStorage } from '../../utils/redux/component';
 import { ParameterValueCountTableComponent } from "../components/parameter-value-count-table/parameter-value-count-table.component";
@@ -15,15 +15,19 @@ import { ComponentTypeService } from '../../services/component-type.service';
 import { ChartTemplateComponent } from "../components/charts/chart-template.component";
 import { AppEnum } from '../../utils/enum/app.enum';
 import { SelectListComponent } from "../components/select-list/select-list.component";
+import { CdkNoDataRow } from "@angular/cdk/table";
+import { ComponentAnalyticsComponent } from "../component-analytics/component-analytics.component";
+import { ComponentAnalyticsDateCompareComponent } from '../component-analytics-date-compare/component-analytics-date-compare.component';
 
 @Component({
   selector: 'app-home',
-  imports: [NavigatorComponent, HttpClientModule, LoaderComponent, NgStyle, NgIf, NgFor, ParameterValueCountTableComponent, ChartTemplateComponent],
+  imports: [NavigatorComponent, HttpClientModule, LoaderComponent, NgStyle, NgIf, NgFor, ParameterValueCountTableComponent, ChartTemplateComponent, NgClass, ComponentAnalyticsDateCompareComponent],
   providers: [ApiService, ComponentTypeService, DatePipe],
   templateUrl: './home1.component.html',
   styleUrls: ['./home1.component.css', '../components/styles/button.css']
 })
 export class Home1Component {
+  countriesComparingStat: Map<string, string> = new Map()
   changeFirstDate(event: any) {
     const target = event.target as HTMLInputElement;
     if (target.value != "")
@@ -34,6 +38,7 @@ export class Home1Component {
     if (target.value != "")
       this.lastDate = this.datePipe.transform(new Date(target.value), 'yyyy-MM-dd')!
   }
+
   update(dates: [string, string]) {
     of(null).pipe(
       switchMap((res) => {
@@ -41,13 +46,19 @@ export class Home1Component {
         const componentTypesTmp = []
         this.all = []
         this.componentTypes = []
-        // // console.log(this.all.length, this.componentTypes.length)
         const resultStorage: any = {}
         for (const key in this.storage) {
-          const all = (this.storage[key] as any[]).filter(item => !item['insertion'] || (item['insertion'] >= dates[0] && item['insertion'] <= dates[1]))
+          const all = (this.storage[key] as any[]).filter(item => {
+            let dateStr = item['InsertionDate']
+            if (dateStr) {
+              // dateStr = dateStr.replace('T', ' ').split(' ')[0]
+              return dateStr >= dates[0] && dateStr <= dates[1]
+            }
+            return true
+          })
           if (all.length) {
             resultStorage[key] = all
-            const componentType = componentTypes.find(item => item.enComponentType.toLowerCase() == key.toLowerCase())
+            const componentType = componentTypes.find(item => item.EnComponentType == key)
             componentTypesTmp.push(componentType!)
           }
         }
@@ -59,12 +70,11 @@ export class Home1Component {
             ...dataMap.get(key),
           ]
         }
-        componentTypesTmp.unshift({ ruComponentType: AppEnum.ALL, enComponentType: AppEnum.ALL })
+        componentTypesTmp.unshift({ RuComponentType: AppEnum.ALL, EnComponentType: AppEnum.ALL })
         return of([componentTypesTmp, all, resultStorage])
       })
     )
       .subscribe(([componentTypes, all, resultStorage]) => {
-        // // console.log(componentTypes, all, resultStorage)
         // this.componentTypes = Array.from(componentTypes)
         setTimeout(() => {
           this.all = all;
@@ -74,7 +84,6 @@ export class Home1Component {
         this.resultStorage = resultStorage
         let map: Map<string, ComponentTypePopup> = getComponentTypesStat(resultStorage, true, componentTypes)
         this.componentTypesStat = Array.from(map)
-        // console.log(map)
         this.currentComponentType = undefined
         this.buildChartQueryManufacturers()
         this.buildChartQueryStat()
@@ -125,12 +134,15 @@ export class Home1Component {
   extractDates(all: any[], query: Map<string, any>): [string, string, string, string] {
     let lastDateQuery = query.get('lastDate')
     let fromDateQuery = query.get('fromDate')
-    const sortedDates = all.sort((a: any, b: any) => a['insertion'] - b['insertion'])
+    const sortedDates = all.sort((a, b) =>
+      new Date(a.InsertionDate).getTime() - new Date(b.InsertionDate).getTime()
+    );
+    // const sortedDates = all.sort((a: any, b: any) => a['InsertionDate'] - b['InsertionDate'])
     let [minDate, maxDate, fromDate, lastDate] = [
-      this.datePipe.transform(new Date(sortedDates[0]['insertion']), 'yyyy-MM-dd')!,
-      this.datePipe.transform(new Date(sortedDates[sortedDates.length - 1]['insertion']), 'yyyy-MM-dd')!,
-      this.datePipe.transform(new Date(sortedDates[0]['insertion']), 'yyyy-MM-dd')!,
-      this.datePipe.transform(new Date(sortedDates[sortedDates.length - 1]['insertion']), 'yyyy-MM-dd')!
+      this.datePipe.transform(new Date(sortedDates[0]['InsertionDate']), 'yyyy-MM-dd')!,
+      this.datePipe.transform(new Date(sortedDates[sortedDates.length - 1]['InsertionDate']), 'yyyy-MM-dd')!,
+      this.datePipe.transform(new Date(sortedDates[0]['InsertionDate']), 'yyyy-MM-dd')!,
+      this.datePipe.transform(new Date(sortedDates[sortedDates.length - 1]['InsertionDate']), 'yyyy-MM-dd')!
     ]
     if ((fromDateQuery || !isNaN(new Date(fromDateQuery).getDate()))) {
       fromDate = this.datePipe.transform(new Date(fromDateQuery), 'yyyy-MM-dd')!
@@ -140,17 +152,24 @@ export class Home1Component {
       lastDate = this.datePipe.transform(new Date(lastDateQuery), 'yyyy-MM-dd')!
       lastDate = lastDate > maxDate ? maxDate : lastDate
     }
+
     return [minDate, maxDate, fromDate, lastDate]
   }
+  windowState: "main" | "dates-compare" = "main"
 
+  alias: any = {};
+  componentDates: any = {}
   getApi(query: Map<string, any>): void {
+    console.log("sds")
     this.loader = true
     this.api.getAlias()
       .pipe(
         concatMap((alias: { [type: string]: string }) => {
+          this.alias = new Map(Object.entries(alias))
           const obs = [
-            this.api.getComponentsApiAll(),
-            this.api.getComponentNames()
+            this.api.getComponentsAll(),
+            this.api.getComponentNames(),
+            this.api.getComponentsAllDates()
           ]
           return forkJoin(obs)
         })
@@ -160,9 +179,9 @@ export class Home1Component {
 
         // this.componentTypesStat = Array.from(map)
         // this.componentTypes = res[1]
-        // this.componentTypes.unshift({ enComponentType: AppEnum.ALL, ruComponentType: AppEnum.ALL })
+        // this.componentTypes.unshift({ EnComponentType: AppEnum.ALL, RuComponentType: AppEnum.ALL })
         // this.currentComponentType = res[1][0]
-        // // console.log(res[1])
+        this.componentDates = res[2]
         this.cts.setComponentTypes(res[1])
         this.storage = res[0]
         // this.resultStorage = this.storage
@@ -176,13 +195,10 @@ export class Home1Component {
             ...res[0][key],
           ]
         }
-        // console.log(all);
-        // console.log(this.pvct);
         [this.minDate, this.maxDate, this.firstDate, this.lastDate] = this.extractDates(all, query)
         this.update([this.firstDate, this.lastDate])
 
         this.loader = false;
-        // // console.log([this.minDate, this.maxDate, this.firstDate, this.lastDate])
       })
   }
   validateDate(event: any) {
@@ -203,24 +219,20 @@ export class Home1Component {
   }
 
   buildChartQueryManufacturers(sortParam: string = AppEnum.AMOUNT, sortDirectopn: string = AppEnum.ASC): void {
-    // // console.log(sortParam, sortDirectopn)
-    this.chartQueryManufacturers = new Map().set("componentTypes", this.cts.getComponentTypes()).set("sortParam", sortParam).set("sortDirectopn", sortDirectopn).set("enComponentType", this.currentComponentType ? this.currentComponentType.enComponentType : undefined)
+    this.chartQueryManufacturers = new Map().set("componentTypes", this.cts.getComponentTypes()).set("sortParam", sortParam).set("sortDirectopn", sortDirectopn).set("EnComponentType", this.currentComponentType ? this.currentComponentType.EnComponentType : undefined)
   }
   buildChartQueryStat(): void {
     this.chartQueryStat = new Map()
       .set("componentTypes", this.cts.getComponentTypes())
   }
 
-  getSafeUrl(ruComponentType: string, enComponentKind: string | void): any {
-    // // // console.log(ruComponentType)
-    const componentType: any = this.cts.getComponentTypeByRu(ruComponentType)
-
-    // // // console.log(componentType)
-    // const componentType: any = this.cts.getComponentTypes().find((val: any) => val.ruComponentType === ruComponentType)
-    // return this.sanitizer.bypassSecurityTrustResourceUrl(`component-analytic/${componentType.enComponentType}`)
-    let url: string = `selection-main?enComponentType=${componentType.enComponentType}&fromDate=${this.firstDate}&lastDate=${this.lastDate}`
-    if(enComponentKind){
-      url += `&enComponentKind=${enComponentKind}`
+  getSafeUrl(RuComponentType: string, EnComponentKind: string | void): any {
+    const componentType: any = this.cts.getComponentTypeByRu(RuComponentType)
+    // const componentType: any = this.cts.getComponentTypes().find((val: any) => val.RuComponentType === RuComponentType)
+    // return this.sanitizer.bypassSecurityTrustResourceUrl(`component-analytic/${componentType.EnComponentType}`)
+    let url: string = `selection-main?EnComponentType=${componentType.EnComponentType}&fromDate=${this.firstDate}&lastDate=${this.lastDate}`
+    if (EnComponentKind) {
+      url += `&EnComponentKind=${EnComponentKind}`
     }
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
@@ -236,15 +248,15 @@ export class Home1Component {
     }
     return this.sanitizer.bypassSecurityTrustHtml(res)
   }
-  getRuComponentTypeByEn(enComponentType: string): string | undefined {
+  getRuComponentTypeByEn(EnComponentType: string): string | undefined {
     const componentTypes = this.cts.getComponentTypes()
-    let ruComponentType
+    let RuComponentType
     for (const element of componentTypes) {
-      if (element.enComponentType.toLowerCase() === enComponentType.toLowerCase()) {
-        ruComponentType = element.ruComponentType
+      if (element.EnComponentType === EnComponentType) {
+        RuComponentType = element.RuComponentType
         break
       }
     }
-    return ruComponentType
+    return RuComponentType
   }
 }

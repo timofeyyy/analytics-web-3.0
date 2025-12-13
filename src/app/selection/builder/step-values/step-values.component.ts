@@ -63,22 +63,22 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
       }
       this.initSelections()
       // // // console.log(this.parameterStat, this.manufacturersStat)
-      // // console.log(this.queryObj.size, this.manufacturerName, this.manufacturerName !== this.prevManufacturerName)
-      if (!this.queryObj.size || this.manufacturerName !== this.prevManufacturerName) {
+      // // console.log(this.queryObj.size, this.ManufacturerName, this.ManufacturerName !== this.prevManufacturerName)
+      if (!this.queryObj.size || this.ManufacturerName !== this.prevManufacturerName) {
         this.buildMainChart()
-        this.prevManufacturerName = this.manufacturerName
+        this.prevManufacturerName = this.ManufacturerName
       }
     }
   }
 
   initSelections(): void {
-    let enComponentType: string = this.dropBoxPropsMapConfig.get('enComponentType').currentValue
+    let EnComponentType: string = this.dropBoxPropsMapConfig.get('EnComponentType').currentValue
     let storageCopy = Object.fromEntries(this.storage)
     if (!Object.entries(this.obj).length) {
       for (const key in storageCopy) {
         if (!this.obj[key])
           this.obj[key] = []
-        if (enComponentType.toLowerCase() === key.toLowerCase()) {
+        if (EnComponentType.toLowerCase() === key.toLowerCase()) {
           let prevSelection = this.prevSelection
           if (this.obj[key].length !== prevSelection.length) {
             this.obj[key] = this.prevSelection
@@ -87,7 +87,7 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
       }
     }
     for (const key in storageCopy) {
-      if (enComponentType.toLowerCase() === key.toLowerCase()) {
+      if (EnComponentType.toLowerCase() === key.toLowerCase()) {
         this.parameterStat = this.prevSelection
         this.manufacturersStat = this.currentSelection
         this.stepValues.get(0)?.initOriginalRecords(this.manufacturersStat)
@@ -99,8 +99,8 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
 
   buildMainChart(sortParam: string = AppEnum.AMOUNT, sortDirectopn: string = AppEnum.ASC): void {
     this.queryObj = new Map()
-      .set('ruComponentType', this.dropBoxPropsMapConfig.get('ruComponentType').currentValue)
-      .set('enComponentType', this.dropBoxPropsMapConfig.get('enComponentType').currentValue)
+      .set('RuComponentType', this.dropBoxPropsMapConfig.get('RuComponentType').currentValue)
+      .set('EnComponentType', this.dropBoxPropsMapConfig.get('EnComponentType').currentValue)
       .set('param', this.columnName)
       .set('all', '1')
       .set('bar-x-labels', '1')
@@ -108,8 +108,8 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
       .set('x-labels-size', 'max(0.8vw, 8px)')
       .set('y-labels-size', '0.75vw')
       .set("sortParam", sortParam).set("sortDirectopn", sortDirectopn)
-    if (this.manufacturerName) {
-      this.queryObj.set('manufacturerName', this.manufacturerName)
+    if (this.ManufacturerName) {
+      this.queryObj.set('ManufacturerName', this.ManufacturerName)
     }
     // // console.log(this.queryObj)
   }
@@ -177,11 +177,11 @@ export class StepValuesComponent implements OnChanges, ErrorStepHandling {
     }
     this.onSourceChanged.emit([this.columnName, this.currentSelection])
   }
-  manufacturerName: string | undefined
+  ManufacturerName: string | undefined
   prevManufacturerName: string | undefined
 
-  onManufacturerChanged(manufacturerName: string): void {
-    this.manufacturerName = (this.manufacturerName == manufacturerName ? undefined : manufacturerName)
+  onManufacturerChanged(ManufacturerName: string): void {
+    this.ManufacturerName = (this.ManufacturerName == ManufacturerName ? undefined : ManufacturerName)
     this.ngOnChanges()
   }
   inputDisabled!: boolean

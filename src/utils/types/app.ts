@@ -23,8 +23,8 @@ export interface FilterDropBox extends DropBox {
 // }
 
 export interface ComponentTypes {
-    ruComponentType: string,
-    enComponentType: string
+    RuComponentType: string,
+    EnComponentType: string
 }
 
 export interface Columns {

@@ -48,8 +48,8 @@ export class StepTablenameComponent implements OnInit, ErrorStepHandling {
   componentTypes!: ComponentTypes[]
 
   onValueSelected(value: ComponentTypes): void {
-    this.current = (this.current === value.ruComponentType ? "" : value.ruComponentType)
+    this.current = (this.current === value.RuComponentType ? "" : value.RuComponentType)
     this.findError()
-    this.typeChanged.emit([value.ruComponentType, value.enComponentType, this.storage.get(value.enComponentType.toLocaleLowerCase())])
+    this.typeChanged.emit([value.RuComponentType, value.EnComponentType, this.storage.get(value.EnComponentType)])
   }
 }

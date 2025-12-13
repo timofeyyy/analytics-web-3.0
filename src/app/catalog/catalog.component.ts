@@ -77,42 +77,42 @@ export class CatalogComponent implements OnInit {
         }))
         this.initDropBoxMapConfig(exceptions);
 
-        let ruComponentType: string | undefined = query.get('ruComponentType')
-        if (!ruComponentType) {
-          ruComponentType = AppEnum.ALL
+        let RuComponentType: string | undefined = query.get('RuComponentType')
+        if (!RuComponentType) {
+          RuComponentType = AppEnum.ALL
         }
         query.forEach((value, key) => {
-          if (this.dropBoxPropsMapConfig.has(key) && key !== 'ruComponentType') {
-            catalogStorage.dispatch(setCurrentValue([ruComponentType, key, value]))
+          if (this.dropBoxPropsMapConfig.has(key) && key !== 'RuComponentType') {
+            catalogStorage.dispatch(setCurrentValue([RuComponentType, key, value]))
           }
         })
-        const currentComponentType = this.cts.getComponentTypeByRu(ruComponentType)
+        const currentComponentType = this.cts.getComponentTypeByRu(RuComponentType)
         this.cts.setCurrentComponentType(currentComponentType!)
         // this.api.getComponentNames()?.subscribe(res => {
         //   this.componentTypes = res
         // })
         this.initComponentStorage()
-        this.selectKeyAndValues(ruComponentType)
+        this.selectKeyAndValues(RuComponentType)
         this.getApi(query)
       })
   }
 
-  selectKeyAndValues(ruComponentType: string): void {
+  selectKeyAndValues(RuComponentType: string): void {
     this.selectedKeysValues = []
     const currentValues = catalogStorage.getState().currentValues
-    // // // console.log(ruComponentType, currentValues)
-    for (const _ruComponentType in currentValues) {
-      if (_ruComponentType.toLowerCase() === ruComponentType.toLowerCase()) {
-        for (const key in (currentValues as any)[_ruComponentType]) {
-          this.selectedKeysValues.push([key, (currentValues as any)[_ruComponentType][key]])
+    // // // console.log(RuComponentType, currentValues)
+    for (const _RuComponentType in currentValues) {
+      if (_RuComponentType === RuComponentType) {
+        for (const key in (currentValues as any)[_RuComponentType]) {
+          this.selectedKeysValues.push([key, (currentValues as any)[_RuComponentType][key]])
         }
       }
     }
   }
 
-  resetKeyAndValues(ruComponentType: string): void {
+  resetKeyAndValues(RuComponentType: string): void {
     this.selectedKeysValues = []
-    catalogStorage.dispatch(removeRuComponentType([ruComponentType]))
+    catalogStorage.dispatch(removeRuComponentType([RuComponentType]))
     const currentValues = catalogStorage.getState().currentValues
     localStorage.setItem('savedFilterValues', JSON.stringify(currentValues))
   }
@@ -120,9 +120,9 @@ export class CatalogComponent implements OnInit {
   initComponentStorage(): void {
     const savedFilterValues = JSON.parse(localStorage.getItem('savedFilterValues')!)
     if (typeof savedFilterValues === 'object') {
-      for (const ruComponentType in savedFilterValues) {
-        for (const key in savedFilterValues[ruComponentType]) {
-          catalogStorage.dispatch(setCurrentValue([ruComponentType, key, savedFilterValues[ruComponentType][key]]))
+      for (const RuComponentType in savedFilterValues) {
+        for (const key in savedFilterValues[RuComponentType]) {
+          catalogStorage.dispatch(setCurrentValue([RuComponentType, key, savedFilterValues[RuComponentType][key]]))
         }
       }
     }
@@ -147,8 +147,8 @@ export class CatalogComponent implements OnInit {
 
   setQuery(query: Map<string, string>, queryParamsHandlingState: 'replace' | 'merge'): Promise<Map<string, string>> {
     const querysearchBuffer: Map<string, string | null> = query
-    if (querysearchBuffer.get('ruComponentType') === AppEnum.ALL) {
-      querysearchBuffer.set('ruComponentType', null)
+    if (querysearchBuffer.get('RuComponentType') === AppEnum.ALL) {
+      querysearchBuffer.set('RuComponentType', null)
     }
     return this.router.navigate([], {
       relativeTo: this.route,
@@ -156,8 +156,8 @@ export class CatalogComponent implements OnInit {
       queryParamsHandling: queryParamsHandlingState,
       skipLocationChange: false,
     }).then(() => {
-      if (querysearchBuffer.get('ruComponentType') === null) {
-        querysearchBuffer.delete('ruComponentType')
+      if (querysearchBuffer.get('RuComponentType') === null) {
+        querysearchBuffer.delete('RuComponentType')
       }
       return querysearchBuffer as Map<string, string>
     });
@@ -165,45 +165,45 @@ export class CatalogComponent implements OnInit {
 
   apply(payload: Map<string, string>): void {
     if (payload) {
-      let ruComponentType: string | undefined = payload.get('ruComponentType')
-      if (ruComponentType) {
-        const columns = ['manufacturerName', 'ruComponentKind', ...this.columns]
+      let RuComponentType: string | undefined = payload.get('RuComponentType')
+      if (RuComponentType) {
+        const columns = ['ManufacturerName', 'RuComponentKind', ...this.columns]
         for (const col of columns) {
           // // // console.log(payload.has(col), columns, payload)
           if (payload.has(col)) {
-            catalogStorage.dispatch(setCurrentValue([ruComponentType, col, payload.get(col) as string]))
+            catalogStorage.dispatch(setCurrentValue([RuComponentType, col, payload.get(col) as string]))
           }
           else {
-            catalogStorage.dispatch(removeCurrentValue([ruComponentType, col]))
+            catalogStorage.dispatch(removeCurrentValue([RuComponentType, col]))
           }
         }
       }
       else {
-        ruComponentType = AppEnum.ALL
-        catalogStorage.dispatch(removeRuComponentType([ruComponentType]))
+        RuComponentType = AppEnum.ALL
+        catalogStorage.dispatch(removeRuComponentType([RuComponentType]))
         for (const key in Object.fromEntries(payload)) {
-          if (key === 'manufacturerName' || key === 'ruComponentKind') {
-            catalogStorage.dispatch(setCurrentValue([ruComponentType, key, payload.get(key) as string]))
+          if (key === 'ManufacturerName' || key === 'RuComponentKind') {
+            catalogStorage.dispatch(setCurrentValue([RuComponentType, key, payload.get(key) as string]))
           }
         }
       }
       const currentValues = catalogStorage.getState().currentValues
       localStorage.setItem('savedFilterValues', JSON.stringify(currentValues))
-      this.selectKeyAndValues(ruComponentType)
+      this.selectKeyAndValues(RuComponentType)
       this.searchBuffer = []
       this.resultBuffer = []
       for (const key of this.storage.keys()) {
         const componentType = this.cts.getComponentTypeByEn(key)
         const all: any[] = this.storage.get(key)!
-        if (this.cts.getComponentTypeByEn(key)?.ruComponentType != ruComponentType && ruComponentType != AppEnum.ALL) {
+        if (this.cts.getComponentTypeByEn(key)?.RuComponentType != RuComponentType && RuComponentType != AppEnum.ALL) {
           continue
         }
         all.forEach((item: any, index) => {
-          payload.delete('ruComponentType')
-          payload.delete('enComponentType')
+          payload.delete('RuComponentType')
+          payload.delete('EnComponentType')
           let countProp: number = payload.size
           let countMatch: number = 0;
-          item['ruComponentType'] = componentType?.ruComponentType
+          item['RuComponentType'] = componentType?.RuComponentType
           payload.forEach((value, key) => {
             let val = (item as any)[key]
             if (val !== undefined) {
@@ -244,7 +244,7 @@ export class CatalogComponent implements OnInit {
         val && (
           (object[key].input === false && val !== AppEnum.ALL && val) ||
           (object[key].input && val) ||
-          key === 'ruComponentType'
+          key === 'RuComponentType'
         )
       ) {
         map.set(key, val)
@@ -263,7 +263,7 @@ export class CatalogComponent implements OnInit {
 
   getApi(payload: Map<string, string>): void {
     this.loader = true
-    this.api.getComponentsApiAll()
+    this.api.getComponentsAll()
       .subscribe((res: any) => {
         this.storage = new Map(Object.entries(res))
         componentStorage.dispatch(setComponentSchema(res))
@@ -271,16 +271,16 @@ export class CatalogComponent implements OnInit {
         const currentComponentType = this.cts.getCurrentComponentType()
         for (const key in storageObj) {
           const componentType = this.cts.getComponentTypeByEn(key);
-          if (currentComponentType && componentType!.ruComponentType.toLowerCase() != currentComponentType.ruComponentType.toLowerCase()) {
+          if (currentComponentType && componentType!.RuComponentType != currentComponentType.RuComponentType) {
             continue
           }
           (storageObj[key] as []).forEach((item: any) => {
-            payload.delete('ruComponentType')
-            payload.delete('enComponentType')
+            payload.delete('RuComponentType')
+            payload.delete('EnComponentType')
             let satisfyCount: number = 0;
             const actualPayload = payload
             actualPayload.delete('page')
-            item['ruComponentType'] = componentType?.ruComponentType
+            item['RuComponentType'] = componentType?.RuComponentType
 
             payload.forEach((value, key) => {
               let val = (item as any)[key]
@@ -306,9 +306,9 @@ export class CatalogComponent implements OnInit {
             this.all.push(item)
           })
         }
-        let ruComponentType = payload.get('ruComponentType')
-        if (ruComponentType) {
-          this.columns = this.getTabelColumns(ruComponentType)
+        let RuComponentType = payload.get('RuComponentType')
+        if (RuComponentType) {
+          this.columns = this.getTabelColumns(RuComponentType)
         }
         this.resultBuffer = Array.from(this.searchBuffer);
 
@@ -328,20 +328,20 @@ export class CatalogComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(markup)
   }
 
-  getTabelColumns(ruComponentType: string): string[] {
-    // // // console.log(ruComponentType)
-    const componentType = this.cts.getComponentTypeByRu(ruComponentType)
+  getTabelColumns(RuComponentType: string): string[] {
+    // // // console.log(RuComponentType)
+    const componentType = this.cts.getComponentTypeByRu(RuComponentType)
     const schema: Map<string, string[]> = new Map(Object.entries(componentStorage.getState().componentSchema as []))
-    return schema.get(componentType!.enComponentType.toLowerCase())!
+    return schema.get(componentType!.EnComponentType)!
   }
-  onTypeChangedUpdate(ruComponentType: string): void {
-    const componentType = this.cts.getComponentTypeByRu(ruComponentType)
-    // // // console.log(ruComponentType, componentType)
+  onTypeChangedUpdate(RuComponentType: string): void {
+    const componentType = this.cts.getComponentTypeByRu(RuComponentType)
+    // // // console.log(RuComponentType, componentType)
     if (componentType) {
       this.onTypeChanged(componentType!)
     }
     else {
-      this.onTypeChanged({ ruComponentType: AppEnum.ALL, enComponentType: AppEnum.ALL })
+      this.onTypeChanged({ RuComponentType: AppEnum.ALL, EnComponentType: AppEnum.ALL })
     }
   }
   onTypeChanged(componentType: ComponentTypes): void {
@@ -349,18 +349,18 @@ export class CatalogComponent implements OnInit {
     let exceptions = new Map()
     let currentValues: any = catalogStorage.getState().currentValues
     this.resultBuffer = [...this.resultBuffer]
-    if (componentType.ruComponentType === AppEnum.ALL) {
+    if (componentType.RuComponentType === AppEnum.ALL) {
       this.columns = []
       exceptions
-        .set('manufacturerName', { currentValue: currentValues[AppEnum.ALL] && currentValues[AppEnum.ALL].manufacturerName ? currentValues[AppEnum.ALL].manufacturerName : AppEnum.ALL })
-        .set('ruComponentKind', { currentValue: currentValues[AppEnum.ALL] && currentValues[AppEnum.ALL].ruComponentKind ? currentValues[AppEnum.ALL].ruComponentKind : AppEnum.ALL })
+        .set('ManufacturerName', { currentValue: currentValues[AppEnum.ALL] && currentValues[AppEnum.ALL].ManufacturerName ? currentValues[AppEnum.ALL].ManufacturerName : AppEnum.ALL })
+        .set('RuComponentKind', { currentValue: currentValues[AppEnum.ALL] && currentValues[AppEnum.ALL].RuComponentKind ? currentValues[AppEnum.ALL].RuComponentKind : AppEnum.ALL })
     }
     else {
-      this.columns = this.getTabelColumns(componentType.ruComponentType)
-      const columns = ['manufacturerName', 'ruComponentKind', ...this.columns]
+      this.columns = this.getTabelColumns(componentType.RuComponentType)
+      const columns = ['ManufacturerName', 'RuComponentKind', ...this.columns]
 
       for (const componentType1 in currentValues) {
-        if (componentType.ruComponentType.toLocaleLowerCase() === componentType1.toLocaleLowerCase()) {
+        if (componentType.RuComponentType.toLocaleLowerCase() === componentType1.toLocaleLowerCase()) {
           for (const key in currentValues[componentType1]) {
             const column = columns.find((val: string) => val == key)
             if (column) {
@@ -373,7 +373,7 @@ export class CatalogComponent implements OnInit {
     this.initDropBoxMapConfig(
       exceptions
     );
-    this.dropBoxPropsMapConfig.get('ruComponentType').currentValue = componentType.ruComponentType
+    this.dropBoxPropsMapConfig.get('RuComponentType').currentValue = componentType.RuComponentType
     let map = this.getSimpleKeyValueMap()
     // // // console.log(map)
     this.setQuery(map, 'replace').then((res) => {
@@ -383,8 +383,8 @@ export class CatalogComponent implements OnInit {
   }
 
   openComponentInfo(item: any): void {
-    const componentType = this.cts.getComponentTypeByRu(item.ruComponentType)
-    this.router.navigateByUrl(`component?enComponentType=${componentType?.enComponentType}&id=${item.id}`)
+    const componentType = this.cts.getComponentTypeByRu(item.RuComponentType)
+    this.router.navigateByUrl(`component?EnComponentType=${componentType?.EnComponentType}&id=${item.id}`)
   }
 
   getPdfUrl(item: any): string | null {

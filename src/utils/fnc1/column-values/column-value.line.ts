@@ -64,15 +64,15 @@ const getColumnValueLineChartOptions = (data: any, query: Map<string, string>): 
     const map = new Map();
     const paramAlias = query.get('alias')
     const param = query.get('param')
-    const enComponentType = query.get('enComponentType')
+    const EnComponentType = query.get('EnComponentType')
     const paramValue = query.get('paramValue')
 
-    if (param && paramValue && enComponentType) {
+    if (param && paramValue && EnComponentType) {
         apexChartData.series = [{
             name: paramAlias,
             data: []
         }]
-         for (const obj of data[enComponentType.toLowerCase()]) {
+         for (const obj of data[EnComponentType]) {
                 if (obj[param] && `${obj[param]}` === paramValue) {
                
                     const date = new Date(obj.date)

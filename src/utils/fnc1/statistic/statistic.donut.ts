@@ -33,7 +33,7 @@ const getComponentTypesStatChartOptionsDonut = (data: any, query: Map<string, an
             }
         },
         legend: {
-            show: true,
+            show: false,
             position: 'right',
             horizontalAlign: 'center'
         },
@@ -54,18 +54,18 @@ const getComponentTypesStatChartOptionsDonut = (data: any, query: Map<string, an
     let tmp: any = {}
     const colorObj: any = {}
     for (const key in data) {
-        const ruComponentType = componentTypes!.find(c => c.enComponentType.toLowerCase() == key.toLowerCase())!.ruComponentType;
-        (apexChartData as ChartOptions).labels.push(ruComponentType)
+        const RuComponentType = componentTypes!.find(c => c.EnComponentType.toLowerCase() == key.toLowerCase())!.RuComponentType;
+        (apexChartData as ChartOptions).labels.push(RuComponentType)
 
         if (!colorObj[key]) {
-            colorObj[key] = colorTypes.find((colorType) => colorType.enComponentType == key)?.color
+            colorObj[key] = colorTypes.find((colorType) => colorType.EnComponentType == key)?.color
         }
 
         for (const obj of data[key]) {
-            if (tmp[ruComponentType] === undefined) {
-                tmp[ruComponentType] = 0
+            if (tmp[RuComponentType] === undefined) {
+                tmp[RuComponentType] = 0
             }
-            tmp[ruComponentType] += 1
+            tmp[RuComponentType] += 1
         }
     }
     (apexChartData as ChartOptions).labels.forEach((label: string) => {

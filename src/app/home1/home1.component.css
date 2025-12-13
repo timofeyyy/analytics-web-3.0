@@ -1,5 +1,5 @@
 .workspace main {
-    height: 92%;
+    height: 87%;
 }
 
 .workspace main .main-view {
@@ -198,7 +198,6 @@
 
 .controllers .inputs input {
     margin-right: .5vw;
-    width: 6vw;
     font-size: max(.8vw, 8px);
 }
 
@@ -230,4 +229,44 @@ input[type='date'] {
 
 .kind-popup {
     position: relative;
+}
+
+
+
+
+.page-menu {
+    background-color: white;
+    display: flex;
+    padding: .5vw .75vw;
+    border-bottom: 0.1vw solid lightgrey;
+    height: 2.5%;
+}
+
+.page-menu .item {
+    margin: 0 1vw 0 0;
+    font-size: max(0.8vw, 8px);
+    cursor: pointer;
+}
+
+.page-menu .selected .line {
+    width: 100%;
+    background-color: #7490f8;
+}
+
+.page-menu .line {
+    display: block;
+    margin-top: .15vw;
+    background-color: lightgray;
+    height: .15vw;
+    border-radius: .5vw;
+    width: 0;
+    transition: all ease 0.5s;
+}
+
+.page-menu .item:hover>.line {
+    width: 100%;
+}
+
+.prod-compared {
+    border: .1vw solid lightgray;
 }

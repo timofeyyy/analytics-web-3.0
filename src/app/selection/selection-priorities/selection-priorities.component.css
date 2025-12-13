@@ -133,7 +133,7 @@ aside {
 }
 
 .panel .actions {
-    width: 45%;
+    /* width: 45%; */
     display: flex;
     justify-content: flex-end;
     margin: 0;
@@ -418,3 +418,13 @@ aside .recs .rec .extens .ext-h {
     margin-right: 0.5vw;
     line-height: 1;
 } */
+
+.ladder-result {
+    height: unset;
+    border: .1vw solid lightgray;
+    margin: .5vw;
+    border-radius: .5vw;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+}

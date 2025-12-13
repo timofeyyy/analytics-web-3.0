@@ -50,11 +50,11 @@ const getColumnPieChartOptions = (data: any, query: Map<string, string>): Partia
 
     const map = new Map()
     const param = query.get('param')
-    const manufacturerName = query.get('manufacturerName')
-    const enComponentType = query.get('enComponentType')
+    const ManufacturerName = query.get('ManufacturerName')
+    const EnComponentType = query.get('EnComponentType')
     const all = query.get('all')
-    if (param && enComponentType) {
-        const sortedData = (data[enComponentType.toLowerCase()] as []).sort((a: any, b: any) => a[param] - b[param])
+    if (param && EnComponentType) {
+        const sortedData = (data[EnComponentType] as []).sort((a: any, b: any) => a[param] - b[param])
         for (const obj of sortedData as any) {
             const value = obj[param] ? `${obj[param]}` : 'Не указано'
             if (!obj[param] && all === "0") {
@@ -62,8 +62,8 @@ const getColumnPieChartOptions = (data: any, query: Map<string, string>): Partia
             }
 
             if (
-                manufacturerName ?
-                    (value && obj.manufacturerName == manufacturerName) :
+                ManufacturerName ?
+                    (value && obj.ManufacturerName == ManufacturerName) :
                     value
             ) {
 

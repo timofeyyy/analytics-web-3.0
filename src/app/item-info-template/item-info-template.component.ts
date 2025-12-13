@@ -30,19 +30,19 @@ export class ItemInfoTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.loader = true
     const query = new Map(Object.entries((this.route.snapshot.queryParamMap as any).params));
-    const enComponentType = query.get("enComponentType")
+    const EnComponentType = query.get("EnComponentType")
     const id = parseInt(query.get("id") as string)
-    // // // console.log(enComponentType, id)
+    // // // console.log(EnComponentType, id)
     forkJoin([
       this.api.getAlias(),
-      this.api.getComponent(enComponentType as string, id)
+      this.api.getComponent(EnComponentType as string, id)
     ]).subscribe((res: any[]) => {
       let body = ''
       let header = ''
       const obj = res[1]
       const alias = res[0]
       for (const key in obj) {
-        if (key == 'componentName' || key == 'manufacturerName') {
+        if (key == 'componentName' || key == 'ManufacturerName') {
           header += `<h3>${alias[key] === undefined ? key : alias[key]}: ${obj[key]}</h1>`
           continue
         }
